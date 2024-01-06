@@ -14,6 +14,7 @@ defineProps({
     status: {
         type: String,
     },
+    errors: Object
 });
 
 const form = useForm({
@@ -32,11 +33,7 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
+        
         <form class="login-form" @submit.prevent="submit">
             <div class="card mb-0">
                 <div class="card-body">
@@ -44,6 +41,16 @@ const submit = () => {
                         <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
                         <h5 class="mb-0">Login</h5>
                         <span class="d-block text-muted">Your credentials</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div v-if="status" class="tw-mb-4 tw-font-medium tw-text-sm tw-text-green-600">
+                            {{ status }}
+                        </div>
+
+                        <div v-if="errors.password" class="tw-mb-4 tw-font-medium tw-text-sm text-danger">
+                            {{ errors.password }}
+                        </div>
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-left">
@@ -60,6 +67,7 @@ const submit = () => {
                     <div class="form-group form-group-feedback form-group-feedback-left">
                         <input type="password"
                                name="password"
+                               v-model="form.password"
                                class="form-control" placeholder="Password">
                         <div class="form-control-feedback">
                             <i class="icon-lock2 text-muted"></i>
@@ -86,7 +94,7 @@ const submit = () => {
                     </div>
 
                     <div class="form-group">
-                        <button type="button"
+                        <button type="submit"
                                 :disabled="form.processing"
                                 class="btn btn-primary btn-block">
                             Sign in
