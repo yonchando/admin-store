@@ -2,15 +2,8 @@
 import NavLink from "@/Components/NavLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import {reactive} from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
-
-
-const menuState = reactive({
-    isOpen: false
-})
-
 </script>
 
 <template>
@@ -23,33 +16,42 @@ const menuState = reactive({
             </div>
 
             <div class="d-md-none">
-                <button class="navbar-toggler sidebar-mobile-main-toggle"
-                        @click="menuState.isOpen = !menuState.isOpen"
-                        type="button">
+                <button
+                    class="navbar-toggler sidebar-mobile-main-toggle"
+                    type="button"
+                >
                     <i class="icon-paragraph-justify3"></i>
                 </button>
             </div>
 
-            <div class="collapse navbar-collapse"
-                 :class="{'show': menuState.isOpen}"
-                 id="navbar-mobile">
-                <ul class="navbar-nav ml-auto">
-                    <Dropdown class="nav-item dropdown-user" toggle-class="navbar-nav-link d-flex align-items-center dropdown-toggle">
-                        <template v-slot:toggle>
-                            <img src="../../../assets/limitless_theme/images/image.png"
-                                 class="rounded-circle mr-2" height="34" alt="">
+            <div class="collapse navbar-collapse" id="navbar-mobile">
+                <Dropdown
+                    class="nav-item dropdown-user"
+                >
+                    <template v-slot:toggle>
+                        <DropdownToggle class="navbar-nav-link d-flex align-items-center dropdown-toggle">
+                            <img
+                                src="/assets/limitless_theme/images/image.png"
+                                class="rounded-circle mr-2 tw-w-8"
+                                alt=""
+                            />
                             <span>{{ $page.props.auth?.user.name }}</span>
-                        </template>
+                        </DropdownToggle>
+                    </template>
 
-                        <DropdownLink :href="route('profile.edit')" title="Profile"/>
-                        <DropdownLink :href="route('logout')" method="post" title="Logout"/>
-                    </Dropdown>
-                </ul>
+                    <DropdownLink
+                        :href="route('profile.edit')"
+                        title="Profile"
+                    />
+                    <DropdownLink
+                        :href="route('logout')"
+                        method="post"
+                        title="Logout"
+                    />
+                </Dropdown>
             </div>
         </div>
     </section>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

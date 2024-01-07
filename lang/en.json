@@ -1,0 +1,15 @@
+{
+    "dashboard": "Dashboard",
+    "categories": "Categories",
+    "category": "Category",
+    "products": "Products",
+    "empty": "Empty",
+    "name": "Name",
+    "action": "Action",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "category_name": "Category Name",
+    "save": "Save",
+    "close": "Close"
+}

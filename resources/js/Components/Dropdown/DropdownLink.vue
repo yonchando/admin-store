@@ -1,20 +1,27 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import {Link} from '@inertiajs/vue3';
 
 defineProps({
     title: String,
-    href: {
-        type: String,
-        required: true,
-    },
+    href: String,
 });
 </script>
 
 <template>
     <Link
         :href="href"
+        v-if="href"
         class="dropdown-item"
     >
         <slot>{{ title }}</slot>
     </Link>
+
+    <button
+        v-else
+        type="button"
+        class="dropdown-item"
+    >
+        <slot>{{ title }}</slot>
+    </button>
+
 </template>

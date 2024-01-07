@@ -9,5 +9,11 @@
         border-width: 0;
         border-style: solid;
         border-color: theme('borderColor.DEFAULT', currentColor);
-    }    
+    }
+}
+
+@layer components {
+    .modal.show {
+        display: block;
+    }
 }
