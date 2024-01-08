@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Contracts;
+namespace App\Repositories\Contracts;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
@@ -14,7 +14,7 @@ interface CategoryRepositoryInterface
      * @param Request $request
      * @return Collection<Category>
      */
-    public function all(Request $request): Collection;
+    public function get(Request $request): Collection;
 
     /**
      * @param Request $request

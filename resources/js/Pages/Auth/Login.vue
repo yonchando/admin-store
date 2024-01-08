@@ -1,11 +1,11 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
+import Checkbox from '@/Components/Form/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import InputError from '@/Components/Form/InputError.vue';
+import InputLabel from '@/Components/Form/InputLabel.vue';
+import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
+import TextInput from '@/Components/Form/TextInput.vue';
+import {Head, Link, useForm} from '@inertiajs/vue3';
 
 defineProps({
     canResetPassword: {
@@ -32,8 +32,8 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
-        
+        <Head title="Log in"/>
+
         <form class="login-form" @submit.prevent="submit">
             <div class="card mb-0">
                 <div class="card-body">
@@ -42,7 +42,7 @@ const submit = () => {
                         <h5 class="mb-0">Login</h5>
                         <span class="d-block text-muted">Your credentials</span>
                     </div>
-                    
+
                     <div class="form-group">
                         <div v-if="status" class="tw-mb-4 tw-font-medium tw-text-sm tw-text-green-600">
                             {{ status }}

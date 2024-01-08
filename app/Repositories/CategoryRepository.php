@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repositories;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class CategoryRepository implements Contracts\CategoryRepositoryInterface
+class CategoryRepository implements CategoryRepositoryInterface
 {
 
     /**
      * @inheritDoc
      */
-    public function all(Request $request): Collection
+    public function get(Request $request): Collection
     {
         return Category::get();
     }

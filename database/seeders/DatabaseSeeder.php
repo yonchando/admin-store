@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Super Admin',
             'username' => 'admin',
             'password' => bcrypt('password'),
+            'is_admin' => true
         ]);
     }
 }

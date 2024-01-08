@@ -12,4 +12,8 @@ class Category extends Model
     use HasScopes;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'json' => 'object'
+    ];
 }

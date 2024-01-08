@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Schema;
+use App\Helpers\HelperService;
 use Illuminate\Support\ServiceProvider;
 use URL;
 
@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(HelperService::class, HelperService::class);
     }
 
     /**

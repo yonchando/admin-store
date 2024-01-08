@@ -7,7 +7,7 @@ import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import Modal from "@/Components/Modal/Modal.vue";
 import FormGroup from "@/Components/Form/FormGroup.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";

@@ -11,6 +11,7 @@ const menus = {
         text: lang.categories
     },
     product: {
+        link: route('category.index'),
         text: lang.products
     }
 };

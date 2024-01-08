@@ -1,11 +1,11 @@
 <?php
 
+use App\Enums\Product\ProductStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,7 +20,10 @@ return new class extends Migration
             $table->bigInteger("category_id")->nullable();
             $table->string("image")->nullable();
             $table->string("slug")->nullable();
+            $table->tinyText("status")->default(ProductStatus::ACTIVE->name);
+            $table->string('json')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
