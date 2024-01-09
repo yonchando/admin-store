@@ -12,21 +12,21 @@ use Illuminate\Support\Str;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
+    public function __construct(
+        private readonly Request $request,
+    ) {
+    }
 
-    /**
-     * @inheritDoc
-     */
-    public function get(Request $request): Collection
+    public function get(): Collection
     {
         return Category::get();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function paginate(Request $request): LengthAwarePaginator
+    public function paginate(): LengthAwarePaginator
     {
-        return Category::latest()->paginate($request->get('perPage', 15));
+        return Category::query()
+            ->latest()
+            ->paginate($this->request->get('perPage', 15));
     }
 
     public function store(CategoryRequest $request): Category
@@ -45,7 +45,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->fill($request->validated());
         $category->slug = Str::slug($request->get('category_name'));
         $category->save();
-
         return $category;
     }
 

@@ -103,7 +103,7 @@ onMounted(() => {
                     <tr v-for="category in categories.data">
                         <td>{{ index++ }}</td>
                         <td>{{ category.category_name }}</td>
-                        <td class="">
+                        <td>
                             <Dropdown>
                                 <template #toggle>
                                     <DropdownToggle>

@@ -24,20 +24,23 @@ Route::middleware('auth')->group(function () {
         ->name('category.')
         ->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
-            Route::post('/', [CategoryController::class, 'store'])->name('store');
-            Route::patch('/{category}', [CategoryController::class, 'update'])->name('update');
-            Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+            Route::post('/save', [CategoryController::class, 'store'])->name('store');
+            Route::patch('update/{category}', [CategoryController::class, 'update'])->name('update');
+            Route::delete('delete/{category}', [CategoryController::class, 'destroy'])->name('destroy');
         });
 
-    Route::prefix('products')
+    Route::prefix('product')
         ->name('product.')
         ->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/{product}', [ProductController::class, 'index'])->name('show');
+            Route::get('/show/{product}', [ProductController::class, 'index'])->name('show');
 
-            Route::post('/', [ProductController::class, 'store'])->name('store');
-            Route::patch('/{product}', [ProductController::class, 'update'])->name('update');
-            Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::get('/create', [ProductController::class, 'create'])->name('create');
+            Route::post('/save', [ProductController::class, 'store'])->name('store');
+
+            Route::get('edit/{product}', [ProductController::class, 'edit'])->name('edit');
+            Route::patch('update/{product}', [ProductController::class, 'update'])->name('update');
+            Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
         });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

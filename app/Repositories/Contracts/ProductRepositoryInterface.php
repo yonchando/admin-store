@@ -24,9 +24,9 @@ interface ProductRepositoryInterface
 
     /**
      * @param int $id
-     * @return Product
+     * @return Product|null
      */
-    public function find(int $id): Product;
+    public function find(int $id): ?Product;
 
     /**
      * @param ProductRequest $request

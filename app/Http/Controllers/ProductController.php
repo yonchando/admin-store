@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Facades\Helper;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,9 +13,9 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
 
-
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
+        private readonly CategoryRepositoryInterface $categoryRepository,
     )
     {
     }
@@ -29,6 +30,10 @@ class ProductController extends Controller
 
     public function create()
     {
+        $categories = $this->categoryRepository->get();
+        return Inertia::render('Product/Form', [
+            'categories' => $categories
+        ]);
     }
 
     public function store(ProductRequest $request)

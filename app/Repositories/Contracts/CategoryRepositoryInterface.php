@@ -11,16 +11,14 @@ use Illuminate\Support\Collection;
 interface CategoryRepositoryInterface
 {
     /**
-     * @param Request $request
      * @return Collection<Category>
      */
-    public function get(Request $request): Collection;
+    public function get(): Collection;
 
     /**
-     * @param Request $request
      * @return LengthAwarePaginator<Category>
      */
-    public function paginate(Request $request): LengthAwarePaginator;
+    public function paginate(): LengthAwarePaginator;
 
     public function store(CategoryRequest $request): Category;
 

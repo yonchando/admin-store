@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +23,17 @@ test('index methods', function () {
             fn(AssertableInertia $page) => $page->component("Product/Index")
                 ->has('products.data', 2)
                 ->where('products.total', $products->count())
+        );
+});
+
+test('create methods', function () {
+    $categories = Category::factory(3)->create();
+
+    $this->get(route('product.create'))
+        ->assertOk()
+        ->assertInertia(
+            fn(AssertableInertia $page) => $page->component('Product/Form')
+                ->has('categories', $categories->count())
         );
 });
 

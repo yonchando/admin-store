@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session()->has('dark-theme') ? 'tw-dark' : '' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+      class="{{ session()->has('dark-theme') ? 'tw-dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -17,11 +18,12 @@
 </head>
 
 <body>
-    @inertia
+@inertia
 
-    <script src="{{ asset('assets/limitless_theme/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/limitless_theme/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/limitless_theme/plugins/loaders/blockui.min.js') }}"></script>
-    <script src="{{ asset('assets/limitless_theme/js/theme.js') }}"></script>
+<script src="{{ asset('assets/limitless_theme/js/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/limitless_theme/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/limitless_theme/plugins/loaders/blockui.min.js') }}"></script>
+<script src="{{ asset('assets/limitless_theme/plugins/notifications/sweet_alert.min.js') }}"></script>
+<script src="{{ asset('assets/limitless_theme/js/theme.js') }}"></script>
 </body>
 </html>

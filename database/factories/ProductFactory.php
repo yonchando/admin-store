@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\ValueObjects\ProductObject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
@@ -28,6 +29,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(1, 100),
             'stock_quantity' => $this->faker->numberBetween(1, 1000),
             'image' => $this->faker->imageUrl,
+            'json' => null,
         ];
     }
 

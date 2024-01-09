@@ -19,12 +19,13 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function paginate(Request $request): LengthAwarePaginator
     {
-        return Product::query()->paginate($request->get('perPage'));
+        return Product::query()->with(['category'])
+            ->paginate($request->get('perPage'));
     }
 
-    public function find(int $id): Product
+    public function find(int $id): ?Product
     {
-        // TODO: Implement find() method.
+        return Product::find($id);
     }
 
     public function store(ProductRequest $request): Product
