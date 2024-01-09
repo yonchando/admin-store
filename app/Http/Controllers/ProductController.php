@@ -12,17 +12,16 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
-    )
-    {
+    ) {
     }
 
     public function index(Request $request)
     {
         $products = $this->productRepository->paginate($request);
+
         return Inertia::render('Product/Index', [
             'products' => $products,
         ]);
@@ -31,8 +30,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = $this->categoryRepository->get();
+
         return Inertia::render('Product/Form', [
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -41,6 +41,7 @@ class ProductController extends Controller
         $this->productRepository->store($request);
 
         Helper::message(__('lang.created_success', ['attribute' => __('lang.product')]));
+
         return redirect()->route('product.index');
     }
 
@@ -57,12 +58,14 @@ class ProductController extends Controller
         $this->productRepository->update($request, $product);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.product')]));
+
         return redirect()->route('product.index');
     }
 
     public function destroy(Product $product)
     {
         $this->productRepository->destroy($product);
+
         return redirect()->route('product.index', request()->toArray());
     }
 }

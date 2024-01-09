@@ -3,18 +3,17 @@
 use App\Casts\ProductObjectCast;
 use App\Enums\Product\ProductStatus;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 it('must has attribute image url', function () {
     $product = new Product();
-    
+
     expect($product->getMutatedAttributes())
         ->toContain('image_url');
 });
 
-it('must be has casts json field to product object',function(){
+it('must be has casts json field to product object', function () {
     $product = new Product();
-    
+
     expect($product->getCasts())->toHaveKey('json', ProductObjectCast::class);
 });
 
@@ -33,6 +32,7 @@ it('must be has casts status field to enum product status', function () {
 
 it('must be has relationship category', function () {
     $product = new Product();
-    
-    expect(method_exists($product,'category'))->toBeTrue();
+
+    expect(method_exists($product, 'category'))->toBeTrue();
 });
+
