@@ -51,6 +51,10 @@ const submit = () => {
                         <div v-if="errors.password" class="tw-mb-4 tw-font-medium tw-text-sm text-danger">
                             {{ errors.password }}
                         </div>
+                        
+                        <div v-if="errors.username" class="tw-mb-4 tw-font-medium tw-text-sm text-danger">
+                            {{ errors.username }}
+                        </div>
                     </div>
 
                     <div class="form-group form-group-feedback form-group-feedback-left">
@@ -83,14 +87,6 @@ const submit = () => {
                             </label>
                         </div>
                         <br>
-
-                        <Link
-                            v-if="canResetPassword"
-                            :href="route('password.request')"
-                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                        >
-                            Forgot your password?
-                        </Link>
                     </div>
 
                     <div class="form-group">

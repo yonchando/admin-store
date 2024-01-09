@@ -12,7 +12,7 @@ defineProps({
 
 <template>
     <Link class="breadcrumb-item">
-        <i v-if="icon" class="mr-2" :class="icon"/>
+        <i v-if="icon" class="tw-mr-2" :class="icon"/>
         <slot>{{ title }}</slot>
     </Link>
 </template>

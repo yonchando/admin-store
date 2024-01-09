@@ -5,31 +5,25 @@ import PrimaryButton from '@/Components/Button/PrimaryButton.vue';
 import TextInput from '@/Components/Form/TextInput.vue';
 import {Link, useForm, usePage} from '@inertiajs/vue3';
 
-defineProps({
-    status: {
-        type: String,
-    },
-});
-
 const user = usePage().props.auth.user;
 
 const form = useForm({
     name: user.name,
-    email: user.username,
+    username: user.username,
 });
 </script>
 
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
+            <h2 class="tw-text-lg tw-font-medium tw-text-gray-900 dark:tw-text-gray-100">Profile Information</h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <p class="tw-mt-1 tw-text-sm tw-text-gray-600 dark:tw-text-gray-400">
                 Update your account's profile information and username.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('profile.update'))" class="tw-mt-6 tw-space-y-6">
             <div class="form-group">
                 <InputLabel for="name" value="Name"/>
 
