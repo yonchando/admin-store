@@ -14,12 +14,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     public function __construct(
         private readonly Request $request,
-    ) {
+    )
+    {
     }
 
     public function get(): Collection
     {
-        return Category::get();
+        return Category::latest()->get();
     }
 
     public function paginate(): LengthAwarePaginator

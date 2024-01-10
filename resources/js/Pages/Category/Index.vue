@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, useForm, usePage } from "@inertiajs/vue3";
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
@@ -13,10 +13,10 @@ import FormGroup from "@/Components/Form/FormGroup.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import DefaultButton from "@/Components/Button/DefaultButton.vue";
-import { onBeforeMount, onMounted, onUpdated, reactive, ref, watch } from "vue";
-import { inject } from "vue";
+import {onBeforeMount, onMounted, onUpdated, reactive, ref, watch} from "vue";
+import {inject} from "vue";
 
-const { lang, categories } = defineProps(["lang", "categories"]);
+const {lang, categories} = defineProps(["lang", "categories"]);
 
 const form = useForm({
     category_name: null,
@@ -84,13 +84,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Category" />
+    <Head title="Category"/>
 
     <AppLayout>
         <template #breadcrumb>
             <BreadcrumbItem
                 :title="lang.category"
-                icon="icon-tree5"
+                icon="icon-grid4"
                 :href="route('category.index')"
             />
         </template>
@@ -153,15 +153,15 @@ onMounted(() => {
     <Modal id="category-form" :title="title" center size="sm" bg="bg-info">
         <form @submit.prevent="save">
             <FormGroup>
-                <InputLabel :value="lang.category_name" />
-                <TextInput v-model="form.category_name" />
+                <InputLabel :value="lang.category_name"/>
+                <TextInput v-model="form.category_name"/>
             </FormGroup>
 
             <FormGroup class="tw-space-x-2">
                 <PrimaryButton type="submit">
                     {{ lang.save }}
                 </PrimaryButton>
-                <DefaultButton data-dismiss="modal"> Close </DefaultButton>
+                <DefaultButton data-dismiss="modal"> Close</DefaultButton>
             </FormGroup>
         </form>
     </Modal>
