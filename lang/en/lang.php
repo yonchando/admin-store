@@ -32,5 +32,10 @@ return [
     'browse_file' => 'Broswe File',
     'browse_image' => 'Broswe Image',
     'please_selected' => 'Please Selected',
+    'filters' => 'Filters',
+    'search' => 'Search Text',
+    'price_from' => "Price From",
+    "price_to" => "Price To",
+    'status' => "Status",
 
 ];

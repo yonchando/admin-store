@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Product\ProductStatus;
 use App\Models\Category;
 use App\Models\Product;
 use App\ValueObjects\ProductObject;
@@ -30,13 +31,28 @@ class ProductFactory extends Factory
             'stock_quantity' => $this->faker->numberBetween(1, 1000),
             'image' => $this->faker->imageUrl,
             'json' => null,
+            'status' => ProductStatus::ACTIVE->name,
         ];
+    }
+
+    public function active(): ProductFactory|Factory
+    {
+        return $this->state(fn() => [
+            'status' => ProductStatus::ACTIVE->name,
+        ]);
+    }
+
+    public function inactive(): ProductFactory|Factory
+    {
+        return $this->state(fn() => [
+            'status' => ProductStatus::INACTIVE->name,
+        ]);
     }
 
     public function category($id = null): ProductFactory|Factory
     {
         return $this->state(fn() => [
-            'category_id' => $id ?? Category::factory()
+            'category_id' => $id ?? Category::factory(),
         ]);
     }
 }

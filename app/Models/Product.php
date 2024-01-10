@@ -6,6 +6,7 @@ use App\Casts\ProductObjectCast;
 use App\Enums\Product\ProductStatus;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
+use App\Models\Concerns\Product\HasScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,18 +17,19 @@ class Product extends Model
     use SoftDeletes;
     use HasAttributes;
     use HasRelationships;
+    use HasScopes;
 
     protected $guarded = [
-        'image_url'
+        'image_url',
     ];
 
     protected $casts = [
         'json' => ProductObjectCast::class,
         'price' => 'decimal:2',
-        'status' => ProductStatus::class
+        'status' => ProductStatus::class,
     ];
-    
+
     protected $appends = [
-        'image_url'
+        'image_url',
     ];
 }

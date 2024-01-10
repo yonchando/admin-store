@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Product\ProductStatus;
 use App\Facades\Helper;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
@@ -20,10 +21,27 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = $this->productRepository->paginate($request);
+        $filters = $request->only([
+            'category_id',
+            'search',
+            'min_price',
+            'max_price',
+            'status',
+        ]);
+
+        $filters['perPage'] = $request->get('perPage', 15);
+
+        $products = $this->productRepository->filter($filters);
+
+        $categories = $this->categoryRepository->get();
+
+        $statuses = ProductStatus::toArray();
 
         return Inertia::render('Product/Index', [
             'products' => $products,
+            'filters' => $filters,
+            'statuses' => $statuses,
+            'categories' => $categories,
         ]);
     }
 
@@ -51,6 +69,12 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $categories = $this->categoryRepository->get();
+
+        return Inertia::render('Product/Form', [
+            'categories' => $categories,
+            'product' => $product,
+        ]);
     }
 
     public function update(ProductRequest $request, Product $product)

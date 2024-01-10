@@ -11,38 +11,47 @@ use Illuminate\Http\Request;
 interface ProductRepositoryInterface
 {
     /**
-     * @param Request $request
      * @return Collection<Product>
      */
-    public function get(Request $request): Collection;
+    public function get(): Collection;
 
     /**
-     * @param Request $request
      * @return LengthAwarePaginator<Product>
      */
-    public function paginate(Request $request): LengthAwarePaginator;
+    public function paginate(): LengthAwarePaginator;
 
     /**
-     * @param int $id
+     * @param  array{
+     *     category_id: int,
+     *     search: string,
+     *     min_price: double,
+     *     max_price: double,
+     * }  $filters
+     * @return LengthAwarePaginator<Product>|Collection<Product>
+     */
+    public function filter(array $filters): LengthAwarePaginator|Collection;
+
+    /**
+     * @param  int  $id
      * @return Product|null
      */
     public function find(int $id): ?Product;
 
     /**
-     * @param ProductRequest $request
+     * @param  ProductRequest  $request
      * @return Product
      */
     public function store(ProductRequest $request): Product;
 
     /**
-     * @param ProductRequest $request
-     * @param Product $product
+     * @param  ProductRequest  $request
+     * @param  Product  $product
      * @return Product
      */
     public function update(ProductRequest $request, Product $product): Product;
 
     /**
-     * @param Product $product
+     * @param  Product  $product
      * @return void
      */
     public function destroy(Product $product): void;

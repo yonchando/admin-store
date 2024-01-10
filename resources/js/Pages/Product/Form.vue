@@ -7,9 +7,9 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 
-const { lang, product, categories } = defineProps([
+const {lang, product, categories} = defineProps([
     "lang",
     "product",
     "categories",
@@ -26,7 +26,7 @@ const form = useForm({
 
 const save = () => {
     if (product) {
-        form.patch(route("product.update", update));
+        form.patch(route("product.update", product));
         return;
     }
 
@@ -35,13 +35,13 @@ const save = () => {
 </script>
 
 <template>
-    <Head v-if="product == null" title="Prodcut Add" />
-    <Head v-else title="Prodcut Edit" />
+    <Head v-if="product == null" title="Prodcut Add"/>
+    <Head v-else title="Prodcut Edit"/>
 
     <form @submit.prevent="save()" enctype="multipart/form-data">
         <AppLayout>
             <template #action>
-                <PrimaryButton type="submit">
+                <PrimaryButton type="submit" :disabled="form.processing">
                     <i class="icon-floppy-disk"></i>
                     <span>{{ lang.save }}</span>
                 </PrimaryButton>
@@ -61,7 +61,7 @@ const save = () => {
 
             <Card :title="product ? lang.prodcut_edit : lang.product_create">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-9">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -143,10 +143,10 @@ const save = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="form-group">
                             <fieldset>Product Image</fieldset>
-                            <FileInput name="image" v-model="form.image" />
+                            <FileInput name="image" v-model="form.image"/>
                         </div>
                     </div>
                 </div>

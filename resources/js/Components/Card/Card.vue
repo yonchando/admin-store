@@ -17,13 +17,18 @@ defineProps({
     remove: {
         type: Boolean,
         default: false,
-    }
+    },
+    bg: {
+        type: String,
+        default: 'bg-white'
+    },
 })
 </script>
 
 <template>
     <div class="card">
-        <div v-if="hasHeader" class="card-header bg-white header-elements-inline">
+        <div v-if="hasHeader" class="card-header header-elements-inline"
+             :class="bg">
             <h6 v-if="title" class="card-title">{{ title }}</h6>
             <div v-if="collapse || reload || remove" class="header-elements">
                 <div class="list-icons">

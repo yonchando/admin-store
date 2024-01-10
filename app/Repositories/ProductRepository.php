@@ -12,15 +12,35 @@ use Storage;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function get(Request $request): Collection
+    public function get(): Collection
     {
         return Product::query()->get();
     }
 
-    public function paginate(Request $request): LengthAwarePaginator
+    public function paginate(): LengthAwarePaginator
     {
-        return Product::query()->with(['category'])
-            ->paginate($request->get('perPage'));
+        return Product::query()->with(['category'])->paginate();
+    }
+
+    public function filter(array $filters): LengthAwarePaginator|Collection
+    {
+        $query = Product::query();
+
+        $query->filters($filters);
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        } else {
+            $query->active();
+        }
+
+        if (isset($filters['order_by']) && isset($filters['order_direction'])) {
+            $query->where($filters['order_by'], $filters['order_direction']);
+        } else {
+            $query->latest();
+        }
+
+        return isset($filters['perPage']) ? $query->paginate($filters['perPage']) : $query->get();
     }
 
     public function find(int $id): ?Product
@@ -71,4 +91,5 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product->delete();
     }
+
 }

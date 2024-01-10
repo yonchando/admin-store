@@ -7,3 +7,6 @@ import "../../public/assets/limitless_theme/css/components.css";
 import "../../public/assets/limitless_theme/css/colors.css";
 
 import "../css/app.css";
+
+// animate.css (https://animate.style)
+import "animate.css";

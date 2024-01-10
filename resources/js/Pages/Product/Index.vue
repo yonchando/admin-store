@@ -1,16 +1,17 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Table from "@/Components/Table/Table.vue";
 import Card from "@/Components/Card/Card.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
-import { inject } from "vue";
+import {inject} from "vue";
+import ProductFilter from "@/Pages/Product/ProductFilter.vue";
 
-const { lang, products } = defineProps(["lang", "products", "swal"]);
+const {lang, products} = defineProps(["lang", "products", "categories", "statuses"]);
 
 let index = products.from;
 
@@ -36,7 +37,7 @@ const destroy = (product) => {
 </script>
 
 <template>
-    <Head :title="lang.products" />
+    <Head :title="lang.products"/>
 
     <AppLayout>
         <template #action>
@@ -47,8 +48,12 @@ const destroy = (product) => {
         </template>
 
         <template #breadcrumb>
-            <BreadcrumbItem icon="icon-box" :title="lang.products" />
+            <BreadcrumbItem icon="icon-box" :title="lang.products"/>
         </template>
+
+        <Card :has-header="false">
+            <ProductFilter :categories="categories" :statuses="statuses"/>
+        </Card>
 
         <Card :title="lang.products">
             <Table>
@@ -65,7 +70,7 @@ const destroy = (product) => {
                     <tr v-for="product in products.data">
                         <td>{{ index++ }}</td>
                         <td>
-                            <img :src="product.image_url" alt="" width="60" />
+                            <img :src="product.image_url" alt="" width="60"/>
                         </td>
                         <td>{{ product.product_name }}</td>
                         <td>{{ product.category?.category_name }}</td>
