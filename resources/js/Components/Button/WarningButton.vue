@@ -6,13 +6,17 @@ defineProps({
 });
 
 </script>
+
 <template>
-    <Link v-if="href"
-          :href="href" class="btn btn-primary btn-sm tw-space-x-4">
+    <Link v-if="href" :href="href" class="btn btn-warning btn-sm tw-space-x-4">
         <slot/>
     </Link>
 
-    <button v-else class="btn btn-primary btn-sm tw-space-x-4">
+    <button v-else class="btn btn-warning btn-sm tw-space-x-4">
         <slot/>
     </button>
 </template>
+
+<style scoped>
+
+</style>

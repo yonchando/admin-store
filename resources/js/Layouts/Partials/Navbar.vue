@@ -8,11 +8,13 @@ const lang = usePage().props.lang;
 const menus = {
     category: {
         link: route('category.index'),
-        text: lang.categories
+        text: lang.categories,
+        icon: 'icon-grid4'
     },
     product: {
         link: route('product.index'),
-        text: lang.products
+        text: lang.products,
+        icon: 'icon-box'
     }
 };
 </script>
@@ -28,6 +30,7 @@ const menus = {
         <template v-for="menu in menus">
             <li class="nav-item">
                 <NavLink class="nav-link" :href="menu.link ?? '#'" :active="menu.active">
+                    <i v-if="menu.icon" :class="menu.icon"></i>
                     {{ menu.text }}
                 </NavLink>
             </li>

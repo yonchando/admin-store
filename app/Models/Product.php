@@ -19,8 +19,16 @@ class Product extends Model
     use HasRelationships;
     use HasScopes;
 
-    protected $guarded = [
-        'image_url',
+    protected $fillable = [
+        'product_name',
+        'description',
+        'price',
+        'stock_quantity',
+        'category_id',
+        'image',
+        'slug',
+        'status',
+        'json',
     ];
 
     protected $casts = [
@@ -31,5 +39,6 @@ class Product extends Model
 
     protected $appends = [
         'image_url',
+        'status_text',
     ];
 }

@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
-//uses(RefreshDatabase::class);
-
 beforeEach(function () {
     asUser();
 });
@@ -34,7 +32,13 @@ describe('product filters', function () {
         $res->assertOk()
             ->assertInertia(
                 fn(AssertableInertia $page) => $page->component('Product/Index')
-                    ->where('products.data.0', $product)
+                    ->has('products.data', 1)
+                    ->has(
+                        'products.data.0',
+                        fn(AssertableInertia $page) => $page->where('id', $product->id)
+                            ->where('product_name', $product->product_name)
+                            ->etc()
+                    )
                     ->where('categories.0', $category)
                     ->has(
                         'filters',

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\Product\ProductStatus;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
@@ -26,12 +27,14 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $query = Product::query();
 
+        $query->with([
+            'category',
+        ]);
+
         $query->filters($filters);
 
         if (isset($filters['status'])) {
             $query->where('status', $filters['status']);
-        } else {
-            $query->active();
         }
 
         if (isset($filters['order_by']) && isset($filters['order_direction'])) {
@@ -84,6 +87,14 @@ class ProductRepository implements ProductRepositoryInterface
 
         $product->save();
 
+        return $product;
+    }
+
+    public function updateStatus(Product $product): Product
+    {
+        $product->status = $product->is_active ? ProductStatus::INACTIVE : ProductStatus::ACTIVE;
+        $product->save();
+       
         return $product;
     }
 

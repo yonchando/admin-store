@@ -33,9 +33,13 @@ return [
     'browse_image' => 'Broswe Image',
     'please_selected' => 'Please Selected',
     'filters' => 'Filters',
+    'filter' => 'Filter',
     'search' => 'Search Text',
     'price_from' => "Price From",
     "price_to" => "Price To",
     'status' => "Status",
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'clear' => "Clear",
 
 ];

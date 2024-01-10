@@ -33,13 +33,15 @@ Route::middleware('auth')->group(function () {
         ->name('product.')
         ->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/show/{product}', [ProductController::class, 'index'])->name('show');
+            Route::get('/show/{product}', [ProductController::class, 'show'])->name('show');
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('/save', [ProductController::class, 'store'])->name('store');
 
             Route::get('edit/{product}', [ProductController::class, 'edit'])->name('edit');
             Route::patch('update/{product}', [ProductController::class, 'update'])->name('update');
+            Route::patch('update-status/{product}', [ProductController::class, 'updateStatus'])->name('update.status');
+
             Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
         });
 
@@ -48,4 +50,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

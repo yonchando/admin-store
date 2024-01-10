@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Table from "@/Components/Table/Table.vue";
 import Card from "@/Components/Card/Card.vue";
@@ -10,8 +10,15 @@ import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import {inject} from "vue";
 import ProductFilter from "@/Pages/Product/ProductFilter.vue";
+import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
 
-const {lang, products} = defineProps(["lang", "products", "categories", "statuses"]);
+const {lang, products} = defineProps([
+    "lang",
+    "products",
+    "categories",
+    "statuses",
+    "filters"
+]);
 
 let index = products.from;
 
@@ -52,18 +59,19 @@ const destroy = (product) => {
         </template>
 
         <Card :has-header="false">
-            <ProductFilter :categories="categories" :statuses="statuses"/>
+            <ProductFilter :categories="categories" :statuses="statuses" :filter="filters"/>
         </Card>
 
         <Card :title="lang.products">
             <Table>
                 <tr>
                     <th width="50">#</th>
-                    <th width="100">Image</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Action</th>
+                    <th width="100">{{ lang.image }}</th>
+                    <th>{{ lang.product_name }}</th>
+                    <th>{{ lang.category }}</th>
+                    <th>{{ lang.price }}</th>
+                    <th width="120">{{ lang.status }}</th>
+                    <th>{{ lang.action }}</th>
                 </tr>
 
                 <template v-if="products.data.length > 0">
@@ -72,9 +80,16 @@ const destroy = (product) => {
                         <td>
                             <img :src="product.image_url" alt="" width="60"/>
                         </td>
-                        <td>{{ product.product_name }}</td>
+                        <td>
+                            <Link :href="route('product.show',product)">
+                                {{ product.product_name }}
+                            </Link>
+                        </td>
                         <td>{{ product.category?.category_name }}</td>
                         <td>${{ product.price }}</td>
+                        <td>
+                            <ProductStatusText :product="product"/>
+                        </td>
                         <td>
                             <Dropdown>
                                 <template #toggle>

@@ -50,6 +50,8 @@ interface ProductRepositoryInterface
      */
     public function update(ProductRequest $request, Product $product): Product;
 
+    public function updateStatus(Product $product): Product;
+
     /**
      * @param  Product  $product
      * @return void

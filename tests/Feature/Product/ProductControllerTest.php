@@ -6,9 +6,8 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
-
-uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $user = User::factory()->create();
@@ -41,8 +40,21 @@ test('index methods', function () {
         );
 });
 
+test('show methods', function () {
+    $product = Product::factory()->create();
+
+    $this->get(route('product.show', $product))
+        ->assertOk()
+        ->assertInertia(
+            fn(AssertableInertia $page) => $page->component("Product/Show")
+                ->where('product.id', $product->id)
+                ->where('product.product_name', $product->product_name)
+        );
+});
+
 describe('create product', function () {
-    test('create methods', function () {
+
+    it('can load form create', function () {
         $categories = Category::factory(3)->create();
 
         $this->get(route('product.create'))
@@ -53,7 +65,7 @@ describe('create product', function () {
             );
     });
 
-    test('store methods', function () {
+    it('can store data to database', function () {
 
         Storage::fake();
 
@@ -83,7 +95,7 @@ describe('create product', function () {
 
 describe('product edit', function () {
 
-    test("edit methos", function () {
+    it("can load form edit", function () {
         $cagtegories = Category::factory(3)->create();
         $product = Product::factory()->create();
 
@@ -99,7 +111,7 @@ describe('product edit', function () {
             );
     });
 
-    test('update methods', function () {
+    it('update database', function () {
         $product = Product::factory()->create();
 
         $changed = Product::factory()->make([
@@ -144,8 +156,29 @@ describe('product edit', function () {
 
         Storage::assertExists($product->image);
     });
-});
 
+    it('can update product status active to inactive and inactive to active', function () {
+        $product = Product::factory()->active()->create();
+
+        $this->patchJson(route('product.update.status', $product))
+            ->assertOk()
+            ->assertJson(
+                fn(AssertableJson $json) => $json->where('product.id', $product->id)
+                    ->where('product.status', ProductStatus::INACTIVE->name)
+                    ->etc()
+            );
+
+        $this->patchJson(route('product.update.status', $product))
+            ->assertOk()
+            ->assertJson(
+                fn(AssertableJson $json) => $json->where('product.id', $product->id)
+                    ->where('product.status', ProductStatus::ACTIVE->name)
+                    ->etc()
+            );
+
+    });
+
+});
 
 test('destroy methods', function () {
     $product = Product::factory()->create();

@@ -63,8 +63,13 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = $this->productRepository->find($id);
+
+        return Inertia::render("Product/Show", [
+            'product' => $product,
+        ]);
     }
 
     public function edit(Product $product)
@@ -84,6 +89,15 @@ class ProductController extends Controller
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.product')]));
 
         return redirect()->route('product.index');
+    }
+
+    public function updateStatus(Product $product)
+    {
+        $product = $this->productRepository->updateStatus($product);
+
+        return response()->json([
+            'product' => $product,
+        ]);
     }
 
     public function destroy(Product $product)
