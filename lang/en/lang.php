@@ -41,5 +41,8 @@ return [
     'active' => 'Active',
     'inactive' => 'Inactive',
     'clear' => "Clear",
+    'product_detail' => "Product Detail",
+    'detail' => 'Detail',
+    'lang' => "Lang",
 
 ];

@@ -6,6 +6,11 @@ import NavLink from "@/Components/NavLink.vue";
 const lang = usePage().props.lang;
 
 const menus = {
+    dashboard: {
+        link: route('dashboard'),
+        text: lang.dashboard,
+        icon: 'icon-home2'
+    },
     category: {
         link: route('category.index'),
         text: lang.categories,
@@ -15,6 +20,11 @@ const menus = {
         link: route('product.index'),
         text: lang.products,
         icon: 'icon-box'
+    },
+    order: {
+        link: route('order.index'),
+        icon: '',
+        text: lang.orders,
     }
 };
 </script>

@@ -5,14 +5,17 @@ namespace App\Providers;
 use App\Repositories\CategoryRepository;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\Contracts\PurchaseOrderInterface;
 use App\Repositories\ProductRepository;
+use App\Repositories\PurchaseOrderRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
     private $binds = [
         CategoryRepositoryInterface::class => CategoryRepository::class,
-        ProductRepositoryInterface::class => ProductRepository::class
+        ProductRepositoryInterface::class => ProductRepository::class,
+        PurchaseOrderInterface::class => PurchaseOrderRepository::class,
     ];
 
     public function register(): void

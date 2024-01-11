@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,12 @@ Route::middleware('auth')->group(function () {
             Route::patch('update-status/{product}', [ProductController::class, 'updateStatus'])->name('update.status');
 
             Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        });
+
+    Route::prefix('purchase-order')
+        ->name('purchase.order.')
+        ->group(function () {
+            Route::get('/', [PurchaseOrderController::class, 'index'])->name('index');
         });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

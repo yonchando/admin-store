@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\PurchaseOrder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
+ * @extends Factory<PurchaseOrder>
  */
-class OrderFactory extends Factory
+class PurchaseOrderFactory extends Factory
 {
     /**
      * Define the model's default state.
