@@ -3,9 +3,9 @@ import HeaderTop from "@/Layouts/Partials/HeaderTop.vue";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import { router, usePage } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import Loading from "./Partials/Loading.vue";
-import { ref } from "vue";
+import {ref} from "vue";
 
 defineProps({
     showSidebar: {
@@ -34,10 +34,10 @@ const lang = usePage().props.lang;
 <template>
     <div>
         <div class="navbar-top">
-            <HeaderTop v-if="showHeaderTop" />
+            <HeaderTop v-if="showHeaderTop"/>
 
             <div class="page-content">
-                <Sidebar v-if="showSidebar" />
+                <Sidebar v-if="showSidebar"/>
 
                 <div class="content-wrapper">
                     <div class="page-header page-header-light">
@@ -51,20 +51,20 @@ const lang = usePage().props.lang;
                                         icon="icon-home2"
                                         :href="route('dashboard')"
                                     />
-                                    <slot name="breadcrumb" />
+                                    <slot name="breadcrumb"/>
                                 </Breadcrumb>
                             </div>
 
                             <div class="header-elements d-none">
                                 <Breadcrumb class="justify-content-center">
-                                    <slot name="action" />
+                                    <slot name="action"/>
                                 </Breadcrumb>
                             </div>
                         </div>
                     </div>
 
                     <div class="content tw-mb-24 tw-px-2">
-                        <slot />
+                        <slot/>
                     </div>
 
                     <div
@@ -101,5 +101,5 @@ const lang = usePage().props.lang;
         </div>
     </div>
 
-    <Loading v-if="loading" />
+    <Loading v-if="loading"/>
 </template>

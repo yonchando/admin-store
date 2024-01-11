@@ -5,11 +5,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
-beforeEach(function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-});
-
 test('index method', function () {
 
     $category = Category::factory(3)->create();

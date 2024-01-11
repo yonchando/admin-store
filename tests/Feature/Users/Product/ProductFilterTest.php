@@ -7,10 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
-beforeEach(function () {
-    asUser();
-});
-
 describe('product filters', function () {
 
     it('filter all', function () {

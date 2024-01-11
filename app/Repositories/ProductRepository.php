@@ -48,7 +48,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function find(int $id): ?Product
     {
-        return Product::find($id);
+        return Product::query()->with(['category'])->find($id);
     }
 
     public function store(ProductRequest $request): Product
@@ -94,7 +94,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product->status = $product->is_active ? ProductStatus::INACTIVE : ProductStatus::ACTIVE;
         $product->save();
-       
+
         return $product;
     }
 

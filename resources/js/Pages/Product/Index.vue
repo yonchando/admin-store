@@ -70,6 +70,7 @@ const destroy = (product) => {
                     <th>{{ lang.product_name }}</th>
                     <th>{{ lang.category }}</th>
                     <th>{{ lang.price }}</th>
+                    <th>{{ lang.stock_quantity }}</th>
                     <th width="120">{{ lang.status }}</th>
                     <th>{{ lang.action }}</th>
                 </tr>
@@ -87,6 +88,9 @@ const destroy = (product) => {
                         </td>
                         <td>{{ product.category?.category_name }}</td>
                         <td>${{ product.price }}</td>
+                        <td>
+                            <span class="badge badge-pill badge-info">{{ product.stock_quantity }}</span>
+                        </td>
                         <td>
                             <ProductStatusText :product="product"/>
                         </td>

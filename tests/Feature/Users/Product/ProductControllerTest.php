@@ -9,11 +9,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
-beforeEach(function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-});
-
 test('index methods', function () {
 
     $categories = Category::factory(2)->create();
