@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Helper;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
@@ -14,8 +15,7 @@ class CategoryController extends Controller
 
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
-    )
-    {
+    ) {
     }
 
     public function index(Request $request)
@@ -31,7 +31,8 @@ class CategoryController extends Controller
     {
         $this->categoryRepository->store($request);
 
-        Session::flash('message', __('lang.success'));
+        Helper::message(__('lang.created_success', ['attribute' => __('lang.category')]));
+
         return redirect()->route('category.index');
     }
 
@@ -39,7 +40,8 @@ class CategoryController extends Controller
     {
         $this->categoryRepository->update($request, $category);
 
-        Session::flash('message', __('lang.success'));
+        Helper::message(__('lang.updated_success', ['attribute' => __('lang.category')]));
+
         return redirect()->route('category.index');
     }
 
@@ -47,7 +49,8 @@ class CategoryController extends Controller
     {
         $this->categoryRepository->destroy($category);
 
-        Session::flash('message', __('Category Delete'));
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.category')]));
+
         return redirect()->back();
     }
 }

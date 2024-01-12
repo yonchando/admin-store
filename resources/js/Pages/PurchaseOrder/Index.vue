@@ -14,7 +14,7 @@ let index = purchaseOrders.from;
 
 const swal = inject('$swal');
 
-const updateStatus = (purchase, statusUpdate) => {
+const updatePurchaseStatus = (purchase, statusUpdate) => {
     index = purchaseOrders.from;
 
     swal({
@@ -31,6 +31,7 @@ const updateStatus = (purchase, statusUpdate) => {
         }
     )
 }
+
 </script>
 
 <template>
@@ -67,22 +68,22 @@ const updateStatus = (purchase, statusUpdate) => {
                             <template v-if="purchase.status === status.PENDING || purchase.status === status.ACCEPTED">
                                 <Action>
                                     <DropdownLink v-if="purchase.status === status.PENDING"
-                                                  @click="updateStatus(purchase,status.ACCEPTED)">
+                                                  @click="updatePurchaseStatus(purchase,status.ACCEPTED)">
                                         <i class="icon-check2 text-success"></i>
                                         {{ status.ACCEPTED }}
                                     </DropdownLink>
                                     <template v-if="purchase.status === status.ACCEPTED">
-                                        <DropdownLink @click="updateStatus(purchase, status.SHIPPED)">
+                                        <DropdownLink @click="updatePurchaseStatus(purchase, status.SHIPPED)">
                                             <i class="icon-box-add text-info"></i>
                                             {{ status.SHIPPED }}
                                         </DropdownLink>
-                                        <DropdownLink @click="updateStatus(purchase, status.CANCELED)">
+                                        <DropdownLink @click="updatePurchaseStatus(purchase, status.CANCELED)">
                                             <i class="icon-x text-danger"></i>
                                             {{ status.CANCELED }}
                                         </DropdownLink>
                                     </template>
                                     <DropdownLink v-if="purchase.status === status.PENDING"
-                                                  @click="updateStatus(purchase,'REJECTED')">
+                                                  @click="updatePurchaseStatus(purchase,'REJECTED')">
                                         <i class="icon-x text-danger"></i>
                                         {{ status.REJECTED }}
                                     </DropdownLink>
@@ -93,7 +94,7 @@ const updateStatus = (purchase, statusUpdate) => {
                 </template>
                 <template v-else>
                     <tr>
-                        <td :colspan="Object.keys(tHead).length">{{ lang.empty }}</td>
+                        <td colspan="8">{{ lang.empty }}</td>
                     </tr>
                 </template>
 

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId("purchase_order_id")->constrained()->onDelete('cascade');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string("product_name");
             $table->double("category_name")->nullable();
             $table->double("product_price");

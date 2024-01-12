@@ -1,16 +1,39 @@
 <script setup>
 
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
 import Table from "@/Components/Table/Table.vue";
 
-const {lang} = defineProps({
+import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
+import {inject} from "vue";
+import FlashMessage from "@/Components/Alert/FlashMessage.vue";
+
+const {lang, purchase, status} = defineProps({
     purchase: Object,
-    lang: Object
-})
+    lang: Object,
+    status: Object,
+});
+
+const swal = inject('$swal');
+
+const updatePurchaseStatus = (statusUpdate) => {
+    swal({
+        title: lang.are_you_sure,
+        text: lang.do_you_want_to.replace(':attribute', statusUpdate.toLowerCase()),
+        icon: statusUpdate === status.CANCELED || statusUpdate === status.REJECTED ? 'error' : 'warning',
+        confirmButtonClass: statusUpdate === status.CANCELED || statusUpdate === status.REJECTED ? 'btn btn-danger' : 'btn btn-primary',
+    }).then(
+        res => {
+            if (res.value) {
+                useForm({status: statusUpdate})
+                    .patch(route('purchase.order.update.status', purchase));
+            }
+        }
+    )
+}
 
 </script>
 
@@ -22,6 +45,15 @@ const {lang} = defineProps({
             <BreadcrumbItem :href="route('purchase.order.index')" icon="icon-box" :title="lang.purchase_orders"/>
             <BreadcrumbItem icon="fa fa-box-open" :title="lang.detail"/>
         </template>
+
+        <template #action>
+            <PrimaryButton @click="updatePurchaseStatus(status.ACCEPTED)">
+                <i class="icon-check2"></i>
+                {{ lang.accepted }}
+            </PrimaryButton>
+        </template>
+
+        <FlashMessage/>
 
         <Card :has-header="false">
             <div class="row">

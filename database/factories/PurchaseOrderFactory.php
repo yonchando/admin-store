@@ -21,7 +21,6 @@ class PurchaseOrderFactory extends Factory
     {
         return [
             'transaction_id' => \Str::upper($this->faker->unique()->word),
-            'customer_id' => Customer::factory()->create(),
             'total_price' => $this->faker->randomFloat(2, 10, 100),
             'status' => PurchaseOrderStatus::PENDING->name,
             'purchased_at' => $this->faker->dateTimeBetween('-30 months', '-1 week')->format('Y-m-d H:i:s'),

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +55,15 @@ Route::middleware('auth')->group(function () {
 
             Route::patch('update-status/{purchaseOrder}',
                 [PurchaseOrderController::class, 'updateStatus'])->name('update.status');
+        });
+
+    Route::prefix('customer')
+        ->name('customer.')
+        ->group(function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('index');
+            Route::get('/show/{customer}', [CustomerController::class, 'show'])->name('show');
+            Route::patch('update-status/{customer}', [CustomerController::class, 'updateStatus'])
+                ->name('update.status');
         });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -8,10 +8,10 @@ use Inertia\Testing\AssertableInertia;
 
 test('list orders in index methods', function () {
 
-    $purchases = PurchaseOrder::factory(3)->hasOrderItems(3)
+    $purchases = PurchaseOrder::factory(3)->customer()->hasOrderItems(3)
         ->purchasedAt(now()->subDay()->toDateTimeString())->create();
 
-    $first = PurchaseOrder::factory()->hasOrderItems(2)
+    $first = PurchaseOrder::factory()->customer()->hasOrderItems(2)
         ->purchasedAt()->create();
 
     $this->get(route('purchase.order.index', ['perPage' => 2]))
@@ -55,7 +55,7 @@ test('show detail purchase', function () {
 describe('update purchase status', function () {
 
     it('can not updated with invalid status', function () {
-        $purchase = PurchaseOrder::factory()->create();
+        $purchase = PurchaseOrder::factory()->customer()->create();
 
         $res = $this->from(route('purchase.order.index'))
             ->patch(route('purchase.order.update.status', $purchase), [
@@ -68,11 +68,15 @@ describe('update purchase status', function () {
 
     it('can purchase order status', function ($status) {
 
-        $purchase = PurchaseOrder::factory()->create();
+        $purchase = PurchaseOrder::factory()->customer()->create();
 
-        $this->patchJson(route('purchase.order.update.status', $purchase), [
-            'status' => $status,
-        ])->assertRedirect(route('purchase.order.index'));
+        $this->from(route('purchase.order.index'))
+            ->patchJson(route('purchase.order.update.status', $purchase), [
+                'status' => $status,
+            ])->assertRedirect(route('purchase.order.index'))
+            ->assertSessionHas([
+                'message' => ['message' => __('lang.updated_success', ['attribute' => __('lang.purchase_status')])],
+            ]);
 
         $purchase->refresh();
 

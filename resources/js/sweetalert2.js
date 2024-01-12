@@ -1,7 +1,7 @@
 import Swal from "sweetalert2/dist/sweetalert2";
 
 export default class Sweetalert2 {
-    static install(vue, options = {}) {
+    static install(app, options = {}) {
         const swalFunction = (...args) => {
             args.forEach((value) => {
                 if (typeof value.confirmButtonClass !== "undefined") {
@@ -30,7 +30,7 @@ export default class Sweetalert2 {
                 swalFunction[methodName] =
                     swalLocalInstance[methodName].bind(swalLocalInstance);
             });
-        vue.config.globalProperties.$swal = swalFunction;
-        vue.provide("$swal", swalFunction);
+        app.config.globalProperties.$swal = swalFunction;
+        app.provide("$swal", swalFunction);
     }
 }

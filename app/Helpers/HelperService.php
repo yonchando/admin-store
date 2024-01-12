@@ -6,10 +6,11 @@ use Illuminate\Support\Facades\Session;
 
 class HelperService
 {
-    public function message($message, $key = 'message'): void
+    public function message($message, $type = 'success', $key = 'message'): void
     {
         Session::flash($key, [
-            'message' => $message
+            'message' => $message,
+            'type' => $type,
         ]);
     }
 }

@@ -25,6 +25,11 @@ const menus = {
         link: route('purchase.order.index'),
         icon: 'icon-store2',
         text: lang.purchase_orders,
+    },
+    customer: {
+        link: route('customer.index'),
+        icon: 'icon-users',
+        text: lang.customers
     }
 };
 </script>

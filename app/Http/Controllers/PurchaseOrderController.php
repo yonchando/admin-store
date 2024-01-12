@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PurchaseOrder\PurchaseOrderStatus;
+use App\Facades\Helper;
 use App\Models\PurchaseOrder;
 use App\Repositories\Contracts\PurchaseOrderInterface;
 use Illuminate\Http\Request;
@@ -34,6 +35,7 @@ class PurchaseOrderController extends Controller
 
         return Inertia::render('PurchaseOrder/Show', [
             'purchase' => $purchase,
+            'status' => PurchaseOrderStatus::toJson(),
         ]);
     }
 
@@ -45,6 +47,7 @@ class PurchaseOrderController extends Controller
 
         $this->purchaseOrder->updateStatus($request, $purchaseOrder->id);
 
-        return to_route('purchase.order.index');
+        Helper::message(__('lang.updated_success', ['attribute' => __('lang.purchase_status')]));
+        return redirect()->back();
     }
 }

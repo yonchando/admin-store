@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {Head, useForm, usePage} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
@@ -13,8 +13,8 @@ import FormGroup from "@/Components/Form/FormGroup.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import DefaultButton from "@/Components/Button/DefaultButton.vue";
-import {onBeforeMount, onMounted, onUpdated, reactive, ref, watch} from "vue";
-import {inject} from "vue";
+import {inject, onMounted, ref} from "vue";
+import FlashMessage from "@/Components/Alert/FlashMessage.vue";
 
 const {lang, categories} = defineProps(["lang", "categories"]);
 
@@ -102,12 +102,7 @@ onMounted(() => {
             </PrimaryButton>
         </template>
 
-        <div
-            v-if="$page.props.flash.message || form.recentlySuccessful"
-            class="alert alert-success"
-        >
-            {{ $page.props.flash.message }}
-        </div>
+        <FlashMessage/>
 
         <Card title="Categories">
             <Table>
@@ -167,4 +162,3 @@ onMounted(() => {
     </Modal>
 </template>
 
-<style scoped></style>

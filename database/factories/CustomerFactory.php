@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Gender;
 use App\Models\Customer;
 use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,15 +21,17 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         $province = Province::factory()->create();
-
+        $countryCode = '+855';
+        $phone = $this->faker->unique()->e164PhoneNumber;
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'username' => $this->faker->unique()->userName,
+            'phone' => $countryCode.substr($phone, $this->faker->numberBetween(4, 5)),
             'password' => Hash::make('password'),
             'email' => $this->faker->unique()->safeEmail,
             'city_id' => $province->city_id,
             'province_id' => Province::factory()->create(),
+            'gender' => $this->faker->randomElement(Gender::cases()),
         ];
     }
 }
