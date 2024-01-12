@@ -74,9 +74,7 @@ describe('update purchase status', function () {
             ->patchJson(route('purchase.order.update.status', $purchase), [
                 'status' => $status,
             ])->assertRedirect(route('purchase.order.index'))
-            ->assertSessionHas([
-                'message' => ['message' => __('lang.updated_success', ['attribute' => __('lang.purchase_status')])],
-            ]);
+            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.purchase_status')]));
 
         $purchase->refresh();
 

@@ -15,7 +15,7 @@ const types = {
         class="alert"
         :class="types[$page.props.flash.message.type]"
     >
-        {{ $page.props.flash.message.message }}
+        {{ $page.props.flash.message.text }}
     </div>
 
     <div

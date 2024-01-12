@@ -57,7 +57,7 @@ test('store mehtod', function () {
 
     $this->post(route('category.store'), $cateogry->toArray())
         ->assertRedirect(route('category.index'))
-        ->assertSessionHas('message', __('lang.success'));
+        ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.category')]));
 
     $this->assertDatabaseHas($cateogry->getTable(), [
         'category_name' => $cateogry->category_name,
@@ -73,7 +73,7 @@ test("update method", function () {
     $this->patch(route('category.update', $cateogry), [
         'category_name' => $name,
     ])->assertRedirect(route('category.index'))
-        ->assertSessionHas('message', __('lang.success'));
+        ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.category')]));
 
     $changed = $cateogry->fresh();
 
@@ -86,7 +86,8 @@ test('destroy methods', function () {
 
     $this->from(route('category.index'))
         ->delete(route('category.destroy', $category))
-        ->assertRedirect(route('category.index'));
+        ->assertRedirect(route('category.index'))
+        ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.category')]));
 
     $this->assertDatabaseMissing($category->getTable(), [
         'category_name' => $category->category_name,

@@ -70,9 +70,7 @@ describe('create product', function () {
 
         $this->post(route('product.store'), $product->toArray())
             ->assertRedirect()
-            ->assertSessionHas('message', [
-                'message' => __('lang.created_success', ['attribute' => __('lang.product')]),
-            ]);
+            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
 
         $this->assertDatabaseHas($product->getTable(), [
             'product_name' => $product->product_name,
@@ -115,9 +113,7 @@ describe('product edit', function () {
 
         $this->patch(route('product.update', $product->id), $changed->toArray())
             ->assertRedirect(route('product.index'))
-            ->assertSessionHas('message', [
-                'message' => __('lang.updated_success', ['attribute' => __('lang.product')]),
-            ]);
+            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product')]));
 
         $this->assertDatabaseMissing($product->getTable(), [
             'product_name' => $product->product_name,
