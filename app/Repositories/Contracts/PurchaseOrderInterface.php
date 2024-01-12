@@ -19,5 +19,7 @@ interface PurchaseOrderInterface
      */
     public function paginate(Request $request): LengthAwarePaginator;
 
-    public function updateStatus(Request $request, int $id): bool;
+    public function updateStatus(Request $request, int $id): PurchaseOrder;
+
+    public function find(int $id): PurchaseOrder;
 }

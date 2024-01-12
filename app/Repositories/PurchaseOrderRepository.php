@@ -20,13 +20,37 @@ class PurchaseOrderRepository implements PurchaseOrderInterface
     {
         $query = PurchaseOrder::query();
 
-        return $query->paginate();
+        $query->with(['customer']);
+
+        $query->withCount(['orderItems']);
+
+        if ($request->has('orderBy')) {
+            $query->orderBy($request->get('orderBy'), $request->get('direction', 'asc'));
+        } else {
+            $query->orderByDesc('purchased_at');
+        }
+
+        return $query->paginate($request->get('perPage', 15));
     }
 
-    public function updateStatus(Request $request, int $id): bool
+    public function find(int $id): PurchaseOrder
     {
-        $order = PurchaseOrder::find($id);
-        $order->status = $request->get('status');
-        return $order->save();
+        $query = PurchaseOrder::query();
+
+        $query->with(['customer', 'orderItems']);
+
+        return $query->find($id);
     }
+
+    public function updateStatus(Request $request, int $id): PurchaseOrder
+    {
+        $purchase = PurchaseOrder::find($id);
+
+        $purchase->status = $request->get('status');
+
+        $purchase->save();
+
+        return $purchase;
+    }
+
 }

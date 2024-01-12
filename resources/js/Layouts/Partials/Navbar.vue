@@ -22,9 +22,9 @@ const menus = {
         icon: 'icon-box'
     },
     order: {
-        link: route('order.index'),
-        icon: '',
-        text: lang.orders,
+        link: route('purchase.order.index'),
+        icon: 'icon-store2',
+        text: lang.purchase_orders,
     }
 };
 </script>

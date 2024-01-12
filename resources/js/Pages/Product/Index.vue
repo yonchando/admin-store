@@ -28,7 +28,7 @@ const destroy = (product) => {
     index = products.from;
 
     swal({
-        title: "Are you sure?",
+        title: lang.are_you_sure,
         text: lang.do_you_want_to_delete_this.replace(
             ":attribute",
             product.product_name,
