@@ -2,30 +2,24 @@
 
 namespace App\Providers;
 
-use App\Repositories\CategoryRepository;
-use App\Repositories\Contracts\CategoryRepositoryInterface;
-use App\Repositories\Contracts\CustomerRepositoryInterface;
-use App\Repositories\Contracts\ProductRepositoryInterface;
-use App\Repositories\Contracts\PurchaseOrderInterface;
-use App\Repositories\CustomerRepository;
-use App\Repositories\ProductRepository;
-use App\Repositories\PurchaseOrderRepository;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-    private $binds = [
-        CategoryRepositoryInterface::class => CategoryRepository::class,
-        ProductRepositoryInterface::class => ProductRepository::class,
-        PurchaseOrderInterface::class => PurchaseOrderRepository::class,
-        CustomerRepositoryInterface::class => CustomerRepository::class,
-    ];
-
     public function register(): void
     {
-        foreach ($this->binds as $key => $bind) {
-            $this->app->bind($key, $bind);
+        $files = File::files(app_path('Repositories/Contracts'));
+
+        foreach ($files as $file) {
+            $interface = "App\\Repositories\\Contracts\\{$file->getFilenameWithoutExtension()}";
+            $classImpl = "App\\Repositories\\".Str::replace('Interface', '', $file->getFilenameWithoutExtension());
+
+            /** @noinspection PhpUnusedLocalVariable */
+            $this->app->bind($interface, $classImpl);
         }
+
     }
 
     public function boot(): void

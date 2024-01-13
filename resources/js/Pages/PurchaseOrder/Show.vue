@@ -61,7 +61,8 @@ const updatePurchaseStatus = (statusUpdate) => {
                     <div class="tw-space-y-3">
                         <ListItem :label="lang.transaction_id" :value="`#${purchase.transaction_id}`"/>
                         <ListItem :label="lang.customer" :value="purchase.customer.name"/>
-                        <ListItem :label="lang.total_price" :value="`$${purchase.tota_price}`"/>
+                        <ListItem :label="lang.total_price"
+                                  :value="`${purchase.total_price} ${ $page.props.setting?.currency?.code }`"/>
                         <ListItem :label="lang.status">
                             <div v-html="purchase.status_text"></div>
                         </ListItem>
@@ -83,14 +84,14 @@ const updatePurchaseStatus = (statusUpdate) => {
                 <tr v-for="(product,i) in purchase.order_items" :key="product.id">
                     <td>{{ i + 1 }}</td>
                     <td>{{ product.product_name }}</td>
-                    <td>{{ product.product_price }} USD</td>
+                    <td>{{ product.product_price }} {{ $page.props.setting?.currency?.code }}</td>
                     <td>{{ product.qty }}</td>
-                    <td>{{ product.total_price }} USD</td>
+                    <td>{{ product.total_price }} {{ $page.props.setting?.currency?.code }}</td>
                 </tr>
 
                 <tr class="tw-font-medium">
                     <td class="text-right" colspan="4">{{ lang.total }}</td>
-                    <td>{{ purchase.total_price }} USD</td>
+                    <td>{{ purchase.total_price }} {{ $page.props.setting?.currency?.code }}</td>
                 </tr>
             </Table>
         </Card>

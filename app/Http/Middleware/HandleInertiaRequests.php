@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Inertia\Middleware;
+use Session;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,8 +38,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'lang' => fn() => Lang::get('lang'),
             'flash' => [
-                'message' => fn() => $request->session()->get('message')
+                'message' => fn() => $request->session()->get('message'),
             ],
+            'setting' => Session::get('setting'),
         ];
     }
 }

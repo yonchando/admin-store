@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Casts\ProductObjectCast;
 use App\Enums\Product\ProductStatus;
+use App\Models\Casts\ProductObjectCast;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
 use App\Models\Concerns\Product\HasScopes;

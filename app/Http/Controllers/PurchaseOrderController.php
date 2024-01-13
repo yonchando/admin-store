@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PurchaseOrder\PurchaseOrderStatus;
 use App\Facades\Helper;
 use App\Models\PurchaseOrder;
-use App\Repositories\Contracts\PurchaseOrderInterface;
+use App\Repositories\Contracts\PurchaseOrderRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -15,13 +15,13 @@ class PurchaseOrderController extends Controller
 
 
     public function __construct(
-        private readonly PurchaseOrderInterface $purchaseOrder,
+        private readonly PurchaseOrderRepositoryInterface $purchaseOrderRepository,
     ) {
     }
 
     public function index(Request $request)
     {
-        $purchaseOrders = $this->purchaseOrder->paginate($request);
+        $purchaseOrders = $this->purchaseOrderRepository->paginate($request);
 
         return Inertia::render('PurchaseOrder/Index', [
             'purchaseOrders' => $purchaseOrders,
@@ -31,7 +31,7 @@ class PurchaseOrderController extends Controller
 
     public function show(PurchaseOrder $purchaseOrder)
     {
-        $purchase = $this->purchaseOrder->find($purchaseOrder->id);
+        $purchase = $this->purchaseOrderRepository->find($purchaseOrder->id);
 
         return Inertia::render('PurchaseOrder/Show', [
             'purchase' => $purchase,
@@ -45,7 +45,7 @@ class PurchaseOrderController extends Controller
             'status' => [Rule::in(PurchaseOrderStatus::cases())],
         ]);
 
-        $this->purchaseOrder->updateStatus($request, $purchaseOrder->id);
+        $this->purchaseOrderRepository->updateStatus($request, $purchaseOrder->id);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.purchase_status')]));
         return redirect()->back();

@@ -30,6 +30,11 @@ const menus = {
         link: route('customer.index'),
         icon: 'icon-users',
         text: lang.customers
+    },
+    setting: {
+        link: route('setting.show'),
+        icon: 'icon-gear',
+        text: lang.setting
     }
 };
 </script>

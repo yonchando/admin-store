@@ -1,7 +1,7 @@
 <?php
 
-use App\Casts\ProductObjectCast;
 use App\Enums\Product\ProductStatus;
+use App\Models\Casts\ProductObjectCast;
 use App\Models\Product;
 
 it('must has attribute image url', function () {

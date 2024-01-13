@@ -3,12 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\PurchaseOrder;
-use App\Repositories\Contracts\PurchaseOrderInterface;
+use App\Repositories\Contracts\PurchaseOrderRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PurchaseOrderRepository implements PurchaseOrderInterface
+class PurchaseOrderRepository implements PurchaseOrderRepositoryInterface
 {
 
     public function all(): Collection

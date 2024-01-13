@@ -29,7 +29,8 @@ const {lang} = defineProps({
                     <div class="tw-space-y-3">
                         <ListItem :label="lang.product_name" :value="product.product_name"/>
                         <ListItem :label="lang.category" :value="product.category?.category_name"/>
-                        <ListItem :label="lang.price" :value="`$${product.price}`"/>
+                        <ListItem :label="lang.price"
+                                  :value="product.price + ' ' +  $page.props.setting?.currency?.code "/>
                         <ListItem :label="lang.stock_quantity">
                             <span class="badge badge-info badge-pill"
                                   v-text="product.stock_quantity"></span>

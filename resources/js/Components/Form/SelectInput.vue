@@ -1,7 +1,7 @@
 <script setup>
 import {usePage} from "@inertiajs/vue3";
 import TextInput from "./TextInput.vue";
-import {ref, reactive} from "vue";
+import {ref, reactive, computed} from "vue";
 import {watch} from "vue";
 
 const {modelValue, items, id, text, disabled} = defineProps({
@@ -11,13 +11,14 @@ const {modelValue, items, id, text, disabled} = defineProps({
         type: String,
         default: 'id',
     },
-    text: String,
+    text: String | Array,
     placeholder: String,
     hideSearch: {
         type: Boolean,
         default: false,
     },
-    disabled: Boolean
+    disabled: Boolean,
+    disabledClear: Boolean,
 });
 
 const lang = usePage().props.lang;
@@ -34,24 +35,28 @@ watch(search, (value) => {
     }
 });
 
+const selectText = (item) => {
+    return typeof text === 'function' ? text(item) : item[text];
+};
+
 const defaultSelected = items.find((item) => item[id] == modelValue);
 
 const selected = reactive({
     id: defaultSelected ? defaultSelected[id] : null,
-    text: defaultSelected ? defaultSelected[text] : null,
+    text: defaultSelected ? selectText(defaultSelected) : null,
 });
 
 const collapse = reactive({
     open: false,
 });
 
-let keydown = (event) => {
+let keydownEvent = (event) => {
     if (event.key === "Escape") {
         close();
     }
 };
 
-let click = (event) => {
+let clickEvent = (event) => {
     if (
         !event.target.closest("#collapse") &&
         !event.target.closest("#select-input-search")
@@ -65,8 +70,8 @@ const close = () => {
     search.value = null;
     data.value = items;
 
-    document.removeEventListener("keydown", keydown);
-    document.removeEventListener("click", click);
+    document.removeEventListener("keydown", keydownEvent);
+    document.removeEventListener("click", clickEvent);
 };
 
 const open = () => {
@@ -82,9 +87,9 @@ const open = () => {
         return;
     }
 
-    document.addEventListener("keydown", keydown);
+    document.addEventListener("keydown", keydownEvent);
 
-    document.addEventListener("click", click);
+    document.addEventListener("click", clickEvent);
 };
 
 const $emit = defineEmits("update:modelValue");
@@ -99,12 +104,11 @@ const clear = () => {
     $emit("update:modelValue", selected.id);
 }
 
-
 defineExpose({focus: () => input.value.focus()});
 
 const select = (item) => {
     selected.id = item[id];
-    selected.text = item[text];
+    selected.text = selectText(item);
     close();
 
     $emit("update:modelValue", selected.id);
@@ -128,6 +132,7 @@ const select = (item) => {
             </span>
         </div>
         <i
+            v-if="!disabledClear"
             @click="clear()"
             class=" tw-absolute tw-right-2 tw-top-1/2 -tw-translate-y-1/2"
             :class="{
@@ -167,7 +172,7 @@ const select = (item) => {
                                 :key="item[id]"
                                 @click="select(item)"
                             >
-                                {{ item[text] }}
+                                {{ selectText(item) }}
                             </div>
                         </template>
 

@@ -87,7 +87,7 @@ const destroy = (product) => {
                             </Link>
                         </td>
                         <td>{{ product.category?.category_name }}</td>
-                        <td>${{ product.price }}</td>
+                        <td class="tw-font-medium">{{ product.price }} {{ $page.props.setting?.currency?.code }}</td>
                         <td>
                             <span class="badge badge-pill badge-info">{{ product.stock_quantity }}</span>
                         </td>

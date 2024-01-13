@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-interface PurchaseOrderInterface
+interface PurchaseOrderRepositoryInterface
 {
     /**
      * @return Collection<PurchaseOrder>

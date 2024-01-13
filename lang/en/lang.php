@@ -2,9 +2,9 @@
 
 return [
     'success' => 'Success',
-    'created_success' => ':attribute created success',
-    'updated_success' => ':attribute updated success',
-    'deleted_success' => ':attribute deleted success',
+    'created_success' => ':attribute created success.',
+    'updated_success' => ':attribute updated success.',
+    'deleted_success' => ':attribute deleted success.',
     'product' => 'Product',
     'dashboard' => 'Dashboard',
     'categories' => 'Categories',
@@ -70,4 +70,7 @@ return [
     'female' => 'Female',
     'total_purchase' => 'Total Purchase',
     'purchase_status' => 'Purchase Status',
+    'setting' => 'Setting',
+    'currency' => "Currency",
+    'exchange_rate' => 'Exchange Rate',
 ];

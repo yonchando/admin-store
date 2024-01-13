@@ -60,7 +60,8 @@ const updatePurchaseStatus = (purchase, statusUpdate) => {
                             </Link>
                         </td>
                         <td v-text=" purchase.customer.name "></td>
-                        <td v-text="`${purchase.total_price} USD`"></td>
+                        <td class="tw-font-medium"
+                            v-text="`${purchase.total_price} ${ $page.props.setting?.currency?.code }`"></td>
                         <td v-text=" purchase.order_items_count "></td>
                         <td v-text=" purchase.purchased_date "></td>
                         <td v-html="purchase.status_text"></td>

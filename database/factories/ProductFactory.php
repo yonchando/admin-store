@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\Product\ProductStatus;
 use App\Models\Category;
 use App\Models\Product;
-use App\ValueObjects\ProductObject;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
