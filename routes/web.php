@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,6 +71,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('staff')
+        ->name('staff.')
+        ->group(function () {
+            Route::get('/', [StaffController::class, 'index'])->name('index');
+            Route::get('/show/{user}', [StaffController::class, 'show'])->name('show');
+
+            Route::get('/create', [StaffController::class, 'create'])->name('create');
+            Route::post('/save', [StaffController::class, 'store'])->name('store');
+
+            Route::get('edit/{user}', [StaffController::class, 'edit'])->name('edit');
+            Route::patch('update/{user}', [StaffController::class, 'update'])->name('update');
+            Route::patch('update-status/{user}', [StaffController::class, 'updateStatus'])->name('update.status');
+
+            Route::delete('destroy/{user}', [StaffController::class, 'destroy'])->name('destroy');
+
+        });
 
     Route::prefix('setting')
         ->name('setting.')

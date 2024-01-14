@@ -55,6 +55,6 @@ function something()
 
 function asUser()
 {
-    $user = User::factory()->create();
+    $user = User::factory()->admin()->create();
     return test()->actingAs($user);
 }

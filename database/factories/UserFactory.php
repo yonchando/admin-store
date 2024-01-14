@@ -2,12 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Enums\Gender;
+use App\Facades\Helper;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -23,21 +26,21 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $genders = Helper::enumToArray(Gender::cases(), true);
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'gender' => $this->faker->randomElement($genders),
+            'is_admin' => false,
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function admin(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'is_admin' => null,
+        return $this->state(fn() => [
+            'is_admin' => true,
         ]);
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import NavLink from "@/Components/NavLink.vue";
+import NavLink from "@/Components/Navbar/NavLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";

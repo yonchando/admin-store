@@ -73,4 +73,9 @@ return [
     'setting' => 'Setting',
     'currency' => "Currency",
     'exchange_rate' => 'Exchange Rate',
+    'users' => 'Users',
+    'staffs' => 'Staffs',
+    'purchase_management' => "Purchase Management",
+    'product_management' => "Product Management",
+    'username' => "Username",
 ];

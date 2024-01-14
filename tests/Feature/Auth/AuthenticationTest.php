@@ -9,10 +9,35 @@ test('login screen can be rendered', function () {
     $response->assertStatus(200);
 });
 
+test('users admin can authenticate using the login screen', function () {
+    $user = User::factory()->admin()->create();
+
+    $response = $this->post(route('login'), [
+        'username' => $user->username,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(RouteServiceProvider::HOME);
+
+});
+
+test('users admin can not authenticate with invalid password', function () {
+    $user = User::factory()->admin()->create();
+
+    $this->post('/login', [
+        'username' => $user->username,
+        'password' => 'wrong-password',
+    ]);
+
+    $this->assertGuest();
+
+});
+
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
-    $response = $this->post('/login', [
+    $response = $this->post(route('login'), [
         'username' => $user->username,
         'password' => 'password',
     ]);

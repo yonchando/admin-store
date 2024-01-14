@@ -13,4 +13,9 @@ class HelperService
             'type' => $type,
         ]);
     }
+
+    public function enumToArray(array $enum, $getValue = false): array
+    {
+        return collect($enum)->map(fn($value) => $getValue ? $value->value : $value->name)->toArray();
+    }
 }

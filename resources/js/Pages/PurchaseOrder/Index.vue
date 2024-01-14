@@ -3,7 +3,7 @@ import {Head, useForm} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
-import Action from "@/Components/Button/Action.vue";
+import Action from "@/Components/List/Action/Action.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import {Link} from "@inertiajs/vue3";
 import {inject} from "vue";

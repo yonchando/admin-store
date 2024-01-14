@@ -13,14 +13,5 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Super Admin',
-            'username' => 'admin',
-            'password' => bcrypt('password'),
-            'is_admin' => true,
-        ]);
-
-        $this->call(ProductSeeder::class);
-        $this->call(PurchaseOrderSeeder::class);
     }
 }
