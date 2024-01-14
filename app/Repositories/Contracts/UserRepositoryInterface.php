@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -23,7 +24,9 @@ interface UserRepositoryInterface
 
     public function findById(int $id): User;
 
-    public function save(Request $request): User;
+    public function save(UserRequest $request): User;
 
-    public function update(Request $request, User $user);
+    public function update(UserRequest $request, User $user);
+
+    public function destroy(User $user): bool;
 }

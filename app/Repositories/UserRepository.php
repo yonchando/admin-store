@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,13 +37,25 @@ class UserRepository implements Contracts\UserRepositoryInterface
         // TODO: Implement findById() method.
     }
 
-    public function save(Request $request): User
+    public function save(UserRequest $request): User
     {
-        // TODO: Implement save() method.
+        $user = new User();
+
+        $user->fill($request->validated());
+
+        $user->save();
+       
+
+        return $user;
     }
 
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         // TODO: Implement update() method.
+    }
+
+    public function destroy(User $user): bool
+    {
+        return $user->delete();
     }
 }

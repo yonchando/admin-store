@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Gender;
+use App\Facades\Helper;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,10 +30,18 @@ class StaffController extends Controller
 
     public function create()
     {
+        return Inertia::render('Staff/Form', [
+            'gender' => Helper::enumToSelectForm(Gender::cases()),
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
+        $this->userRepository->save($request);
+
+        Helper::message(__('lang.created_success', ['attribute' => __('lang.staff')]));
+
+        return redirect()->route('staff.index');
     }
 
     public function show(User $user)
@@ -47,5 +58,8 @@ class StaffController extends Controller
 
     public function destroy(User $user)
     {
+        $this->userRepository->destroy($user);
+
+        return redirect()->back();
     }
 }

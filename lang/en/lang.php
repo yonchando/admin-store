@@ -75,7 +75,12 @@ return [
     'exchange_rate' => 'Exchange Rate',
     'users' => 'Users',
     'staffs' => 'Staffs',
+    'staff' => 'Staff',
     'purchase_management' => "Purchase Management",
     'product_management' => "Product Management",
     'username' => "Username",
+    'create_staff' => 'Create Staff',
+    'edit_staff' => "Edit Staff",
+    'password' => "Password",
+    'password_confirmation' => 'Password Confirmation',
 ];

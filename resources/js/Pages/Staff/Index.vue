@@ -28,7 +28,7 @@ let index = staffs.from;
                 <i class="icon-filter3"></i>
                 {{ lang.filter }}
             </WarningButton>
-            <PrimaryButton>
+            <PrimaryButton :href="route('staff.create')">
                 <i class="icon-plus2"></i>
                 {{ lang.add }}
             </PrimaryButton>
@@ -59,7 +59,7 @@ let index = staffs.from;
                         <td>
                             <Action>
                                 <EditAction :href="route('staff.edit',staff)"/>
-                                <DeleteAction @change="index = staffs.from" :text="staff.name"
+                                <DeleteAction @change="() => index = staffs.from" :text="staff.name"
                                               :url="route('staff.destroy',staff)"/>
                             </Action>
                         </td>

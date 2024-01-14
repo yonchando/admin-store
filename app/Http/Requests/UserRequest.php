@@ -11,10 +11,9 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required'],
             'username' => ['required'],
-            'password' => ['required'],
+            'password' => ['required', 'confirmed', 'min: 6', 'string:255'],
+            'password_confirmation' => ['required'],
             'gender' => ['nullable'],
-            'status' => ['required'],
-            'remember_token' => ['nullable'],
         ];
     }
 

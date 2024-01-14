@@ -18,4 +18,13 @@ class HelperService
     {
         return collect($enum)->map(fn($value) => $getValue ? $value->value : $value->name)->toArray();
     }
+
+    public function enumToSelectForm(array $enum, $getValue = false): array
+    {
+        return collect($enum)->map(fn($value) => [
+            'id' => $getValue ? $value->value : $value->name,
+            'text' => $getValue ? $value->value : $value->name,
+        ])->toArray();
+    }
+
 }
