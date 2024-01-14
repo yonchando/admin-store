@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
+use App\Enums\User\UserStatus;
+use App\Facades\Enum;
 use App\Facades\Helper;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StaffController extends Controller
 {
-
 
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
@@ -23,15 +23,19 @@ class StaffController extends Controller
     public function index(Request $request)
     {
         $staffs = $this->userRepository->paginate($request);
+
         return Inertia::render('Staff/Index', [
             'staffs' => $staffs,
+            'gender' => Enum::toSelectedForm(Gender::cases(), true),
+            'statuses' => Enum::toSelectedForm(UserStatus::cases()),
+            'filters' => $request->toArray(),
         ]);
     }
 
     public function create()
     {
         return Inertia::render('Staff/Form', [
-            'gender' => Helper::enumToSelectForm(Gender::cases()),
+            'gender' => Enum::toSelectedForm(Gender::cases(), true),
         ]);
     }
 
@@ -50,15 +54,35 @@ class StaffController extends Controller
 
     public function edit(User $user)
     {
+        return Inertia::render('Staff/Form', [
+            'staff' => $user,
+            'gender' => Enum::toSelectedForm(Gender::cases(), true),
+        ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
+        $this->userRepository->update($request, $user);
+
+        Helper::message(__('lang.updated_success', ['attribute' => __('lang.staff')]));
+
+        return to_route('staff.index');
+    }
+
+    public function updatestatus(User $user)
+    {
+        $this->userRepository->updateStatus($user);
+
+        Helper::message(__('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
+
+        return redirect()->back();
     }
 
     public function destroy(User $user)
     {
         $this->userRepository->destroy($user);
+
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.staff')]));
 
         return redirect()->back();
     }

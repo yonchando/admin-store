@@ -55,7 +55,7 @@ const updatePurchaseStatus = (statusUpdate) => {
 
         <FlashMessage/>
 
-        <Card :has-header="false">
+        <Card no-header>
             <div class="row">
                 <div class="col-6">
                     <div class="tw-space-y-3">

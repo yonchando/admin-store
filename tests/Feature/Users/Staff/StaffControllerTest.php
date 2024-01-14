@@ -3,9 +3,9 @@
 
 use App\Enums\Gender;
 use App\Enums\User\UserStatus;
-use App\Facades\Helper;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
+use App\Facades\Enum;
 
 
 describe('user lists', function () {
@@ -17,6 +17,9 @@ describe('user lists', function () {
             ->assertInertia(
                 fn(AssertableInertia $page) => $page->component('Staff/Index')
                     ->has('staffs.data', $staff->count())
+                    ->has('gender', 2)
+                    ->has('statuses', 2)
+                    ->has('filters')
             );
     });
 
@@ -25,19 +28,20 @@ describe('user lists', function () {
         User::factory()->create([
             'name' => fake()->name,
             'username' => fake()->userName,
-            'gender' => fake()->randomElement(Helper::enumToArray(Gender::cases())),
+            'gender' => fake()->randomElement(Enum::toArray(Gender::cases(), true)),
             'created_at' => now()->subHours(2),
         ]);
 
         $first = User::factory()->create([
             'name' => fake()->name,
             'username' => fake()->userName,
-            'gender' => fake()->randomElement(Helper::enumToArray(Gender::cases())),
+            'gender' => fake()->randomElement(Enum::toArray(Gender::cases(), true)),
             'created_at' => now(),
         ]);
 
         $filters = [
             'search_text' => $first->name,
+            'gender' => $first->gender->value,
             'status' => UserStatus::ACTIVE->name,
         ];
 
@@ -85,6 +89,64 @@ describe('create staff', function () {
     });
 });
 
+describe('edit staff', function () {
+    it('can render form for edition', function () {
+        $user = User::factory()->create();
+
+        $this->get(route('staff.edit', $user))
+            ->assertOk()
+            ->assertInertia(
+                fn(AssertableInertia $page) => $page->component('Staff/Form')
+                    ->where('staff.id', $user->id)
+                    ->where('staff.name', $user->name)
+                    ->where('staff.username', $user->username)
+            );
+    });
+
+    it('can updated user data', function () {
+        $user = User::factory()->create();
+
+        $changed = User::factory()->make();
+
+        $this->patch(route('staff.update', $user), $changed->toArray())
+            ->assertRedirect(route('staff.index'))
+            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.staff')]));
+
+        $updated = $user->fresh();
+
+        $this->assertEquals($changed->name, $updated->name);
+        $this->assertEquals($changed->username, $updated->username);
+        $this->assertEquals($changed->gender, $updated->gender);
+        $this->assertEquals($updated->password, $user->password);
+
+        $this->assertNotEquals($user->name, $updated->name);
+        $this->assertNotEquals($user->username, $updated->username);
+
+    });
+
+    it('can update status', function () {
+        $user = User::factory()->create();
+
+        $this->patch(route('staff.update.status', $user))
+            ->assertRedirect()
+            ->assertSessionHas('message.text',
+                __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
+
+        $user->refresh();
+
+        $this->assertEquals(UserStatus::INACTIVE, $user->status);
+
+        $this->patch(route('staff.update.status', $user))
+            ->assertRedirect()
+            ->assertSessionHas('message.text',
+                __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
+
+        $user->refresh();
+
+        $this->assertEquals(UserStatus::ACTIVE, $user->status);
+    });
+});
+
 test('delete staff', function () {
 
     $staff = User::factory()->create();
@@ -92,7 +154,8 @@ test('delete staff', function () {
     $this->from(route('staff.index'));
 
     $this->delete(route('staff.destroy', $staff))
-        ->assertRedirect(route('staff.index'));
+        ->assertRedirect(route('staff.index'))
+        ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
 
     $this->delete(route('staff.destroy', $staff))
         ->assertStatus(404);

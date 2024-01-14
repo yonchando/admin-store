@@ -6,12 +6,15 @@ import {watch} from "vue";
 
 const {modelValue, items, id, text, disabled} = defineProps({
     modelValue: String,
-    items: Array,
+    items: Object,
     id: {
         type: String,
         default: 'id',
     },
-    text: String | Array,
+    text: {
+        type: [Object, String],
+        default: 'text',
+    },
     placeholder: String,
     hideSearch: {
         type: Boolean,
@@ -23,7 +26,7 @@ const {modelValue, items, id, text, disabled} = defineProps({
 
 const lang = usePage().props.lang;
 
-let data = ref(items);
+let data = ref(items ?? []);
 
 const search = ref(null);
 
@@ -36,10 +39,14 @@ watch(search, (value) => {
 });
 
 const selectText = (item) => {
-    return typeof text === 'function' ? text(item) : item[text];
+    if (typeof text === 'function') {
+        return text(item);
+    } else {
+        return lang[item[text].toLowerCase()] ?? item[text];
+    }
 };
 
-const defaultSelected = items.find((item) => item[id] == modelValue);
+const defaultSelected = modelValue != null ? items.find((item) => item[id] == modelValue) : null;
 
 const selected = reactive({
     id: defaultSelected ? defaultSelected[id] : null,
@@ -68,7 +75,7 @@ let clickEvent = (event) => {
 const close = () => {
     collapse.open = false;
     search.value = null;
-    data.value = items;
+    data.value = items ?? [];
 
     document.removeEventListener("keydown", keydownEvent);
     document.removeEventListener("click", clickEvent);
@@ -124,7 +131,7 @@ const select = (item) => {
             id="collapse"
             @click="open()"
         >
-            <span v-if="selected.id == null" class="text-muted tw-opacity-50">
+            <span v-if="selected.id == null" class="text-muted">
                 {{ placeholder ?? lang.please_selected }}
             </span>
             <span v-if="selected.id != null" class="">

@@ -26,7 +26,11 @@ interface UserRepositoryInterface
 
     public function save(UserRequest $request): User;
 
-    public function update(UserRequest $request, User $user);
+    public function update(UserRequest $request, User $user): User;
+
+    public function updatePassword(Request $request, User $user): User;
 
     public function destroy(User $user): bool;
+
+    public function updateStatus(User $user): bool;
 }

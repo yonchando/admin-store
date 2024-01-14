@@ -23,7 +23,7 @@ const {lang} = defineProps({
             <BreadcrumbItem icon="fa fa-box-open" :title="lang.detail"/>
         </template>
 
-        <Card :has-header="false">
+        <Card no-header>
             <div class="row">
                 <div class="col-6">
                     <div class="tw-space-y-3">

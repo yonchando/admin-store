@@ -83,4 +83,5 @@ return [
     'edit_staff' => "Edit Staff",
     'password' => "Password",
     'password_confirmation' => 'Password Confirmation',
+    'all' => "All",
 ];

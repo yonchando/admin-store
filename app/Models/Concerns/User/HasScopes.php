@@ -23,6 +23,10 @@ trait HasScopes
             );
         }
 
+        if (!is_null($gender = $request->get('gender'))) {
+            $query->where('gender', $gender);
+        }
+
         if (!is_null($status = $request->get('status'))) {
             $query->where('status', $status);
         }

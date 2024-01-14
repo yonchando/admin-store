@@ -58,7 +58,7 @@ const destroy = (product) => {
             <BreadcrumbItem icon="icon-box" :title="lang.products"/>
         </template>
 
-        <Card :has-header="false">
+        <Card no-header>
             <ProductFilter :categories="categories" :statuses="statuses" :filter="filters"/>
         </Card>
 

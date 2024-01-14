@@ -1,21 +1,25 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import EditAction from "@/Components/List/Action/EditAction.vue";
 import DeleteAction from "@/Components/List/Action/DeleteAction.vue";
+import FlashMessage from "@/Components/Alert/FlashMessage.vue";
+import StaffFilter from "@/Pages/Staff/StaffFilter.vue";
 
-const {staffs} = defineProps(['lang', 'staffs'])
-
+const {staffs} = defineProps(['lang', 'staffs', 'gender', 'statuses', 'filters'])
 
 let index = staffs.from;
 
+
+const updateStatus = (user) => {
+    index = staffs.from;
+    useForm({}).patch(route('staff.update.status', user));
+}
 </script>
 
 <template>
@@ -24,10 +28,6 @@ let index = staffs.from;
     <AppLayout>
 
         <template #action>
-            <WarningButton class="tw-mr-2">
-                <i class="icon-filter3"></i>
-                {{ lang.filter }}
-            </WarningButton>
             <PrimaryButton :href="route('staff.create')">
                 <i class="icon-plus2"></i>
                 {{ lang.add }}
@@ -37,6 +37,10 @@ let index = staffs.from;
         <template #breadcrumb>
             <BreadcrumbItem icon="icon-user-tie" :title="lang.staffs"/>
         </template>
+
+        <FlashMessage/>
+
+        <StaffFilter :gender="gender" :filters="filters" :statuses="statuses"/>
 
         <Card :title="lang.staffs">
             <Table>
@@ -54,12 +58,15 @@ let index = staffs.from;
                         <td>{{ index++ }}</td>
                         <td>{{ staff.name }}</td>
                         <td>{{ staff.username }}</td>
-                        <td>{{ lang[staff.gender.toLowerCase()] }}</td>
-                        <td>{{ staff.status_text }}</td>
+                        <td>{{ lang[staff.gender?.toLowerCase()] }}</td>
+                        <td>
+                            <span @click="updateStatus(staff)" v-html="staff.status_text">
+                            </span>
+                        </td>
                         <td>
                             <Action>
                                 <EditAction :href="route('staff.edit',staff)"/>
-                                <DeleteAction @change="() => index = staffs.from" :text="staff.name"
+                                <DeleteAction @change="index = staffs.from" :text="staff.name"
                                               :url="route('staff.destroy',staff)"/>
                             </Action>
                         </td>

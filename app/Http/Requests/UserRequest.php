@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -11,8 +12,15 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required'],
             'username' => ['required'],
-            'password' => ['required', 'confirmed', 'min: 6', 'string:255'],
-            'password_confirmation' => ['required'],
+            'password' => [
+                Rule::requiredIf($this->user == null),
+                Rule::when($this->user == null, [
+                    'confirmed',
+                    'min: 6',
+                    'string:255',
+                ]),
+            ],
+            'password_confirmation' => [Rule::requiredIf($this->user == null)],
             'gender' => ['nullable'],
         ];
     }

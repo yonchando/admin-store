@@ -21,9 +21,15 @@ const form = useForm({
 });
 
 const save = () => {
-    form.post(route('staff.store'), {
-        onFinish: () => form.reset('password_confirmation', 'password')
-    });
+    if (staff) {
+        form.patch(route('staff.update', staff), {
+            onFinish: () => form.reset()
+        })
+    } else {
+        form.post(route('staff.store'), {
+            onFinish: () => form.reset('password_confirmation', 'password')
+        });
+    }
 }
 
 </script>
@@ -39,7 +45,7 @@ const save = () => {
             </template>
 
             <template #action>
-                <PrimaryButton type="submit">
+                <PrimaryButton type="submit" :disabled="form.processing">
                     <i class="icon-floppy-disk"></i>
                     {{ lang.save }}
                 </PrimaryButton>
@@ -58,14 +64,14 @@ const save = () => {
                         <FormGroup>
                             <InputLabel :value="lang.password"/>
 
-                            <TextInput v-model="form.password"/>
+                            <TextInput type="password" v-model="form.password"/>
 
                             <InputError :message="form.errors.password"/>
                         </FormGroup>
                         <FormGroup>
                             <InputLabel :value="lang.password_confirmation"/>
 
-                            <TextInput v-model="form.password_confirmation"/>
+                            <TextInput type="password" v-model="form.password_confirmation"/>
 
                             <InputError :message="form.errors.password_confirmation"/>
                         </FormGroup>
@@ -82,7 +88,8 @@ const save = () => {
                         <FormGroup>
                             <InputLabel :value="lang.gender"/>
 
-                            <SelectInput :items="gender" text="text"/>
+                            <SelectInput v-model="form.gender" :items="gender" :text="(item) => lang[item.text]"
+                                         hide-search/>
 
                             <InputError :message="form.errors.gender"/>
                         </FormGroup>
