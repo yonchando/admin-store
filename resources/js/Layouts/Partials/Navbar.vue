@@ -18,13 +18,18 @@ const menus = [
                 link: route('category.index'),
                 text: lang.categories,
                 icon: 'icon-grid4'
-            }
+            },
+            {
+                link: route('product.index'),
+                text: lang.products,
+                icon: 'icon-box'
+            },
+            {
+                link: route('product.option.group.index'),
+                text: lang.product_option_group,
+                icon: 'icon-boxs'
+            },
         ]
-    },
-    {
-        link: route('product.index'),
-        text: lang.products,
-        icon: 'icon-box'
     },
     {
         text: lang.purchase_management,

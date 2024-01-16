@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductOptionGroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SettingController;
@@ -47,6 +48,21 @@ Route::middleware('auth')->group(function () {
             Route::patch('update-status/{product}', [ProductController::class, 'updateStatus'])->name('update.status');
 
             Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
+        });
+
+    Route::prefix('product-option-group')
+        ->name('product.option.group.')
+        ->group(function () {
+            Route::get('/', [ProductOptionGroupController::class, 'index'])->name('index');
+            Route::post('/save', [ProductOptionGroupController::class, 'store'])->name('store');
+
+            Route::patch('update/{productOptionGroup}', [
+                ProductOptionGroupController::class, 'update',
+            ])->name('update');
+
+            Route::delete('delete/{productOptionGroup}', [
+                ProductOptionGroupController::class, 'destroy',
+            ])->name('destroy');
         });
 
     Route::prefix('purchase-order')
