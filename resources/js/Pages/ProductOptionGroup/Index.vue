@@ -1,31 +1,26 @@
 <script setup>
 import {Head, useForm} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import FlashMessage from "@/Components/Alert/FlashMessage.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Card from "@/Components/Card/Card.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import Action from "@/Components/List/Action/Action.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
 import Table from "@/Components/Table/Table.vue";
-import DefaultButton from "@/Components/Button/DefaultButton.vue";
+import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
+import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import Modal from "@/Components/Modal/Modal.vue";
 import FormGroup from "@/Components/Form/FormGroup.vue";
+import InputLabel from "@/Components/Form/InputLabel.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import DefaultButton from "@/Components/Button/DefaultButton.vue";
 import {onMounted, ref} from "vue";
+import Action from "@/Components/List/Action/Action.vue";
+import DeleteAction from "@/Components/List/Action/DeleteAction.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
 
-defineProps({
-    lang: Object,
-    productOptions: Array
-})
+const {lang, groups} = defineProps(["lang", "groups"]);
 
 const form = useForm({
     name: null,
-    price_adjustment: null,
 });
 
-let option = null;
+let group = null;
 
 let title = ref("");
 
@@ -34,23 +29,22 @@ let modal;
 function create() {
     modal.modal("show");
     form.reset();
-    option = null;
+    group = null;
     title.value = "Create Form";
 }
 
 function edit(value) {
-    option = value;
+    group = value;
     title.value = "Update Form";
-    form.name = option.name;
-    form.group_id = option.product_option_id;
+    form.name = group.name;
     modal.modal("show");
 }
 
 function save() {
-    if (!option) {
+    if (!group) {
         form.post(route("product.option.group.store"));
     } else {
-        form.patch(route("product.option.group.update", option));
+        form.patch(route("product.option.group.update", group));
     }
 
     form.reset();
@@ -58,17 +52,12 @@ function save() {
 }
 
 onMounted(() => {
-    modal = $("#form-product-option");
-
-    if (form.errors.length > 0) {
-        modal.modal('show')
-    }
+    modal = $("#modal-form");
 });
-
 </script>
 
 <template>
-    <Head :title="lang.product_options"/>
+    <Head :title="lang.option_groups"/>
 
     <AppLayout>
         <template #action>
@@ -78,35 +67,27 @@ onMounted(() => {
             </PrimaryButton>
         </template>
 
-        <template #breadcrumb>
-            <BreadcrumbItem
-                :title="lang.product_options"
-                icon="icon-price-tags"
-            />
-        </template>
-
-        <FlashMessage/>
-
-
-        <Card :title="lang.options" collapse>
+        <Card :title="lang.option_groups">
             <Table>
                 <thead>
                     <th width="30">#</th>
                     <th>{{ lang.name }}</th>
-                    <th>{{ lang.price_adjustment }}</th>
                     <th width="10%">{{ lang.action }}</th>
                 </thead>
 
-                <template v-if="productOptions.length > 0">
-                    <tr v-for="(option,i) in groups">
+                <template v-if="groups.length > 0">
+                    <tr v-for="(group,i) in groups">
                         <td>{{ i + 1 }}</td>
-                        <td>{{ option.name }}</td>
+                        <td>{{ group.name }}</td>
                         <td>
                             <Action>
-                                <DropdownLink @click="edit(option)">
+                                <DropdownLink @click="edit(group)">
                                     <i class="icon-pencil7"></i>
                                     {{ lang.edit }}
                                 </DropdownLink>
+
+                                <DeleteAction :url="route('product.option.group.destroy',group)" :text="group.name"/>
+
                             </Action>
                         </td>
                     </tr>
@@ -118,17 +99,13 @@ onMounted(() => {
             </Table>
         </Card>
 
-        <Modal id="form-product-option" :title="title" center size="sm" bg="bg-info">
+        <Modal id="modal-form" :title="title" center size="sm" bg="bg-info">
             <form @submit.prevent="save">
                 <FormGroup>
                     <InputLabel :value="lang.name"/>
                     <TextInput v-model="form.name"/>
                 </FormGroup>
-                <FormGroup>
-                    <InputLabel :value="lang.price_adjustment"/>
 
-                    <TextInput type="number" v-model="form.price_adjustment"/>
-                </FormGroup>
                 <FormGroup class="tw-space-x-2">
                     <PrimaryButton type="submit">
                         {{ lang.save }}
@@ -139,7 +116,3 @@ onMounted(() => {
         </Modal>
     </AppLayout>
 </template>
-
-<style scoped>
-
-</style>

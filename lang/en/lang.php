@@ -84,5 +84,10 @@ return [
     'password' => "Password",
     'password_confirmation' => 'Password Confirmation',
     'all' => "All",
+    'options' => "Options",
+    'option_groups' => 'Option Groups',
+    'product_options' => 'Product Options',
+    'product_option' => 'Product Option',
+    'price_adjustment' => 'Price Adjustment',
     'product_option_group' => 'Product Option Group',
 ];

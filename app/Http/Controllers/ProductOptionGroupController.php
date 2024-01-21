@@ -20,7 +20,7 @@ class ProductOptionGroupController extends Controller
     public function index(Request $request)
     {
         $groups = $this->productOptionGroupRepository->get($request);
-        return Inertia::render('ProductOption/Index', [
+        return Inertia::render('ProductOptionGroup/Index', [
             'groups' => $groups,
         ]);
     }

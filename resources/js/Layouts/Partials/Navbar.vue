@@ -22,12 +22,22 @@ const menus = [
             {
                 link: route('product.index'),
                 text: lang.products,
-                icon: 'icon-box'
+                icon: 'icon-bag'
             },
+        ]
+    },
+    {
+        text: lang.product_options,
+        children: [
             {
                 link: route('product.option.group.index'),
-                text: lang.product_option_group,
-                icon: 'icon-boxs'
+                text: lang.option_groups,
+                icon: 'icon-price-tags'
+            },
+            {
+                link: route('product.option.index'),
+                text: lang.options,
+                icon: 'icon-price-tag'
             },
         ]
     },
@@ -73,25 +83,28 @@ const menus = [
         </NavHeader>
 
         <template v-for="menu in menus">
-            <li class="nav-item">
-                <template v-if="menu.children?.length > 0">
-                    <NavHeader>
-                        {{ menu.text }}
-                    </NavHeader>
-                    <template v-for="child in menu.children">
+            <template v-if="menu.children?.length > 0">
+                <NavHeader>
+                    {{ menu.text }}
+                </NavHeader>
+
+                <template v-for="child in menu.children">
+                    <li class="nav-item">
                         <NavLink class="nav-link" :href="child.link ?? '#'" :active="child.active">
                             <i v-if="child.icon" :class="child.icon"></i>
-                            {{ child.text }}
+                            <span>{{ child.text }}</span>
                         </NavLink>
-                    </template>
+                    </li>
                 </template>
-                <template v-else>
+            </template>
+            <template v-else>
+                <li class="nav-item">
                     <NavLink class="nav-link" :href="menu.link ?? '#'" :active="menu.active">
                         <i v-if="menu.icon" :class="menu.icon"></i>
-                        {{ menu.text }}
+                        <span>{{ menu.text }}</span>
                     </NavLink>
-                </template>
-            </li>
+                </li>
+            </template>
         </template>
 
     </ul>

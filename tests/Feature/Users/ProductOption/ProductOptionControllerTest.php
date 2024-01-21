@@ -1,79 +1,66 @@
 <?php
 
 
-use App\Models\ProductOptionGroup;
+use App\Models\ProductOption;
 use Inertia\Testing\AssertableInertia;
 
-test('listing product option', function () {
-
-    $groups = ProductOptionGroup::factory()->create();
-
-    $this->get(route('product.option.group.index'))
+test('list product option response ok', function () {
+    ProductOption::factory(3)->create();
+    $this->get(route('product.option.index'))
         ->assertOk()
         ->assertInertia(
             fn(AssertableInertia $page) => $page->component('ProductOption/Index')
-                ->has('groups', $groups->count())
+                ->has('productOptions', 3)
         );
 });
 
-test('store product option group', function () {
+describe('store product', function () {
 
-    $group = ProductOptionGroup::factory()->make();
+    it('can not store product option with out field name', function () {
+        $this->from(route('product.option.index'));
 
-    $this->from(route('product.option.group.index'));
+        $this->post(route('product.option.store'))
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHasErrors('name', __('validation.required', ['attribute' => 'name']));
+    });
 
-    $this->post(route('product.option.group.store'), [
-        ...$group->only('name'),
-    ])
-        ->assertRedirectToRoute('product.option.group.index')
-        ->assertSessionHas('message.text',
-            __('lang.created_success', ['attribute' => __('lang.product_option_group')]));
+    it('can store product option with valid data and response success', function () {
+        $option = ProductOption::factory()->make();
 
-    $this->assertDatabaseHas($group->getTable(), [
-        'name' => $group->name,
-    ]);
+        $this->from(route('product.option.index'));
 
+        $this->post(route('product.option.store'), $option->toArray())
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertDatabaseHas($option->getTable(), [
+            'name' => $option->name,
+            'price_adjustment' => $option->price_adjustment,
+        ]);
+    });
 });
 
-test('update product option group', function () {
+describe('update product option', function () {
 
-    $group = ProductOptionGroup::factory()->create();
+    it('can update product option', function () {
+        $option = ProductOption::factory()->create();
 
-    $change = ProductOptionGroup::factory()->make();
+        $changed = ProductOption::factory()->make();
 
-    $this->from(route('product.option.group.index'));
+        $this->patch(route('product.option.update', $option), $changed->toArray())
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product_option')]));
 
-    $this->patch(route('product.option.group.update', $group), [
-        ...$change->only('name'),
-    ])
-        ->assertRedirectToRoute('product.option.group.index')
-        ->assertSessionHas('message.text',
-            __('lang.updated_success', ['attribute' => __('lang.product_option_group')]));
+        $updated = $option->fresh();
 
-    $updated = $group->fresh();
+        $this->assertEquals($changed->name, $updated->name);
+        $this->assertEquals($changed->price_adjustment, $updated->price_adjustment);
 
-    $this->assertEquals($change->name, $updated->name);
-
-    $this->assertDatabaseHas($group->getTable(), [
-        'name' => $change->name,
-    ]);
-
-    $this->assertDatabaseMissing($group->getTable(), [
-        'name' => $group->name,
-    ]);
-
+        $this->assertNotEquals($option->name, $updated->name);
+        $this->assertNotEquals($option->price_adjustment, $updated->price_adjustment);
+    });
 });
 
-test('delete product option group', function () {
-
-    $group = ProductOptionGroup::factory()->create();
-
-    $this->from(route('product.option.group.index'));
-
-    $this->delete(route('product.option.group.destroy', $group))
-        ->assertRedirectToRoute('product.option.group.index')
-        ->assertSessionHas('message.text',
-            __('lang.deleted_success', ['attribute' => __('lang.product_option_group')]));
-
-    $this->assertModelMissing($group);
+test('destroy product option success', function () {
+    $option = ProductOption::factory()->create();
 });

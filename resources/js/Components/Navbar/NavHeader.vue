@@ -9,6 +9,7 @@ defineProps(['value']);
                 {{ value }}
             </slot>
         </div>
+        <i class="icon-menu" :title="value"></i>
     </li>
 </template>
 
