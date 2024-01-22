@@ -1,5 +1,5 @@
 <script setup>
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";

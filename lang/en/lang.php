@@ -90,4 +90,5 @@ return [
     'product_option' => 'Product Option',
     'price_adjustment' => 'Price Adjustment',
     'product_option_group' => 'Product Option Group',
+    'udpate' => "Update",
 ];

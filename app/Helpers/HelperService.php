@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 
 class HelperService
@@ -12,5 +13,10 @@ class HelperService
             'text' => $message,
             'type' => $type,
         ]);
+    }
+
+    public function setting(): Setting
+    {
+        return session('setting');
     }
 }

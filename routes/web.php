@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
         ->name('product.option.group.')
         ->group(function () {
             Route::get('/', [ProductOptionGroupController::class, 'index'])->name('index');
+
             Route::post('/save', [ProductOptionGroupController::class, 'store'])->name('store');
 
             Route::patch('update/{productOptionGroup}', [

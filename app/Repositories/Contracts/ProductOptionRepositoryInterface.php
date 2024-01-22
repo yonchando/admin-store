@@ -19,4 +19,10 @@ interface ProductOptionRepositoryInterface
     public function update(ProductOptionRequest $request, ProductOption $productOption): ProductOption;
 
     public function destroy(ProductOption $productOption): bool;
+
+    /**
+     * @param  int  $id
+     * @return Collection<ProductOption>
+     */
+    public function findByGroupId(int $id): Collection;
 }

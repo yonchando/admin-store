@@ -1,28 +1,32 @@
 <script setup>
-
 import {usePage} from "@inertiajs/vue3";
 import NavLink from "@/Components/Navbar/NavLink.vue";
 import NavHeader from "@/Components/Navbar/NavHeader.vue";
 
-const lang = usePage().props.lang;
+const $page = usePage();
+
+const lang = $page.props.lang;
 
 const menus = [
     {
         link: route('dashboard'),
         text: lang.dashboard,
-        icon: 'icon-home2'
+        icon: 'icon-home2',
+        active: $page.url === '/',
     }, {
         text: lang.product_management,
         children: [
             {
                 link: route('category.index'),
                 text: lang.categories,
-                icon: 'icon-grid4'
+                icon: 'icon-grid4',
+                active: $page.url.startsWith('/category')
             },
             {
                 link: route('product.index'),
                 text: lang.products,
-                icon: 'icon-bag'
+                icon: 'icon-bag',
+                active: $page.url.startsWith('/product/') || $page.url === '/product'
             },
         ]
     },
@@ -32,12 +36,14 @@ const menus = [
             {
                 link: route('product.option.group.index'),
                 text: lang.option_groups,
-                icon: 'icon-price-tags'
+                icon: 'icon-price-tags',
+                active: $page.url === '/product-option-group'
             },
             {
                 link: route('product.option.index'),
                 text: lang.options,
-                icon: 'icon-price-tag'
+                icon: 'icon-price-tag',
+                active: $page.url === '/product-option'
             },
         ]
     },
@@ -48,6 +54,7 @@ const menus = [
                 link: route('purchase.order.index'),
                 icon: 'icon-store2',
                 text: lang.purchase_orders,
+                active: $page.url.startsWith('/purchase-order')
             }
         ]
     },
@@ -56,11 +63,13 @@ const menus = [
         children: [{
             link: route('customer.index'),
             icon: 'icon-users2',
-            text: lang.customers
+            text: lang.customers,
+            active: $page.url === '/customer'
         }, {
             link: route('staff.index'),
             icon: 'icon-user-tie',
-            text: lang.staffs
+            text: lang.staffs,
+            active: $page.url.startsWith('/staff')
         }]
     },
     {
@@ -69,7 +78,8 @@ const menus = [
             {
                 link: route('setting.show'),
                 icon: 'icon-gear',
-                text: lang.setting
+                text: lang.setting,
+                active: $page.url === '/setting',
             }
         ],
     }

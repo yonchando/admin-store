@@ -12,7 +12,7 @@ class ProductOptionRepository implements Contracts\ProductOptionRepositoryInterf
 
     public function get(Request $request): Collection
     {
-        return ProductOption::get();
+        return ProductOption::latest()->get();
     }
 
     public function store(ProductOptionRequest $request): ProductOption
@@ -36,6 +36,15 @@ class ProductOptionRepository implements Contracts\ProductOptionRepositoryInterf
 
     public function destroy(ProductOption $productOption): bool
     {
-        // TODO: Implement destroy() method.
+        return $productOption->delete();
+    }
+
+    public function findByGroupId(int $id): Collection
+    {
+        $query = ProductOption::query();
+
+        $query->findByGroupId($id);
+
+        return $query->get();
     }
 }

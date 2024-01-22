@@ -1,45 +1,41 @@
 <script setup>
-import {Head, useForm} from "@inertiajs/vue3";
+
+import {Head} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import FlashMessage from "@/Components/Alert/FlashMessage.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Card from "@/Components/Card/Card.vue";
+import ListItem from "@/Components/List/ListItem.vue";
 import Action from "@/Components/List/Action/Action.vue";
 import Table from "@/Components/Table/Table.vue";
-import {ref} from "vue";
-import Form from '@/Pages/ProductOption/Form.vue';
+import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 
-defineProps({
-    lang: Object,
-    productOptions: Array
-});
-
-let index = 1;
-
-let option = ref(null);
-let open = ref(false);
-
-function edit(value) {
-    option.value = value;
-    open.value = true;
-
-}
+const {lang} = defineProps({
+    productOptionGroup: Object,
+    productOptions: Array,
+    lang: Object
+})
 
 </script>
 
 <template>
-    <Head :title="lang.product_options"/>
+    <Head :title="productOptionGroup.name"/>
 
     <AppLayout>
         <template #breadcrumb>
-            <BreadcrumbItem
-                :title="lang.product_options"
-                icon="icon-price-tags"
-            />
+            <BreadcrumbItem :href="route('product.option.group.index')" icon="icon-box"
+                            :title="lang.product_option"/>
+            <BreadcrumbItem icon="fa fa-box-open" :title="lang.detail"/>
         </template>
 
-        <FlashMessage/>
+        <Card no-header>
+            <div class="row">
+                <div class="col-6">
+                    <div class="tw-space-y-3">
+                        <ListItem :label="lang.name" :value="productOptionGroup.name"/>
+                    </div>
+                </div>
+            </div>
+        </Card>
 
         <Card :title="lang.options" collapse>
             <Table>
@@ -51,8 +47,8 @@ function edit(value) {
                 </thead>
 
                 <template v-if="productOptions.length > 0">
-                    <tr v-for="option in productOptions">
-                        <td>{{ index++ }}</td>
+                    <tr v-for="(option,i) in productOptions">
+                        <td>{{ i + 1 }}</td>
                         <td>{{ option.name }}</td>
                         <td>{{ option.price_adjustment_text }}</td>
                         <td>
@@ -70,12 +66,8 @@ function edit(value) {
                     <td>{{ lang.empty }}</td>
                 </tr>
             </Table>
-
-            <button class="btn" href="#">Add Option</button>
         </Card>
     </AppLayout>
-
-    <Form :open="open" :option="option" @close="() => {option = null; index = 1;}"/>
 </template>
 
 <style scoped>
