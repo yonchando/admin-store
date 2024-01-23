@@ -2,10 +2,9 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface CategoryRepositoryInterface

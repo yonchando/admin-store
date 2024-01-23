@@ -6,7 +6,7 @@ use App\Enums\Gender;
 use App\Enums\User\UserStatus;
 use App\Facades\Enum;
 use App\Facades\Helper;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;

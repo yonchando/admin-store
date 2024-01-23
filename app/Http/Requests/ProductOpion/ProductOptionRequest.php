@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ProductOpion;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class ProductOptionRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'category_name' => ['required', Rule::unique('categories', 'category_name')],
+            'name' => ['required'],
+            'price_adjustment' => ['nullable', 'numeric'],
         ];
     }
 

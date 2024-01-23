@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\SettingRequest;
+use App\Http\Requests\Setting\SettingRequest;
 use App\Models\Setting;
 use App\Repositories\Contracts\SettingRepositoryInterface;
 
@@ -21,7 +21,7 @@ class SettingRepository implements SettingRepositoryInterface
         $setting->save();
 
         $setting->refresh();
-       
+
         return $setting;
     }
 }

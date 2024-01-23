@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ProductOptionRequest;
-use App\Http\Requests\ProductOptionStoreManyRequest;
+use App\Http\Requests\ProductOpion\ProductOptionRequest;
+use App\Http\Requests\ProductOpion\ProductOptionStoreManyRequest;
 use App\Models\ProductOption;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class ProductOptionRepository implements Contracts\ProductOptionRepositoryInterf
         foreach ($options as $value) {
             $collect->push(ProductOption::create($value));
         }
-      
+
         return $collect;
     }
 

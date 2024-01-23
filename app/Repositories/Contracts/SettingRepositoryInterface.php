@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Http\Requests\SettingRequest;
+use App\Http\Requests\Setting\SettingRequest;
 use App\Models\Setting;
 
 interface SettingRepositoryInterface

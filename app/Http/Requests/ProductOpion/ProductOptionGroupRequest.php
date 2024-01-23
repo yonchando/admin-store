@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ProductOpion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductOptionRequest extends FormRequest
+class ProductOptionGroupRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'name' => ['required'],
-            'price_adjustment' => ['nullable', 'numeric'],
         ];
     }
 

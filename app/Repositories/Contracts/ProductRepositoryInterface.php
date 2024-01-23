@@ -2,11 +2,10 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 interface ProductRepositoryInterface
 {

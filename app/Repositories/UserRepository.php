@@ -3,9 +3,8 @@
 namespace App\Repositories;
 
 use App\Enums\User\UserStatus;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

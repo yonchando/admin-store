@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Product\ProductStatus;
 use App\Facades\Helper;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;

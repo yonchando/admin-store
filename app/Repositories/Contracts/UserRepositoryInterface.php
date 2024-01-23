@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;

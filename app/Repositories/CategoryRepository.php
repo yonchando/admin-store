@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -14,8 +14,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     public function __construct(
         private readonly Request $request,
-    )
-    {
+    ) {
     }
 
     public function get(): Collection

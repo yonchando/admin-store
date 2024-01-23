@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Helper;
-use App\Http\Requests\ProductOptionRequest;
-use App\Http\Requests\ProductOptionStoreManyRequest;
+use App\Http\Requests\ProductOpion\ProductOptionRequest;
+use App\Http\Requests\ProductOpion\ProductOptionStoreManyRequest;
 use App\Models\ProductOption;
 use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use Illuminate\Http\Request;

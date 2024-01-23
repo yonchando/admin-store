@@ -3,12 +3,11 @@
 namespace App\Repositories;
 
 use App\Enums\Product\ProductStatus;
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Storage;
 
 class ProductRepository implements ProductRepositoryInterface

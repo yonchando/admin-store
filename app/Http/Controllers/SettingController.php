@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Helper;
-use App\Http\Requests\SettingRequest;
+use App\Http\Requests\Setting\SettingRequest;
 use App\Repositories\Contracts\CurrencyRepositoryInterface;
 use App\Repositories\Contracts\SettingRepositoryInterface;
 use Inertia\Inertia;

@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ProductOptionGroupRequest;
+use App\Http\Requests\ProductOpion\ProductOptionGroupRequest;
 use App\Models\ProductOptionGroup;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;

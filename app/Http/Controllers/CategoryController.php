@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Helper;
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
