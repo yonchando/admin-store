@@ -44,6 +44,9 @@ const {hide} = defineProps({
         <div class="card-body">
             <slot/>
         </div>
+        <div class="card-footer" v-if="$slots.footer">
+            <slot name="footer"/>
+        </div>
     </div>
 </template>
 

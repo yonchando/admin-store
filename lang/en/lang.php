@@ -84,6 +84,7 @@ return [
     'password' => "Password",
     'password_confirmation' => 'Password Confirmation',
     'all' => "All",
+    'add_option' => 'Add Option',
     'options' => "Options",
     'option_groups' => 'Option Groups',
     'product_options' => 'Product Options',
@@ -91,4 +92,5 @@ return [
     'price_adjustment' => 'Price Adjustment',
     'product_option_group' => 'Product Option Group',
     'udpate' => "Update",
+    'delete_selected' => 'Delete Selected',
 ];

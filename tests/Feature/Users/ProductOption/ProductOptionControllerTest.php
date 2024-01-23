@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\ProductOption;
 use Inertia\Testing\AssertableInertia;
 
@@ -38,6 +37,21 @@ describe('store product', function () {
             'price_adjustment' => $option->price_adjustment,
         ]);
     });
+
+    it('can store multiple product option in one request', function () {
+        $options = ProductOption::factory(3)->make();
+
+        $this->from(route('product.option.index'));
+
+        $res = $this->post(route('product.option.store.many'), [
+            'options' => $options->toArray(),
+        ]);
+
+        $res->assertRedirectToRoute('product.option.index')
+            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertDatabaseCount(ProductOption::newModelInstance()->getTable(), $options->count());
+    });
 });
 
 describe('update product option', function () {
@@ -61,6 +75,39 @@ describe('update product option', function () {
     });
 });
 
-test('destroy product option success', function () {
-    $option = ProductOption::factory()->create();
+describe('delete product option', function () {
+    it('can delete product option', function () {
+        $option = ProductOption::factory()->create();
+
+        $this->delete(route('product.option.destroy', $option))
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertModelMissing($option);
+    });
+
+    it('can delete product option multiple ids', function () {
+
+        $options = ProductOption::factory(3)->create();
+
+        $this->delete(route('product.option.destroy.many'), [
+            'ids' => $options->pluck('id')->toArray(),
+        ])
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertDatabaseEmpty($options->first()->getTable());
+    });
+
+    it('can not delete multiple product option with ids is not array', function () {
+
+        $this->from(route('product.option.index'));
+
+        $this->delete(route('product.option.destroy.many'), [
+            'ids' => collect(),
+        ])
+            ->assertRedirectToRoute('product.option.index')
+            ->assertSessionHasErrors('ids', __("validation.array", ["attribute" => __('ids')]));
+
+    });
 });

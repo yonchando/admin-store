@@ -1,13 +1,10 @@
 <script setup>
-import { computed } from 'vue';
+import {computed} from 'vue';
 
-const emit = defineEmits(['update:checked']);
+const emit = defineEmits(['update:modelValue']);
 
 const props = defineProps({
-    checked: {
-        type: [Array, Boolean],
-        required: true,
-    },
+    modelValue: [Array, Boolean],
     value: {
         default: null,
     },
@@ -15,11 +12,24 @@ const props = defineProps({
 
 const proxyChecked = computed({
     get() {
-        return props.checked;
+        if (Array.isArray(props.modelValue)) {
+            return props.modelValue.includes(props.value);
+        }
+        return props.modelValue;
     },
 
     set(val) {
-        emit('update:checked', val);
+        if (Array.isArray(props.modelValue)) {
+            let newValue;
+            if (val) {
+                newValue = [...props.modelValue, props.value];
+            } else {
+                newValue = props.modelValue.filter(item => item !== props.value);
+            }
+            emit('update:modelValue', newValue);
+        } else {
+            emit('update:modelValue', val);
+        }
     },
 });
 </script>

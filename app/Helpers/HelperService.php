@@ -15,7 +15,7 @@ class HelperService
         ]);
     }
 
-    public function setting(): Setting
+    public function setting(): Setting|null
     {
         return session('setting');
     }

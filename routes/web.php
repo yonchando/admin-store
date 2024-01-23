@@ -55,7 +55,10 @@ Route::middleware('auth')->group(function () {
         ->name('product.option.')
         ->group(function () {
             Route::get('/', [ProductOptionController::class, 'index'])->name('index');
+
             Route::post('/save', [ProductOptionController::class, 'store'])->name('store');
+
+            Route::post('/save-many', [ProductOptionController::class, 'storeMany'])->name('store.many');
 
             Route::patch('update/{productOption}', [
                 ProductOptionController::class, 'update',
@@ -64,6 +67,10 @@ Route::middleware('auth')->group(function () {
             Route::delete('delete/{productOption}', [
                 ProductOptionController::class, 'destroy',
             ])->name('destroy');
+
+            Route::delete('delete-multiple', [
+                ProductOptionController::class, 'destroyMany',
+            ])->name('destroy.many');
         });
 
     Route::prefix('product-option-group')

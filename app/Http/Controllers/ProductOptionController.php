@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\Helper;
 use App\Http\Requests\ProductOptionRequest;
+use App\Http\Requests\ProductOptionStoreManyRequest;
 use App\Models\ProductOption;
 use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use Illuminate\Http\Request;
@@ -33,6 +34,14 @@ class ProductOptionController extends Controller
         return redirect()->route('product.option.index');
     }
 
+    public function storeMany(ProductOptionStoreManyRequest $request)
+    {
+        $this->productOptionRepository->storeMany($request);
+
+        Helper::message(__('lang.created_success', ['attribute' => __('lang.product_option')]));
+        return redirect()->route('product.option.index');
+    }
+
     public function update(ProductOptionRequest $request, ProductOption $productOption)
     {
         $this->productOptionRepository->update($request, $productOption);
@@ -43,5 +52,21 @@ class ProductOptionController extends Controller
 
     public function destroy(ProductOption $productOption)
     {
+        $this->productOptionRepository->destroy($productOption->id);
+
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+        return redirect()->route('product.option.index');
+    }
+
+    public function destroyMany(Request $request)
+    {
+        $this->validate($request, [
+            'ids' => ['required', 'array'],
+        ]);
+
+        $this->productOptionRepository->destroy($request->get('ids'));
+
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+        return redirect()->route('product.option.index');
     }
 }
