@@ -231,7 +231,7 @@ ul.list-circle {
 }
 
 .list-inline-dotted.list-inline-condensed
-    .list-inline-item:not(:last-child):after {
+.list-inline-item:not(:last-child):after {
     margin-left: 0.54167rem;
 }
 
@@ -676,45 +676,45 @@ tfoot .table-border-double th {
 .card > .table:first-child thead:first-child tr:first-child th,
 .card > .table:first-child thead:first-child tr:first-child td,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    caption
-    + thead
-    tr:first-child
-    th,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+caption
++ thead
+tr:first-child
+th,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    caption
-    + thead
-    tr:first-child
-    td,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+caption
++ thead
+tr:first-child
+td,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    colgroup
-    + thead
-    tr:first-child
-    th,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+colgroup
++ thead
+tr:first-child
+th,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    colgroup
-    + thead
-    tr:first-child
-    td,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+colgroup
++ thead
+tr:first-child
+td,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    th,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+th,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    td {
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+td {
     border-top-width: 0;
 }
 
@@ -738,15 +738,15 @@ tfoot .table-border-double th {
 .card > .table:first-child thead:first-child tr:first-child,
 .card > .table:first-child tbody:first-child tr:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    tbody:first-child
-    tr:first-child {
+> [class*="table-responsive"]:first-child
+> .table:first-child
+tbody:first-child
+tr:first-child {
     border-top-left-radius: 0.125rem;
     border-top-right-radius: 0.125rem;
 }
@@ -756,29 +756,29 @@ tfoot .table-border-double th {
 .card > .table:first-child tbody:first-child tr:first-child td:first-child,
 .card > .table:first-child tbody:first-child tr:first-child th:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    td:first-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+td:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    th:first-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+th:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    tbody:first-child
-    tr:first-child
-    td:first-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+tbody:first-child
+tr:first-child
+td:first-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    tbody:first-child
-    tr:first-child
-    th:first-child {
+> [class*="table-responsive"]:first-child
+> .table:first-child
+tbody:first-child
+tr:first-child
+th:first-child {
     border-top-left-radius: 0.125rem;
 }
 
@@ -787,29 +787,29 @@ tfoot .table-border-double th {
 .card > .table:first-child tbody:first-child tr:first-child td:last-child,
 .card > .table:first-child tbody:first-child tr:first-child th:last-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    td:last-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+td:last-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    thead:first-child
-    tr:first-child
-    th:last-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+thead:first-child
+tr:first-child
+th:last-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    tbody:first-child
-    tr:first-child
-    td:last-child,
+> [class*="table-responsive"]:first-child
+> .table:first-child
+tbody:first-child
+tr:first-child
+td:last-child,
 .card
-    > [class*="table-responsive"]:first-child
-    > .table:first-child
-    tbody:first-child
-    tr:first-child
-    th:last-child {
+> [class*="table-responsive"]:first-child
+> .table:first-child
+tbody:first-child
+tr:first-child
+th:last-child {
     border-top-right-radius: 0.125rem;
 }
 
@@ -822,15 +822,15 @@ tfoot .table-border-double th {
 .card > .table:last-child tbody:last-child tr:last-child,
 .card > .table:last-child tfoot:last-child tr:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tbody:last-child
-    tr:last-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tbody:last-child
+tr:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tfoot:last-child
-    tr:last-child {
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tfoot:last-child
+tr:last-child {
     border-bottom-left-radius: 0.125rem;
     border-bottom-right-radius: 0.125rem;
 }
@@ -840,29 +840,29 @@ tfoot .table-border-double th {
 .card > .table:last-child tfoot:last-child tr:last-child td:first-child,
 .card > .table:last-child tfoot:last-child tr:last-child th:first-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tbody:last-child
-    tr:last-child
-    td:first-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tbody:last-child
+tr:last-child
+td:first-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tbody:last-child
-    tr:last-child
-    th:first-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tbody:last-child
+tr:last-child
+th:first-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tfoot:last-child
-    tr:last-child
-    td:first-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tfoot:last-child
+tr:last-child
+td:first-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tfoot:last-child
-    tr:last-child
-    th:first-child {
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tfoot:last-child
+tr:last-child
+th:first-child {
     border-bottom-left-radius: 0.125rem;
 }
 
@@ -871,29 +871,29 @@ tfoot .table-border-double th {
 .card > .table:last-child tfoot:last-child tr:last-child td:last-child,
 .card > .table:last-child tfoot:last-child tr:last-child th:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tbody:last-child
-    tr:last-child
-    td:last-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tbody:last-child
+tr:last-child
+td:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tbody:last-child
-    tr:last-child
-    th:last-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tbody:last-child
+tr:last-child
+th:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tfoot:last-child
-    tr:last-child
-    td:last-child,
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tfoot:last-child
+tr:last-child
+td:last-child,
 .card
-    > [class*="table-responsive"]:last-child
-    > .table:last-child
-    tfoot:last-child
-    tr:last-child
-    th:last-child {
+> [class*="table-responsive"]:last-child
+> .table:last-child
+tfoot:last-child
+tr:last-child
+th:last-child {
     border-bottom-right-radius: 0.125rem;
 }
 
@@ -1046,24 +1046,24 @@ select[size] option + option {
 
 @media (max-width: 767.98px) {
     .form-group
-        [class*="col-md-"]:not([class*="col-form-label"])
-        + [class*="col-md-"] {
+    [class*="col-md-"]:not([class*="col-form-label"])
+    + [class*="col-md-"] {
         margin-top: 1.25rem;
     }
 }
 
 @media (max-width: 991.98px) {
     .form-group
-        [class*="col-lg-"]:not([class*="col-form-label"])
-        + [class*="col-lg-"] {
+    [class*="col-lg-"]:not([class*="col-form-label"])
+    + [class*="col-lg-"] {
         margin-top: 1.25rem;
     }
 }
 
 @media (max-width: 1199.98px) {
     .form-group
-        [class*="col-xl-"]:not([class*="col-form-label"])
-        + [class*="col-xl-"] {
+    [class*="col-xl-"]:not([class*="col-form-label"])
+    + [class*="col-xl-"] {
         margin-top: 1.25rem;
     }
 }
@@ -1212,7 +1212,7 @@ select[size] option + option {
 }
 
 input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    + .form-control-feedback {
++ .form-control-feedback {
     color: #fff;
 }
 
@@ -1243,7 +1243,7 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
         .btn-link
     ):not([class*="alpha-"]):not(.fab-menu-btn).active,
 .show
-    > .btn:not(.bg-transparent):not([class*="btn-outline"]):not(.btn-light):not(
+> .btn:not(.bg-transparent):not([class*="btn-outline"]):not(.btn-light):not(
         .btn-link
     ):not([class*="alpha-"]):not(.fab-menu-btn).dropdown-toggle {
     box-shadow: 0 0 0 62.5rem rgba(0, 0, 0, 0.075) inset;
@@ -1300,7 +1300,7 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
         [disabled]
     ):not(.disabled).active,
 .show
-    > .btn-outline:not(.disabled):not(:disabled):not(
+> .btn-outline:not(.disabled):not(:disabled):not(
         [class*="alpha-"]
     ).dropdown-toggle {
     color: #fff !important;
@@ -1478,9 +1478,8 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
     text-overflow: ellipsis;
     cursor: pointer;
     margin-bottom: 0;
-    transition:
-        background-color ease-in-out 0.15s,
-        color ease-in-out 0.15s;
+    transition: background-color ease-in-out 0.15s,
+    color ease-in-out 0.15s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1627,13 +1626,13 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .dropdown-menu
-    > .dropdown-submenu:hover
-    > .dropdown-item:not(.dropdown-toggle)
-    ~ .dropdown-menu,
+> .dropdown-submenu:hover
+> .dropdown-item:not(.dropdown-toggle)
+~ .dropdown-menu,
 .dropdown-menu
-    > .dropdown-submenu:focus
-    > .dropdown-item:not(.dropdown-toggle)
-    ~ .dropdown-menu {
+> .dropdown-submenu:focus
+> .dropdown-item:not(.dropdown-toggle)
+~ .dropdown-menu {
     display: block;
 }
 
@@ -1674,26 +1673,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
     .dropdown-menu > .dropdown-submenu > .dropdown-menu > .dropdown-item,
     .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 2rem;
     }
 
     .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-item,
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-item,
     .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 3rem;
     }
 }
@@ -1737,54 +1736,54 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light) > .dropdown-item,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu
-    > .dropdown-item {
+> .dropdown-submenu
+> .dropdown-item {
     color: #fff;
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-item:hover,
+> .dropdown-item:hover,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-item:focus,
+> .dropdown-item:focus,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu
-    > .dropdown-item:hover,
+> .dropdown-submenu
+> .dropdown-item:hover,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu
-    > .dropdown-item:focus {
+> .dropdown-submenu
+> .dropdown-item:focus {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-item.active,
+> .dropdown-item.active,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu
-    > .dropdown-item.active {
+> .dropdown-submenu
+> .dropdown-item.active {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-item.disabled,
+> .dropdown-item.disabled,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu
-    > .dropdown-item.disabled {
+> .dropdown-submenu
+> .dropdown-item.disabled {
     background-color: transparent;
     color: rgba(255, 255, 255, 0.6);
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu.show
-    > .dropdown-item,
+> .dropdown-submenu.show
+> .dropdown-item,
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu:hover
-    > .dropdown-item {
+> .dropdown-submenu:hover
+> .dropdown-item {
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-submenu.disabled
-    > .dropdown-item {
+> .dropdown-submenu.disabled
+> .dropdown-item {
     background-color: transparent;
     color: rgba(255, 255, 255, 0.6);
 }
@@ -1794,7 +1793,7 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .dropdown-menu[class*="bg-"]:not(.bg-white):not(.bg-light)
-    > .dropdown-header-highlight {
+> .dropdown-header-highlight {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -2148,39 +2147,39 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-link {
+.nav-link {
     color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-link:hover,
+.nav-link:hover,
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-link:focus {
+.nav-link:focus {
     color: #fff;
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-link.disabled {
+.nav-link.disabled {
     color: rgba(255, 255, 255, 0.6);
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-item.show
-    .nav-link {
+.nav-item.show
+.nav-link {
     color: #fff;
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-link.active,
+.nav-link.active,
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .nav-item.show
-    .nav-link.active {
+.nav-item.show
+.nav-link.active {
     color: #fff;
     background-color: rgba(0, 0, 0, 0.1);
 }
 
 .nav-tabs-solid[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    + .tab-content[class*="bg-"] {
++ .tab-content[class*="bg-"] {
     border-top-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -2258,8 +2257,8 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .nav-pills
-    .nav-link.active
-    .badge:not(.bg-transparent):not(.bg-light):not(.bg-white) {
+.nav-link.active
+.badge:not(.bg-transparent):not(.bg-light):not(.bg-white) {
     background-color: #fff;
     color: #333;
     transition: all ease-in-out 0.15s;
@@ -2267,8 +2266,8 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
 @media (prefers-reduced-motion: reduce) {
     .nav-pills
-        .nav-link.active
-        .badge:not(.bg-transparent):not(.bg-light):not(.bg-white) {
+    .nav-link.active
+    .badge:not(.bg-transparent):not(.bg-light):not(.bg-white) {
         transition: none;
     }
 }
@@ -2572,26 +2571,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
     .navbar-expand-sm .dropdown-submenu > .dropdown-menu > .dropdown-item,
     .navbar-expand-sm
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 2rem;
     }
 
     .navbar-expand-sm
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-item,
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-item,
     .navbar-expand-sm
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 3rem;
     }
 
@@ -2679,26 +2678,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
     .navbar-expand-md .dropdown-submenu > .dropdown-menu > .dropdown-item,
     .navbar-expand-md
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 2rem;
     }
 
     .navbar-expand-md
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-item,
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-item,
     .navbar-expand-md
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 3rem;
     }
 
@@ -2786,26 +2785,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
     .navbar-expand-lg .dropdown-submenu > .dropdown-menu > .dropdown-item,
     .navbar-expand-lg
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 2rem;
     }
 
     .navbar-expand-lg
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-item,
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-item,
     .navbar-expand-lg
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 3rem;
     }
 
@@ -2893,26 +2892,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
     .navbar-expand-xl .dropdown-submenu > .dropdown-menu > .dropdown-item,
     .navbar-expand-xl
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 2rem;
     }
 
     .navbar-expand-xl
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-item,
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-item,
     .navbar-expand-xl
-        .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-menu
-        > .dropdown-submenu
-        > .dropdown-item {
+    .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-menu
+    > .dropdown-submenu
+    > .dropdown-item {
         padding-left: 3rem;
     }
 
@@ -2999,26 +2998,26 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
 .navbar-expand .dropdown-submenu > .dropdown-menu > .dropdown-item,
 .navbar-expand
-    .dropdown-submenu
-    > .dropdown-menu
-    > .dropdown-submenu
-    > .dropdown-item {
+.dropdown-submenu
+> .dropdown-menu
+> .dropdown-submenu
+> .dropdown-item {
     padding-left: 2rem;
 }
 
 .navbar-expand
-    .dropdown-submenu
-    > .dropdown-menu
-    > .dropdown-submenu
-    > .dropdown-menu
-    > .dropdown-item,
+.dropdown-submenu
+> .dropdown-menu
+> .dropdown-submenu
+> .dropdown-menu
+> .dropdown-item,
 .navbar-expand
-    .dropdown-submenu
-    > .dropdown-menu
-    > .dropdown-submenu
-    > .dropdown-menu
-    > .dropdown-submenu
-    > .dropdown-item {
+.dropdown-submenu
+> .dropdown-menu
+> .dropdown-submenu
+> .dropdown-menu
+> .dropdown-submenu
+> .dropdown-item {
     padding-left: 3rem;
 }
 
@@ -3305,7 +3304,7 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .navbar-top {
-    padding-top: 3.89953rem;
+    padding-top: 3.12503rem;
 }
 
 .navbar-lg-top {
@@ -3481,7 +3480,7 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 }
 
 .card[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
-    .card-header {
+.card-header {
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
@@ -3494,8 +3493,8 @@ input[class*="bg-"]:not(.bg-light):not(.bg-white):not(.bg-transparent)
 
 .card-header:not([class*="bg-"]):not([class*="alpha-"]) + .card-body,
 .card-header:not([class*="bg-"]):not([class*="alpha-"])
-    + *
-    > .card-body:first-child {
++ *
+> .card-body:first-child {
     padding-top: 0;
 }
 
@@ -3739,7 +3738,7 @@ a.breadcrumb-elements-item:focus,
 }
 
 .page-header-light
-    .breadcrumb-line-light:not(.breadcrumb-line-component):last-child {
+.breadcrumb-line-light:not(.breadcrumb-line-component):last-child {
     border-bottom-width: 0;
 }
 
@@ -3748,7 +3747,7 @@ a.breadcrumb-elements-item:focus,
 }
 
 .page-header-dark
-    .breadcrumb-line-light:not(.breadcrumb-line-component):first-child {
+.breadcrumb-line-light:not(.breadcrumb-line-component):first-child {
     border-bottom-width: 0;
 }
 
@@ -3763,7 +3762,7 @@ a.breadcrumb-elements-item:focus,
 }
 
 .page-header-dark
-    .breadcrumb-line-dark:not(.breadcrumb-line-component):last-child {
+.breadcrumb-line-dark:not(.breadcrumb-line-component):last-child {
     border-bottom-width: 0;
 }
 
@@ -3925,7 +3924,7 @@ a.breadcrumb-elements-item:focus,
 a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):hover,
 a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):focus,
 .show
-    > a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(
+> a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(
         .bg-light
     ).dropdown-toggle {
     box-shadow: 0 0 0 62.5rem rgba(0, 0, 0, 0.075) inset;
@@ -4029,7 +4028,7 @@ a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):focus,
 }
 
 .alert[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light)
-    .alert-link {
+.alert-link {
     color: inherit;
     border-bottom-color: rgba(255, 255, 255, 0.85);
 }
@@ -4430,7 +4429,7 @@ a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):focus,
 .list-group-bordered[class*="bg-"]:not(.bg-light):not(.bg-white):not(
         .bg-transparent
     )
-    .list-group-item {
+.list-group-item {
     border-top-color: rgba(255, 255, 255, 0.1);
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
@@ -4440,38 +4439,38 @@ a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):focus,
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item-action:not(.active):not(.disabled) {
+.list-group-item-action:not(.active):not(.disabled) {
     color: rgba(255, 255, 255, 0.9);
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item-action:not(.active):not(.disabled):hover,
+.list-group-item-action:not(.active):not(.disabled):hover,
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item-action:not(.active):not(.disabled):focus {
+.list-group-item-action:not(.active):not(.disabled):focus {
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item {
+.list-group-item {
     color: #fff;
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item.active {
+.list-group-item.active {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item.disabled,
+.list-group-item.disabled,
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-item:disabled {
+.list-group-item:disabled {
     color: rgba(255, 255, 255, 0.6);
     background-color: transparent;
 }
 
 .list-group[class*="bg-"]:not(.bg-light):not(.bg-transparent):not(.bg-white)
-    .list-group-divider {
+.list-group-divider {
     border-top-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -4620,9 +4619,8 @@ a.badge[class*="bg-"]:not(.bg-transparent):not(.bg-white):not(.bg-light):focus,
  * ---------------------------------------------------------------------------- */
 .close {
     opacity: 0.75;
-    transition:
-        color ease-in-out 0.15s,
-        opacity ease-in-out 0.15s;
+    transition: color ease-in-out 0.15s,
+    opacity ease-in-out 0.15s;
 }
 
 @media (prefers-reduced-motion: reduce) {

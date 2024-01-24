@@ -29,77 +29,54 @@ router.on("finish", () => {
 });
 
 const lang = usePage().props.lang;
+
+const date = new Date();
 </script>
 
 <template>
-    <div>
-        <div class="navbar-top">
-            <HeaderTop v-if="showHeaderTop"/>
+    <HeaderTop v-if="showHeaderTop"/>
 
-            <div class="page-content">
-                <Sidebar v-if="showSidebar"/>
+    <div class="page-content tw-h-full">
+        <Sidebar v-if="showSidebar"/>
 
-                <div class="content-wrapper">
-                    <div class="page-header page-header-light">
-                        <div
-                            class="breadcrumb-line breadcrumb-line-light header-elements-md-inline"
-                        >
-                            <div class="d-flex">
-                                <Breadcrumb>
-                                    <BreadcrumbItem
-                                        :title="lang.dashboard"
-                                        icon="icon-home2"
-                                        :href="route('dashboard')"
-                                    />
-                                    <slot name="breadcrumb"/>
-                                </Breadcrumb>
-                            </div>
-
-                            <div class="header-elements d-none">
-                                <Breadcrumb class="justify-content-center">
-                                    <slot name="action"/>
-                                </Breadcrumb>
-                            </div>
-                        </div>
+        <div class="content-wrapper">
+            <div class="page-header page-header-light">
+                <div
+                    class="breadcrumb-line breadcrumb-line-light header-elements-md-inline"
+                >
+                    <div class="d-flex">
+                        <Breadcrumb>
+                            <BreadcrumbItem
+                                :title="lang.dashboard"
+                                icon="icon-home2"
+                                :href="route('dashboard')"
+                            />
+                            <slot name="breadcrumb"/>
+                        </Breadcrumb>
                     </div>
 
-                    <div class="content tw-mb-24 tw-px-2">
-                        <slot/>
+                    <div class="header-elements d-none">
+                        <Breadcrumb class="justify-content-center">
+                            <slot name="action"/>
+                        </Breadcrumb>
                     </div>
+                </div>
+            </div>
 
-                    <div
-                        class="tw-fixed tw-bottom-0 tw-right-0"
-                        :style="{
-                            left: showSidebar ? '16.875rem' : '0',
-                        }"
-                    >
-                        <div class="navbar navbar-expand-lg navbar-light">
-                            <div class="text-center d-lg-none w-100">
-                                <button
-                                    type="button"
-                                    class="navbar-toggler dropdown-toggle"
-                                    data-toggle="collapse"
-                                    data-target="#navbar-footer"
-                                >
-                                    <i class="icon-unfold mr-2"></i>
-                                    Footer
-                                </button>
-                            </div>
+            <div class="content tw-mb-24 tw-px-2">
+                <slot/>
+            </div>
 
-                            <div
-                                class="navbar-collapse collapse"
-                                id="navbar-footer"
-                            >
-                                <span class="navbar-text">
-                                    &copy; 2023 - .
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="navbar navbar-expand-lg navbar-light">
+                <div id="navbar-footer" class="navbar-collapse">
+                    <span class="navbar-text">
+                        Copyright &copy; 2023 - {{ date.getFullYear() }}
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+
 
     <Loading v-if="loading"/>
 </template>
