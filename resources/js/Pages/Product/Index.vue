@@ -17,7 +17,8 @@ const {lang, products} = defineProps([
     "products",
     "categories",
     "statuses",
-    "filters"
+    "filters",
+    'errors',
 ]);
 
 let index = products.from;
@@ -59,7 +60,7 @@ const destroy = (product) => {
         </template>
 
         <Card no-header>
-            <ProductFilter :categories="categories" :statuses="statuses" :filter="filters"/>
+            <ProductFilter :errors="errors" :categories="categories" :statuses="statuses" :filter="filters"/>
         </Card>
 
         <Card :title="lang.products">

@@ -9,11 +9,11 @@ const {modelValue, items, id, text, disabled} = defineProps({
     items: Object,
     id: {
         type: String,
-        default: 'id',
+        default: "id",
     },
     text: {
         type: [Object, String],
-        default: 'text',
+        default: "text",
     },
     placeholder: String,
     hideSearch: {
@@ -32,21 +32,25 @@ const search = ref(null);
 
 watch(search, (value) => {
     if (value) {
-        data.value = items.filter(item => {
+        data.value = items.filter((item) => {
             return item[text].toLowerCase().includes(value.toLowerCase());
         });
     }
 });
 
 const selectText = (item) => {
-    if (typeof text === 'function') {
+    if (typeof text === "function") {
         return text(item);
     } else {
+        if (typeof item[text] === "undefined") {
+            return "";
+        }
         return lang[item[text].toLowerCase()] ?? item[text];
     }
 };
 
-const defaultSelected = modelValue != null ? items.find((item) => item[id] == modelValue) : null;
+const defaultSelected =
+    modelValue != null ? items.find((item) => item[id] == modelValue) : null;
 
 const selected = reactive({
     id: defaultSelected ? defaultSelected[id] : null,
@@ -57,20 +61,20 @@ const collapse = reactive({
     open: false,
 });
 
-let keydownEvent = (event) => {
+const $emit = defineEmits("update:modelValue");
+
+function keydownEvent(event) {
     if (event.key === "Escape") {
         close();
     }
-};
+}
 
-let clickEvent = (event) => {
-    if (
-        !event.target.closest("#collapse") &&
-        !event.target.closest("#select-input-search")
-    ) {
+function clickEvent(event) {
+    if (!event.target.closest("#collapse") &&
+        !event.target.closest("#select-input-search")) {
         close();
     }
-};
+}
 
 const close = () => {
     collapse.open = false;
@@ -81,8 +85,7 @@ const close = () => {
     document.removeEventListener("click", clickEvent);
 };
 
-const open = () => {
-
+function open() {
     if (disabled) {
         return;
     }
@@ -97,11 +100,9 @@ const open = () => {
     document.addEventListener("keydown", keydownEvent);
 
     document.addEventListener("click", clickEvent);
-};
+}
 
-const $emit = defineEmits("update:modelValue");
-
-const clear = () => {
+function clear() {
     if (disabled) {
         return;
     }
@@ -111,22 +112,20 @@ const clear = () => {
     $emit("update:modelValue", selected.id);
 }
 
-defineExpose({focus: () => input.value.focus()});
-
-const select = (item) => {
+function select(item) {
     selected.id = item[id];
     selected.text = selectText(item);
     close();
 
     $emit("update:modelValue", selected.id);
-};
+}
 </script>
 <template>
     <div class="tw-relative">
         <div
             class="tw-flex tw-w-full tw-items-center tw-rounded tw-border tw-px-[0.875rem] tw-py-[.4375rem]"
             :class="{
-                'tw-bg-gray-100/75': disabled
+                'tw-bg-gray-100/75': disabled,
             }"
             id="collapse"
             @click="open()"
@@ -141,11 +140,12 @@ const select = (item) => {
         <i
             v-if="!disabledClear"
             @click="clear()"
-            class=" tw-absolute tw-right-2 tw-top-1/2 -tw-translate-y-1/2"
+            class="tw-absolute tw-right-2 tw-top-1/2 -tw-translate-y-1/2"
             :class="{
-                'icon-chevron-down': !collapse.open && selected.id === null || disabled,
+                'icon-chevron-down':
+                    (!collapse.open && selected.id === null) || disabled,
                 'icon-chevron-up': collapse.open && selected.id === null,
-                'icon-x tw-cursor-pointer': selected.id && !disabled
+                'icon-x tw-cursor-pointer': selected.id && !disabled,
             }"
         ></i>
         <Transition
@@ -157,9 +157,8 @@ const select = (item) => {
                 v-show="collapse.open && !disabled"
                 class="tw-absolute tw-left-0 tw-right-0 tw-top-full tw-z-50 tw-grid tw-w-full tw-grid-cols-1 tw-grid-rows-1"
             >
-
                 <div
-                    class="tw-relative  tw-rounded-md tw-border tw-border-gray-200 tw-bg-white tw-shadow-lg"
+                    class="tw-relative tw-rounded-md tw-border tw-border-gray-200 tw-bg-white tw-shadow-lg"
                 >
                     <div
                         v-if="!hideSearch"
@@ -171,12 +170,12 @@ const select = (item) => {
                     <div class="tw-max-h-56 tw-max-w-full tw-overflow-y-scroll">
                         <template v-if="data.length > 0">
                             <div
-                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black hover:tw-bg-gray-100"
-                                :class="{
-                                'tw-bg-gray-100': selected.id == item[id],
-                            }"
                                 v-for="item in data"
                                 :key="item[id]"
+                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black hover:tw-bg-gray-100"
+                                :class="{
+                                    'tw-bg-gray-100': selected.id === item[id],
+                                }"
                                 @click="select(item)"
                             >
                                 {{ selectText(item) }}
@@ -191,7 +190,6 @@ const select = (item) => {
                             </div>
                         </template>
                     </div>
-
                 </div>
             </div>
         </Transition>
@@ -199,7 +197,6 @@ const select = (item) => {
 </template>
 
 <style scoped>
-
 .animate__super_faster {
     animation-duration: 200ms;
 }

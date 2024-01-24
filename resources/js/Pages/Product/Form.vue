@@ -8,11 +8,14 @@ import SelectInput from "@/Components/Form/SelectInput.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {Head, useForm} from "@inertiajs/vue3";
+import InfoButton from "@/Components/Button/InfoButton.vue";
 
 const {lang, product, categories} = defineProps([
     "lang",
     "product",
     "categories",
+    'groups',
+    'options',
 ]);
 
 const form = useForm({
@@ -22,7 +25,26 @@ const form = useForm({
     stock: product ? product.stock_quantity : null,
     description: product ? product.description : null,
     image: product ? product.image : null,
+    product_options: [{
+        product_option_group_id: null,
+        options: [{
+            product_option_id: null,
+            price_adjustment: null,
+        }]
+    }],
 });
+
+function addGroup() {
+    form.product_options.push({
+        product_option_group_id: null,
+        options: [
+            {
+                product_option_id: null,
+                price_adjustment: null,
+            }
+        ]
+    });
+}
 
 const save = () => {
     if (product) {
@@ -38,27 +60,20 @@ const save = () => {
     <Head v-if="product == null" title="Prodcut Add"/>
     <Head v-else title="Prodcut Edit"/>
 
-    <form @submit.prevent="save()" enctype="multipart/form-data">
-        <AppLayout>
-            <template #action>
-                <PrimaryButton type="submit" :disabled="form.processing">
-                    <i class="icon-floppy-disk"></i>
-                    <span>{{ lang.save }}</span>
-                </PrimaryButton>
-            </template>
+    <AppLayout>
+        <template #breadcrumb>
+            <BreadcrumbItem
+                icon="icon-box"
+                :href="route('product.index')"
+                :title="lang.products"
+            />
+            <BreadcrumbItem
+                :icon="product ? 'icon-pencil7' : 'icon-plus2'"
+                :title="product ? lang.prodcut_edit : lang.product_create"
+            />
+        </template>
 
-            <template #breadcrumb>
-                <BreadcrumbItem
-                    icon="icon-box"
-                    :href="route('product.index')"
-                    :title="lang.products"
-                />
-                <BreadcrumbItem
-                    :icon="product ? 'icon-pencil7' : 'icon-plus2'"
-                    :title="product ? lang.prodcut_edit : lang.product_create"
-                />
-            </template>
-
+        <form @submit.prevent="save()" enctype="multipart/form-data">
             <Card :title="product ? lang.prodcut_edit : lang.product_create">
                 <div class="row">
                     <div class="col-9">
@@ -151,8 +166,50 @@ const save = () => {
                     </div>
                 </div>
             </Card>
-        </AppLayout>
-    </form>
+
+            <Card v-if="!product" collapse :title="lang.product_option">
+
+                <template v-for="(group,i) in form.product_options">
+                    <Card>
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <InputLabel :value="lang.option_group"/>
+                                <SelectInput v-model="group.product_option_group_id"
+                                             text="name"
+                                             :items="groups"/>
+                            </div>
+                        </div>
+                        <div class="form-group tw-grid tw-grid-cols-2 tw-gap-4">
+                            <template v-for="option in group.options">
+                                <div class="">
+                                    <InputLabel :value="lang.options"/>
+                                    <SelectInput v-model="option.product_option_id"
+                                                 text="name"
+                                                 :items="options"/>
+                                </div>
+                                <div class="">
+                                    <InputLabel :value="lang.price_adjustment"/>
+                                    <TextInput v-model="option.price_adjustment" type="number"/>
+                                </div>
+                            </template>
+                        </div>
+                        <InfoButton @click="group.options.push({product_option_id: null,price_adjustment: null})">
+                            {{ lang.add_option }}
+                        </InfoButton>
+                    </Card>
+                </template>
+
+                <InfoButton @click="addGroup">
+                    {{ lang.add_group }}
+                </InfoButton>
+            </Card>
+
+            <PrimaryButton type="submit" :disabled="form.processing">
+                <i class="icon-floppy-disk"></i>
+                <span>{{ lang.save }}</span>
+            </PrimaryButton>
+        </form>
+    </AppLayout>
 </template>
 
 <style scoped></style>

@@ -10,12 +10,12 @@ class EnumService
 {
     public function toArray(array $enum, $getValue = false): array
     {
-        return collect($enum)->map(fn($value) => $getValue ? $value->value : $value->name)->toArray();
+        return collect($enum)->map(fn ($value) => $getValue ? $value->value : $value->name)->toArray();
     }
 
     public function toSelectedForm(array $enum, $getValue = false): array
     {
-        return collect($enum)->map(fn($value) => [
+        return collect($enum)->map(fn ($value) => [
             'id' => $getValue ? $value->value : $value->name,
             'text' => $getValue ? $value->value : $value->name,
         ])->toArray();
@@ -26,6 +26,6 @@ class EnumService
         if (is_null($enum)) {
             return null;
         }
-        return __("lang.".Str::lower($getVlaue ? $enum->value : $enum->name));
+        return __("lang." . Str::lower($getVlaue ? $enum->value : $enum->name));
     }
 }

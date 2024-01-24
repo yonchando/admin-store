@@ -29,9 +29,11 @@ const {hide} = defineProps({
 
 <template>
     <div class="card">
-        <div v-if="!noHeader" class="card-header header-elements-inline"
+        <div v-if="$slots.header || title || collapse || reload || remove" class="card-header header-elements-inline"
              :class="bg">
-            <h6 v-if="title" class="card-title">{{ title }}</h6>
+            <h6 v-if="title" class="card-title">
+                <slot name="header">{{ title }}</slot>
+            </h6>
             <div v-if="collapse || reload || remove" class="header-elements">
                 <div class="list-icons">
                     <a v-if="collapse" class="list-icons-item"

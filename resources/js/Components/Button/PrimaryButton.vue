@@ -12,7 +12,7 @@ defineProps({
         <slot/>
     </Link>
 
-    <button v-else class="btn btn-primary btn-sm tw-space-x-4">
+    <button type="button" v-else class="btn btn-primary btn-sm tw-space-x-4">
         <slot/>
     </button>
 </template>

@@ -36,7 +36,7 @@ const date = new Date();
 <template>
     <HeaderTop v-if="showHeaderTop"/>
 
-    <div class="page-content tw-h-full">
+    <div class="page-content tw-min-h-screen">
         <Sidebar v-if="showSidebar"/>
 
         <div class="content-wrapper">

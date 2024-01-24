@@ -16,6 +16,7 @@ class ProductRequest extends FormRequest
             'category_id' => ['nullable', 'integer'],
             'image' => ['nullable'],
             'slug' => ['nullable'],
+            'product_options' => ['nullable', 'array'],
         ];
     }
 

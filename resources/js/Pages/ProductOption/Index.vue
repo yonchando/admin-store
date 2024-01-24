@@ -53,7 +53,6 @@ function removeItem(i) {
 function save() {
     form.post(route('product.option.store.many'), {
         onSuccess: params => {
-            console.log(params);
             form.options = [];
         }
     });

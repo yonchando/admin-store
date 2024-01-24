@@ -1,10 +1,11 @@
 <?php
 
 use App\Enums\Product\ProductStatus;
+use App\Facades\Enum;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\ProductOption;
+use App\Models\ProductOptionGroup;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
@@ -29,7 +30,7 @@ test('index methods', function () {
             fn(AssertableInertia $page) => $page->component("Product/Index")
                 ->has('products.data', $perPage)
                 ->has('categories', $categories->count())
-                ->where('statuses', ProductStatus::toArray())
+                ->where('statuses', Enum::toArray(ProductStatus::cases()))
                 ->where('products.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
@@ -83,6 +84,48 @@ describe('create product', function () {
         Storage::assertExists(Product::first()->image);
     });
 
+    it('can store product option from create form', function () {
+        $group = ProductOptionGroup::factory()->create();
+        $option = ProductOption::factory()->create();
+
+        $product = Product::factory()->category()->make();
+
+        $data = $product->toArray();
+
+        $data['product_options'][] = [
+            'product_option_group_id' => $group->id,
+            'options' => [
+                [
+                    'product_option_id' => $option->id,
+                    'price_adjustment' => 1,
+                ],
+            ],
+        ];
+
+        $this->post(route('product.store'), $data)
+            ->assertRedirect()
+            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
+
+        $this->assertDatabaseHas($product->getTable(), [
+            'product_name' => $product->product_name,
+            'description' => $product->description,
+        ]);
+
+        $product = Product::with(['productHasOptionGroups.productHasOptions'])->first();
+
+        $this->assertNotEmpty($product->productOptionGroups);
+
+        $this->assertDatabaseHas('product_has_option_groups', [
+            'product_option_group_id' => $group->id,
+            'product_id' => $product->id,
+        ]);
+
+        $this->assertDatabaseHas('product_has_options', [
+            'product_option_id' => $option->id,
+        ]);
+
+
+    });
 });
 
 
@@ -97,9 +140,11 @@ describe('product edit', function () {
             ->assertInertia(
                 fn(AssertableInertia $page) => $page->component("Product/Form")
                     ->has('categories', $cagtegories->count())
-                    ->has('product', fn(AssertableInertia $page) => $page
-                        ->where('id', $product->id)
-                        ->where('product_name', $product->product_name)->etc()
+                    ->has(
+                        'product',
+                        fn(AssertableInertia $page) => $page
+                            ->where('id', $product->id)
+                            ->where('product_name', $product->product_name)->etc()
                     )
             );
     });
@@ -166,9 +211,7 @@ describe('product edit', function () {
                     ->where('product.status', ProductStatus::ACTIVE->name)
                     ->etc()
             );
-
     });
-
 });
 
 test('destroy methods', function () {

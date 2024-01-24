@@ -19,7 +19,6 @@ createInertiaApp({
     },
     setup({el, App, props, plugin}) {
         $('body').css('margin-bottom', 0).addClass('navbar-top');
-        $(el).addClass('tw-h-screen');
         return createApp({render: () => h(App, props)})
             .use(plugin)
             .use(ZiggyVue)

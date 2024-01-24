@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Product\ProductStatus;
+use App\Facades\Enum;
 use App\Facades\Helper;
+use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
+use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,18 +21,15 @@ class ProductController extends Controller
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
+        private readonly ProductOptionRepositoryInterface $productOptionRepository,
+        private readonly ProductService $productService,
     ) {
     }
 
-    public function index(Request $request)
+    public function index(ProductFilterRequest $request)
     {
-        $filters = $request->only([
-            'category_id',
-            'search',
-            'min_price',
-            'max_price',
-            'status',
-        ]);
+        $filters = $request->validated();
 
         $filters['perPage'] = $request->get('perPage', 15);
 
@@ -35,7 +37,7 @@ class ProductController extends Controller
 
         $categories = $this->categoryRepository->get();
 
-        $statuses = ProductStatus::toArray();
+        $statuses = Enum::toSelectedForm(ProductStatus::cases());
 
         return Inertia::render('Product/Index', [
             'products' => $products,
@@ -45,18 +47,22 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $categories = $this->categoryRepository->get();
+        $groups = $this->productOptionGroupRepository->get($request);
+        $options = $this->productOptionRepository->get($request);
 
         return Inertia::render('Product/Form', [
             'categories' => $categories,
+            'groups' => $groups,
+            'options' => $options,
         ]);
     }
 
     public function store(ProductRequest $request)
     {
-        $this->productRepository->store($request);
+        $this->productService->storeProductWithProductOption($request);
 
         Helper::message(__('lang.created_success', ['attribute' => __('lang.product')]));
 

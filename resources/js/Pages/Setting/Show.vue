@@ -26,38 +26,36 @@ const update = () => {
 <template>
     <Head :title="lang.setting"/>
 
-    <form @submit.prevent="update()">
-        <AppLayout>
-            <template #action>
-                <PrimaryButton type="submit">
-                    <i class="fa fa-save"></i>
-                    {{ lang.save }}
-                </PrimaryButton>
-            </template>
+    <AppLayout>
+        <template #action>
+            <PrimaryButton @click="update">
+                <i class="fa fa-save"></i>
+                {{ lang.save }}
+            </PrimaryButton>
+        </template>
 
-            <template #breadcrumb>
-                <BreadcrumbItem :title="lang.setting" icon="icon-gear"/>
-            </template>
+        <template #breadcrumb>
+            <BreadcrumbItem :title="lang.setting" icon="icon-gear"/>
+        </template>
 
-            <FlashMessage/>
+        <FlashMessage/>
 
-            <Card :title="lang.setting">
-                <div class="row">
-                    <div class="col-6">
-                        <FormGroup>
-                            <InputLabel :value="lang.currency"/>
+        <Card :title="lang.setting">
+            <div class="row">
+                <div class="col-6">
+                    <FormGroup>
+                        <InputLabel :value="lang.currency"/>
 
-                            <SelectInput v-model="form.currency_id" hide-search :items="currencies"
-                                         disabled-clear
-                                         :text="(item) => `${item['name']} - ${item['code']}` "/>
+                        <SelectInput v-model="form.currency_id" hide-search :items="currencies"
+                                     disabled-clear
+                                     :text="(item) => `${item['name']} - ${item['code']}` "/>
 
-                            <InputError :message="form.errors.currency_id"/>
-                        </FormGroup>
-                    </div>
+                        <InputError :message="form.errors.currency_id"/>
+                    </FormGroup>
                 </div>
-            </Card>
-        </AppLayout>
-    </form>
+            </div>
+        </Card>
+    </AppLayout>
 </template>
 
 <style scoped>

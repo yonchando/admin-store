@@ -86,6 +86,7 @@ return [
     'all' => "All",
     'add_option' => 'Add Option',
     'options' => "Options",
+    'option' => "Option",
     'option_groups' => 'Option Groups',
     'product_options' => 'Product Options',
     'product_option' => 'Product Option',
@@ -93,4 +94,6 @@ return [
     'product_option_group' => 'Product Option Group',
     'udpate' => "Update",
     'delete_selected' => 'Delete Selected',
+    'add_group' => "Add Group",
+    'option_group' => 'Option Group',
 ];

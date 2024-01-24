@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Enums\Gender;
 use App\Facades\Enum;
-use App\Facades\Helper;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -40,28 +39,28 @@ class UserFactory extends Factory
 
     public function male(): Factory|UserFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'gender' => Gender::MALE->value,
         ]);
     }
 
     public function female(): Factory|UserFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'gender' => Gender::FEMALE->value,
         ]);
     }
 
     public function admin(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'is_admin' => true,
         ]);
     }
 
     public function status($status): Factory|UserFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => $status,
         ]);
     }

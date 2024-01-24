@@ -8,11 +8,11 @@ defineProps({
 </script>
 
 <template>
-    <Link v-if="href" :href="href" class="btn btn-warning btn-sm tw-space-x-4">
+    <Link v-if="href" :href="href" class="btn btn-info btn-sm tw-space-x-4">
         <slot/>
     </Link>
 
-    <button type="button" v-else class="btn btn-warning btn-sm tw-space-x-4">
+    <button type="button" v-else class="btn btn-info btn-sm tw-space-x-4">
         <slot/>
     </button>
 </template>
