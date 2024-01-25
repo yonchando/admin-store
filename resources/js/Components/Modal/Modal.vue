@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import {reactive} from "vue";
 
 const props = defineProps({
     size: {
@@ -36,7 +36,7 @@ const dialog = reactive({
                 </div>
 
                 <div class="modal-body">
-                    <slot />
+                    <slot/>
                 </div>
 
                 <div class="modal-footer" v-if="footer"></div>

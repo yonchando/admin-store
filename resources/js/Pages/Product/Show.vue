@@ -1,11 +1,12 @@
 <script setup>
 
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
 import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
+import Table from "@/Components/Table/Table.vue";
 
 const {lang} = defineProps({
     product: Object,
@@ -49,7 +50,45 @@ const {lang} = defineProps({
                     <img class="tw-w-2/5" :src="product.image_url" alt="">
                 </div>
             </div>
+        </Card>
 
+        <Card :title="lang.product_options">
+            <ul class="nav nav-tabs nav-tabs-bottom">
+                <template v-for="(group,i) in product.product_has_option_groups">
+                    <li class="nav-item">
+                        <a :href="`#tab-${group.id}`" class="nav-link"
+                           :class="{
+                            'active': i === 0
+                           }"
+                           data-toggle="tab">{{ group.product_option_group.name }}</a>
+                    </li>
+                </template>
+            </ul>
+            <div class="tab-content">
+                <template v-for="(group,i) in product.product_has_option_groups">
+                    <div class="tab-pane fade"
+                         :class="{
+                            'show active': i === 0
+                           }"
+                         :id="`tab-${group.id}`">
+                        <Table>
+                            <tr>
+                                <th>{{ lang.name }}</th>
+                                <th>{{ lang.price_adjustment }}</th>
+                                <th>{{ lang.action }}</th>
+                            </tr>
+
+                            <template v-for="option in group.product_has_options">
+                                <tr>
+                                    <td class="text-capitalize">{{ option.product_option.name }}</td>
+                                    <td>{{ option.price_adjustment_text }}</td>
+                                    <td></td>
+                                </tr>
+                            </template>
+                        </Table>
+                    </div>
+                </template>
+            </div>
 
         </Card>
     </AppLayout>

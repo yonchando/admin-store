@@ -20,6 +20,6 @@ trait HasRelationships
 
     public function productHasOptions()
     {
-        return $this->hasMany(ProductHasOption::class, 'product_has_option_group_id');
+        return $this->hasMany(ProductHasOption::class, 'product_has_option_group_id', 'id');
     }
 }

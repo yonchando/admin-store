@@ -30,7 +30,7 @@ test('index methods', function () {
             fn(AssertableInertia $page) => $page->component("Product/Index")
                 ->has('products.data', $perPage)
                 ->has('categories', $categories->count())
-                ->where('statuses', Enum::toArray(ProductStatus::cases()))
+                ->where('statuses', Enum::toSelectedForm(ProductStatus::cases()))
                 ->where('products.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
@@ -86,48 +86,47 @@ describe('create product', function () {
 
     it('can store product option from create form', function () {
         $group = ProductOptionGroup::factory()->create();
-        $option = ProductOption::factory()->create();
+        $options = ProductOption::factory(3)->create();
 
-        $product = Product::factory()->category()->make();
-
-        $data = $product->toArray();
+        $data = Product::factory()->category()->make()->toArray();
 
         $data['product_options'][] = [
             'product_option_group_id' => $group->id,
-            'options' => [
-                [
-                    'product_option_id' => $option->id,
-                    'price_adjustment' => 1,
-                ],
-            ],
+            'options' => $options->map(
+                fn($value) => [
+                    'product_option_id' => $value->id, 'price_adjustment' => fake()->randomFloat(2, 0, 1),
+                ]
+            ),
         ];
 
         $this->post(route('product.store'), $data)
             ->assertRedirect()
             ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
 
+        $product = Product::with(['productOptionGroups', 'productOptions'])->first();
+
         $this->assertDatabaseHas($product->getTable(), [
             'product_name' => $product->product_name,
             'description' => $product->description,
         ]);
 
-        $product = Product::with(['productHasOptionGroups.productHasOptions'])->first();
-
         $this->assertNotEmpty($product->productOptionGroups);
+
+        $this->assertNotEmpty(
+            $product->productOptions->whereIn(
+                'product_has_option_group_id',
+                $product->productOptionGroups->pluck('pivot.product_option_group_id')
+            )
+        );
+
+        $this->assertEquals($options->count(), $product->productOptions->count());
 
         $this->assertDatabaseHas('product_has_option_groups', [
             'product_option_group_id' => $group->id,
             'product_id' => $product->id,
         ]);
-
-        $this->assertDatabaseHas('product_has_options', [
-            'product_option_id' => $option->id,
-        ]);
-
-
     });
 });
-
 
 describe('product edit', function () {
 

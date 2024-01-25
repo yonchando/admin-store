@@ -11,7 +11,18 @@ trait HasAttributes
     public function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => (preg_match('/^https?/', $this->image)) ? $this->image : \Storage::url($this->image),
+            get: function () {
+
+                if (is_null($this->image)) {
+                    return asset('images/placeholders/placeholder.jpg');
+                }
+
+                if ((preg_match('/^https?/', $this->image))) {
+                    return $this->image;
+                }
+
+                return \Storage::url($this->image);
+            },
         );
     }
 

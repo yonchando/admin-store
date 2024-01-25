@@ -164,7 +164,7 @@ function select(item) {
                         v-if="!hideSearch"
                         class="tw-flex tw-justify-center tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black"
                     >
-                        <TextInput v-model="search" id="select-input-search"/>
+                        <TextInput focus v-model="search" id="select-input-search"/>
                     </div>
 
                     <div class="tw-max-h-56 tw-max-w-full tw-overflow-y-scroll">
@@ -172,7 +172,7 @@ function select(item) {
                             <div
                                 v-for="item in data"
                                 :key="item[id]"
-                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black hover:tw-bg-gray-100"
+                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black hover:tw-bg-gray-100 tw-capitalize"
                                 :class="{
                                     'tw-bg-gray-100': selected.id === item[id],
                                 }"

@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('product_option_group_id');
             $table->unsignedBigInteger('product_id');
+            $table->boolean('is_required')->default(false);
             $table->timestamps();
         });
     }

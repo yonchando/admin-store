@@ -47,7 +47,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function find(int $id): ?Product
     {
-        return Product::query()->with(['category'])->find($id);
+        return Product::query()->with([
+            'category',
+            'productHasOptionGroups.productOptionGroup',
+            'productHasOptionGroups.productHasOptions.productOption',
+        ])->find($id);
     }
 
     public function store(ProductRequest $request): Product
