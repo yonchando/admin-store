@@ -7,6 +7,7 @@ use App\Facades\Enum;
 use App\Facades\Helper;
 use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
+use App\Http\Requests\ProductOpion\ProductOptionRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
@@ -69,12 +70,36 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
-    public function show($id)
+    public function storeProductOption(Request $request, Product $product)
+    {
+        $this->validate($request, [
+            'product_options' => 'required|array',
+            'product_options.*.product_option_group_id' => 'required|int',
+            'product_options.*.options.*.product_option_id' => 'required|int',
+            'product_options.*.options.*.price_adjustment' => ['nullable', 'numeric', 'min:0'],
+        ], [], [
+            'product_options.*.product_option_group_id' => __('lang.product_option_group'),
+            'product_options.*.options.*.product_option_id' => __('lang.product_option'),
+            'product_options.*.options.*.price_adjustment' => __('lang.price_adjustment'),
+        ]);
+
+        $this->productService->storeProductOption($product, $request->get('product_options', []));
+
+        Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
+
+        return redirect()->route('product.show', $product);
+    }
+
+    public function show(Request $request, $id)
     {
         $product = $this->productRepository->find($id);
+        $groups = $this->productOptionGroupRepository->get($request);
+        $options = $this->productOptionRepository->get($request);
 
         return Inertia::render("Product/Show", [
             'product' => $product,
+            'groups' => $groups,
+            'options' => $options,
         ]);
     }
 

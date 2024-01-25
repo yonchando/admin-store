@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('/save', [ProductController::class, 'store'])->name('store');
+            Route::post('add-product-option/{product}', [
+                ProductController::class, 'storeProductOption',
+            ])->name('store.product.option');
 
             Route::get('edit/{product}', [ProductController::class, 'edit'])->name('edit');
             Route::patch('update/{product}', [ProductController::class, 'update'])->name('update');
@@ -95,8 +98,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [PurchaseOrderController::class, 'index'])->name('index');
             Route::get('detail/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
 
-            Route::patch('update-status/{purchaseOrder}',
-                [PurchaseOrderController::class, 'updateStatus'])->name('update.status');
+            Route::patch(
+                'update-status/{purchaseOrder}',
+                [PurchaseOrderController::class, 'updateStatus']
+            )->name('update.status');
         });
 
     Route::prefix('customer')

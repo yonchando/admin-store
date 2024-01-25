@@ -69,7 +69,26 @@ describe('create product', function () {
             'image' => UploadedFile::fake()->image('image.png'),
         ]);
 
-        $this->post(route('product.store'), $product->toArray())
+        $data = $product->toArray();
+
+        $data['product_options'][] = [
+            'product_option_group_id' => null,
+            'options' => [
+                [
+                    'product_option_id' => null,
+                ],
+            ],
+        ];
+        $data['product_options'][] = [
+            'product_option_group_id' => null,
+            'options' => [
+                [
+                    'product_option_id' => null,
+                ],
+            ],
+        ];
+
+        $this->post(route('product.store'), $data)
             ->assertRedirect()
             ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
 
@@ -84,7 +103,7 @@ describe('create product', function () {
         Storage::assertExists(Product::first()->image);
     });
 
-    it('can store product option from create form', function () {
+    it('can store product with product option', function () {
         $group = ProductOptionGroup::factory()->create();
         $options = ProductOption::factory(3)->create();
 
@@ -94,9 +113,10 @@ describe('create product', function () {
             'product_option_group_id' => $group->id,
             'options' => $options->map(
                 fn($value) => [
-                    'product_option_id' => $value->id, 'price_adjustment' => fake()->randomFloat(2, 0, 1),
+                    'product_option_id' => $value->id,
+                    'price_adjustment' => fake()->randomFloat(2, 0, 1),
                 ]
-            ),
+            )->toArray(),
         ];
 
         $this->post(route('product.store'), $data)
@@ -125,6 +145,42 @@ describe('create product', function () {
             'product_option_group_id' => $group->id,
             'product_id' => $product->id,
         ]);
+    });
+
+    it('can add more product option from product detail', function () {
+        $product = Product::factory()->create();
+
+        $group = ProductOptionGroup::factory()->create();
+        $options = ProductOption::factory(3)->create();
+
+        $data = [
+            'product_options' => [
+                [
+                    'product_option_group_id' => $group->id,
+                    'options' => $options->map(
+                        fn($value) => [
+                            'product_option_id' => $value->id,
+                            'price_adjustment' => fake()->randomFloat(2, 0, 5),
+                        ]
+                    )->toArray(),
+                ],
+            ],
+        ];
+
+        $this->post(route('product.store.product.option', $product), $data)
+            ->assertRedirectToRoute('product.show', $product)
+            ->assertSessionHas('message.text', __('lang.add_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertNotEmpty($product->productOptionGroups);
+
+        $this->assertNotEmpty(
+            $product->productOptions->whereIn(
+                'product_has_option_group_id',
+                $product->productOptionGroups->pluck('pivot.product_option_group_id')
+            )
+        );
+
+        $this->assertEquals($options->count(), $product->productOptions->count());
     });
 });
 

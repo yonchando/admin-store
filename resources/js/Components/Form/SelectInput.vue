@@ -133,7 +133,7 @@ function select(item) {
             <span v-if="selected.id == null" class="text-muted">
                 {{ placeholder ?? lang.please_selected }}
             </span>
-            <span v-if="selected.id != null" class="">
+            <span v-if="selected.id != null" class="tw-capitalize">
                 {{ selected.text }}
             </span>
         </div>

@@ -2,6 +2,7 @@
 
 return [
     'success' => 'Success',
+    'add_success' => ':attribute added success.',
     'created_success' => ':attribute created success.',
     'updated_success' => ':attribute updated success.',
     'deleted_success' => ':attribute deleted success.',

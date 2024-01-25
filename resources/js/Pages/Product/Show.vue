@@ -7,12 +7,67 @@ import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
 import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
 import Table from "@/Components/Table/Table.vue";
+import SelectInput from "@/Components/Form/SelectInput.vue";
+import {computed, onMounted} from "vue";
+import InputLabel from "@/Components/Form/InputLabel.vue";
+import InfoButton from "@/Components/Button/InfoButton.vue";
+import TextInput from "@/Components/Form/TextInput.vue";
+import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
+import FlashMessage from "@/Components/Alert/FlashMessage.vue";
+import InputError from "@/Components/Form/InputError.vue";
 
-const {lang} = defineProps({
+const props = defineProps({
     product: Object,
-    lang: Object
-})
+    lang: Object,
+    groups: Array,
+    options: Array,
+});
 
+const lang = props.lang;
+
+const form = useForm({
+    product_options: [],
+});
+
+onMounted(() => {
+    $(".product-options .nav li:first-child a").tab('show');
+});
+
+function addGroup() {
+    form.product_options.push({
+        product_option_group_id: null,
+        options: [{
+            product_option_id: null, price_adjustment: null
+        }],
+    });
+
+    setTimeout(() => {
+        $(".product-options .nav li:last-child a").tab('show');
+    }, 1)
+}
+
+const groupName = (group) => {
+    const item = props.groups.find((value) => value.id === group.product_option_group_id);
+
+    if (!item) {
+        return "New Group";
+    }
+    return item.name;
+};
+
+function save() {
+    form.post(route('product.store.product.option', props.product), {
+        onSuccess: () => {
+            setTimeout(() => {
+                const tab = $(".product-options .nav li.nav-item:last-child a.nav-link");
+                tab.tab('show');
+            }, 1)
+            form.reset()
+        },
+        preserveScroll: true,
+    });
+
+}
 </script>
 
 <template>
@@ -52,15 +107,33 @@ const {lang} = defineProps({
             </div>
         </Card>
 
-        <Card :title="lang.product_options">
+        <FlashMessage/>
+
+        <Card :title="lang.product_options" class="product-options">
+
+            <InfoButton @click="addGroup" class="tw-mb-3">
+                <i class="icon-plus2"></i>
+                {{ lang.add_group }}
+            </InfoButton>
+
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <template v-for="(group,i) in product.product_has_option_groups">
                     <li class="nav-item">
-                        <a :href="`#tab-${group.id}`" class="nav-link"
-                           :class="{
-                            'active': i === 0
-                           }"
+                        <a :href="`#tab-${group.id}`"
+                           class="nav-link"
+                           role="tab"
                            data-toggle="tab">{{ group.product_option_group.name }}</a>
+                    </li>
+                </template>
+                <template v-for="(group,i) in form.product_options">
+                    <li class="nav-item">
+                        <a class="nav-link" :href="`#tab-add-${i}`"
+                           role="tab"
+                           data-toggle="tab">
+                            {{ groupName(group) }}
+                            <i v-if="form.errors[`product_options.${i}.product_option_group_id`]"
+                               class="fa fa-exclamation tw-ml-2 text-danger tw-text-xs"></i>
+                        </a>
                     </li>
                 </template>
             </ul>
@@ -88,8 +161,55 @@ const {lang} = defineProps({
                         </Table>
                     </div>
                 </template>
+
+                <template v-for="(group,i) in form.product_options">
+                    <div class="tab-pane fade"
+                         :id="`tab-add-${i}`">
+
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <InputLabel :value="lang.product_option_group"/>
+                                <SelectInput :items="groups" text="name" v-model="group.product_option_group_id"/>
+                                <InputError :message="form.errors[`product_options.${i}.product_option_group_id`]"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group tw-grid tw-grid-cols-2 tw-gap-4">
+                                    <template v-for="(option,j) in group.options">
+                                        <div class="">
+                                            <InputLabel :value="lang.options"/>
+                                            <SelectInput v-model="option.product_option_id"
+                                                         text="name"
+                                                         :items="options"/>
+                                            <InputError
+                                                :message="form.errors[`product_options.${i}.options.${j}.product_option_id`]"/>
+                                        </div>
+                                        <div class="">
+                                            <InputLabel :value="lang.price_adjustment"/>
+                                            <TextInput v-model="option.price_adjustment"/>
+                                            <InputError
+                                                :message="form.errors[`product_options.${i}.options.${j}.price_adjustment`]"/>
+                                        </div>
+                                    </template>
+                                </div>
+                                <InfoButton
+                                    @click="group.options.push({product_option_id: null,price_adjustment: null})">
+                                    {{ lang.add_option }}
+                                </InfoButton>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
 
+            <template #footer v-if="form.product_options.length > 0">
+                <PrimaryButton @click="save()" :disabled="form.processing">
+                    <i class="icon-floppy-disk"></i>
+                    <span>{{ lang.save }}</span>
+                </PrimaryButton>
+            </template>
         </Card>
     </AppLayout>
 </template>
