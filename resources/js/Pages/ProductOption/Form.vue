@@ -62,7 +62,7 @@ onMounted(() => {
             <FormGroup>
                 <InputLabel :value="lang.price_adjustment"/>
 
-                <TextInput type="number" step="0.00" v-model="form.price_adjustment"/>
+                <TextInput type="number" step="any" v-model="form.price_adjustment"/>
             </FormGroup>
             <FormGroup class="tw-space-x-2">
                 <PrimaryButton type="submit">
