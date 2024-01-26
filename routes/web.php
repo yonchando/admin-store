@@ -52,6 +52,10 @@ Route::middleware('auth')->group(function () {
             Route::patch('update-status/{product}', [ProductController::class, 'updateStatus'])->name('update.status');
 
             Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::delete(
+                'destroy-opiton-group/{productHasOptionGroup}',
+                [ProductController::class, 'destroyProductOptionGroup']
+            )->name('destroy.product.option.group');
         });
 
     Route::prefix('product-option')

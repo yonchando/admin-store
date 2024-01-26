@@ -20,4 +20,11 @@ class ProductHasOptionGroupRepository implements Contracts\ProductHasOptionGroup
             'product_id' => $product_id,
         ]);
     }
+
+    public function destroy(mixed $id): bool
+    {
+        $group = ProductHasOptionGroup::findOrFail($id);
+
+        return $group->delete();
+    }
 }

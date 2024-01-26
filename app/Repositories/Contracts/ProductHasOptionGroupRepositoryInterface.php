@@ -10,4 +10,6 @@ interface ProductHasOptionGroupRepositoryInterface
     public function get(): Collection;
 
     public function create(int $product_id, int $product_option_group_id): ProductHasOptionGroup;
+
+    public function destroy(mixed $id): bool;
 }

@@ -24,6 +24,7 @@ return [
     'no' => 'No',
     'yes' => 'Yes',
     'do_you_want_to_delete_this' => 'Do you want to delete :attribute?',
+    'cant_undo' => 'It can not undo.',
     'product_create' => 'Product Create',
     'product_edit' => 'Product Edit',
     'product_name' => 'Product Name',
@@ -97,4 +98,5 @@ return [
     'delete_selected' => 'Delete Selected',
     'add_group' => "Add Group",
     'option_group' => 'Option Group',
+    'delete_group' => 'Delete Group',
 ];

@@ -21,6 +21,10 @@ class ProductHasOption extends Model
         'price_adjustment_text',
     ];
 
+    protected $casts = [
+        'price_adjustment' => 'decimal:2',
+    ];
+
     public function priceAdjustmentText(): Attribute
     {
         return Attribute::make(

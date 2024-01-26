@@ -18,8 +18,7 @@ createInertiaApp({
         );
     },
     setup({el, App, props, plugin}) {
-        $('body').css('margin-bottom', 0).addClass('navbar-top');
-        return createApp({render: () => h(App, props)})
+        const app = createApp({render: () => h(App, props)})
             .use(plugin)
             .use(ZiggyVue)
             .use(Sweetalert2, {
@@ -32,8 +31,12 @@ createInertiaApp({
                     confirmButton: ["btn", "btn-primary"],
                     closeButton: ["btn"],
                 },
-            })
-            .mount(el);
+            });
+        app.config.globalProperties.$lang = {};
+        app.directive('lang', function (el, binding) {
+            $(el).text(props.initialPage.props.lang[binding.arg]);
+        });
+        app.mount(el);
     },
     progress: {
         color: "#368dff",

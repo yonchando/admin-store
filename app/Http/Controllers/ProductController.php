@@ -9,7 +9,10 @@ use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Requests\ProductOpion\ProductOptionRequest;
 use App\Models\Product;
+use App\Models\ProductHasOptionGroup;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\ProductHasOptionGroupRepositoryInterface;
+use App\Repositories\Contracts\ProductHasOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
@@ -25,6 +28,8 @@ class ProductController extends Controller
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
         private readonly ProductOptionRepositoryInterface $productOptionRepository,
         private readonly ProductService $productService,
+        private readonly ProductHasOptionGroupRepositoryInterface $productHasOptionGroupRepository,
+        private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
     ) {
     }
 
@@ -34,9 +39,9 @@ class ProductController extends Controller
 
         $filters['perPage'] = $request->get('perPage', 15);
 
-        $products = $this->productRepository->filter($filters);
-
         $categories = $this->categoryRepository->get();
+
+        $products = $this->productRepository->filter($filters);
 
         $statuses = Enum::toSelectedForm(ProductStatus::cases());
 
@@ -126,6 +131,8 @@ class ProductController extends Controller
     {
         $product = $this->productRepository->updateStatus($product);
 
+        Helper::message(__('lang.updated_success', ['attribute' => __('lang.status')]));
+
         return response()->json([
             'product' => $product,
         ]);
@@ -137,4 +144,14 @@ class ProductController extends Controller
 
         return redirect()->route('product.index', request()->toArray());
     }
+
+    public function destroyProductOptionGroup(ProductHasOptionGroup $productHasOptionGroup)
+    {
+        $this->productHasOptionGroupRepository->destroy($productHasOptionGroup->id);
+
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option_group')]));
+
+        return redirect()->back();
+    }
+
 }

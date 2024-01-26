@@ -21,4 +21,8 @@ class ProductOption extends Model
     protected $appends = [
         'price_adjustment_text',
     ];
+
+    protected $casts = [
+        'price_adjustment' => 'decimal:2',
+    ];
 }

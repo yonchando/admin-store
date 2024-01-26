@@ -4,6 +4,7 @@ use App\Enums\Product\ProductStatus;
 use App\Facades\Enum;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductHasOption;
 use App\Models\ProductOption;
 use App\Models\ProductOptionGroup;
 use Illuminate\Http\UploadedFile;
@@ -269,11 +270,46 @@ describe('product edit', function () {
     });
 });
 
-test('destroy methods', function () {
-    $product = Product::factory()->create();
+describe('delete function', function () {
+    it('can delete product', function () {
+        $product = Product::factory()->create();
 
-    $this->delete(route('product.destroy', $product))
-        ->assertRedirect(route('product.index'));
+        $this->delete(route('product.destroy', $product))
+            ->assertRedirect(route('product.index'));
 
-    $this->assertSoftDeleted($product);
+        $this->assertSoftDeleted($product);
+    });
+
+    it('can delete product option group in product detail', function () {
+        $group = ProductOptionGroup::factory()->create();
+        $option = ProductOption::factory()->create();
+
+        $product = Product::factory()->create();
+
+        $productHasOptionGroup = \App\Models\ProductHasOptionGroup::create([
+            'product_id' => $product->id,
+            'product_option_group_id' => $group->id,
+        ]);
+
+        $productHasOption = ProductHasOption::create([
+            'product_has_option_group_id' => $productHasOptionGroup->id,
+            'product_option_id' => $option->id,
+        ]);
+
+        $this->from(route('product.show', $product));
+
+        $this->delete(route('product.destroy.product.option.group', $productHasOptionGroup))
+            ->assertRedirect(route('product.show', $product))
+            ->assertSessionHas(
+                'message.text',
+                __('lang.deleted_success', ['attribute' => __('lang.product_option_group')])
+            );
+
+        $product->refresh();
+
+        $this->assertModelMissing($productHasOptionGroup);
+        $this->assertDatabaseEmpty($productHasOption->getTable());
+        $this->assertEmpty($product->productOptionGroups);
+        $this->assertEmpty($product->productOptions);
+    });
 });

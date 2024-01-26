@@ -5,7 +5,7 @@ import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import {router, usePage} from "@inertiajs/vue3";
 import Loading from "./Partials/Loading.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 defineProps({
     showSidebar: {
@@ -31,12 +31,16 @@ router.on("finish", () => {
 const lang = usePage().props.lang;
 
 const date = new Date();
+
+onMounted(() => {
+    $("#app").addClass('tw-flex tw-flex-col navbar-top tw-min-h-screen');
+})
 </script>
 
 <template>
     <HeaderTop v-if="showHeaderTop"/>
 
-    <div class="page-content tw-min-h-screen">
+    <div class="page-content">
         <Sidebar v-if="showSidebar"/>
 
         <div class="content-wrapper">
