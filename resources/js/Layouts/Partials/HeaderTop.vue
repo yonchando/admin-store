@@ -47,6 +47,7 @@ import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
                     :href="route('logout')"
                     method="post"
                     title="Logout"
+                    as="button"
                 />
             </Dropdown>
         </div>

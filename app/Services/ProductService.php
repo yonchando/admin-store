@@ -53,4 +53,19 @@ class ProductService
             }
         }
     }
+
+    public function addOptionToGroup(Request $request): void
+    {
+        $options = $request->get('options', []);
+
+        foreach ($options as $option) {
+            $productHasOption = new ProductHasOption([
+                'product_option_id' => $option['product_option_id'],
+                'product_has_option_group_id' => $option['product_has_option_group_id'],
+                'price_adjustment' => $option['price_adjustment'],
+            ]);
+
+            $productHasOption->save();
+        }
+    }
 }

@@ -21,7 +21,7 @@ trait HasRelationships
         return $this->hasMany(ProductHasOptionGroup::class);
     }
 
-    public function productOptions()
+    public function productHasOptions()
     {
         return $this->hasManyThrough(ProductHasOption::class, ProductHasOptionGroup::class);
     }

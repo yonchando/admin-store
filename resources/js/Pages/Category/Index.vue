@@ -48,11 +48,11 @@ function save() {
     index = categories.from;
     if (!category) {
         form.post(route("category.store"), {
-            onFinish: () => form.reset("category_name"),
+            onSuccess: () => form.reset("category_name"),
         });
     } else {
         form.patch(route("category.update", category), {
-            onFinish: () => form.reset("category_name"),
+            onSuccess: () => form.reset("category_name"),
         });
     }
 

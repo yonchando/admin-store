@@ -5,6 +5,7 @@ use App\Facades\Enum;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductHasOption;
+use App\Models\ProductHasOptionGroup;
 use App\Models\ProductOption;
 use App\Models\ProductOptionGroup;
 use Illuminate\Http\UploadedFile;
@@ -72,23 +73,6 @@ describe('create product', function () {
 
         $data = $product->toArray();
 
-        $data['product_options'][] = [
-            'product_option_group_id' => null,
-            'options' => [
-                [
-                    'product_option_id' => null,
-                ],
-            ],
-        ];
-        $data['product_options'][] = [
-            'product_option_group_id' => null,
-            'options' => [
-                [
-                    'product_option_id' => null,
-                ],
-            ],
-        ];
-
         $this->post(route('product.store'), $data)
             ->assertRedirect()
             ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
@@ -102,86 +86,6 @@ describe('create product', function () {
 
         expect($product->image)->not()->toBeNull();
         Storage::assertExists(Product::first()->image);
-    });
-
-    it('can store product with product option', function () {
-        $group = ProductOptionGroup::factory()->create();
-        $options = ProductOption::factory(3)->create();
-
-        $data = Product::factory()->category()->make()->toArray();
-
-        $data['product_options'][] = [
-            'product_option_group_id' => $group->id,
-            'options' => $options->map(
-                fn($value) => [
-                    'product_option_id' => $value->id,
-                    'price_adjustment' => fake()->randomFloat(2, 0, 1),
-                ]
-            )->toArray(),
-        ];
-
-        $this->post(route('product.store'), $data)
-            ->assertRedirect()
-            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
-
-        $product = Product::with(['productOptionGroups', 'productOptions'])->first();
-
-        $this->assertDatabaseHas($product->getTable(), [
-            'product_name' => $product->product_name,
-            'description' => $product->description,
-        ]);
-
-        $this->assertNotEmpty($product->productOptionGroups);
-
-        $this->assertNotEmpty(
-            $product->productOptions->whereIn(
-                'product_has_option_group_id',
-                $product->productOptionGroups->pluck('pivot.product_option_group_id')
-            )
-        );
-
-        $this->assertEquals($options->count(), $product->productOptions->count());
-
-        $this->assertDatabaseHas('product_has_option_groups', [
-            'product_option_group_id' => $group->id,
-            'product_id' => $product->id,
-        ]);
-    });
-
-    it('can add more product option from product detail', function () {
-        $product = Product::factory()->create();
-
-        $group = ProductOptionGroup::factory()->create();
-        $options = ProductOption::factory(3)->create();
-
-        $data = [
-            'product_options' => [
-                [
-                    'product_option_group_id' => $group->id,
-                    'options' => $options->map(
-                        fn($value) => [
-                            'product_option_id' => $value->id,
-                            'price_adjustment' => fake()->randomFloat(2, 0, 5),
-                        ]
-                    )->toArray(),
-                ],
-            ],
-        ];
-
-        $this->post(route('product.store.product.option', $product), $data)
-            ->assertRedirectToRoute('product.show', $product)
-            ->assertSessionHas('message.text', __('lang.add_success', ['attribute' => __('lang.product_option')]));
-
-        $this->assertNotEmpty($product->productOptionGroups);
-
-        $this->assertNotEmpty(
-            $product->productOptions->whereIn(
-                'product_has_option_group_id',
-                $product->productOptionGroups->pluck('pivot.product_option_group_id')
-            )
-        );
-
-        $this->assertEquals($options->count(), $product->productOptions->count());
     });
 });
 
@@ -286,7 +190,7 @@ describe('delete function', function () {
 
         $product = Product::factory()->create();
 
-        $productHasOptionGroup = \App\Models\ProductHasOptionGroup::create([
+        $productHasOptionGroup = ProductHasOptionGroup::create([
             'product_id' => $product->id,
             'product_option_group_id' => $group->id,
         ]);

@@ -43,9 +43,14 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('/save', [ProductController::class, 'store'])->name('store');
+
             Route::post('add-product-option/{product}', [
                 ProductController::class, 'storeProductOption',
             ])->name('store.product.option');
+
+            Route::post('/{product}/add-option', [
+                ProductController::class, 'storeOption',
+            ])->name('add.option');
 
             Route::get('edit/{product}', [ProductController::class, 'edit'])->name('edit');
             Route::patch('update/{product}', [ProductController::class, 'update'])->name('update');

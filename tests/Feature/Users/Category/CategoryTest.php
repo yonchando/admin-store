@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
 test('index method', function () {
@@ -14,9 +12,10 @@ test('index method', function () {
     $res = $this->get(route('category.index', ['perPage' => $perPage]));
 
     $res->assertOk();
-    $res->assertInertia(fn(AssertableInertia $page) => $page->component('Category/Index')
-        ->has('categories.data', $perPage)
-        ->where('categories.total', $category->count())
+    $res->assertInertia(
+        fn (AssertableInertia $page) => $page->component('Category/Index')
+            ->has('categories.data', $perPage)
+            ->where('categories.total', $category->count())
     );
 });
 
@@ -30,9 +29,10 @@ it('order cateogry by latest', function () {
 
     $this->get(route('category.index'))
         ->assertOk()
-        ->assertInertia(fn(AssertableInertia $page) => $page->component('Category/Index')
-            ->where('categories.data.0.id', $second->id)
-            ->where('categories.data.1.id', $first->id)
+        ->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Category/Index')
+                ->where('categories.data.0.id', $second->id)
+                ->where('categories.data.1.id', $first->id)
         );
 });
 
@@ -65,7 +65,7 @@ test('store mehtod', function () {
     ]);
 });
 
-test("update method", function () {
+test('update method', function () {
     $cateogry = Category::factory()->create();
 
     $name = 'changed name';

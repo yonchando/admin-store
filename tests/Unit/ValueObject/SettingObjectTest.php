@@ -1,6 +1,5 @@
 <?php
 
-use App\ValueObjects\Setting\CurrencyObject;
 use App\ValueObjects\Setting\SettingObject;
 
 test('method toArray convert all properties memeber to array', function () {

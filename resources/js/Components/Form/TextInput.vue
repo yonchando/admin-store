@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 
 defineProps({
     modelValue: {
         type: String,
-        required: true,
+        required: false,
         default: null,
     },
 });
@@ -19,7 +19,7 @@ onMounted(() => {
     }
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose({focus: () => input.value.focus()});
 </script>
 
 <template>

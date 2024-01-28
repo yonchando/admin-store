@@ -1,8 +1,7 @@
 <script setup>
 import {usePage} from "@inertiajs/vue3";
-import TextInput from "./TextInput.vue";
-import {ref, reactive, computed} from "vue";
-import {watch} from "vue";
+import {reactive, ref, watch} from "vue";
+import TextInput from "@/Components/Form/TextInput.vue";
 
 const {modelValue, items, id, text, disabled} = defineProps({
     modelValue: String,
@@ -164,7 +163,7 @@ function select(item) {
                         v-if="!hideSearch"
                         class="tw-flex tw-justify-center tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black"
                     >
-                        <TextInput focus v-model="search" id="select-input-search"/>
+                        <TextInput v-model="search" id="select-input-search"/>
                     </div>
 
                     <div class="tw-max-h-56 tw-max-w-full tw-overflow-y-scroll">

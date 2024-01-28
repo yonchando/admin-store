@@ -10,7 +10,7 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_name' => ['required', Rule::unique('categories', 'category_name')],
+            'category_name' => ['required', Rule::unique('categories', 'category_name')->ignore($this->category?->id)],
         ];
     }
 

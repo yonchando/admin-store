@@ -9,6 +9,7 @@ use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Requests\ProductOpion\ProductOptionRequest;
 use App\Models\Product;
+use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\ProductHasOptionGroupRepositoryInterface;
@@ -18,6 +19,7 @@ use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -93,6 +95,29 @@ class ProductController extends Controller
         Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
 
         return redirect()->route('product.show', $product);
+    }
+
+    public function storeOption(Request $request, Product $product)
+    {
+        $this->validate($request, [
+            'options' => 'required|array',
+            'options.*.product_option_id' => [
+                'required', 'int',
+                Rule::exists('product_options', 'id'),
+            ],
+            'options.*.product_has_option_group_id' => [
+                'required', 'int',
+                Rule::exists('product_has_option_groups', 'id'),
+            ],
+        ], [], [
+            'options.*.product_option_id' => __('lang.product_option'),
+            'options.*.product_has_option_group_id' => __('lang.product_option_group'),
+        ]);
+
+        $this->productService->addOptionToGroup($request);
+
+        Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
+        return to_route('product.show', $product);
     }
 
     public function show(Request $request, $id)
