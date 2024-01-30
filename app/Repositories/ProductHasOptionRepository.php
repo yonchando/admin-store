@@ -16,4 +16,9 @@ class ProductHasOptionRepository implements Contracts\ProductHasOptionRepository
         ]);
 
     }
+
+    public function destroy(array|int $ids): bool
+    {
+        return ProductHasOption::destroy($ids);
+    }
 }

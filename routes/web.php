@@ -61,6 +61,10 @@ Route::middleware('auth')->group(function () {
                 'destroy-opiton-group/{productHasOptionGroup}',
                 [ProductController::class, 'destroyProductOptionGroup']
             )->name('destroy.product.option.group');
+            Route::delete(
+                'destroy-opiton/{productHasOption}',
+                [ProductController::class, 'destroyProductOption']
+            )->name('destroy.product.option');
         });
 
     Route::prefix('product-option')

@@ -25,8 +25,6 @@
     <script src="{{ asset('assets/limitless_theme/plugins/loaders/blockui.min.js') }}"></script>
     <script src="{{ asset('assets/limitless_theme/plugins/notifications/sweet_alert.min.js') }}"></script>
     <script src="{{ asset('assets/limitless_theme/plugins/forms/selects/select2.min.js') }}"></script>
-    <script src="{{ asset('assets/limitless_theme/plugins/notifications/jgrowl.min.js') }}"></script>
-    <script src="{{ asset('assets/limitless_theme/plugins/notifications/noty.min.js') }}"></script>
     <script src="{{ asset('assets/limitless_theme/js/theme.js') }}"></script>
 </body>
 

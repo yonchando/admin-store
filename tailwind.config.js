@@ -17,10 +17,10 @@ export default {
         extend: {
             colors: {
                 dark: "#263238",
-                danger: '#F44336',
-                primary: '#2196F3',
-                warning: '#FF7043',
-                info: '#00BCD4',
+                danger: "#F44336",
+                primary: "#2196F3",
+                warning: "#FF7043",
+                info: "#00BCD4",
             },
         },
     },

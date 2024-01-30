@@ -179,4 +179,13 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+    public function destroyProductOption(ProductHasOption $productHasOption)
+    {
+        $this->productHasOptionRepository->destroy($productHasOption->id);
+
+        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+
+        return redirect()->back();
+    }
+
 }

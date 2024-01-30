@@ -1,11 +1,11 @@
 <script setup>
-import {usePage} from "@inertiajs/vue3";
-import {reactive, ref, watch} from "vue";
+import { usePage } from "@inertiajs/vue3";
+import { computed, reactive, ref, watch } from "vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 
-const {modelValue, items, id, text, disabled} = defineProps({
-    modelValue: String,
-    items: Object,
+const props = defineProps({
+    modelValue: [String, Number],
+    items: Array,
     id: {
         type: String,
         default: "id",
@@ -25,34 +25,25 @@ const {modelValue, items, id, text, disabled} = defineProps({
 
 const lang = usePage().props.lang;
 
-let data = ref(items ?? []);
-
 const search = ref(null);
 
-watch(search, (value) => {
-    if (value) {
-        data.value = items.filter((item) => {
-            return item[text].toLowerCase().includes(value.toLowerCase());
-        });
+const data = computed(() => {
+    if (search.value !== null) {
+        return props.items.filter((item) =>
+            item[props.text].toLowerCase().includes(search.value.toLowerCase()),
+        );
     }
+
+    return props.items;
 });
 
-const selectText = (item) => {
-    if (typeof text === "function") {
-        return text(item);
-    } else {
-        if (typeof item[text] === "undefined") {
-            return "";
-        }
-        return lang[item[text].toLowerCase()] ?? item[text];
-    }
-};
-
 const defaultSelected =
-    modelValue != null ? items.find((item) => item[id] == modelValue) : null;
+    props.modelValue != null
+        ? props.items.find((item) => item[props.id] == props.modelValue)
+        : null;
 
 const selected = reactive({
-    id: defaultSelected ? defaultSelected[id] : null,
+    id: defaultSelected ? defaultSelected[props.id] : null,
     text: defaultSelected ? selectText(defaultSelected) : null,
 });
 
@@ -60,7 +51,22 @@ const collapse = reactive({
     open: false,
 });
 
-const $emit = defineEmits("update:modelValue");
+const $emit = defineEmits(["update:modelValue"]);
+
+const collapseDropdown = ref(null);
+
+const collapseSelect = ref(null);
+
+function selectText(item) {
+    if (typeof props.text === "function") {
+        return props.text(item);
+    } else {
+        if (typeof item[props.text] === "undefined") {
+            return "";
+        }
+        return lang[item[props.text].toLowerCase()] ?? item[props.text];
+    }
+}
 
 function keydownEvent(event) {
     if (event.key === "Escape") {
@@ -69,8 +75,12 @@ function keydownEvent(event) {
 }
 
 function clickEvent(event) {
-    if (!event.target.closest("#collapse") &&
-        !event.target.closest("#select-input-search")) {
+    if (
+        collapseSelect.value !== event.target &&
+        collapseSelect.value !== event.target.parentNode &&
+        !event.target !== collapseDropdown.value &&
+        !event.target.closest("#select-input-search")
+    ) {
         close();
     }
 }
@@ -78,14 +88,14 @@ function clickEvent(event) {
 const close = () => {
     collapse.open = false;
     search.value = null;
-    data.value = items ?? [];
+    data.value = props.items ?? [];
 
     document.removeEventListener("keydown", keydownEvent);
     document.removeEventListener("click", clickEvent);
 };
 
 function open() {
-    if (disabled) {
+    if (props.disabled) {
         return;
     }
 
@@ -102,7 +112,7 @@ function open() {
 }
 
 function clear() {
-    if (disabled) {
+    if (props.disabled) {
         return;
     }
     selected.id = null;
@@ -112,7 +122,7 @@ function clear() {
 }
 
 function select(item) {
-    selected.id = item[id];
+    selected.id = item[props.id];
     selected.text = selectText(item);
     close();
 
@@ -126,7 +136,7 @@ function select(item) {
             :class="{
                 'tw-bg-gray-100/75': disabled,
             }"
-            id="collapse"
+            ref="collapseSelect"
             @click="open()"
         >
             <span v-if="selected.id == null" class="text-muted">
@@ -154,16 +164,20 @@ function select(item) {
         >
             <div
                 v-show="collapse.open && !disabled"
-                class="tw-absolute tw-left-0 tw-right-0 tw-top-full tw-z-50 tw-grid tw-w-full tw-grid-cols-1 tw-grid-rows-1"
+                :class="{
+                    show: collapse.open && !disabled,
+                }"
+                ref="collapseDropdown"
+                class="tw-absolute tw-left-0 tw-right-0 tw-top-full tw-z-50 tw-mt-1 tw-grid tw-w-full tw-grid-cols-1 tw-grid-rows-1"
             >
                 <div
-                    class="tw-relative tw-rounded-md tw-border tw-border-gray-200 tw-bg-white tw-shadow-lg"
+                    class="tw-relative tw-mb-8 tw-rounded-md tw-border tw-border-gray-200 tw-bg-white tw-shadow-lg"
                 >
                     <div
                         v-if="!hideSearch"
                         class="tw-flex tw-justify-center tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black"
                     >
-                        <TextInput v-model="search" id="select-input-search"/>
+                        <TextInput v-model="search" id="select-input-search" />
                     </div>
 
                     <div class="tw-max-h-56 tw-max-w-full tw-overflow-y-scroll">
@@ -171,7 +185,7 @@ function select(item) {
                             <div
                                 v-for="item in data"
                                 :key="item[id]"
-                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-text-black hover:tw-bg-gray-100 tw-capitalize"
+                                class="tw-cursor-pointer tw-px-[0.875rem] tw-py-[.4375rem] tw-capitalize tw-text-black hover:tw-bg-gray-100"
                                 :class="{
                                     'tw-bg-gray-100': selected.id === item[id],
                                 }"

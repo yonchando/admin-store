@@ -216,4 +216,30 @@ describe('delete function', function () {
         $this->assertEmpty($product->productOptionGroups);
         $this->assertEmpty($product->productOptions);
     });
+
+    it('can delete option from groups', function () {
+        $group = ProductOptionGroup::factory()->create();
+        $option = ProductOption::factory()->create();
+
+        $product = Product::factory()->create();
+
+        $productHasOptionGroup = ProductHasOptionGroup::create([
+            'product_id' => $product->id,
+            'product_option_group_id' => $group->id,
+        ]);
+
+        $productHasOption = ProductHasOption::create([
+            'product_has_option_group_id' => $productHasOptionGroup->id,
+            'product_option_id' => $option->id,
+        ]);
+
+        $this->from(route('product.show', $product));
+
+        $this->delete(route('product.destroy.product.option', $productHasOption))
+            ->assertRedirectToRoute('product.show', $product)
+            ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.product_option')]));
+
+        $this->assertModelMissing($productHasOption);
+        $this->assertEmpty($product->productHasOptions);
+    });
 });
