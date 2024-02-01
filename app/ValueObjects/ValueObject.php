@@ -10,24 +10,31 @@ class ValueObject
     public function __construct(array $data = null)
     {
         if (!is_null($data)) {
-            $this->initializeProperties($data);
+            $this->setData($data);
         }
     }
 
-    protected function initializeProperties(array $data): void
+    public function setData(mixed $data): static
     {
-        foreach ($data as $property => $value) {
-            if (property_exists($this, $property)) {
-                $this->set($property, $value);
+        if (!empty($data)) {
+            foreach ($data as $property => $value) {
+                if (property_exists($this, $property)) {
+                    if (is_object($this->$property)) {
+                        $this->$property->setData($value);
+                    } else {
+                        $this->set($property, $value);
+                    }
+                }
             }
         }
+
+        return $this;
     }
 
     protected function set($property, $value): void
     {
         $this->$property = $value;
     }
-
 
     public function toArray(): array
     {

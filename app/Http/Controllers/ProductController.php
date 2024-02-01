@@ -7,7 +7,6 @@ use App\Facades\Enum;
 use App\Facades\Helper;
 use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
-use App\Http\Requests\ProductOpion\ProductOptionRequest;
 use App\Models\Product;
 use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;
@@ -187,5 +186,4 @@ class ProductController extends Controller
 
         return redirect()->back();
     }
-
 }

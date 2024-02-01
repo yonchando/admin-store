@@ -2,10 +2,12 @@
 
 use App\Models\Currency;
 use App\Models\Setting;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
-test('create setting if not exists', function () {
+uses(RefreshDatabase::class);
 
+test('create setting if not exists', function () {
     $currencies = Currency::factory(3)->create();
 
     $this->get(route('setting.show'))
@@ -13,13 +15,15 @@ test('create setting if not exists', function () {
         ->assertInertia(
             fn(AssertableInertia $page) => $page->component('Setting/Show')
                 ->has('currencies', $currencies->count())
-                ->where('setting.id', 1)
+                ->has('setting')
         );
 
     $this->assertDatabaseCount('settings', 1);
 });
 
 test('user can update currency', function () {
+
+    $setting = Setting::factory()->create();
 
     $currency = Currency::factory()->create();
 
@@ -29,7 +33,7 @@ test('user can update currency', function () {
 
     $res->assertRedirect(route('setting.show'));
 
-    $setting = Setting::first();
+    $setting->refresh();
 
     $this->assertEquals($currency->id, $setting->properties->currency_id);
 });

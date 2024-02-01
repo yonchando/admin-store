@@ -9,6 +9,7 @@ use App\Models\ProductHasOptionGroup;
 use App\Models\ProductOption;
 use App\Models\ProductOptionGroup;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
@@ -67,8 +68,10 @@ describe('create product', function () {
 
         Storage::fake();
 
+        $image = UploadedFile::fake()->image("image.png");
+
         $product = Product::factory()->category()->make([
-            'image' => UploadedFile::fake()->image('image.png'),
+            'image' => $image,
         ]);
 
         $data = $product->toArray();
@@ -84,8 +87,11 @@ describe('create product', function () {
 
         $product = Product::first();
 
-        expect($product->image)->not()->toBeNull();
-        Storage::assertExists(Product::first()->image);
+        expect($product->json->image)->not()->toBeNull();
+
+        Storage::assertExists($product->json->image->path);
+
+        expect($product->json->image->url)->toEqual(Storage::url(config("paths.product_image")."/".$image->hashName()));
     });
 });
 
@@ -144,13 +150,13 @@ describe('product edit', function () {
         $this->patch(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'));
 
-        $image = $product->image;
+        $image = $product->json->image->url;
 
         $product->refresh();
 
-        $this->assertNotEquals($image, $product->image);
+        $this->assertNotEquals($image, $product->json->image->url);
 
-        Storage::assertExists($product->image);
+        Storage::assertExists($product->json->image->path);
     });
 
     it('can update product status active to inactive and inactive to active', function () {

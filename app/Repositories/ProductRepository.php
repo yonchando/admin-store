@@ -67,7 +67,11 @@ class ProductRepository implements ProductRepositoryInterface
             $path = config('paths.product_image');
             Storage::putFileAs($path, $file, $filename);
 
-            $product->image = "$path/$filename";
+            $product->fillJsonAttribute('json->image', [
+                'filename' => $file->getClientOriginalName(),
+                'path' => "$path/$filename",
+                "url" => Storage::url("$path/$filename"),
+            ]);
         }
 
         $product->save();
@@ -83,9 +87,17 @@ class ProductRepository implements ProductRepositoryInterface
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
-            $filename = Storage::putFileAs(config('paths.product_image'), $file, $file->hashName());
+            $path = config('paths.product_image');
+            $filename = Storage::putFileAs($path, $file, $file->hashName());
 
-            $product->image = $filename;
+            $image = $product->json->image;
+
+            $image->filename = $file->getClientOriginalName();
+            $image->url = Storage::url("$path/$filename");
+            $image->extension = $file->getClientOriginalExtension();
+            $image->path = $path;
+
+            $product->fillJsonAttribute('json->image', $image->toArray());
         }
 
         $product->save();
@@ -105,5 +117,5 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product->delete();
     }
-
 }
+

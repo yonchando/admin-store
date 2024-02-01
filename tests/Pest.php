@@ -15,12 +15,11 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class, RefreshDatabase::class)->in('Feature/Auth');
+uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
-uses(TestCase::class, RefreshDatabase::class)
-    ->beforeEach(function () {
-        asUser();
-    })->in('Feature/Users');
+uses()->beforeEach(function () {
+    asUser();
+})->in('Feature/Users');
 
 /*
 |--------------------------------------------------------------------------

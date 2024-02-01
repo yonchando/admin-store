@@ -28,8 +28,14 @@ class ProductFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(1, 100),
             'stock_quantity' => $this->faker->numberBetween(1, 1000),
-            'image' => $this->faker->imageUrl,
-            'json' => null,
+            'json' => [
+                'image' => [
+                    'filename' => $this->faker->word,
+                    'path' => $this->faker->filePath(),
+                    'url' => $this->faker->imageUrl,
+                    'extension' => $this->faker->randomElement(['png', 'jpeg', 'svg', 'jpg']),
+                ],
+            ],
             'status' => ProductStatus::ACTIVE->name,
         ];
     }

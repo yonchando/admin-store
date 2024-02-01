@@ -7,5 +7,10 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class ProductObject extends ValueObject implements Arrayable
 {
-    public string $published_at;
+    public function __construct(public ProductImage $image, array $data = null)
+    {
+        parent::__construct($data);
+    }
+
+
 }
