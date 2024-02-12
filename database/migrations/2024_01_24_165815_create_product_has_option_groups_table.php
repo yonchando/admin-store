@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('product_has_option_groups', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_option_group_id');
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('product_option_group_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->boolean('is_required')->default(false);
             $table->timestamps();
         });

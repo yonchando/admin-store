@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->bigInteger("category_id")->nullable();
             $table->string("slug")->nullable();
             $table->tinyText("status")->default(ProductStatus::ACTIVE->name);
-            $table->string('json')->nullable();
+            $table->json('json')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

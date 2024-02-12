@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-      class="{{ session()->has('dark-theme') ? 'tw-dark' : '' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session()->has('dark-theme') ? 'tw-dark' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -8,8 +7,7 @@
 
     <title inertia> {{ config('app.name', 'E-Store') }}</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
-          type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 
     <!-- Scripts -->
     @routes

@@ -63,13 +63,14 @@ class ProductRepository implements ProductRepositoryInterface
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
-            $filename = $file->hashName();
             $path = config('paths.product_image');
+            $filename = $file->hashName();
             Storage::putFileAs($path, $file, $filename);
 
             $product->fillJsonAttribute('json->image', [
-                'filename' => $file->getClientOriginalName(),
-                'path' => "$path/$filename",
+                'filename' => $filename,
+                'original_name' => $file->getClientOriginalName(),
+                'path' => $path,
                 "url" => Storage::url("$path/$filename"),
             ]);
         }
@@ -83,19 +84,20 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product->fill($request->except(['slug', 'image']));
 
-
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
             $path = config('paths.product_image');
-            $filename = Storage::putFileAs($path, $file, $file->hashName());
+            $filename = $file->hashName();
+            Storage::putFileAs($path, $file, $filename);
 
             $image = $product->json->image;
 
-            $image->filename = $file->getClientOriginalName();
-            $image->url = Storage::url("$path/$filename");
+            $image->original_name = $file->getClientOriginalName();
+            $image->filename = $filename;
             $image->extension = $file->getClientOriginalExtension();
             $image->path = $path;
+            $image->url = Storage::url("$path/$filename");
 
             $product->fillJsonAttribute('json->image', $image->toArray());
         }
@@ -116,6 +118,15 @@ class ProductRepository implements ProductRepositoryInterface
     public function destroy(Product $product): void
     {
         $product->delete();
+    }
+
+    public function findBySlug($slug): Product
+    {
+        return Product::query()->with([
+            'category',
+            'productHasOptionGroups.productOptionGroup',
+            'productHasOptionGroups.productHasOptions.productOption',
+        ])->slug($slug)->first();
     }
 }
 

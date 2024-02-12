@@ -57,4 +57,9 @@ trait HasScopes
     {
         return $query->where('category_id', $id);
     }
+
+    public function scopeSlug(Builder $query, string $slug): Builder
+    {
+        return $query->where('slug', $slug);
+    }
 }

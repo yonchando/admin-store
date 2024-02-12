@@ -56,4 +56,6 @@ interface ProductRepositoryInterface
      * @return void
      */
     public function destroy(Product $product): void;
+
+    public function findBySlug($slug): Product;
 }
