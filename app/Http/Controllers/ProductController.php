@@ -118,9 +118,9 @@ class ProductController extends Controller
         return to_route('product.show', $product);
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request, $slug)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->productRepository->findBySlug($slug);
         $groups = $this->productOptionGroupRepository->get($request);
         $options = $this->productOptionRepository->get($request);
 

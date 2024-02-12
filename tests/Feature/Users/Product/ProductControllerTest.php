@@ -8,6 +8,7 @@ use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;
 use App\Models\ProductOption;
 use App\Models\ProductOptionGroup;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -38,17 +39,52 @@ test('index methods', function () {
                 ->where('products.data.0.id', $first->id)
         );
 });
+describe("show product detail", function () {
+    it('show product detail', function () {
+        $product = Product::factory()->create();
 
-test('show methods', function () {
-    $product = Product::factory()->create();
+        $this->get(route('product.show', $product))
+            ->assertOk()
+            ->assertInertia(
+                fn(AssertableInertia $page) => $page->component("Product/Show")
+                    ->where('product.id', $product->id)
+                    ->where('product.product_name', $product->product_name)
+            );
+    });
 
-    $this->get(route('product.show', $product))
-        ->assertOk()
-        ->assertInertia(
-            fn(AssertableInertia $page) => $page->component("Product/Show")
-                ->where('product.id', $product->id)
-                ->where('product.product_name', $product->product_name)
-        );
+    it('can load product option and options', function () {
+        $group = ProductOptionGroup::factory()->create();
+
+        $options = ProductOption::factory(3)->create();
+
+        $product = Product::factory()->create();
+
+        $hasGroup = ProductHasOptionGroup::factory()
+            ->optionGroup($group->id)
+            ->product($product->id)->create();
+
+        $hasOptions = ProductHasOption::factory(3)
+            ->hasGroupId($hasGroup->id)
+            ->option(
+                new Sequence(
+                    $options->first()->id,
+                    $options->get(1)->id,
+                    $options->last()->id,
+                )
+            )
+            ->create();
+
+        $this->get(route('product.show', $product))
+            ->assertOk()
+            ->assertInertia(
+                fn(AssertableInertia $page) => $page->component("Product/Show")
+                    ->where('product.id', $product->id)
+                    ->where('product.product_name', $product->product_name)
+                    ->has('product.product_has_option_groups', 1)
+                    ->has('product.product_has_option_groups.0.product_has_options', $options->count())
+            );
+
+    });
 });
 
 describe('create product', function () {
@@ -121,8 +157,8 @@ describe('product edit', function () {
         $changed = Product::factory()->make([
             'image' => null,
         ]);
-
-        $this->patch(route('product.update', $product->id), $changed->toArray())
+       
+        $this->patch(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'))
             ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product')]));
 
@@ -143,8 +179,10 @@ describe('product edit', function () {
 
         $product = Product::factory()->create();
 
+        $file = UploadedFile::fake()->image('image.png');
+
         $changed = Product::factory()->make([
-            'image' => UploadedFile::fake()->image('image.png'),
+            'image' => $file,
         ]);
 
         $this->patch(route('product.update', $product), $changed->toArray())
@@ -157,6 +195,8 @@ describe('product edit', function () {
         $this->assertNotEquals($image, $product->json->image->url);
 
         Storage::assertExists($product->json->image->path);
+
+        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image')."/".$file->hashName()));
     });
 
     it('can update product status active to inactive and inactive to active', function () {

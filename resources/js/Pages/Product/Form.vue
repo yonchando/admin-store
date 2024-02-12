@@ -7,15 +7,15 @@ import InputLabel from "@/Components/Form/InputLabel.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import { Head, router, useForm } from "@inertiajs/vue3";
 import InfoButton from "@/Components/Button/InfoButton.vue";
 
-const {lang, product, categories} = defineProps([
+const { lang, product, categories } = defineProps([
     "lang",
     "product",
     "categories",
-    'groups',
-    'options',
+    "groups",
+    "options",
 ]);
 
 const form = useForm({
@@ -25,13 +25,17 @@ const form = useForm({
     stock: product ? product.stock_quantity : null,
     description: product ? product.description : null,
     image: product ? product.image : null,
-    product_options: [{
-        product_option_group_id: null,
-        options: [{
-            product_option_id: null,
-            price_adjustment: null,
-        }]
-    }],
+    product_options: [
+        {
+            product_option_group_id: null,
+            options: [
+                {
+                    product_option_id: null,
+                    price_adjustment: null,
+                },
+            ],
+        },
+    ],
 });
 
 function addGroup() {
@@ -41,14 +45,15 @@ function addGroup() {
             {
                 product_option_id: null,
                 price_adjustment: null,
-            }
-        ]
+            },
+        ],
     });
 }
 
 const save = () => {
     if (product) {
-        form.patch(route("product.update", product));
+        form._method = "PATCH";
+        router.post(route("product.update", product), form);
         return;
     }
 
@@ -57,8 +62,8 @@ const save = () => {
 </script>
 
 <template>
-    <Head v-if="product == null" title="Prodcut Add"/>
-    <Head v-else title="Prodcut Edit"/>
+    <Head v-if="product == null" title="Prodcut Add" />
+    <Head v-else title="Prodcut Edit" />
 
     <AppLayout>
         <template #breadcrumb>
@@ -161,39 +166,54 @@ const save = () => {
                     <div class="col-3">
                         <div class="form-group">
                             <fieldset>Product Image</fieldset>
-                            <FileInput name="image" v-model="form.image"/>
+                            <FileInput name="image" v-model="form.image" />
                         </div>
                     </div>
                 </div>
             </Card>
 
             <Card v-if="!product" collapse :title="lang.product_option">
-
-                <template v-for="(group,i) in form.product_options">
+                <template v-for="(group, i) in form.product_options">
                     <Card>
                         <div class="form-group row">
                             <div class="col-6">
-                                <InputLabel :value="lang.option_group"/>
-                                <SelectInput v-model="group.product_option_group_id"
-                                             text="name"
-                                             :items="groups"/>
+                                <InputLabel :value="lang.option_group" />
+                                <SelectInput
+                                    v-model="group.product_option_group_id"
+                                    text="name"
+                                    :items="groups"
+                                />
                             </div>
                         </div>
                         <div class="form-group tw-grid tw-grid-cols-2 tw-gap-4">
                             <template v-for="option in group.options">
                                 <div class="">
-                                    <InputLabel :value="lang.options"/>
-                                    <SelectInput v-model="option.product_option_id"
-                                                 text="name"
-                                                 :items="options"/>
+                                    <InputLabel :value="lang.options" />
+                                    <SelectInput
+                                        v-model="option.product_option_id"
+                                        text="name"
+                                        :items="options"
+                                    />
                                 </div>
                                 <div class="">
-                                    <InputLabel :value="lang.price_adjustment"/>
-                                    <TextInput v-model="option.price_adjustment" type="number"/>
+                                    <InputLabel
+                                        :value="lang.price_adjustment"
+                                    />
+                                    <TextInput
+                                        v-model="option.price_adjustment"
+                                        type="number"
+                                    />
                                 </div>
                             </template>
                         </div>
-                        <InfoButton @click="group.options.push({product_option_id: null,price_adjustment: null})">
+                        <InfoButton
+                            @click="
+                                group.options.push({
+                                    product_option_id: null,
+                                    price_adjustment: null,
+                                })
+                            "
+                        >
                             {{ lang.add_option }}
                         </InfoButton>
                     </Card>

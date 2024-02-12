@@ -39,6 +39,10 @@ interface ProductRepositoryInterface
     public function updateStatus(Product $product): Product;
 
     public function destroy(Product $product): void;
+<<<<<<< HEAD
+}
+=======
 
     public function findBySlug($slug): Product;
 }
+>>>>>>> 65dea3d74537d4f711359c667a03611669bd70d5

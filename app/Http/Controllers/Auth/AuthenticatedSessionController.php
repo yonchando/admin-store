@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->put('setting', $this->settingRepository->first());
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(route('dashboard'));
     }
 
     /**

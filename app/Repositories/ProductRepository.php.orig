@@ -58,10 +58,16 @@ class ProductRepository implements ProductRepositoryInterface
             Storage::putFileAs($path, $file, $filename);
 
             $product->fillJsonAttribute('json->image', [
+<<<<<<< HEAD
+                'filename' => $file->getClientOriginalName(),
+                'path' => "$path/$filename",
+                'url' => Storage::url("$path/$filename"),
+=======
                 'filename' => $filename,
                 'original_name' => $file->getClientOriginalName(),
                 'path' => $path,
                 "url" => Storage::url("$path/$filename"),
+>>>>>>> 65dea3d74537d4f711359c667a03611669bd70d5
             ]);
         }
 
