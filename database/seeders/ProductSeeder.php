@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::factory(10)->state(
+        Product::factory(100)->state(
             new Sequence(
                 ['category_id' => null],
                 ['category_id' => Category::factory()->create()->id]

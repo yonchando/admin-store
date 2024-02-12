@@ -38,11 +38,9 @@ class ProductController extends Controller
     {
         $filters = $request->validated();
 
-        $filters['perPage'] = $request->get('perPage', 15);
-
         $categories = $this->categoryRepository->get();
 
-        $products = $this->productRepository->filter($filters);
+        $products = $this->productRepository->filterByAndPaginate($filters);
 
         $statuses = Enum::toSelectedForm(ProductStatus::cases());
 
@@ -116,6 +114,7 @@ class ProductController extends Controller
         $this->productService->addOptionToGroup($request);
 
         Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
+
         return to_route('product.show', $product);
     }
 
@@ -125,7 +124,7 @@ class ProductController extends Controller
         $groups = $this->productOptionGroupRepository->get($request);
         $options = $this->productOptionRepository->get($request);
 
-        return Inertia::render("Product/Show", [
+        return Inertia::render('Product/Show', [
             'product' => $product,
             'groups' => $groups,
             'options' => $options,

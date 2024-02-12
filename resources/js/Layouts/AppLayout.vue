@@ -3,9 +3,9 @@ import HeaderTop from "@/Layouts/Partials/HeaderTop.vue";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import Breadcrumb from "@/Components/Breadcrumb/Breadcrumb.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import {router, usePage} from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import Loading from "./Partials/Loading.vue";
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 
 defineProps({
     showSidebar: {
@@ -33,17 +33,17 @@ const lang = usePage().props.lang;
 const date = new Date();
 
 onMounted(() => {
-    $("#app").addClass('tw-flex tw-flex-col navbar-top tw-min-h-screen');
-})
+    $("#app").addClass("tw-flex tw-flex-col navbar-top tw-min-h-screen");
+});
 </script>
 
 <template>
-    <HeaderTop v-if="showHeaderTop"/>
+    <HeaderTop v-if="showHeaderTop" />
 
     <div class="page-content">
-        <Sidebar v-if="showSidebar"/>
+        <Sidebar v-if="showSidebar" />
 
-        <div class="content-wrapper">
+        <div class="content-wrapper" id="content">
             <div class="page-header page-header-light">
                 <div
                     class="breadcrumb-line breadcrumb-line-light header-elements-md-inline"
@@ -55,20 +55,20 @@ onMounted(() => {
                                 icon="icon-home2"
                                 :href="route('dashboard')"
                             />
-                            <slot name="breadcrumb"/>
+                            <slot name="breadcrumb" />
                         </Breadcrumb>
                     </div>
 
                     <div class="header-elements d-none">
                         <Breadcrumb class="justify-content-center">
-                            <slot name="action"/>
+                            <slot name="action" />
                         </Breadcrumb>
                     </div>
                 </div>
             </div>
 
             <div class="content tw-mb-24 tw-px-2">
-                <slot/>
+                <slot />
             </div>
 
             <div class="navbar navbar-expand-lg navbar-light">
@@ -81,6 +81,5 @@ onMounted(() => {
         </div>
     </div>
 
-
-    <Loading v-if="loading"/>
+    <Loading v-if="loading" />
 </template>

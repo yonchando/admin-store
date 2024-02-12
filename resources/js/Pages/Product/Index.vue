@@ -1,33 +1,36 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Table from "@/Components/Table/Table.vue";
 import Card from "@/Components/Card/Card.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
-import {inject} from "vue";
+import { inject } from "vue";
 import ProductFilter from "@/Pages/Product/ProductFilter.vue";
 import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
+import { computed } from "vue";
+import Paginate from "@/Components/Paginate.vue";
+import WarningButton from "@/Components/Button/WarningButton.vue";
 
-const {lang, products} = defineProps([
+const { lang, products } = defineProps([
     "lang",
     "products",
     "categories",
     "statuses",
     "filters",
-    'errors',
+    "errors",
 ]);
 
-let index = products.from;
+let index = computed(() => {
+    return products.from;
+});
 
 const swal = inject("$swal");
 
 const destroy = (product) => {
-    index = products.from;
-
     swal({
         title: lang.are_you_sure,
         text: lang.do_you_want_to_delete_this.replace(
@@ -45,10 +48,14 @@ const destroy = (product) => {
 </script>
 
 <template>
-    <Head :title="lang.products"/>
+    <Head :title="lang.products" />
 
     <AppLayout>
         <template #action>
+            <WarningButton class="tw-mr-2">
+                <i class="icon-filter3"></i>
+                {{ lang.filter }}
+            </WarningButton>
             <PrimaryButton :href="route('product.create')">
                 <i class="icon-plus2"></i>
                 {{ lang.add }}
@@ -56,11 +63,16 @@ const destroy = (product) => {
         </template>
 
         <template #breadcrumb>
-            <BreadcrumbItem icon="icon-box" :title="lang.products"/>
+            <BreadcrumbItem icon="icon-box" :title="lang.products" />
         </template>
 
         <Card no-header>
-            <ProductFilter :errors="errors" :categories="categories" :statuses="statuses" :filter="filters"/>
+            <ProductFilter
+                :errors="errors"
+                :categories="categories"
+                :statuses="statuses"
+                :filter="filters"
+            />
         </Card>
 
         <Card :title="lang.products">
@@ -77,23 +89,28 @@ const destroy = (product) => {
                 </tr>
 
                 <template v-if="products.data.length > 0">
-                    <tr v-for="product in products.data">
-                        <td>{{ index++ }}</td>
+                    <tr v-for="(product, i) in products.data">
+                        <td>{{ index + i }}</td>
                         <td>
-                            <img :src="product.image_url" alt="" width="60"/>
+                            <img :src="product.image_url" alt="" width="60" />
                         </td>
                         <td>
-                            <Link :href="route('product.show',product)">
+                            <Link :href="route('product.show', product)">
                                 {{ product.product_name }}
                             </Link>
                         </td>
                         <td>{{ product.category?.category_name }}</td>
-                        <td class="tw-font-medium">{{ product.price }} {{ $page.props.setting?.currency?.code }}</td>
-                        <td>
-                            <span class="badge badge-pill badge-info">{{ product.stock_quantity }}</span>
+                        <td class="tw-font-medium">
+                            {{ product.price }}
+                            {{ $page.props.setting?.currency?.code }}
                         </td>
                         <td>
-                            <ProductStatusText :product="product"/>
+                            <span class="badge badge-pill badge-info">{{
+                                product.stock_quantity
+                            }}</span>
+                        </td>
+                        <td>
+                            <ProductStatusText :product="product" />
                         </td>
                         <td>
                             <Dropdown>
@@ -125,6 +142,8 @@ const destroy = (product) => {
                     </tr>
                 </template>
             </Table>
+
+            <Paginate :links="products.links" />
         </Card>
     </AppLayout>
 </template>

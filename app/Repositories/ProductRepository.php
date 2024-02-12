@@ -22,7 +22,7 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::query()->with(['category'])->paginate();
     }
 
-    public function filter(array $filters): LengthAwarePaginator|Collection
+    public function filterByAndPaginate(array $filters): LengthAwarePaginator|Collection
     {
         $query = Product::query();
 
@@ -32,17 +32,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query->filters($filters);
 
-        if (isset($filters['status'])) {
-            $query->where('status', $filters['status']);
-        }
-
-        if (isset($filters['order_by']) && isset($filters['order_direction'])) {
-            $query->where($filters['order_by'], $filters['order_direction']);
-        } else {
-            $query->latest();
-        }
-
-        return isset($filters['perPage']) ? $query->paginate($filters['perPage']) : $query->get();
+        return $query->paginate(@$filters['perPage'] ?? 15);
     }
 
     public function find(int $id): ?Product
@@ -70,7 +60,7 @@ class ProductRepository implements ProductRepositoryInterface
             $product->fillJsonAttribute('json->image', [
                 'filename' => $file->getClientOriginalName(),
                 'path' => "$path/$filename",
-                "url" => Storage::url("$path/$filename"),
+                'url' => Storage::url("$path/$filename"),
             ]);
         }
 
@@ -82,7 +72,6 @@ class ProductRepository implements ProductRepositoryInterface
     public function update(ProductRequest $request, Product $product): Product
     {
         $product->fill($request->except(['slug', 'image']));
-
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -118,4 +107,3 @@ class ProductRepository implements ProductRepositoryInterface
         $product->delete();
     }
 }
-

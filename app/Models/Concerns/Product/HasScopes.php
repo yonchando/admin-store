@@ -8,14 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 trait HasScopes
 {
     /**
-     * @param  Builder  $query
      * @param  array{
      *     category_id: int,
      *     search: string,
      *     min_price: double,
      *     max_price: double,
      * }  $filters
-     * @return Builder
      */
     public function scopeFilters(Builder $query, array $filters): Builder
     {
@@ -25,19 +23,29 @@ trait HasScopes
 
         if (isset($filters['search'])) {
             $search = $filters['search'];
-            $query->whereRaw("lower(products.product_name) like lower(?)", "%$search%");
+            $query->whereRaw('lower(products.product_name) like lower(?)', "%$search%");
         }
 
         if (isset($filters['min_price']) && isset($filters['max_price'])) {
             $query->whereBetween('price', [$filters['min_price'], $filters['max_price']]);
         } else {
             if (isset($filters['min_price'])) {
-                $query->where('price', ">=", $filters['min_price']);
+                $query->where('price', '>=', $filters['min_price']);
             }
 
             if (isset($filters['max_price'])) {
-                $query->where('price', "<=", $filters['max_price']);
+                $query->where('price', '<=', $filters['max_price']);
             }
+        }
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['order_by']) && isset($filters['order_direction'])) {
+            $query->where($filters['order_by'], $filters['order_direction']);
+        } else {
+            $query->latest();
         }
 
         return $query;
@@ -58,3 +66,4 @@ trait HasScopes
         return $query->where('category_id', $id);
     }
 }
+
