@@ -1,5 +1,5 @@
 <script setup>
-import {usePage} from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import NavLink from "@/Components/Navbar/NavLink.vue";
 import NavHeader from "@/Components/Navbar/NavHeader.vue";
 
@@ -9,81 +9,93 @@ const lang = $page.props.lang;
 
 const menus = [
     {
-        link: route('dashboard'),
+        link: route("dashboard"),
         text: lang.dashboard,
-        icon: 'icon-home2',
-        active: $page.url === '/',
-    }, {
+        icon: "icon-home2",
+        active: $page.url === "/",
+    },
+    {
         text: lang.product_management,
         children: [
             {
-                link: route('category.index'),
+                link: route("category.index"),
                 text: lang.categories,
-                icon: 'icon-grid4',
-                active: $page.url.startsWith('/category')
+                icon: "icon-grid4",
+                active: isActive("Category/Index"),
             },
             {
-                link: route('product.index'),
+                link: route("product.index"),
                 text: lang.products,
-                icon: 'icon-bag',
-                active: $page.url.startsWith('/product/') || $page.url === '/product'
+                icon: "icon-bag",
+                active: isActive(
+                    "Product/Index",
+                    "Product/Show",
+                    "Product/Form",
+                ),
             },
-        ]
+        ],
     },
     {
         text: lang.product_options,
         children: [
             {
-                link: route('product.option.group.index'),
+                link: route("product.option.group.index"),
                 text: lang.option_groups,
-                icon: 'icon-price-tags',
-                active: $page.url === '/product-option-group'
+                icon: "icon-price-tags",
+                active: isActive("ProductOptionGroup/Index"),
             },
             {
-                link: route('product.option.index'),
+                link: route("product.option.index"),
                 text: lang.options,
-                icon: 'icon-price-tag',
-                active: $page.url === '/product-option'
+                icon: "icon-price-tag",
+                active: isActive("ProductOption/Index"),
             },
-        ]
+        ],
     },
     {
         text: lang.purchase_management,
         children: [
             {
-                link: route('purchase.order.index'),
-                icon: 'icon-store2',
+                link: route("purchase.order.index"),
+                icon: "icon-store2",
                 text: lang.purchase_orders,
-                active: $page.url.startsWith('/purchase-order')
-            }
-        ]
+                active: isActive("PurchaseOrder/Index"),
+            },
+        ],
     },
     {
         text: lang.users,
-        children: [{
-            link: route('customer.index'),
-            icon: 'icon-users2',
-            text: lang.customers,
-            active: $page.url === '/customer'
-        }, {
-            link: route('staff.index'),
-            icon: 'icon-user-tie',
-            text: lang.staffs,
-            active: $page.url.startsWith('/staff')
-        }]
+        children: [
+            {
+                link: route("customer.index"),
+                icon: "icon-users2",
+                text: lang.customers,
+                active: isActive("Customer/Index"),
+            },
+            {
+                link: route("staff.index"),
+                icon: "icon-user-tie",
+                text: lang.staffs,
+                active: isActive("Staff/Index"),
+            },
+        ],
     },
     {
         text: lang.setting,
         children: [
             {
-                link: route('setting.show'),
-                icon: 'icon-gear',
+                link: route("setting.show"),
+                icon: "icon-gear",
                 text: lang.setting,
-                active: $page.url === '/setting',
-            }
+                active: isActive("Setting/Show"),
+            },
         ],
-    }
+    },
 ];
+
+function isActive(...urls) {
+    return urls.some((url) => $page.component === url);
+}
 </script>
 
 <template>
@@ -100,7 +112,11 @@ const menus = [
 
                 <template v-for="child in menu.children">
                     <li class="nav-item">
-                        <NavLink class="nav-link" :href="child.link ?? '#'" :active="child.active">
+                        <NavLink
+                            class="nav-link"
+                            :href="child.link ?? '#'"
+                            :active="child.active"
+                        >
                             <i v-if="child.icon" :class="child.icon"></i>
                             <span>{{ child.text }}</span>
                         </NavLink>
@@ -109,17 +125,18 @@ const menus = [
             </template>
             <template v-else>
                 <li class="nav-item">
-                    <NavLink class="nav-link" :href="menu.link ?? '#'" :active="menu.active">
+                    <NavLink
+                        class="nav-link"
+                        :href="menu.link ?? '#'"
+                        :active="menu.active"
+                    >
                         <i v-if="menu.icon" :class="menu.icon"></i>
                         <span>{{ menu.text }}</span>
                     </NavLink>
                 </li>
             </template>
         </template>
-
     </ul>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

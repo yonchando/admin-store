@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseOrder extends Model
 {
+    use HasAttributes;
     use HasFactory;
     use HasRelationships;
-    use HasAttributes;
 
     protected $fillable = [
         'customer_id',
@@ -29,5 +29,6 @@ class PurchaseOrder extends Model
     protected $appends = [
         'purchased_date',
         'status_text',
+        'total_price_text',
     ];
 }

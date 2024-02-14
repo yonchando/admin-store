@@ -28,9 +28,11 @@ class SettingController extends Controller
     {
         $setting = $this->settingRepository->update($request);
 
+        session()->forget('setting');
         session()->put('setting', $setting);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.setting')]));
+
         return redirect()->route('setting.show');
     }
 }

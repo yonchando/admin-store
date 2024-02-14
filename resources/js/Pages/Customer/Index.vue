@@ -1,18 +1,19 @@
 <script setup>
-import {Head} from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
-import {Link} from "@inertiajs/vue3";
+import { Link } from "@inertiajs/vue3";
+import { computed } from "vue";
+import Paginate from "@/Components/Paginate.vue";
 
-const {lang, customers} = defineProps(['lang', 'customers'])
+const { lang, customers } = defineProps(["lang", "customers"]);
 
-let index = customers.from;
-
+let index = computed(() => customers.from);
 </script>
 
 <template>
-    <Head :title="lang.customers"/>
+    <Head :title="lang.customers" />
 
     <AppLayout>
         <Card :title="lang.customers">
@@ -26,10 +27,10 @@ let index = customers.from;
                 </tr>
 
                 <template v-if="customers.data.length > 0">
-                    <tr v-for="customer in customers.data">
-                        <td>{{ index++ }}</td>
+                    <tr v-for="(customer, i) in customers.data">
+                        <td>{{ index + i }}</td>
                         <td>
-                            <Link :href="route('customer.show',customer)">
+                            <Link :href="route('customer.show', customer)">
                                 {{ customer.name }}
                             </Link>
                         </td>
@@ -45,10 +46,10 @@ let index = customers.from;
                     </tr>
                 </template>
             </Table>
+
+            <Paginate :data="customers" />
         </Card>
     </AppLayout>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -23,6 +23,7 @@ class CustomerFactory extends Factory
         $province = Province::factory()->create();
         $countryCode = '+855';
         $phone = $this->faker->unique()->e164PhoneNumber;
+
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
@@ -30,7 +31,7 @@ class CustomerFactory extends Factory
             'password' => Hash::make('password'),
             'email' => $this->faker->unique()->safeEmail,
             'city_id' => $province->city_id,
-            'province_id' => Province::factory()->create(),
+            'province_id' => $province->id,
             'gender' => $this->faker->randomElement(Gender::cases()),
         ];
     }

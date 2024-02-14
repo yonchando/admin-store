@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import Card from "@/Components/Card/Card.vue";
 import Table from "@/Components/Table/Table.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
@@ -13,10 +13,11 @@ import FormGroup from "@/Components/Form/FormGroup.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
 import DefaultButton from "@/Components/Button/DefaultButton.vue";
-import {inject, onMounted, ref} from "vue";
+import { inject, onMounted, ref } from "vue";
 import FlashMessage from "@/Components/Alert/FlashMessage.vue";
+import Paginate from "@/Components/Paginate.vue";
 
-const {lang, categories} = defineProps(["lang", "categories"]);
+const { lang, categories } = defineProps(["lang", "categories"]);
 
 const form = useForm({
     category_name: null,
@@ -84,7 +85,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head title="Category"/>
+    <Head title="Category" />
 
     <AppLayout>
         <template #breadcrumb>
@@ -102,7 +103,7 @@ onMounted(() => {
             </PrimaryButton>
         </template>
 
-        <FlashMessage/>
+        <FlashMessage />
 
         <Card title="Categories">
             <Table>
@@ -142,14 +143,16 @@ onMounted(() => {
                     <td>{{ lang.empty }}</td>
                 </tr>
             </Table>
+
+            <Paginate :data="categories" />
         </Card>
     </AppLayout>
 
     <Modal id="category-form" :title="title" center size="sm" bg="bg-info">
         <form @submit.prevent="save">
             <FormGroup>
-                <InputLabel :value="lang.category_name"/>
-                <TextInput v-model="form.category_name"/>
+                <InputLabel :value="lang.category_name" />
+                <TextInput v-model="form.category_name" />
             </FormGroup>
 
             <FormGroup class="tw-space-x-2">
@@ -161,4 +164,3 @@ onMounted(() => {
         </form>
     </Modal>
 </template>
-

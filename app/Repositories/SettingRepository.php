@@ -5,17 +5,16 @@ namespace App\Repositories;
 use App\Http\Requests\Setting\SettingRequest;
 use App\Models\Setting;
 use App\Repositories\Contracts\SettingRepositoryInterface;
-use Illuminate\Support\Facades\Route;
 
 class SettingRepository implements SettingRepositoryInterface
 {
-
     public function first(): Setting
     {
         if (Setting::first() === null) {
-            return Setting::create();
+            return Setting::with('currency')->create();
         }
-        return Setting::first();
+
+        return Setting::with('currency')->first();
     }
 
     public function update(SettingRequest $request): Setting
@@ -24,6 +23,8 @@ class SettingRepository implements SettingRepositoryInterface
         $setting->properties->currency_id = $request->get('currency_id');
         $setting->save();
         $setting->refresh();
+
         return $setting;
     }
 }
+

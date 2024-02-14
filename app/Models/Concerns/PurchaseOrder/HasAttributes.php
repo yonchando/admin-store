@@ -3,6 +3,7 @@
 namespace App\Models\Concerns\PurchaseOrder;
 
 use App\Enums\PurchaseOrder\PurchaseOrderStatus;
+use App\Facades\Helper;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasAttributes
@@ -10,7 +11,7 @@ trait HasAttributes
     public function purchasedDate(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->purchased_at->format('d-M-Y | h:i A'),
+            get: fn () => $this->purchased_at->format('d-M-Y | h:i A'),
         );
     }
 
@@ -29,4 +30,12 @@ trait HasAttributes
             }
         );
     }
+
+    public function totalPriceText(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->total_price.' '.Helper::setting()?->currency?->code
+        );
+    }
 }
+

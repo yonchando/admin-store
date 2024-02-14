@@ -37,7 +37,9 @@ const form = useForm({
 });
 
 const filters = () => {
-    form.get(route("product.index"));
+    form.get(route("product.index"), {
+        preserveState: true,
+    });
 };
 </script>
 

@@ -40,7 +40,7 @@ class ProductController extends Controller
 
         $categories = $this->categoryRepository->get();
 
-        $products = $this->productRepository->filterByAndPaginate($filters);
+        $products = $this->productRepository->filterByAndPaginate($filters)->withQueryString();
 
         $statuses = Enum::toSelectedForm(ProductStatus::cases());
 

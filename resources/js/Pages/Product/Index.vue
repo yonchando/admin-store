@@ -143,7 +143,7 @@ const destroy = (product) => {
                 </template>
             </Table>
 
-            <Paginate :links="products.links" />
+            <Paginate :data="products" />
         </Card>
     </AppLayout>
 </template>
