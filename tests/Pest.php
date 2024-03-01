@@ -19,7 +19,7 @@ uses(TestCase::class, RefreshDatabase::class)->in('Feature');
 
 uses()->beforeEach(function () {
     asUser();
-})->in('Feature/Users');
+})->in('Feature/Controllers');
 
 /*
 |--------------------------------------------------------------------------
