@@ -5,11 +5,10 @@ namespace App\Services;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductHasOption;
-use App\Models\ProductHasOptionGroup;
 use App\Repositories\Contracts\ProductHasOptionGroupRepositoryInterface;
 use App\Repositories\Contracts\ProductHasOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
