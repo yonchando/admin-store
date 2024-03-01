@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -128,6 +129,22 @@ Route::middleware('auth')->group(function () {
             Route::get('/show/{customer}', [CustomerController::class, 'show'])->name('show');
             Route::put('update-status/{customer}', [CustomerController::class, 'updateStatus'])
                 ->name('update.status');
+        });
+
+    Route::prefix('card')
+        ->name('card.')
+        ->controller(CardController::class)
+        ->group(function(){
+            Route::get('/','index')->name('index');
+            Route::get('/{card}','show')->name('show');
+
+            Route::get('create','create')->name('create');
+            Route::post('store','store')->name('store');
+
+            Route::get('edit/{card}','edit')->name('edit');
+            Route::put('update/{card}','update')->name('update');
+
+            Route::get('destroy/{card}','destroy')->name('destroy');
         });
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
