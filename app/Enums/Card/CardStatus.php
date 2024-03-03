@@ -6,7 +6,4 @@ enum CardStatus
 {
     case ACTIVE;
     case INACTIVE;
-    case EXPIRED;
-    case SUSPECT;
-    case BLOCK;
 }

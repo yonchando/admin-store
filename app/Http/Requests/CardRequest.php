@@ -10,8 +10,6 @@ class CardRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'number' => ['required'],
-            'expired_at' => ['nullable'],
         ];
     }
 

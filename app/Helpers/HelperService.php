@@ -22,6 +22,25 @@ class HelperService
         ]);
     }
 
+    public function generateCardNumber($length = 16): string
+    {
+        $characters = '0123456789';
+        $cardNumber = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $cardNumber .= $characters[rand(0, strlen($characters) - 1)];
+            // Add a hyphen after every 4 characters (optional)
+            if (($i + 1) % 4 === 0 && $i < $length - 1) {
+                $cardNumber .= '-';
+            }
+        }
+
+        return $cardNumber;
+    }
+
+    /**
+     * @return Setting|null
+     */
     public function setting(): Setting|null
     {
         return $this->settingRepository->first();

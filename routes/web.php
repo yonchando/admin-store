@@ -134,17 +134,17 @@ Route::middleware('auth')->group(function () {
     Route::prefix('card')
         ->name('card.')
         ->controller(CardController::class)
-        ->group(function(){
-            Route::get('/','index')->name('index');
-            Route::get('/{card}','show')->name('show');
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('show/{card}', 'show')->name('show');
 
-            Route::get('create','create')->name('create');
-            Route::post('store','store')->name('store');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
 
-            Route::get('edit/{card}','edit')->name('edit');
-            Route::put('update/{card}','update')->name('update');
+            Route::get('edit/{card}', 'edit')->name('edit');
+            Route::put('update/{card}', 'update')->name('update');
 
-            Route::get('destroy/{card}','destroy')->name('destroy');
+            Route::delete('destroy/{card}', 'destroy')->name('destroy');
         });
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
