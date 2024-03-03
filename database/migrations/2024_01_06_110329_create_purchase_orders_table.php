@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
             $table->string('ref_no')->unique();
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->double('total_price');
             $table->dateTime('purchased_at');
             $table->string('status')->default(PurchaseOrderStatus::PENDING->value);
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('purchase_orders');
     }
 };

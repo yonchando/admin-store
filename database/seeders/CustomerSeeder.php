@@ -14,6 +14,6 @@ class CustomerSeeder extends Seeder
     public function run(): void
     {
         $purchaseOrders = PurchaseOrder::factory(5)->hasPurchaseDetails(5);
-        Customer::factory(100)->has($purchaseOrders)->create();
+        Customer::factory()->has($purchaseOrders)->create();
     }
 }
