@@ -1,14 +1,14 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+import {Head, useForm} from "@inertiajs/vue3";
+
 import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import Action from "@/Components/List/Action/Action.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import { Link } from "@inertiajs/vue3";
-import { inject } from "vue";
+import {Link} from "@inertiajs/vue3";
+import {inject} from "vue";
 
-const { lang, purchaseOrders, status } = defineProps([
+const {lang, purchaseOrders, status} = defineProps([
     "lang",
     "purchaseOrders",
     "status",
@@ -37,7 +37,7 @@ const updatePurchaseStatus = (purchase, statusUpdate) => {
                 : "btn btn-primary",
     }).then((res) => {
         if (res.value) {
-            useForm({ status: statusUpdate }).patch(
+            useForm({status: statusUpdate}).patch(
                 route("purchase.order.update.status", purchase),
             );
         }
@@ -46,7 +46,7 @@ const updatePurchaseStatus = (purchase, statusUpdate) => {
 </script>
 
 <template>
-    <Head :title="lang.purchase_orders" />
+    <Head :title="lang.purchase_orders"/>
 
     <AppLayout>
         <Card :title="lang.purchase_orders">

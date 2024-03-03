@@ -1,13 +1,13 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+import {Head, useForm} from "@inertiajs/vue3";
+
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import FlashMessage from "@/Components/Alert/FlashMessage.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Card from "@/Components/Card/Card.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import Table from "@/Components/Table/Table.vue";
-import { inject, reactive, ref } from "vue";
+
+import {inject, reactive, ref} from "vue";
 import Form from "@/Pages/ProductOption/Form.vue";
 import DefaultButton from "@/Components/Button/DefaultButton.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
@@ -53,7 +53,7 @@ function removeItem(i) {
 
 function save() {
     form.post(route("product.option.store.many"), {
-        onSuccess: (params) => {
+        onSuccess: () => {
             form.options = [];
         },
     });
@@ -84,7 +84,7 @@ function deleteSelected() {
 </script>
 
 <template>
-    <Head :title="lang.product_options" />
+    <Head :title="lang.product_options"/>
 
     <AppLayout>
         <template #breadcrumb>
@@ -94,21 +94,24 @@ function deleteSelected() {
             />
         </template>
 
-        <FlashMessage />
+        <FlashMessage/>
 
         <Card :title="lang.options" collapse>
-            <Table>
+            <DefaultButton class="btn-link tw-ml-auto" @click="add">
+                {{ lang.add_option }}
+            </DefaultButton>
+            <Table class="mt-3">
                 <thead>
-                    <th width="10">
+                    <th style="width:10px">
                         <Checkbox
                             v-model="isSelectedAll"
                             @change="selectedAll()"
                         />
                     </th>
-                    <th width="30">#</th>
-                    <th width="40%">{{ lang.name }}</th>
+                    <th style="width:30px">#</th>
+                    <th style="width:40%">{{ lang.name }}</th>
                     <th>{{ lang.price_adjustment }}</th>
-                    <th width="10%">{{ lang.action }}</th>
+                    <th style="width:10%">{{ lang.action }}</th>
                 </thead>
 
                 <template v-if="productOptions.length > 0">
@@ -137,7 +140,7 @@ function deleteSelected() {
 
                 <tr
                     v-if="
-                        productOptions.length == 0 && form.options.length == 0
+                        productOptions.length === 0 && form.options.length === 0
                     "
                 >
                     <td>{{ lang.empty }}</td>
@@ -148,7 +151,7 @@ function deleteSelected() {
                         <td></td>
                         <td>{{ i + 1 + productOptions.length }}</td>
                         <td>
-                            <TextInput v-model="item.name" />
+                            <TextInput v-model="item.name"/>
                             <span
                                 v-if="form.errors[`options.${i}.name`]"
                                 class="text-danger"
@@ -157,7 +160,7 @@ function deleteSelected() {
                             </span>
                         </td>
                         <td>
-                            <TextInput v-model="item.price_adjustment" />
+                            <TextInput v-model="item.price_adjustment"/>
                         </td>
                         <td>
                             <a
@@ -171,9 +174,7 @@ function deleteSelected() {
                     </tr>
                 </template>
             </Table>
-            <DefaultButton class="btn-link tw-ml-auto" @click="add">
-                {{ lang.add_option }}
-            </DefaultButton>
+
 
             <template
                 #footer

@@ -17,14 +17,14 @@ const props = defineProps({
 
 <template>
     <ul class="navbar-nav ml-auto">
-        <li class="dropdown" :class="{ show: show }">
+        <li class="dropdown" :class="{ show }">
             <slot name="toggle">
                 <DropdownToggle :title="title"/>
             </slot>
 
             <div
                 class="dropdown-menu dropdown-menu-right"
-                :class="{ show: show }"
+                :class="{show}"
             >
                 <slot/>
             </div>

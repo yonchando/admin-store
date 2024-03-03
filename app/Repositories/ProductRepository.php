@@ -70,8 +70,9 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function update(ProductRequest $request, Product $product): Product
+    public function update(ProductRequest $request, $id): Product
     {
+        $product = Product::findOrFail($id);
         $product->fill($request->except(['slug', 'image']));
 
         if ($request->hasFile('image')) {
@@ -97,25 +98,26 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function updateStatus(Product $product): Product
+    public function updateStatus(int $id): Product
     {
+        $product = Product::findOrFail($id);
         $product->status = $product->is_active ? ProductStatus::INACTIVE : ProductStatus::ACTIVE;
         $product->save();
 
         return $product;
     }
 
-    public function destroy(Product $product): void
+    public function destroy(array|int $ids): void
     {
-        $product->delete();
+        Product::destroy($ids);
     }
 
-    public function findBySlug($slug): Product
+    public function findBySlug(string $slug): Product
     {
         return Product::query()->with([
             'category',
             'productHasOptionGroups.productOptionGroup',
             'productHasOptionGroups.productHasOptions.productOption',
-        ])->slug($slug)->first();
+        ])->slug($slug)->firstOrFail();
     }
 }

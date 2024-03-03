@@ -1,7 +1,7 @@
 <script setup>
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import Modal from "@/Components/Modal/Modal.vue";
@@ -12,7 +12,7 @@ import DefaultButton from "@/Components/Button/DefaultButton.vue";
 import {onMounted, ref} from "vue";
 import Action from "@/Components/List/Action/Action.vue";
 import DeleteAction from "@/Components/List/Action/DeleteAction.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 
 const {lang, groups} = defineProps(["lang", "groups"]);
 
@@ -70,9 +70,9 @@ onMounted(() => {
         <Card :title="lang.option_groups">
             <Table>
                 <thead>
-                    <th width="30">#</th>
-                    <th>{{ lang.name }}</th>
-                    <th width="10%">{{ lang.action }}</th>
+                <th width="30">#</th>
+                <th>{{ lang.name }}</th>
+                <th width="10%">{{ lang.action }}</th>
                 </thead>
 
                 <template v-if="groups.length > 0">

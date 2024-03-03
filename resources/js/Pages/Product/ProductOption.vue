@@ -3,13 +3,13 @@ import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import DangerButton from "@/Components/Button/DangerButton.vue";
 import InputError from "@/Components/Form/InputError.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import TextInput from "@/Components/Form/TextInput.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import Card from "@/Components/Card/Card.vue";
 import InfoButton from "@/Components/Button/InfoButton.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
-import { computed, inject, nextTick, onMounted, ref } from "vue";
+import {useForm, usePage} from "@inertiajs/vue3";
+import {computed, inject, nextTick, onMounted, ref} from "vue";
 import WarningButton from "@/Components/Button/WarningButton.vue";
 
 onMounted(() => {
@@ -220,7 +220,8 @@ function clear() {
             {{ lang.add_group }}
         </InfoButton>
 
-        <ul class="nav nav-tabs nav-tabs-bottom" id="product-options">
+        <ul class="nav nav-tabs nav-tabs-bottom" id="product-options"
+            v-if="product.product_has_option_groups.length > 0 || form.product_options.length > 0">
             <template v-for="group in product.product_has_option_groups">
                 <li class="nav-item tw-flex tw-items-center">
                     <a
@@ -259,7 +260,7 @@ function clear() {
                 <div class="tab-pane fade" :id="`tab-${group.id}`">
                     <div class="tw-flex tw-gap-4">
                         <DangerButton @click="deleteGroup(group)">
-                            <span v-lang:delete_group />
+                            <span v-lang:delete_group/>
                             <i class="fa fa-trash tw-text-sm"></i>
                         </DangerButton>
                         <InfoButton
@@ -347,7 +348,7 @@ function clear() {
                 <div class="tab-pane fade" :id="`tab-add-${i}`">
                     <div class="tw-flex tw-gap-4">
                         <DangerButton @click="deleteNewGroup(i)">
-                            <span v-lang:delete_group />
+                            <span v-lang:delete_group/>
                             <i class="fa fa-trash tw-text-sm"></i>
                         </DangerButton>
 
@@ -365,7 +366,7 @@ function clear() {
 
                     <div class="row mb-3 mt-3">
                         <div class="col-4">
-                            <InputLabel :value="lang.product_option_group" />
+                            <InputLabel :value="lang.product_option_group"/>
                             <SelectInput
                                 :items="getGroups"
                                 text="name"
@@ -388,7 +389,7 @@ function clear() {
                             >
                                 <template v-for="(option, j) in group.options">
                                     <div class="">
-                                        <InputLabel :value="lang.option" />
+                                        <InputLabel :value="lang.option"/>
                                         <SelectInput
                                             v-model="option.product_option_id"
                                             text="name"

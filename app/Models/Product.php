@@ -40,5 +40,6 @@ class Product extends Model
     protected $appends = [
         'image_url',
         'status_text',
+        'price_text',
     ];
 }

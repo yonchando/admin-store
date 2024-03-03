@@ -1,9 +1,9 @@
 <script setup>
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import {Head, Link, router, useForm} from "@inertiajs/vue3";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import Card from "@/Components/Card/Card.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
@@ -30,7 +30,11 @@ let index = computed(() => {
     return products.from;
 });
 
+const isFilter = ref(false);
+
 const swal = inject("$swal");
+
+const selected = ref(null);
 
 const isShowFilter = ref(false);
 
@@ -63,15 +67,15 @@ function destroy(product) {
 </script>
 
 <template>
-    <Head :title="lang.products" />
+    <Head :title="lang.products"/>
 
     <AppLayout :actions="actions">
         <template #breadcrumb>
-            <BreadcrumbItem icon="icon-box" :title="lang.products" />
+            <BreadcrumbItem icon="icon-box" :title="lang.products"/>
         </template>
 
         <FadeIn>
-            <Card v-if="isShowFilter" no-header>
+            <Card v-if="isShowFilter" no-header v-if="isFilter">
                 <ProductFilter
                     :errors="errors"
                     :categories="categories"
@@ -84,39 +88,39 @@ function destroy(product) {
         <Card :title="lang.products">
             <Table>
                 <tr>
-                    <th width="50">#</th>
-                    <th width="100">{{ lang.image }}</th>
+                    <th style="width:5%">#</th>
                     <th>{{ lang.product_name }}</th>
                     <th>{{ lang.category }}</th>
                     <th>{{ lang.price }}</th>
                     <th>{{ lang.stock_quantity }}</th>
-                    <th width="120">{{ lang.status }}</th>
+                    <th style="width:120px">{{ lang.status }}</th>
                     <th>{{ lang.action }}</th>
                 </tr>
 
                 <template v-if="products.data.length > 0">
-                    <tr v-for="(product, i) in products.data">
+                    <tr
+                        @dblclick="router.get(route('product.show',product))"
+                        @click="selected = product.id"
+                        :class="{'tw-bg-gray-200': selected === product.id}"
+                        v-for="(product, i) in products.data">
                         <td>{{ index + i }}</td>
-                        <td>
-                            <img :src="product.image_url" alt="" width="60" />
-                        </td>
-                        <td>
-                            <Link :href="route('product.show', product)">
+                        <td colspan="2">
+                            <div class="tw-flex tw-gap-2 tw-items-center">
+                                <img :src="product.image_url" alt="" width="60"/>
                                 {{ product.product_name }}
-                            </Link>
+                            </div>
                         </td>
                         <td>{{ product.category?.category_name }}</td>
                         <td class="tw-font-medium">
-                            {{ product.price }}
-                            {{ $page.props.setting?.currency?.code }}
+                            {{ product.price_text }}
                         </td>
                         <td>
-                            <span class="badge badge-pill badge-info">{{
-                                product.stock_quantity
-                            }}</span>
+                            <span class="badge badge-pill badge-info">
+                                {{ product.stock_quantity }}
+                            </span>
                         </td>
                         <td>
-                            <ProductStatusText :product="product" />
+                            <ProductStatusText :product="product"/>
                         </td>
                         <td>
                             <Dropdown>
@@ -127,7 +131,7 @@ function destroy(product) {
                                 </template>
 
                                 <DropdownLink
-                                    :href="route('product.edit', product)"
+                                    :href="route('product.edit', product.id)"
                                 >
                                     <i class="icon-pencil7"></i>
                                     {{ lang.edit }}
@@ -149,7 +153,7 @@ function destroy(product) {
                 </template>
             </Table>
 
-            <Paginate :data="products" />
+            <Paginate :data="products"/>
         </Card>
     </AppLayout>
 </template>

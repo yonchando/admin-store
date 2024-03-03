@@ -1,12 +1,12 @@
 <script setup>
 
 import {Head} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 
 const {lang} = defineProps({
@@ -40,10 +40,10 @@ const {lang} = defineProps({
         <Card :title="lang.options" collapse>
             <Table>
                 <thead>
-                    <th width="30">#</th>
-                    <th>{{ lang.name }}</th>
-                    <th>{{ lang.price_adjustment }}</th>
-                    <th width="10%">{{ lang.action }}</th>
+                <th width="30">#</th>
+                <th>{{ lang.name }}</th>
+                <th>{{ lang.price_adjustment }}</th>
+                <th width="10%">{{ lang.action }}</th>
                 </thead>
 
                 <template v-if="productOptions.length > 0">

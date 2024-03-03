@@ -1,6 +1,6 @@
 <script setup>
 import {Head} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
@@ -33,7 +33,7 @@ const lang = props.lang;
                         <ListItem :label="lang.product_name" :value="product.product_name"/>
                         <ListItem :label="lang.category" :value="product.category?.category_name"/>
                         <ListItem :label="lang.price"
-                                  :value="product.price + ' ' +  $page.props.setting?.currency?.code "/>
+                                  :value="product.price_text"/>
                         <ListItem :label="lang.stock_quantity">
                             <span class="badge badge-info badge-pill"
                                   v-text="product.stock_quantity"></span>

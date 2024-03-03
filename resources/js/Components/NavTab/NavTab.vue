@@ -5,13 +5,11 @@ defineProps({
 </script>
 
 <template>
-    <ul class="tw-flex tw-gap-4">
-        <template v-for="nav in navItems">
-            <li>{{ nav.product_option_group.name }}</li>
-        </template>
+    <ul class="nav nav-tabs nav-tabs-bottom">
+        <slot name="tabs"/>
     </ul>
 
-    <div class="">
+    <div class="tab-content">
         <slot/>
     </div>
 </template>

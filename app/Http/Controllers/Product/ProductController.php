@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Product;
 
 use App\Enums\Product\ProductStatus;
 use App\Facades\Helper;
+use App\Http\Requests\Product\OptionRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductFilterRequest;
+use App\Http\Requests\Product\ProductOptionRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductHasOption;
@@ -96,9 +98,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, $id)
     {
-        $this->productRepository->update($request, $product);
+        $this->productRepository->update($request, $id);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.product')]));
 
@@ -114,9 +116,9 @@ class ProductController extends Controller
         return to_route('product.index');
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        $this->productRepository->destroy($product);
+        $this->productRepository->destroy($id);
 
         return redirect()->route('product.index', request()->toArray());
     }

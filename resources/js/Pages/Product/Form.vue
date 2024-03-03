@@ -6,11 +6,11 @@ import FileInput from "@/Components/Form/FileInput.vue";
 import InputLabel from "@/Components/Form/InputLabel.vue";
 import SelectInput from "@/Components/Form/SelectInput.vue";
 import TextInput from "@/Components/Form/TextInput.vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, router, useForm } from "@inertiajs/vue3";
+
+import {Head, router, useForm} from "@inertiajs/vue3";
 import InfoButton from "@/Components/Button/InfoButton.vue";
 
-const { lang, product, categories } = defineProps([
+const {lang, product, categories} = defineProps([
     "lang",
     "product",
     "categories",
@@ -62,8 +62,8 @@ const save = () => {
 </script>
 
 <template>
-    <Head v-if="product == null" title="Prodcut Add" />
-    <Head v-else title="Prodcut Edit" />
+    <Head v-if="product == null" title="Prodcut Add"/>
+    <Head v-else title="Prodcut Edit"/>
 
     <AppLayout>
         <template #breadcrumb>
@@ -166,7 +166,7 @@ const save = () => {
                     <div class="col-3">
                         <div class="form-group">
                             <fieldset>Product Image</fieldset>
-                            <FileInput name="image" v-model="form.image" />
+                            <FileInput name="image" v-model="form.image"/>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ const save = () => {
                     <Card>
                         <div class="form-group row">
                             <div class="col-6">
-                                <InputLabel :value="lang.option_group" />
+                                <InputLabel :value="lang.option_group"/>
                                 <SelectInput
                                     v-model="group.product_option_group_id"
                                     text="name"
@@ -188,7 +188,7 @@ const save = () => {
                         <div class="form-group tw-grid tw-grid-cols-2 tw-gap-4">
                             <template v-for="option in group.options">
                                 <div class="">
-                                    <InputLabel :value="lang.options" />
+                                    <InputLabel :value="lang.options"/>
                                     <SelectInput
                                         v-model="option.product_option_id"
                                         text="name"

@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
         ->name('product.')
         ->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/show/{product:slug}', [ProductController::class, 'show'])->name('show');
+            Route::get('/show/{product}', [ProductController::class, 'show'])->name('show');
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('store', [ProductController::class, 'store'])->name('store');
@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
                 'update.status'
             );
 
-            Route::delete('destroy/{product:slug}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::delete('destroy/{product}', [ProductController::class, 'destroy'])->name('destroy');
             Route::delete(
                 'destroy-option-group/{productHasOptionGroup}',
                 [ProductGroupOptionController::class, 'destroy']

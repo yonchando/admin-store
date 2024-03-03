@@ -1,6 +1,6 @@
 <script setup>
 import {Head, useForm} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import FormGroup from "@/Components/Form/FormGroup.vue";

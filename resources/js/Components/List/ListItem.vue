@@ -6,7 +6,7 @@ defineProps(['label', 'value'])
     <div class="tw-flex tw-gap-2">
         <div v-if="label">{{ label }}:</div>
         <div v-if="value" class="tw-font-medium">{{ value }}</div>
-        <slot></slot>
+        <slot/>
     </div>
 </template>
 

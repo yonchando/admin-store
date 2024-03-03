@@ -34,11 +34,11 @@ interface ProductRepositoryInterface
 
     public function store(ProductRequest $request): Product;
 
-    public function update(ProductRequest $request, Product $product): Product;
+    public function update(ProductRequest $request, int $id): Product;
 
-    public function updateStatus(Product $product): Product;
+    public function updateStatus(int $id): Product;
 
-    public function destroy(Product $product): void;
+    public function destroy(array|int $ids): void;
 
-    public function findBySlug($slug): Product;
+    public function findBySlug(string $slug): Product;
 }

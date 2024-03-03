@@ -9,8 +9,10 @@ trait HasAttributes
 {
     public function priceAdjustmentText(): Attribute
     {
+        $code = Helper::setting()?->currency?->code ?? 'USD';
+
         return Attribute::make(
-            get: fn() => data_get($this,'price_adjustment'),
+            get: fn() => "+".($this->price_adjustment ?? number_format(0, 2))." ".$code,
         );
     }
 }

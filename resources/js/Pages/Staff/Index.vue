@@ -1,8 +1,8 @@
 <script setup>
 import {Head, useForm} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+
 import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
+
 import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Action from "@/Components/List/Action/Action.vue";

@@ -16,7 +16,7 @@ const updateStatus = () => {
         'badge-danger': product.status !== 'active',
     }"
             @click="updateStatus"
-            class="badge text-uppercase">
+            class="badge text-uppercase focus:tw-outline-0">
         {{ product.status_text }}
     </button>
 </template>
