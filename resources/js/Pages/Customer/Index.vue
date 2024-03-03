@@ -1,19 +1,19 @@
 <script setup>
-import { Head } from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+import {Head} from "@inertiajs/vue3";
+
 import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
-import { Link } from "@inertiajs/vue3";
-import { computed } from "vue";
+
+import {Link} from "@inertiajs/vue3";
+import {computed} from "vue";
 import Paginate from "@/Components/Paginate.vue";
 
-const { lang, customers } = defineProps(["lang", "customers"]);
+const {lang, customers} = defineProps(["lang", "customers"]);
 
 let index = computed(() => customers.from);
 </script>
 
 <template>
-    <Head :title="lang.customers" />
+    <Head :title="lang.customers"/>
 
     <AppLayout>
         <Card :title="lang.customers">
@@ -47,7 +47,7 @@ let index = computed(() => customers.from);
                 </template>
             </Table>
 
-            <Paginate :data="customers" />
+            <Paginate :data="customers"/>
         </Card>
     </AppLayout>
 </template>
