@@ -1,6 +1,13 @@
-<script setup></script>
+<script setup>
 
-<template></template>
+const props = defineProps({
+    customer: Object
+})
+</script>
+
+<template>
+
+</template>
 
 <style scoped>
 

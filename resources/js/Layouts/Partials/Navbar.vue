@@ -1,5 +1,5 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import NavLink from "@/Components/Navbar/NavLink.vue";
 import NavHeader from "@/Components/Navbar/NavHeader.vue";
 
@@ -12,7 +12,7 @@ const menus = [
         link: route("dashboard"),
         text: lang.dashboard,
         icon: "icon-home2",
-        active: $page.url === "/",
+        active: isActive('dashboard'),
     },
     {
         text: lang.product_management,
@@ -21,16 +21,16 @@ const menus = [
                 link: route("category.index"),
                 text: lang.categories,
                 icon: "icon-grid4",
-                active: isActive("Category/Index"),
+                active: isActive("category.index"),
             },
             {
                 link: route("product.index"),
                 text: lang.products,
                 icon: "icon-bag",
                 active: isActive(
-                    "Product/Index",
-                    "Product/Show",
-                    "Product/Form",
+                    "product.index",
+                    "product.show",
+                    "product.create",
                 ),
             },
         ],
@@ -42,13 +42,13 @@ const menus = [
                 link: route("product.option.group.index"),
                 text: lang.option_groups,
                 icon: "icon-price-tags",
-                active: isActive("ProductOptionGroup/Index"),
+                active: isActive("product.option.group.index"),
             },
             {
                 link: route("product.option.index"),
                 text: lang.options,
                 icon: "icon-price-tag",
-                active: isActive("ProductOption/Index"),
+                active: isActive("product.option.index"),
             },
         ],
     },
@@ -59,9 +59,20 @@ const menus = [
                 link: route("purchase.order.index"),
                 icon: "icon-store2",
                 text: lang.purchase_orders,
-                active: isActive("PurchaseOrder/Index"),
+                active: isActive("purchase.order.index"),
             },
         ],
+    },
+    {
+        text: lang.card_management,
+        children: [
+            {
+                link: route('card.index'),
+                icon: 'icon-credit-card',
+                text: lang.cards,
+                active: isActive("card.index", "card.show", "card.create"),
+            }
+        ]
     },
     {
         text: lang.users,
@@ -70,13 +81,13 @@ const menus = [
                 link: route("customer.index"),
                 icon: "icon-users2",
                 text: lang.customers,
-                active: isActive("Customer/Index"),
+                active: isActive("customer.index", "customer.show", "customer.create"),
             },
             {
                 link: route("staff.index"),
                 icon: "icon-user-tie",
                 text: lang.staffs,
-                active: isActive("Staff/Index"),
+                active: isActive("staff.index"),
             },
         ],
     },
@@ -94,7 +105,7 @@ const menus = [
 ];
 
 function isActive(...urls) {
-    return urls.some((url) => $page.component === url);
+    return urls.some((url) => route().current(url));
 }
 </script>
 
@@ -138,5 +149,3 @@ function isActive(...urls) {
         </template>
     </ul>
 </template>
-
-<style scoped></style>

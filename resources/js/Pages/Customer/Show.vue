@@ -1,21 +1,26 @@
 <script setup>
-import {Link} from "@inertiajs/vue3";
-import {Head} from "@inertiajs/vue3";
-import AppLayout from "@/Layouts/AppLayout.vue";
+import {Link, Head, usePage, router} from "@inertiajs/vue3";
+
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 import Card from "@/Components/Card/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
-import Table from "@/Components/Table/Table.vue";
+import NavTab from "@/Components/NavTab/NavTab.vue";
+import NavItem from "@/Components/NavTab/NavItem.vue";
+import NavPane from "@/Components/NavTab/NavPane.vue";
+import UserPurchase from "@/Pages/Customer/UserPurchase.vue";
+import UserCard from "@/Pages/Customer/UserCard.vue";
 
-const {lang} = defineProps({
+const props = defineProps({
     customer: Object,
-    lang: Object
 })
+
+const lang = usePage().props.lang;
 
 </script>
 
 <template>
-    <Head :title="lang.customer_detail"/>
+
+    <Head :title="lang.detail"/>
 
     <AppLayout>
         <template #breadcrumb>
@@ -37,33 +42,25 @@ const {lang} = defineProps({
             </div>
         </Card>
 
-        <Card :title="lang.purchase_orders">
-            <Table>
-                <tr>
-                    <th>#</th>
-                    <th>{{ lang.transaction_id }}</th>
-                    <th>{{ lang.total_price }}</th>
-                    <th>{{ lang.total_items }}</th>
-                    <th>{{ lang.purchased_date }}</th>
-                    <th>{{ lang.status }}</th>
-                </tr>
-
-                <template v-if="customer.purchase_orders.length > 0">
-                    <tr v-for="(purchase,i) in customer.purchase_orders" :key="purchase.id">
-                        <td>{{ i + 1 }}</td>
-                        <td>
-                            <Link :href="route('purchase.order.show',purchase)">
-                                #{{ purchase.transaction_id }}
-                            </Link>
-                        </td>
-                        <td>{{ purchase.total_price }} USD</td>
-                        <td>{{ purchase.order_items_count }}</td>
-                        <td>{{ purchase.purchased_date }} USD</td>
-                        <td v-html="purchase.status_text"></td>
-                    </tr>
+        <Card>
+            <NavTab>
+                <template #tabs>
+                    <NavItem target="#purchase">
+                        {{ lang.purchase_orders }}
+                    </NavItem>
+                    <NavItem target="#cards" active>
+                        Card
+                    </NavItem>
                 </template>
 
-            </Table>
+                <NavPane id="purchase" class="">
+                    <UserPurchase :data="customer.purchase_orders"/>
+                </NavPane>
+
+                <NavPane id="cards" class="show active">
+                    <UserCard :customer="customer"/>
+                </NavPane>
+            </NavTab>
         </Card>
     </AppLayout>
 </template>
