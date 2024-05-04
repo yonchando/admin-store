@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Facades\Enum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,7 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $genders = Enum::toArray(Gender::cases(), true);
+        $genders = Enum::toArray(GenderEnum::cases(), true);
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
@@ -40,14 +40,14 @@ class UserFactory extends Factory
     public function male(): Factory|UserFactory
     {
         return $this->state(fn () => [
-            'gender' => Gender::MALE->value,
+            'gender' => GenderEnum::MALE->value,
         ]);
     }
 
     public function female(): Factory|UserFactory
     {
         return $this->state(fn () => [
-            'gender' => Gender::FEMALE->value,
+            'gender' => GenderEnum::FEMALE->value,
         ]);
     }
 

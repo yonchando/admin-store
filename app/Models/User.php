@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Enums\User\UserStatus;
 use App\Models\Concerns\User\HasAttributes;
 use App\Models\Concerns\User\HasScopes;
@@ -36,7 +36,7 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'gender' => Gender::class,
+        'gender' => GenderEnum::class,
         'status' => UserStatus::class,
     ];
 

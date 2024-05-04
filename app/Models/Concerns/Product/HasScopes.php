@@ -13,6 +13,9 @@ trait HasScopes
      *     search: string,
      *     min_price: double,
      *     max_price: double,
+     *     status: string,
+     *     order_by: string,
+     *     order_direction: string,
      * }  $filters
      */
     public function scopeFilters(Builder $query, array $filters): Builder
@@ -45,7 +48,7 @@ trait HasScopes
         if (isset($filters['order_by']) && isset($filters['order_direction'])) {
             $query->where($filters['order_by'], $filters['order_direction']);
         } else {
-            $query->latest();
+            $query->latest()->latest('updated_at');
         }
 
         return $query;

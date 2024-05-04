@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Enums\User\UserStatus;
 use App\Facades\Enum;
 use App\Facades\Helper;
@@ -26,7 +26,7 @@ class StaffController extends Controller
 
         return Inertia::render('Staff/Index', [
             'staffs' => $staffs,
-            'gender' => Enum::toSelectedForm(Gender::cases(), true),
+            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
             'statuses' => Enum::toSelectedForm(UserStatus::cases()),
             'filters' => $request->toArray(),
         ]);
@@ -35,7 +35,7 @@ class StaffController extends Controller
     public function create()
     {
         return Inertia::render('Staff/Form', [
-            'gender' => Enum::toSelectedForm(Gender::cases(), true),
+            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
         ]);
     }
 
@@ -56,7 +56,7 @@ class StaffController extends Controller
     {
         return Inertia::render('Staff/Form', [
             'staff' => $user,
-            'gender' => Enum::toSelectedForm(Gender::cases(), true),
+            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
         ]);
     }
 

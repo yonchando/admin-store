@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Models\Customer;
 use App\Models\PurchaseOrder;
 use Inertia\Testing\AssertableInertia;
@@ -11,7 +11,7 @@ test('customer listing', function () {
         'first_name' => 'Customer',
         'last_name' => 'Test',
         'phone' => '+85512312312',
-        'gender' => Gender::MALE->value,
+        'gender' => GenderEnum::MALE->value,
     ]);
 
     $customers = Customer::factory(3)->create();
@@ -25,7 +25,7 @@ test('customer listing', function () {
                     'customers.data.0', fn(AssertableInertia $page) => $page->where('purchase_orders_count', 3)
                     ->where('name', 'Customer Test')
                     ->where('phone', '+85512312312')
-                    ->where('gender_text', __('lang.'.Gender::MALE->value))
+                    ->where('gender_text', __('lang.'.GenderEnum::MALE->value))
                     ->etc()
                 )
         );

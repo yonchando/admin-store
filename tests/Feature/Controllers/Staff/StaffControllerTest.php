@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Enums\User\UserStatus;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
@@ -28,14 +28,14 @@ describe('user lists', function () {
         User::factory()->create([
             'name' => fake()->name,
             'username' => fake()->userName,
-            'gender' => fake()->randomElement(Enum::toArray(Gender::cases(), true)),
+            'gender' => fake()->randomElement(Enum::toArray(GenderEnum::cases(), true)),
             'created_at' => now()->subHours(2),
         ]);
 
         $first = User::factory()->create([
             'name' => fake()->name,
             'username' => fake()->userName,
-            'gender' => fake()->randomElement(Enum::toArray(Gender::cases(), true)),
+            'gender' => fake()->randomElement(Enum::toArray(GenderEnum::cases(), true)),
             'created_at' => now(),
         ]);
 

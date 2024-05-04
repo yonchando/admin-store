@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Gender;
+use App\Enums\GenderEnum;
 use App\Models\Customer;
 use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,7 +32,7 @@ class CustomerFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'city_id' => $province->city_id,
             'province_id' => $province->id,
-            'gender' => $this->faker->randomElement(Gender::cases()),
+            'gender' => $this->faker->randomElement(GenderEnum::cases()),
         ];
     }
 }
