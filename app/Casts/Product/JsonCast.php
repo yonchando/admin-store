@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Casts;
+namespace App\Casts\Product;
 
 use App\ValueObjects\Product\ProductObject;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductObjectCast implements CastsAttributes
+class JsonCast implements CastsAttributes
 {
     public function get(Model $model, string $key, mixed $value, array $attributes): ProductObject
     {

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\PropertyCast;
+use App\Casts\Setting\PropertyCast;
 use App\Models\Concerns\Setting\HasAttributes;
 use App\Models\Concerns\Setting\HasRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

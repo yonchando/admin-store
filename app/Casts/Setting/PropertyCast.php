@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Casts;
+namespace App\Casts\Setting;
 
 use App\ValueObjects\Setting\SettingPropertyObject;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
