@@ -20,9 +20,9 @@ class PurchaseOrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'transaction_id' => \Str::upper($this->faker->unique()->word),
+            'ref_no' => \Str::upper($this->faker->unique()->word),
             'total_price' => $this->faker->randomFloat(2, 10, 100),
-            'status' => PurchaseOrderStatus::PENDING->name,
+            'status' => PurchaseOrderStatus::PENDING->value,
             'purchased_at' => $this->faker->dateTimeBetween('-30 months', '-1 week')->format('Y-m-d H:i:s'),
         ];
     }

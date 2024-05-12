@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\OrderItem;
+use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrder;
 use Illuminate\Database\Seeder;
 

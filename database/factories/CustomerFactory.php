@@ -20,7 +20,6 @@ class CustomerFactory extends Factory
      */
     public function definition(): array
     {
-        $province = Province::factory()->create();
         $countryCode = '+855';
         $phone = $this->faker->unique()->e164PhoneNumber;
 
@@ -30,8 +29,6 @@ class CustomerFactory extends Factory
             'phone' => $countryCode.substr($phone, $this->faker->numberBetween(4, 5)),
             'password' => Hash::make('password'),
             'email' => $this->faker->unique()->safeEmail,
-            'city_id' => $province->city_id,
-            'province_id' => $province->id,
             'gender' => $this->faker->randomElement(GenderEnum::cases()),
         ];
     }

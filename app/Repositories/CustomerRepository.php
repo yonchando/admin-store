@@ -24,7 +24,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $query = Customer::query();
 
         $query->with([
-            'purchaseOrders' => fn($query) => $query->withCount(['orderItems']),
+            'purchaseOrders' => fn($query) => $query->withCount(['purchaseDetails']),
         ]);
 
         $query->withCount(['purchaseOrders']);

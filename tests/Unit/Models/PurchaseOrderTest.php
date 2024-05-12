@@ -5,7 +5,7 @@ use App\Models\PurchaseOrder;
 test('purchase order must has relation ship with order item model', function () {
     $purchase = new PurchaseOrder();
 
-    $this->assertTrue(method_exists($purchase, 'orderItems'));
+    $this->assertTrue(method_exists($purchase, 'purchaseDetails'));
 });
 
 test('purchase order must have purchased_date property', function () {

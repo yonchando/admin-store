@@ -7,5 +7,5 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class CurrencyObject extends ValueObject implements Arrayable
 {
-    public int $currency_id;
+    public int $currencyId;
 }

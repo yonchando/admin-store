@@ -7,5 +7,5 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class SettingObject extends ValueObject implements Arrayable
 {
-    public ?int $currency_id = null;
+    public ?int $currencyId = null;
 }

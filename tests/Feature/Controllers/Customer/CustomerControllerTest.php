@@ -4,10 +4,11 @@
 use App\Enums\GenderEnum;
 use App\Models\Customer;
 use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderDetail;
 use Inertia\Testing\AssertableInertia;
 
 test('customer listing', function () {
-    $first = Customer::factory()->hasPurchaseOrders(3)->create([
+    $first = Customer::factory()->has(PurchaseOrder::factory(3))->create([
         'first_name' => 'Customer',
         'last_name' => 'Test',
         'phone' => '+85512312312',
@@ -31,14 +32,14 @@ test('customer listing', function () {
         );
 });
 
-test('show custoemr detail', function () {
-    $customer = Customer::factory()->has(PurchaseOrder::factory(2)->hasOrderItems(3))->create();
+test('show customer detail', function () {
+    $customer = Customer::factory()->has(PurchaseOrder::factory(2)->has(PurchaseOrderDetail::factory(3),'purchaseDetails'))->create();
 
     $this->get(route('customer.show', $customer))
         ->assertOk()
         ->assertInertia(
             fn(AssertableInertia $page) => $page->component('Customer/Show')
                 ->where('customer.purchase_orders_count', 2)
-                ->where('customer.purchase_orders.0.order_items_count', 3)
+                ->where('customer.purchase_orders.0.purchase_details_count', 3)
         );
 });

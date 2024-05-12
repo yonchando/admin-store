@@ -3,7 +3,7 @@
 namespace App\Models\Concerns\PurchaseOrder;
 
 use App\Models\Customer;
-use App\Models\OrderItem;
+use App\Models\PurchaseOrderDetail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -14,8 +14,8 @@ trait HasRelationships
         return $this->belongsTo(Customer::class);
     }
 
-    public function orderItems(): HasMany
+    public function purchaseDetails(): HasMany
     {
-        return $this->hasMany(OrderItem::class, 'purchase_order_id');
+        return $this->hasMany(PurchaseOrderDetail::class, 'purchase_order_id');
     }
 }

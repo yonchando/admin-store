@@ -32,9 +32,4 @@ class CustomerController extends Controller
             'customer' => $customer,
         ]);
     }
-
-    public function updateStatus(Request $request, Customer $customer)
-    {
-
-    }
 }
