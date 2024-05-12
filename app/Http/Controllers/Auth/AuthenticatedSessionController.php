@@ -38,9 +38,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        $request->session()->put('setting', $this->settingRepository->first());
-
+        
         return redirect()->intended(route('dashboard'));
     }
 
