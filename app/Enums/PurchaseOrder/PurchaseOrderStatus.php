@@ -4,21 +4,21 @@ namespace App\Enums\PurchaseOrder;
 
 use Illuminate\Support\Str;
 
-enum PurchaseOrderStatus
+enum PurchaseOrderStatus: string
 {
-    case PENDING;
-    case ACCEPTED;
-    case SHIPPED;
-    case CANCELED;
-    case REJECTED;
-    case COMPLETED;
+    case PENDING = 'pending';
+    case ACCEPTED = 'accepted';
+    case SHIPPED = 'shipped';
+    case CANCELED = 'canceled';
+    case REJECTED = 'rejected';
+    case COMPLETED = 'completed';
 
     public static function toArray(array $excepts = []): array
     {
         return collect(self::cases())
             ->map(
                 fn($value) => [
-                    'name' => __("lang.".Str::lower($value->name)),
+                    'name' => __('lang.' . Str::lower($value->name)),
                     'id' => $value->name,
                 ]
             )->filter(fn($value) => !in_array($value['id'], $excepts))

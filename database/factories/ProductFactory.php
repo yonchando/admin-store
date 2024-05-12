@@ -6,7 +6,9 @@ use App\Enums\Product\ProductStatus;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Product>
@@ -21,36 +23,40 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->unique()->name;
+
+        $file = UploadedFile::fake()->image("{$this->faker->word}.png", 40, 40);
+        $path = $file->hashName(config('paths.product_image'));
+
         return [
             'product_name' => $name,
-            'category_id' => null,
             'slug' => Str::slug($name),
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(1, 100),
             'stock_quantity' => $this->faker->numberBetween(1, 1000),
             'json' => [
                 'image' => [
-                    'filename' => $this->faker->word,
-                    'path' => $this->faker->filePath(),
-                    'url' => $this->faker->imageUrl,
-                    'extension' => $this->faker->randomElement(['png', 'jpeg', 'svg', 'jpg']),
+                    'filename' => $file->hashName(),
+                    'original_name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'url' => Storage::url($path),
+                    'extension' => $file->extension(),
                 ],
             ],
-            'status' => ProductStatus::ACTIVE->name,
+            'status' => ProductStatus::ACTIVE->value,
         ];
     }
 
     public function active(): ProductFactory|Factory
     {
         return $this->state(fn() => [
-            'status' => ProductStatus::ACTIVE->name,
+            'status' => ProductStatus::ACTIVE->value,
         ]);
     }
 
     public function inactive(): ProductFactory|Factory
     {
         return $this->state(fn() => [
-            'status' => ProductStatus::INACTIVE->name,
+            'status' => ProductStatus::INACTIVE->value,
         ]);
     }
 

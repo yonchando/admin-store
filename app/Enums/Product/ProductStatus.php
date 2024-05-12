@@ -2,11 +2,9 @@
 
 namespace App\Enums\Product;
 
-use Illuminate\Support\Str;
-
-enum ProductStatus
+enum ProductStatus: string
 {
-    case ACTIVE;
-    case INACTIVE;
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Card\CardStatus;
+use App\Enums\Card\CardStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('expiry_date')->nullable();
             $table->integer('points_balance')->default(0);
             $table->decimal('cashback_balance', 11, 2)->default(0);
-            $table->string('status')->default(CardStatus::ACTIVE->name);
+            $table->string('status')->default(CardStatusEnum::ACTIVE->value);
             $table->timestamps();
         });
     }
