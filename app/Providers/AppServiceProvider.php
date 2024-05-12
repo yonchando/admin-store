@@ -15,7 +15,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(HelperService::class, HelperService::class);
-        $this->app->singleton(EnumService::class, EnumService::class);
     }
 
     /**

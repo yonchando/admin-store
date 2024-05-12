@@ -2,8 +2,12 @@
 
 namespace App\Enums\User;
 
-enum UserStatus
+use App\Traits\HasEnumProperty;
+
+enum UserStatus: string
 {
-    case ACTIVE;
-    case INACTIVE;
+    use HasEnumProperty;
+
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
 }

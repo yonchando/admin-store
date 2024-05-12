@@ -16,7 +16,7 @@ class ProductFilterRequest extends FormRequest
             'search' => ['nullable', 'string', 'max:255'],
             'min_price' => ['nullable', 'numeric'],
             'max_price' => ['nullable', 'numeric'],
-            'status' => ['nullable', Rule::in(Enum::toArray(ProductStatus::cases()))],
+            'status' => ['nullable', Rule::in(array_values(array_values(ProductStatus::toJson())))],
             'perPage' => ['nullable', 'numeric'],
         ];
     }

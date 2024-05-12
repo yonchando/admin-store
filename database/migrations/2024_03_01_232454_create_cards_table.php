@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Card\CardStatus;
 use App\Enums\Card\CardStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

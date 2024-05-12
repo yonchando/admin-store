@@ -14,10 +14,10 @@ trait HasAttributes
             get: function () {
                 $status = $this->status;
 
-                $trans = Enum::trans($status);
+                $trans = __("lang.$status->value");
 
-                return match ($status) {
-                    UserStatus::ACTIVE => "<span class='badge badge-success'>$trans</span>",
+                return match ($status->value) {
+                    UserStatus::ACTIVE->value => "<span class='badge badge-success'>$trans</span>",
                     default => "<span class='badge badge-danger'>$trans</span>"
                 };
             }

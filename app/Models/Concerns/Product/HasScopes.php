@@ -48,7 +48,7 @@ trait HasScopes
         if (isset($filters['order_by']) && isset($filters['order_direction'])) {
             $query->where($filters['order_by'], $filters['order_direction']);
         } else {
-            $query->latest()->latest('updated_at');
+            $query->latest()->latest('created_at');
         }
 
         return $query;

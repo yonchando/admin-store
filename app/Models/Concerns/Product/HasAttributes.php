@@ -11,7 +11,7 @@ trait HasAttributes
     public function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->json->image->url,
+            get: fn() => $this->json->image->getUrl(),
         );
     }
 

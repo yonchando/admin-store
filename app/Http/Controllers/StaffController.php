@@ -26,8 +26,8 @@ class StaffController extends Controller
 
         return Inertia::render('Staff/Index', [
             'staffs' => $staffs,
-            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
-            'statuses' => Enum::toSelectedForm(UserStatus::cases()),
+            'gender' => GenderEnum::toArray(),
+            'statuses' => UserStatus::toArray(),
             'filters' => $request->toArray(),
         ]);
     }
@@ -47,11 +47,7 @@ class StaffController extends Controller
 
         return redirect()->route('staff.index');
     }
-
-    public function show(User $user)
-    {
-    }
-
+    
     public function edit(User $user)
     {
         return Inertia::render('Staff/Form', [
@@ -69,7 +65,7 @@ class StaffController extends Controller
         return to_route('staff.index');
     }
 
-    public function updatestatus(User $user)
+    public function updateStatus(User $user)
     {
         $this->userRepository->updateStatus($user);
 

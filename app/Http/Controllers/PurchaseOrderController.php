@@ -12,8 +12,6 @@ use Inertia\Inertia;
 
 class PurchaseOrderController extends Controller
 {
-
-
     public function __construct(
         private readonly PurchaseOrderRepositoryInterface $purchaseOrderRepository,
     ) {

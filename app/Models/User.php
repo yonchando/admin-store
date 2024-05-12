@@ -39,8 +39,4 @@ class User extends Authenticatable
         'gender' => GenderEnum::class,
         'status' => UserStatus::class,
     ];
-
-    protected $appends = [
-        'status_text',
-    ];
 }

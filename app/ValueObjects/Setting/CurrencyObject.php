@@ -2,10 +2,10 @@
 
 namespace App\ValueObjects\Setting;
 
-use App\ValueObjects\ValueObject;
+use App\ValueObjects\JsonProperty;
 use Illuminate\Contracts\Support\Arrayable;
 
-class CurrencyObject extends ValueObject implements Arrayable
+class CurrencyObject extends JsonProperty implements Arrayable
 {
     public int $currencyId;
 }

@@ -42,7 +42,7 @@ class ProductController extends Controller
 
         $products = $this->productRepository->filterByAndPaginate($filters)->withQueryString();
 
-        $statuses = Enum::toSelectedForm(ProductStatus::cases());
+        $statuses = ProductStatus::toArray();
 
         return Inertia::render('Product/Index', [
             'products' => $products,
@@ -150,15 +150,13 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
-    public function updateStatus(Product $product)
+    public function updateStatus($id)
     {
-        $product = $this->productRepository->updateStatus($product);
+        $product = $this->productRepository->updateStatus(Product::find($id));
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.status')]));
 
-        return response()->json([
-            'product' => $product,
-        ]);
+        return to_route('product.index');
     }
 
     public function destroy(Product $product)

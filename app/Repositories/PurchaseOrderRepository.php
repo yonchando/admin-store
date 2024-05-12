@@ -22,7 +22,7 @@ class PurchaseOrderRepository implements PurchaseOrderRepositoryInterface
 
         $query->with(['customer']);
 
-        $query->withCount(['purhcaseDetails']);
+        $query->withCount(['purchaseDetails']);
 
         if ($request->has('orderBy')) {
             $query->orderBy($request->get('orderBy'), $request->get('direction', 'asc'));
@@ -37,7 +37,7 @@ class PurchaseOrderRepository implements PurchaseOrderRepositoryInterface
     {
         $query = PurchaseOrder::query();
 
-        $query->with(['customer', 'purhcaseDetails']);
+        $query->with(['customer', 'purchaseDetails']);
 
         return $query->find($id);
     }

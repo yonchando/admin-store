@@ -48,21 +48,21 @@ class ProductFactory extends Factory
 
     public function active(): ProductFactory|Factory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => ProductStatus::ACTIVE->value,
         ]);
     }
 
     public function inactive(): ProductFactory|Factory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'status' => ProductStatus::INACTIVE->value,
         ]);
     }
 
     public function category($id = null): ProductFactory|Factory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'category_id' => $id ?? Category::factory(),
         ]);
     }

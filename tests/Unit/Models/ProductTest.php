@@ -35,4 +35,3 @@ it('must be has relationship category', function () {
 
     expect(method_exists($product, 'category'))->toBeTrue();
 });
-

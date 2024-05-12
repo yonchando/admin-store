@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\User\UserStatus;
+
 return [
     'success' => 'Success',
     'add_success' => ':attribute added success.',
@@ -52,7 +54,7 @@ return [
     'total_items' => 'Total Items',
     'purchased_date' => 'Purchased Date',
     'n.o' => 'N.o',
-    'transaction_id' => 'Transaction ID',
+    'ref_no' => 'Ref No',
     'accepted' => 'Accepted',
     'shipped' => 'Shipped',
     'rejected' => 'Rejected',
@@ -94,10 +96,13 @@ return [
     'product_option' => 'Product Option',
     'price_adjustment' => 'Price Adjustment',
     'product_option_group' => 'Product Option Group',
-    'udpate' => 'Update',
+    'update' => 'Update',
     'delete_selected' => 'Delete Selected',
     'add_group' => 'Add Group',
     'option_group' => 'Option Group',
     'delete_group' => 'Delete Group',
     'page' => 'Page',
+    
+    UserStatus::ACTIVE->value => 'Active',
+    UserStatus::INACTIVE->value => 'Inactive',
 ];

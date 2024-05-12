@@ -1,26 +1,21 @@
 <script setup>
-import axios from "axios";
+import {router} from "@inertiajs/vue3";
 
 const {product} = defineProps({
     product: Object,
 });
 
 const updateStatus = () => {
-    axios.patch(route('product.update.status', product))
-        .then(res => {
-            const data = res.data?.product;
-            product.status = data.status;
-            product.status_text = data.status_text
-        })
+    router.patch(route('product.update.status', product));
 }
 </script>
 
 <template>
     <button :class="{
-        'badge-primary': product.status === 'ACTIVE',
-        'badge-danger': product.status !== 'ACTIVE',
+        'badge-primary': product.status === 'active',
+        'badge-danger': product.status !== 'active',
     }"
-            @click="updateStatus()"
+            @click="updateStatus"
             class="badge text-uppercase">
         {{ product.status_text }}
     </button>

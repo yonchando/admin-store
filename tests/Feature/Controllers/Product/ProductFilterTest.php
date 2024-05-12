@@ -116,14 +116,14 @@ describe('product filters', function () {
         $inactives = Product::factory(2)->inactive()->create();
 
         $this->get(route('product.index', [
-            'status' => ProductStatus::ACTIVE->name,
+            'status' => ProductStatus::ACTIVE->value,
         ]))->assertOk()->assertInertia(
             fn(AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $actives->count())
         );
 
         $this->get(route('product.index', [
-            'status' => ProductStatus::INACTIVE->name,
+            'status' => ProductStatus::INACTIVE->value,
         ]))->assertOk()->assertInertia(
             fn(AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $inactives->count())

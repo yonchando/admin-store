@@ -83,11 +83,11 @@ class ProductRepository implements ProductRepositoryInterface
 
             $image = $product->json->image;
 
-            $image->original_name = $file->getClientOriginalName();
-            $image->filename = $filename;
-            $image->extension = $file->getClientOriginalExtension();
-            $image->path = $path;
-            $image->url = Storage::url("$path/$filename");
+            $image->setOriginalName($file->getClientOriginalName());
+            $image->setFilename($filename);
+            $image->setExtension($file->getClientOriginalExtension());
+            $image->setPath($path);
+            $image->setUrl(Storage::url("$path/$filename"));
 
             $product->fillJsonAttribute('json->image', $image->toArray());
         }

@@ -33,7 +33,7 @@ class JsonProperty implements Arrayable, Jsonable
         foreach ($this->properties as $property) {
             $propertyName = $property->getName();
             if ($property->getType()->isBuiltin()) {
-                $this->set($propertyName, data_get($data, Str::snake($propertyName)));
+                $property->setValue($this, data_get($data, Str::snake($propertyName)));
             } else {
                 $className = $property->getType()->getName();
                 $this->{$propertyName} = new $className(data_get($data, $propertyName, []));
@@ -53,12 +53,12 @@ class JsonProperty implements Arrayable, Jsonable
         $properties = [];
 
         foreach ($this->properties as $property) {
-            $propertyName = $property->getName();
+            $propertyName = Str::snake($property->getName());
 
             if ($property->getType()->isBuiltin()) {
-                $properties[$propertyName] = Str::snake($property->getValue($this));
+                $properties[$propertyName] = $property->getValue($this);
             } else {
-                $properties[$propertyName] = $property->getValue($this)->toArray();
+                $properties[$propertyName] = $this->{$propertyName}->toArray();
             }
         }
 

@@ -53,7 +53,7 @@ const updatePurchaseStatus = (purchase, statusUpdate) => {
             <Table>
                 <tr>
                     <th>{{ lang["n.o"] }}</th>
-                    <th>{{ lang.transaction_id }}</th>
+                    <th>{{ lang.ref_no }}</th>
                     <th>{{ lang.customer }}</th>
                     <th>{{ lang.total_price }}</th>
                     <th>{{ lang.total_items }}</th>
@@ -69,7 +69,7 @@ const updatePurchaseStatus = (purchase, statusUpdate) => {
                             <Link
                                 :href="route('purchase.order.show', purchase)"
                             >
-                                #{{ purchase.transaction_id }}
+                                #{{ purchase.ref_no }}
                             </Link>
                         </td>
                         <td v-text="purchase.customer.name"></td>

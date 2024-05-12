@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\get;
+
 test('index methods', function () {
 
     $categories = Category::factory(2)->create();
@@ -28,10 +30,10 @@ test('index methods', function () {
 
     $perPage = 2;
 
-    $this->get(route('product.index', ['perPage' => $perPage]))
+    get(route('product.index', ['perPage' => $perPage]))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component("Product/Index")
+            fn (AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $perPage)
                 ->has('categories', $categories->count())
                 ->where('statuses', Enum::toSelectedForm(ProductStatus::cases()))
@@ -39,14 +41,15 @@ test('index methods', function () {
                 ->where('products.data.0.id', $first->id)
         );
 });
-describe("show product detail", function () {
+
+describe('show product detail', function () {
     it('show product detail', function () {
         $product = Product::factory()->create();
 
         $this->get(route('product.show', $product))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component("Product/Show")
+                fn (AssertableInertia $page) => $page->component('Product/Show')
                     ->where('product.id', $product->id)
                     ->where('product.product_name', $product->product_name)
             );
@@ -77,7 +80,7 @@ describe("show product detail", function () {
         $this->get(route('product.show', $product))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component("Product/Show")
+                fn (AssertableInertia $page) => $page->component('Product/Show')
                     ->where('product.id', $product->id)
                     ->where('product.product_name', $product->product_name)
                     ->has('product.product_has_option_groups', 1)
@@ -95,7 +98,7 @@ describe('create product', function () {
         $this->get(route('product.create'))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Product/Form')
+                fn (AssertableInertia $page) => $page->component('Product/Form')
                     ->has('categories', $categories->count())
             );
     });
@@ -104,7 +107,7 @@ describe('create product', function () {
 
         Storage::fake();
 
-        $image = UploadedFile::fake()->image("image.png");
+        $image = UploadedFile::fake()->image('image.png');
 
         $product = Product::factory()->category()->make([
             'image' => $image,
@@ -125,26 +128,26 @@ describe('create product', function () {
 
         expect($product->json->image)->not()->toBeNull();
 
-        Storage::assertExists($product->json->image->path);
+        Storage::assertExists($product->json->image->getPath());
 
-        expect($product->json->image->url)->toEqual(Storage::url(config("paths.product_image")."/".$image->hashName()));
+        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$image->hashName()));
     });
 });
 
 describe('product edit', function () {
 
-    it("can load form edit", function () {
-        $cagtegories = Category::factory(3)->create();
+    it('can load form edit', function () {
+        $categories = Category::factory(3)->create();
         $product = Product::factory()->create();
 
         $this->get(route('product.edit', $product))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component("Product/Form")
-                    ->has('categories', $cagtegories->count())
+                fn (AssertableInertia $page) => $page->component('Product/Form')
+                    ->has('categories', $categories->count())
                     ->has(
                         'product',
-                        fn(AssertableInertia $page) => $page
+                        fn (AssertableInertia $page) => $page
                             ->where('id', $product->id)
                             ->where('product_name', $product->product_name)->etc()
                     )
@@ -157,7 +160,7 @@ describe('product edit', function () {
         $changed = Product::factory()->make([
             'image' => null,
         ]);
-       
+
         $this->patch(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'))
             ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product')]));
@@ -188,15 +191,15 @@ describe('product edit', function () {
         $this->patch(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'));
 
-        $image = $product->json->image->url;
+        $image = $product->json->image->getUrl();
 
         $product->refresh();
 
-        $this->assertNotEquals($image, $product->json->image->url);
+        $this->assertNotEquals($image, $product->json->image->getUrl());
 
-        Storage::assertExists($product->json->image->path);
+        Storage::assertExists($product->json->image->getPath());
 
-        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image')."/".$file->hashName()));
+        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$file->hashName()));
     });
 
     it('can update product status active to inactive and inactive to active', function () {
@@ -205,16 +208,16 @@ describe('product edit', function () {
         $this->patchJson(route('product.update.status', $product))
             ->assertOk()
             ->assertJson(
-                fn(AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::INACTIVE->name)
+                fn (AssertableJson $json) => $json->where('product.id', $product->id)
+                    ->where('product.status', ProductStatus::INACTIVE->value)
                     ->etc()
             );
 
         $this->patchJson(route('product.update.status', $product))
             ->assertOk()
             ->assertJson(
-                fn(AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::ACTIVE->name)
+                fn (AssertableJson $json) => $json->where('product.id', $product->id)
+                    ->where('product.status', ProductStatus::ACTIVE->value)
                     ->etc()
             );
     });

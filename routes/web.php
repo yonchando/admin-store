@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
         ->name('category.')
         ->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
-            Route::post('/save', [CategoryController::class, 'store'])->name('store');
+            Route::post('store', [CategoryController::class, 'store'])->name('store');
             Route::patch('update/{category}', [CategoryController::class, 'update'])->name('update');
             Route::delete('delete/{category}', [CategoryController::class, 'destroy'])->name('destroy');
         });
@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/show/{product:slug}', [ProductController::class, 'show'])->name('show');
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
-            Route::post('/save', [ProductController::class, 'store'])->name('store');
+            Route::post('store', [ProductController::class, 'store'])->name('store');
 
             Route::post('add-product-option/{product}', [
                 ProductController::class, 'storeProductOption',
@@ -54,17 +54,17 @@ Route::middleware('auth')->group(function () {
 
             Route::get('edit/{product:slug}', [ProductController::class, 'edit'])->name('edit');
             Route::patch('update/{product:slug}', [ProductController::class, 'update'])->name('update');
-            Route::patch('update-status/{product:slug}', [ProductController::class, 'updateStatus'])->name(
+            Route::patch('update-status/{id}', [ProductController::class, 'updateStatus'])->name(
                 'update.status'
             );
 
             Route::delete('destroy/{product:slug}', [ProductController::class, 'destroy'])->name('destroy');
             Route::delete(
-                'destroy-opiton-group/{productHasOptionGroup}',
+                'destroy-option-group/{productHasOptionGroup}',
                 [ProductController::class, 'destroyProductOptionGroup']
             )->name('destroy.product.option.group');
             Route::delete(
-                'destroy-opiton/{productHasOption}',
+                'destroy-option/{productHasOption}',
                 [ProductController::class, 'destroyProductOption']
             )->name('destroy.product.option');
         });
@@ -74,9 +74,9 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [ProductOptionController::class, 'index'])->name('index');
 
-            Route::post('/save', [ProductOptionController::class, 'store'])->name('store');
+            Route::post('store', [ProductOptionController::class, 'store'])->name('store');
 
-            Route::post('/save-many', [ProductOptionController::class, 'storeMany'])->name('store.many');
+            Route::post('store-many', [ProductOptionController::class, 'storeMany'])->name('store.many');
 
             Route::patch('update/{productOption}', [
                 ProductOptionController::class, 'update',
@@ -128,9 +128,9 @@ Route::middleware('auth')->group(function () {
                 ->name('update.status');
         });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('staff')
         ->name('staff.')

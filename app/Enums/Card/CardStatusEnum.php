@@ -2,9 +2,13 @@
 
 namespace App\Enums\Card;
 
+use App\Traits\HasEnumProperty;
+
 enum CardStatusEnum: string
 {
-    case ACTIVE = "active";
+    use HasEnumProperty;
+    
+    case ACTIVE = 'active';
     case SUSPENSE = 'suspense';
-    case BLOCK = "block";
+    case BLOCK = 'block';
 }
