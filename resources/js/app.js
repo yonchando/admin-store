@@ -1,11 +1,12 @@
 import "./bootstrap";
 import "./asset.js";
 
-import { createApp, h } from "vue";
-import { createInertiaApp } from "@inertiajs/vue3";
-import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import {createApp, h} from "vue";
+import {createInertiaApp} from "@inertiajs/vue3";
+import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
+import {ZiggyVue} from "../../vendor/tightenco/ziggy/dist/vue.m";
 import Sweetalert2 from "./sweetalert2.js";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -32,6 +33,9 @@ createInertiaApp({
                     closeButton: ["btn"],
                 },
             });
+        
+        app.component("fa",FontAwesomeIcon);
+        
         app.config.globalProperties.$lang = props.initialPage.props.lang;
         app.directive("lang", function (el, binding) {
             $(el).text(props.initialPage.props.lang[binding.arg]);

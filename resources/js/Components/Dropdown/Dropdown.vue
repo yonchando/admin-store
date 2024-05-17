@@ -1,33 +1,39 @@
 <script setup>
-import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
+import { ref } from "vue";
+import SlideDown from "@/Components/Transition/SlideDown.vue";
 
 const props = defineProps({
-    title: {
-        required: false,
-        type: String,
-    },
-    toggleClass: String,
     show: {
         type: Boolean,
         default: false,
     },
+    toggle: {
+        type: Boolean,
+        default: false,
+    }
 });
 
+const open = ref(false);
 </script>
 
 <template>
-    <ul class="navbar-nav ml-auto">
-        <li class="dropdown" :class="{ show: show }">
-            <slot name="toggle">
-                <DropdownToggle :title="title"/>
-            </slot>
+    <div>
+        <template v-if="$slots.button">
+            <button class="w-full pr-6" @click="open = !open">
+                <div class="flex justify-between items-center w-full">
+                    <slot name="button"/>
+                    <i v-if="toggle" class="fa fa-chevron-down"></i>
+                </div>
+            </button>
+        </template>
 
+        <SlideDown>
             <div
-                class="dropdown-menu dropdown-menu-right"
-                :class="{ show: show }"
+                class="relative sm:absolute inset-x-0 flex top-full pt-3 flex-col rounded bg-dark mt-2"
+                v-if="open || show"
             >
-                <slot/>
+                <slot />
             </div>
-        </li>
-    </ul>
+        </SlideDown>
+    </div>
 </template>

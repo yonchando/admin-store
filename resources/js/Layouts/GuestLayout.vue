@@ -1,11 +1,11 @@
 <script setup>
-import {Head, router} from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Loading from "./Partials/Loading.vue";
 
 defineProps({
-    title: String
-})
+    title: String,
+});
 
 const loading = ref(false);
 
@@ -19,16 +19,14 @@ router.on("finish", () => {
 </script>
 
 <template>
-    <Head :title="title" />
+    <Head>
+        <title>{{ title }}</title>
+    </Head>
 
-    <div class="page-content">
-        <div class="content-wrapper">
-            <div
-                class="content d-flex justify-content-center align-items-center tw-h-screen"
-            >
-                <slot />
-            </div>
-        </div>
+    <div
+        class="mx-auto grid min-h-screen max-w-lg grid-cols-1 items-center justify-end"
+    >
+        <slot />
     </div>
 
     <Loading v-if="loading" />

@@ -3,6 +3,9 @@
 use App\Enums\User\UserStatus;
 
 return [
+    UserStatus::ACTIVE->value => 'Active',
+    UserStatus::INACTIVE->value => 'Inactive',
+
     'success' => 'Success',
     'add_success' => ':attribute added success.',
     'created_success' => ':attribute created success.',
@@ -102,7 +105,7 @@ return [
     'option_group' => 'Option Group',
     'delete_group' => 'Delete Group',
     'page' => 'Page',
-    
-    UserStatus::ACTIVE->value => 'Active',
-    UserStatus::INACTIVE->value => 'Inactive',
+    'profile' => 'Profile',
+    'logout' => 'Logout',
+
 ];

@@ -1,58 +1,53 @@
 <script setup>
 import NavLink from "@/Components/Navbar/NavLink.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import { ref } from "vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
+
+const open = ref(false);
 </script>
 
 <template>
-
-    <div class="navbar navbar-expand-md navbar-dark fixed-top">
-        <div class="navbar-brand tw-py-0">
+    <div
+        class="inset-x-0 top-0 grid grid-cols-2 items-center justify-between bg-dark p-2 text-white sm:fixed"
+    >
+        <div class="">
             <NavLink :href="route('dashboard')" class="d-inline-block">
-                <ApplicationLogo width="120" height="50"/>
+                <ApplicationLogo width="120" height="50" />
             </NavLink>
         </div>
 
-        <div class="d-md-none">
-            <button
-                class="navbar-toggler sidebar-mobile-main-toggle"
-                type="button"
-            >
-                <i class="icon-paragraph-justify3"></i>
-            </button>
-        </div>
+        <button class="text-right sm:hidden" @click="open = !open">
+            <i class="fa fa-list text-2xl"></i>
+        </button>
 
-        <div class="collapse navbar-collapse" id="navbar-mobile">
-            <Dropdown
-                class="nav-item dropdown-user"
-            >
-                <template v-slot:toggle>
-                    <DropdownToggle class="navbar-nav-link d-flex align-items-center dropdown-toggle">
+        <div
+            class="col-span-2 hidden h-full items-center sm:col-span-1 sm:flex sm:justify-self-end"
+        >
+            <Dropdown class="relative w-full">
+                <template #button>
+                    <span class="flex items-center gap-4">
                         <img
-                            src="/assets/limitless_theme/images/image.png"
-                            class="rounded-circle mr-2 tw-w-8"
-                            alt=""
+                            class="h-8 w-8 rounded-full"
+                            src="/assets/images/placeholders/placeholder.jpg"
+                            alt="Profile"
                         />
-                        <span>{{ $page.props.auth?.user.name }}</span>
-                    </DropdownToggle>
+                        {{ $page.props.auth.user.name }}
+                    </span>
                 </template>
-
-                <DropdownLink
+                <dropdown-link
+                    :title="$lang.profile"
+                    icon="fa fa-user"
                     :href="route('profile.edit')"
-                    title="Profile"
                 />
-                <DropdownLink
-                    :href="route('logout')"
+                <dropdown-link
+                    :title="$lang.logout"
                     method="post"
-                    title="Logout"
-                    as="button"
+                    icon="fa fa-arrow-right-from-bracket"
+                    :href="route('logout')"
                 />
             </Dropdown>
         </div>
     </div>
-
 </template>
-
-<style scoped></style>
