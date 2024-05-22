@@ -1,26 +1,22 @@
 <script setup>
 import Navbar from "@/Layouts/Partials/Navbar.vue";
+import MobileNav from "@/Layouts/Partials/MobileNav.vue";
+
+defineEmits(["close-sidebar"]);
+
+const props = defineProps({
+    show: Boolean,
+});
 </script>
 
 <template>
-    <div class="sidebar sidebar-dark sidebar-main sidebar-fixed sidebar-expand-sm">
-        <div class="sidebar-mobile-toggler text-center">
-            <a href="#" class="sidebar-mobile-main-toggle">
-                <i class="icon-arrow-left8"></i>
-            </a>
-            <a href="#" class="sidebar-mobile-expand">
-                <i class="icon-screen-full"></i>
-                <i class="icon-screen-normal"></i>
-            </a>
-        </div>
-
-        <div class="sidebar-content">
-            <div class="card card-sidebar-mobile">
-                <Navbar/>
-            </div>
-        </div>
+    <div
+        :class="{
+            'fixed inset-0 bg-dark-400/25': show,
+        }"
+    >
+        <MobileNav :show="show" @close-sidebar="$emit('close-sidebar')" />
     </div>
+
+    <Navbar class="hidden flex-col sm:inline-flex" />
 </template>
-
-<style scoped></style>
-

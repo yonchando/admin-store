@@ -1,6 +1,5 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const props = defineProps({
     active: {
@@ -22,7 +21,7 @@ const iconClass = ["top-0", "mr-5"];
                     v-if="typeof icon === 'string'"
                     :class="[icon, ...iconClass]"
                 ></i>
-                <fas v-else :icon="icon" :class="iconClass" />
+                <fa-icon v-else :icon="icon" :class="iconClass" />
             </template>
             <span>{{ label }}</span>
         </slot>

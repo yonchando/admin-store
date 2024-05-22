@@ -1,142 +1,62 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import useMenu from "@/menu.js";
+import Nav from "@/Layouts/Partials/Nav.vue";
+import { reactive, ref } from "vue";
 import NavLink from "@/Components/Navbar/NavLink.vue";
-import NavHeader from "@/Components/Navbar/NavHeader.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
-const $page = usePage();
+defineEmits(["close-sidebar"]);
 
-const lang = $page.props.lang;
+const menus = useMenu();
 
-const menus = [
-    {
-        link: route("dashboard"),
-        text: lang.dashboard,
-        icon: "icon-home2",
-        active: $page.url === "/",
-    },
-    {
-        text: lang.product_management,
-        children: [
-            {
-                link: route("category.index"),
-                text: lang.categories,
-                icon: "icon-grid4",
-                active: isActive("Category/Index"),
-            },
-            {
-                link: route("product.index"),
-                text: lang.products,
-                icon: "icon-bag",
-                active: isActive(
-                    "Product/Index",
-                    "Product/Show",
-                    "Product/Form",
-                ),
-            },
-        ],
-    },
-    {
-        text: lang.product_options,
-        children: [
-            {
-                link: route("product.option.group.index"),
-                text: lang.option_groups,
-                icon: "icon-price-tags",
-                active: isActive("ProductOptionGroup/Index"),
-            },
-            {
-                link: route("product.option.index"),
-                text: lang.options,
-                icon: "icon-price-tag",
-                active: isActive("ProductOption/Index"),
-            },
-        ],
-    },
-    {
-        text: lang.purchase_management,
-        children: [
-            {
-                link: route("purchase.order.index"),
-                icon: "icon-store2",
-                text: lang.purchase_orders,
-                active: isActive("PurchaseOrder/Index"),
-            },
-        ],
-    },
-    {
-        text: lang.users,
-        children: [
-            {
-                link: route("customer.index"),
-                icon: "icon-users2",
-                text: lang.customers,
-                active: isActive("Customer/Index"),
-            },
-            {
-                link: route("staff.index"),
-                icon: "icon-user-tie",
-                text: lang.staffs,
-                active: isActive("Staff/Index"),
-            },
-        ],
-    },
-    {
-        text: lang.setting,
-        children: [
-            {
-                link: route("setting.show"),
-                icon: "icon-gear",
-                text: lang.setting,
-                active: isActive("Setting/Show"),
-            },
-        ],
-    },
-];
+const config = reactive({
+    mobileExpand: false,
+});
 
-function isActive(...urls) {
-    return urls.some((url) => $page.component === url);
+const sideBarClass = ref(["w-64"]);
+
+function toggleExpand() {
+    if (config.mobileExpand) {
+        sideBarClass.value = ["w-64", "expand-in"];
+        config.mobileExpand = false;
+    } else {
+        sideBarClass.value = ["w-full", "expand-out"];
+        config.mobileExpand = true;
+    }
 }
 </script>
 
 <template>
-    <ul class="nav nav-sidebar" data-nav-type="accordion">
-        <NavHeader>
-            {{ lang.dashboard }}
-        </NavHeader>
+    <div class="min-h-screen bg-dark-400 shadow" :class="sideBarClass">
+        <div
+            class="flex items-center justify-between border-y border-b-white/10 border-t-transparent bg-dark-600 px-1 text-white sm:hidden"
+        >
+            <button @click="$emit('close-sidebar')" class="px-5 py-3.5">
+                <i class="icon-arrow-left8"></i>
+            </button>
 
-        <template v-for="menu in menus">
-            <template v-if="menu.children?.length > 0">
-                <NavHeader>
-                    {{ menu.text }}
-                </NavHeader>
+            YON Chando
 
-                <template v-for="child in menu.children">
-                    <li class="nav-item">
-                        <NavLink
-                            class="nav-link"
-                            :href="child.link ?? '#'"
-                            :active="child.active"
-                        >
-                            <i v-if="child.icon" :class="child.icon"></i>
-                            <span>{{ child.text }}</span>
-                        </NavLink>
-                    </li>
-                </template>
-            </template>
-            <template v-else>
-                <li class="nav-item">
-                    <NavLink
-                        class="nav-link"
-                        :href="menu.link ?? '#'"
-                        :active="menu.active"
-                    >
-                        <i v-if="menu.icon" :class="menu.icon"></i>
-                        <span>{{ menu.text }}</span>
-                    </NavLink>
-                </li>
-            </template>
-        </template>
-    </ul>
+            <button @click="toggleExpand" class="px-5 py-3.5">
+                <i
+                    :class="[!config.mobileExpand ? 'hidden' : '']"
+                    class="icon-screen-normal"
+                ></i>
+                <i
+                    :class="[config.mobileExpand ? 'hidden' : '']"
+                    class="icon-screen-full"
+                ></i>
+            </button>
+        </div>
+
+        <div class="my-4 flex justify-center p-2">
+            <ApplicationLogo width="120" height="120" />
+        </div>
+
+        <div class="text-white">
+            <div class="flex flex-col" data-nav-type="accordion">
+                <Nav :menus="menus" />
+            </div>
+        </div>
+    </div>
 </template>
-
-<style scoped></style>

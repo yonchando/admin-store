@@ -1,31 +1,36 @@
 <script setup>
-import NavLink from "@/Components/Navbar/NavLink.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import { ref } from "vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
+import { Link } from "@inertiajs/vue3";
 
-const open = ref(false);
+defineEmits(["open-sidebar"]);
 </script>
 
 <template>
     <div
-        class="inset-x-0 top-0 grid grid-cols-2 items-center justify-between bg-dark p-2 text-white sm:fixed"
+        class="fixed left-0 right-0 top-0 z-20 flex min-h-14 items-center justify-between bg-dark-200 p-2 text-white sm:left-64"
     >
-        <div class="">
-            <NavLink :href="route('dashboard')" class="d-inline-block">
-                <ApplicationLogo width="120" height="50" />
-            </NavLink>
+        <div>
+            <div class="inline-block sm:hidden">
+                <Link :href="route('dashboard')" class="inline-block">
+                    <ApplicationLogo width="120" height="50" />
+                </Link>
+            </div>
         </div>
 
-        <button class="text-right sm:hidden" @click="open = !open">
+        <button
+            id="btn-open-sidebar"
+            class="text-right sm:hidden"
+            @click="$emit('open-sidebar')"
+        >
             <i class="fa fa-list text-2xl"></i>
         </button>
 
         <div
             class="col-span-2 hidden h-full items-center sm:col-span-1 sm:flex sm:justify-self-end"
         >
-            <Dropdown class="relative w-full">
+            <Dropdown class="mt-4">
                 <template #button>
                     <span class="flex items-center gap-4">
                         <img
@@ -37,11 +42,13 @@ const open = ref(false);
                     </span>
                 </template>
                 <dropdown-link
+                    class="text-dark-400"
                     :title="$lang.profile"
                     icon="fa fa-user"
                     :href="route('profile.edit')"
                 />
                 <dropdown-link
+                    class="text-dark-400"
                     :title="$lang.logout"
                     method="post"
                     icon="fa fa-arrow-right-from-bracket"

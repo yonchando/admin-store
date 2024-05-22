@@ -1,5 +1,5 @@
 <script setup>
-import Icon from "@/Components/Icon.vue";
+import { computed } from "vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -17,6 +17,13 @@ const props = defineProps({
 });
 
 const model = defineModel();
+
+const position = computed(() => {
+    return {
+        right: "right-3",
+        left: "left-3",
+    }[props.position];
+});
 
 const className = [
     "block",
@@ -51,6 +58,13 @@ const className = [
             v-model="model"
             ref="input"
         />
-        <Icon :icon="icon" />
+        <span
+            v-if="icon"
+            :class="position"
+            class="absolute top-1/2 -translate-y-1/2 text-gray-400/50"
+        >
+            <fa-icon v-if="typeof icon === 'object'" :icon="icon" />
+            <i v-else :class="icon"></i>
+        </span>
     </div>
 </template>
