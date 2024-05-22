@@ -13,7 +13,9 @@ defineProps({
 const className = [
     'px-4',
     'py-3',
-    'inline-block'
+    'inline-block',
+    'w-full',
+    'hover:bg-gray-100'
 ];
 </script>
 

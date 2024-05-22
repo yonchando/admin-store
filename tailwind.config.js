@@ -10,11 +10,15 @@ export default {
     theme: {
         extend: {
             colors: {
-                dark: "#263238",
+                light: "#ddd",
+                "dark-200": "#324148",
+                "dark-400": "#263238",
+                "dark-600": "#1e272c",
                 danger: "#F44336",
                 primary: "#2196F3",
                 warning: "#FF7043",
                 info: "#00BCD4",
+                success: "#2e7d32",
             },
         },
     },

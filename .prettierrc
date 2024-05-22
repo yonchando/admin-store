@@ -3,6 +3,10 @@
         "prettier-plugin-tailwindcss"
     ],
     "tailwindAttributes": [
-        "pt"
-    ]
+        "pt",
+        "enter-active-class",
+        "leave-active-class"
+    ],
+    "tabWidth": 4,
+    "useTabs": false
 }

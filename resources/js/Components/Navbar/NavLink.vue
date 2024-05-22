@@ -1,24 +1,30 @@
 <script setup>
-import {computed} from 'vue';
-import {Link} from '@inertiajs/vue3';
+import { Link } from "@inertiajs/vue3";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const props = defineProps({
-    href: {
-        type: String,
-        required: true,
-    },
     active: {
         type: Boolean,
     },
+    label: String,
+    icon: [String, Object],
 });
-
-const classes = computed(() =>
-    props.active ? 'active' : ''
-);
+const iconClass = ["top-0", "mr-5"];
 </script>
 
 <template>
-    <Link :href="href" :class="classes">
-        <slot/>
+    <Link
+        class="relative flex items-center px-5 py-3 font-medium transition-colors duration-150 ease-in-out"
+    >
+        <slot>
+            <template v-if="icon">
+                <i
+                    v-if="typeof icon === 'string'"
+                    :class="[icon, ...iconClass]"
+                ></i>
+                <fas v-else :icon="icon" :class="iconClass" />
+            </template>
+            <span>{{ label }}</span>
+        </slot>
     </Link>
 </template>

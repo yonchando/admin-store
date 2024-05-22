@@ -24,7 +24,7 @@ router.on("finish", () => {
     </Head>
 
     <div
-        class="mx-auto grid min-h-screen max-w-lg grid-cols-1 items-center justify-end"
+        class="mx-auto flex min-h-screen max-w-xs items-center"
     >
         <slot />
     </div>

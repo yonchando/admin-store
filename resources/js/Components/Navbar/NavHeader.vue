@@ -1,18 +1,14 @@
 <script setup>
-defineProps(['value']);
+defineProps(["label"]);
 </script>
 
 <template>
-    <li class="nav-item-header">
-        <div class="text-uppercase font-size-xs line-height-xs">
+    <div class="px-5 py-3.5 text-white/50">
+        <div class="line-height-xs text-xs uppercase leading-7">
             <slot>
-                {{ value }}
+                {{ label }}
             </slot>
         </div>
-        <i class="icon-menu" :title="value"></i>
-    </li>
+        <i class="icon-menu" :title="label"></i>
+    </div>
 </template>
-
-<style scoped>
-
-</style>

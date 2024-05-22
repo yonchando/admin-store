@@ -1,32 +1,56 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import Icon from "@/Components/Icon.vue";
 
-defineProps({
-    modelValue: {
+defineOptions({
+    inheritAttrs: false,
+});
+
+const props = defineProps({
+    icon: [String, Object],
+    position: {
         type: String,
-        required: false,
-        default: null,
+        default: "right",
+        validator(value) {
+            return ["left", "right"].includes(value);
+        },
     },
 });
 
-defineEmits(["update:modelValue"]);
+const model = defineModel();
 
-const input = ref(null);
-
-onMounted(() => {
-    if (input.value.hasAttribute("autofocus")) {
-        input.value.focus();
-    }
-});
-
-defineExpose({ focus: () => input.value.focus() });
+const className = [
+    "block",
+    "h-9",
+    "w-full",
+    "rounded",
+    "bg-clip-border",
+    "px-3",
+    "py-1.5",
+    "bg-white",
+    "border",
+    "border-gray-300",
+    "font-normal",
+    "text-sm",
+    "text-dark",
+    "focus:ring-0",
+    "focus:outline-0",
+    "shadow",
+    "shadow-transparent",
+    "focus:shadow",
+    "focus:border-gray-200",
+    "placeholder:text-gray-400/50",
+];
 </script>
 
 <template>
-    <input
-        class="w-full rounded-md px-3 py-2.5 border border-dark focus:outline-0 placeholder-dark/50"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        ref="input"
-    />
+    <div class="relative">
+        <input
+            v-bind="$attrs"
+            :class="className"
+            class=""
+            v-model="model"
+            ref="input"
+        />
+        <Icon :icon="icon" />
+    </div>
 </template>
