@@ -1,16 +1,16 @@
 <script setup>
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import DangerButton from "@/Components/Button/DangerButton.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import Table from "@/Components/Table/Table.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
-import Card from "@/Components/Card/Card.vue";
-import InfoButton from "@/Components/Button/InfoButton.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import DangerButton from "@/Components/Buttons/DangerButton.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import Table from "@/Components/Tables/Table.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import Card from "@/Components/Cards/Card.vue";
+import InfoButton from "@/Components/Buttons/InfoButton.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { computed, inject, nextTick, onMounted, ref } from "vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
+import WarningButton from "@/Components/Buttons/WarningButton.vue";
 
 onMounted(() => {
     $("#product-options li:first-child a.nav-link").tab("show");
@@ -248,7 +248,7 @@ function clear() {
                                     `product_options.${i}.product_option_group_id`
                                 ]
                             "
-                            class="fa fa-exclamation text-danger tw-ml-2 tw-text-xs"
+                            class="fa fa-exclamation tw-ml-2 tw-text-xs text-danger"
                         ></i>
                     </a>
                 </li>
@@ -287,7 +287,7 @@ function clear() {
                                 <td>
                                     <i
                                         @click="deleteOption(option)"
-                                        class="fa fa-trash text-danger tw-cursor-pointer"
+                                        class="fa fa-trash tw-cursor-pointer text-danger"
                                     ></i>
                                 </td>
                             </tr>
@@ -334,7 +334,7 @@ function clear() {
                                 <td style="vertical-align: middle">
                                     <i
                                         @click="deleteNewOption(group, j)"
-                                        class="fa fa-trash text-danger tw-cursor-pointer"
+                                        class="fa fa-trash tw-cursor-pointer text-danger"
                                     ></i>
                                 </td>
                             </tr>

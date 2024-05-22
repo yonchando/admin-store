@@ -1,19 +1,19 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import Table from "@/Components/Table/Table.vue";
-import Card from "@/Components/Card/Card.vue";
-import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import Dropdown from "@/Components/Dropdown/Dropdown.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import Table from "@/Components/Tables/Table.vue";
+import Card from "@/Components/Cards/Card.vue";
+import DropdownToggle from "@/Components/Dropdowns/DropdownToggle.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import { inject } from "vue";
 import ProductFilter from "@/Pages/Product/ProductFilter.vue";
 import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
 import { computed } from "vue";
 import Paginate from "@/Components/Paginate.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
+import WarningButton from "@/Components/Buttons/WarningButton.vue";
 
 const { lang, products } = defineProps([
     "lang",

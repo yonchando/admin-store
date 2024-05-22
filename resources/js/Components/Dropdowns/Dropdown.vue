@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import SlideDown from "@/Components/Transition/SlideDown.vue";
+import SlideDown from "@/Components/Transitions/SlideDown.vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -46,7 +46,7 @@ const open = ref(false);
 
         <SlideDown>
             <div
-                class="relative right-0 top-full flex min-w-44 flex-col rounded border shadow sm:absolute text-sm"
+                class="relative right-0 top-full flex min-w-44 flex-col rounded border text-sm shadow sm:absolute"
                 v-bind="$attrs"
                 v-if="open || show"
             >

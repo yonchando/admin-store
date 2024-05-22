@@ -1,8 +1,8 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
+import Card from "@/Components/Cards/Card.vue";
+import Table from "@/Components/Tables/Table.vue";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 import Paginate from "@/Components/Paginate.vue";

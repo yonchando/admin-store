@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { computed, reactive, ref, watch } from "vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 
 const props = defineProps({
     modelValue: [String, Number],

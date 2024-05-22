@@ -1,10 +1,6 @@
 <script setup>
-import Checkbox from "@/Components/Form/Checkbox.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { useForm } from "@inertiajs/vue3";
-import TextInput from "@/Components/Form/TextInput.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import { ref } from "vue";
 
 defineProps({
     canResetPassword: {

@@ -19,6 +19,7 @@ export default {
                 warning: "#FF7043",
                 info: "#00BCD4",
                 success: "#2e7d32",
+                active: "#26a69a",
             },
         },
     },

@@ -1,17 +1,16 @@
 <script setup>
-
-import Card from "@/Components/Card/Card.vue";
-import {useForm, usePage} from "@inertiajs/vue3";
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
+import Card from "@/Components/Cards/Card.vue";
+import { useForm, usePage } from "@inertiajs/vue3";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import WarningButton from "@/Components/Buttons/WarningButton.vue";
 
 const lang = usePage().props.lang;
 
-const {filters, gender} = defineProps({
+const { filters, gender } = defineProps({
     filters: Object,
     gender: Object,
     statuses: Object,
@@ -24,10 +23,10 @@ const form = useForm({
 });
 
 const filter = () => {
-    form.get(route('staff.index'), {
-        onFinish: () => form.reset()
-    })
-}
+    form.get(route("staff.index"), {
+        onFinish: () => form.reset(),
+    });
+};
 </script>
 
 <template>
@@ -40,28 +39,34 @@ const filter = () => {
             <div class="row tw-mt-2">
                 <div class="col-6">
                     <FormGroup>
-                        <InputLabel :value="lang.search"/>
+                        <InputLabel :value="lang.search" />
 
-                        <TextInput v-model="form.search_text"/>
+                        <TextInput v-model="form.search_text" />
                     </FormGroup>
 
                     <FormGroup>
-                        <InputLabel :value="lang.status"/>
+                        <InputLabel :value="lang.status" />
 
-                        <SelectInput :items="statuses" v-model="form.status"
-                                     :placeholder="lang.all"
-                                     hide-search/>
+                        <SelectInput
+                            :items="statuses"
+                            v-model="form.status"
+                            :placeholder="lang.all"
+                            hide-search
+                        />
                     </FormGroup>
                 </div>
 
                 <div class="col-6">
                     <FormGroup>
-                        <InputLabel :value="lang.gender"/>
+                        <InputLabel :value="lang.gender" />
 
-                        <SelectInput :items="gender" v-model="form.gender"
-                                     hide-search
-                                     :placeholder="lang.all"
-                                     :text="(item) => lang[item.text]"/>
+                        <SelectInput
+                            :items="gender"
+                            v-model="form.gender"
+                            hide-search
+                            :placeholder="lang.all"
+                            :text="(item) => lang[item.text]"
+                        />
                     </FormGroup>
                 </div>
             </div>
@@ -83,6 +88,4 @@ const filter = () => {
     </Card>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

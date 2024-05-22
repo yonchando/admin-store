@@ -1,20 +1,20 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import FlashMessage from "@/Components/Alert/FlashMessage.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import Card from "@/Components/Card/Card.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import FlashMessage from "@/Components/Alerts/FlashMessage.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import Card from "@/Components/Cards/Card.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import Table from "@/Components/Table/Table.vue";
+import Table from "@/Components/Tables/Table.vue";
 import { inject, reactive, ref } from "vue";
 import Form from "@/Pages/ProductOption/Form.vue";
-import DefaultButton from "@/Components/Button/DefaultButton.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
-import Checkbox from "@/Components/Form/Checkbox.vue";
-import DangerButton from "@/Components/Button/DangerButton.vue";
+import DefaultButton from "@/Components/Buttons/DefaultButton.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import WarningButton from "@/Components/Buttons/WarningButton.vue";
+import Checkbox from "@/Components/Forms/Checkbox.vue";
+import DangerButton from "@/Components/Buttons/DangerButton.vue";
 
 const props = defineProps({
     lang: Object,

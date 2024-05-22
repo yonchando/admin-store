@@ -1,20 +1,20 @@
 <script setup>
-import {Head, Link, useForm} from "@inertiajs/vue3";
-import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import Modal from "@/Components/Modal/Modal.vue";
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import DefaultButton from "@/Components/Button/DefaultButton.vue";
-import {onMounted, ref} from "vue";
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import Card from "@/Components/Cards/Card.vue";
+import Table from "@/Components/Tables/Table.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import Modal from "@/Components/Modals/Modal.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import DefaultButton from "@/Components/Buttons/DefaultButton.vue";
+import { onMounted, ref } from "vue";
 import Action from "@/Components/List/Action/Action.vue";
 import DeleteAction from "@/Components/List/Action/DeleteAction.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 
-const {lang, groups} = defineProps(["lang", "groups"]);
+const { lang, groups } = defineProps(["lang", "groups"]);
 
 const form = useForm({
     name: null,
@@ -57,7 +57,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head :title="lang.option_groups"/>
+    <Head :title="lang.option_groups" />
 
     <AppLayout>
         <template #action>
@@ -76,7 +76,7 @@ onMounted(() => {
                 </thead>
 
                 <template v-if="groups.length > 0">
-                    <tr v-for="(group,i) in groups">
+                    <tr v-for="(group, i) in groups">
                         <td>{{ i + 1 }}</td>
                         <td>{{ group.name }}</td>
                         <td>
@@ -86,8 +86,15 @@ onMounted(() => {
                                     {{ lang.edit }}
                                 </DropdownLink>
 
-                                <DeleteAction :url="route('product.option.group.destroy',group)" :text="group.name"/>
-
+                                <DeleteAction
+                                    :url="
+                                        route(
+                                            'product.option.group.destroy',
+                                            group,
+                                        )
+                                    "
+                                    :text="group.name"
+                                />
                             </Action>
                         </td>
                     </tr>
@@ -102,8 +109,8 @@ onMounted(() => {
         <Modal id="modal-form" :title="title" center size="sm" bg="bg-info">
             <form @submit.prevent="save">
                 <FormGroup>
-                    <InputLabel :value="lang.name"/>
-                    <TextInput v-model="form.name"/>
+                    <InputLabel :value="lang.name" />
+                    <TextInput v-model="form.name" />
                 </FormGroup>
 
                 <FormGroup class="tw-space-x-2">

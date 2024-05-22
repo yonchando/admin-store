@@ -20,6 +20,12 @@ export default function useMenu() {
         {
             label: lang.product_management,
             icon: faDolly,
+            active: isActive(
+                "product.index",
+                "product.show",
+                "product.create",
+                "product.edit",
+            ),
             children: [
                 {
                     link: route("product.index"),
@@ -54,6 +60,8 @@ export default function useMenu() {
         },
         {
             label: lang.purchase_management,
+            icon: "icon-store2",
+            active: isActive("purchase.order.index"),
             children: [
                 {
                     link: route("purchase.order.index"),
@@ -65,10 +73,10 @@ export default function useMenu() {
         },
         {
             label: lang.users,
+            icon: "icon-users2",
             children: [
                 {
                     link: route("customer.index"),
-                    icon: "icon-users2",
                     label: lang.customers,
                     active: isActive("customer.index"),
                 },
@@ -81,15 +89,10 @@ export default function useMenu() {
             ],
         },
         {
+            link: route("setting.show"),
+            icon: "icon-gear",
             label: lang.setting,
-            children: [
-                {
-                    link: route("setting.show"),
-                    icon: "icon-gear",
-                    label: lang.setting,
-                    active: isActive("setting.show"),
-                },
-            ],
+            active: isActive("setting.show"),
         },
     ];
 }

@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 
 defineProps({
     title: String,
-    icon: String | Object,
+    icon: [String, Object],
 });
 
 const className = [
@@ -22,26 +22,24 @@ const className = [
     "duration-150",
     "relative",
     "border",
-    "border-transparent"
+    "border-transparent",
 ];
 </script>
 
 <template>
-    <Link
-        :class="className"
-        v-if="$attrs.href"
-        v-bind="$attrs"
-    >
-        <i v-if="typeof icon === 'string'" :class="icon"></i>
-        <fa v-else :icon="icon" />
+    <Link :class="className" v-if="$attrs.href" v-bind="$attrs">
+        <template v-if="icon">
+            <i v-if="typeof icon === 'string'" :class="icon"></i>
+            <fa v-else :icon="icon" />
+        </template>
         <slot>{{ title }}</slot>
     </Link>
 
-    <button
-        class="" 
-        :class="className" v-else v-bind="$attrs">
-        <i class="mr-2" v-if="typeof icon === 'string'" :class="icon"></i>
-        <fa class="mr-2" v-else :icon="icon" />
+    <button class="" :class="className" v-else v-bind="$attrs">
+        <template v-if="icon">
+            <i v-if="typeof icon === 'string'" :class="icon"></i>
+            <fa v-else :icon="icon" />
+        </template>
         <slot>{{ title }}</slot>
     </button>
 </template>

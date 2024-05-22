@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from "@/Layouts/Partials/Navbar.vue";
-import { onMounted, watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 
 const emit = defineEmits(["close-sidebar"]);
 const props = defineProps({
@@ -11,8 +11,10 @@ function eventListener(e) {
     const sidebar = document.querySelector("#sidebar");
     const btnToggle = document.querySelector("#btn-open-sidebar");
 
-    if (!sidebar.contains(e.target) && !btnToggle.contains(e.target)) {
-        emit("close-sidebar");
+    if (sidebar != null && btnToggle != null) {
+        if (!sidebar.contains(e.target) && !btnToggle.contains(e.target)) {
+            emit("close-sidebar");
+        }
     }
 }
 

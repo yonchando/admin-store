@@ -7,6 +7,9 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import Sweetalert2 from "./sweetalert2.js";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import Checkbox from "@/Components/Forms/Checkbox.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -34,6 +37,9 @@ createInertiaApp({
                 },
             });
 
+        app.component("PrimaryButton", PrimaryButton);
+        app.component("Checkbox", Checkbox);
+        app.component("TextInput", TextInput);
         app.component("fa-icon", FontAwesomeIcon);
 
         app.config.globalProperties.$lang = props.initialPage.props.lang;

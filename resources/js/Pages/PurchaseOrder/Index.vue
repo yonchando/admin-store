@@ -1,10 +1,10 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
+import Card from "@/Components/Cards/Card.vue";
+import Table from "@/Components/Tables/Table.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
 import { Link } from "@inertiajs/vue3";
 import { inject } from "vue";
 

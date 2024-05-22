@@ -1,7 +1,6 @@
 <script setup>
-
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import {usePage} from "@inertiajs/vue3";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import { usePage } from "@inertiajs/vue3";
 
 const title = usePage().props.lang.edit;
 </script>
@@ -13,6 +12,4 @@ const title = usePage().props.lang.edit;
     </DropdownLink>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

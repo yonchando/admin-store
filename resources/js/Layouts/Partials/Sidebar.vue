@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
     <div
         :class="{
-            'fixed inset-0 bg-dark-400/25': show,
+            'fixed inset-0 z-50 bg-dark-400/25': show,
         }"
     >
         <MobileNav :show="show" @close-sidebar="$emit('close-sidebar')" />

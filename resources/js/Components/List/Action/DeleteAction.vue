@@ -1,27 +1,22 @@
 <script setup>
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import { useForm, usePage } from "@inertiajs/vue3";
+import { inject } from "vue";
 
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import {useForm, usePage} from "@inertiajs/vue3";
-import {inject} from "vue";
-
-const {url, text} = defineProps(['url', 'text']);
+const { url, text } = defineProps(["url", "text"]);
 
 const lang = usePage().props.lang;
 
 const swal = inject("$swal");
 
-const $emit = defineEmits('change');
+const $emit = defineEmits("change");
 
 const destroy = function () {
-
-    $emit('change')
+    $emit("change");
 
     swal({
         title: lang.are_you_sure,
-        text: lang.do_you_want_to_delete_this.replace(
-            ":attribute",
-            text,
-        ),
+        text: lang.do_you_want_to_delete_this.replace(":attribute", text),
         icon: "warning",
         confirmButtonClass: "btn btn-danger",
     }).then((res) => {
@@ -29,7 +24,7 @@ const destroy = function () {
             useForm({}).delete(url);
         }
     });
-}
+};
 </script>
 
 <template>
@@ -39,6 +34,4 @@ const destroy = function () {
     </DropdownLink>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

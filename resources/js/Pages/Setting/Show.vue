@@ -1,14 +1,14 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Card from "@/Components/Card/Card.vue";
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
-import FlashMessage from "@/Components/Alert/FlashMessage.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
+import Card from "@/Components/Cards/Card.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import FlashMessage from "@/Components/Alerts/FlashMessage.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
 
 const { lang, setting } = defineProps(["lang", "setting", "currencies"]);
 
@@ -63,4 +63,3 @@ const update = () => {
 </template>
 
 <style scoped></style>
-

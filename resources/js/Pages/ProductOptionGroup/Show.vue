@@ -1,37 +1,41 @@
 <script setup>
-
-import {Head} from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import Card from "@/Components/Card/Card.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import Card from "@/Components/Cards/Card.vue";
 import ListItem from "@/Components/List/ListItem.vue";
 import Action from "@/Components/List/Action/Action.vue";
-import Table from "@/Components/Table/Table.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
+import Table from "@/Components/Tables/Table.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
 
-const {lang} = defineProps({
+const { lang } = defineProps({
     productOptionGroup: Object,
     productOptions: Array,
-    lang: Object
-})
-
+    lang: Object,
+});
 </script>
 
 <template>
-    <Head :title="productOptionGroup.name"/>
+    <Head :title="productOptionGroup.name" />
 
     <AppLayout>
         <template #breadcrumb>
-            <BreadcrumbItem :href="route('product.option.group.index')" icon="icon-box"
-                            :title="lang.product_option"/>
-            <BreadcrumbItem icon="fa fa-box-open" :title="lang.detail"/>
+            <BreadcrumbItem
+                :href="route('product.option.group.index')"
+                icon="icon-box"
+                :title="lang.product_option"
+            />
+            <BreadcrumbItem icon="fa fa-box-open" :title="lang.detail" />
         </template>
 
         <Card no-header>
             <div class="row">
                 <div class="col-6">
                     <div class="tw-space-y-3">
-                        <ListItem :label="lang.name" :value="productOptionGroup.name"/>
+                        <ListItem
+                            :label="lang.name"
+                            :value="productOptionGroup.name"
+                        />
                     </div>
                 </div>
             </div>
@@ -47,7 +51,7 @@ const {lang} = defineProps({
                 </thead>
 
                 <template v-if="productOptions.length > 0">
-                    <tr v-for="(option,i) in productOptions">
+                    <tr v-for="(option, i) in productOptions">
                         <td>{{ i + 1 }}</td>
                         <td>{{ option.name }}</td>
                         <td>{{ option.price_adjustment_text }}</td>
@@ -70,6 +74,4 @@ const {lang} = defineProps({
     </AppLayout>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

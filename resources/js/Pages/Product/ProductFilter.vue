@@ -1,12 +1,12 @@
 <script setup>
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
-import TextInput from "@/Components/Form/TextInput.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
-import InputError from "@/Components/Form/InputError.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import WarningButton from "@/Components/Buttons/WarningButton.vue";
+import InputError from "@/Components/Forms/InputError.vue";
 
 const { filter } = defineProps({
     categories: {

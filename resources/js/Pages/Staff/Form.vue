@@ -1,16 +1,16 @@
 <script setup>
-import {Head, useForm} from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import Card from "@/Components/Card/Card.vue";
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import InputError from "@/Components/Form/InputError.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import Card from "@/Components/Cards/Card.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import InputError from "@/Components/Forms/InputError.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
 
-const {staff} = defineProps(['lang', 'staff', 'gender']);
+const { staff } = defineProps(["lang", "staff", "gender"]);
 
 const form = useForm({
     name: staff?.name,
@@ -22,26 +22,28 @@ const form = useForm({
 
 const save = () => {
     if (staff) {
-        form.patch(route('staff.update', staff), {
-            onFinish: () => form.reset()
-        })
+        form.patch(route("staff.update", staff), {
+            onFinish: () => form.reset(),
+        });
     } else {
-        form.post(route('staff.store'), {
-            onFinish: () => form.reset('password_confirmation', 'password')
+        form.post(route("staff.store"), {
+            onFinish: () => form.reset("password_confirmation", "password"),
         });
     }
-}
-
+};
 </script>
 
 <template>
-    <Head :title="lang.staffs"/>
+    <Head :title="lang.staffs" />
 
     <form @submit.prevent="save()">
         <AppLayout>
             <template #breadcrumb>
-                <BreadcrumbItem :href="route('staff.index')" :title="lang.staffs"/>
-                <BreadcrumbItem :title="lang.add"/>
+                <BreadcrumbItem
+                    :href="route('staff.index')"
+                    :title="lang.staffs"
+                />
+                <BreadcrumbItem :title="lang.add" />
             </template>
 
             <template #action>
@@ -55,52 +57,61 @@ const save = () => {
                 <div class="row">
                     <div class="col-6">
                         <FormGroup>
-                            <InputLabel :value="lang.username"/>
+                            <InputLabel :value="lang.username" />
 
-                            <TextInput v-model="form.username"/>
+                            <TextInput v-model="form.username" />
 
-                            <InputError :message="form.errors.username"/>
+                            <InputError :message="form.errors.username" />
                         </FormGroup>
                         <FormGroup>
-                            <InputLabel :value="lang.password"/>
+                            <InputLabel :value="lang.password" />
 
-                            <TextInput type="password" v-model="form.password"/>
+                            <TextInput
+                                type="password"
+                                v-model="form.password"
+                            />
 
-                            <InputError :message="form.errors.password"/>
+                            <InputError :message="form.errors.password" />
                         </FormGroup>
                         <FormGroup>
-                            <InputLabel :value="lang.password_confirmation"/>
+                            <InputLabel :value="lang.password_confirmation" />
 
-                            <TextInput type="password" v-model="form.password_confirmation"/>
+                            <TextInput
+                                type="password"
+                                v-model="form.password_confirmation"
+                            />
 
-                            <InputError :message="form.errors.password_confirmation"/>
+                            <InputError
+                                :message="form.errors.password_confirmation"
+                            />
                         </FormGroup>
                     </div>
 
                     <div class="col-6">
                         <FormGroup>
-                            <InputLabel :value="lang.name"/>
+                            <InputLabel :value="lang.name" />
 
-                            <TextInput v-model="form.name"/>
+                            <TextInput v-model="form.name" />
 
-                            <InputError :message="form.errors.name"/>
+                            <InputError :message="form.errors.name" />
                         </FormGroup>
                         <FormGroup>
-                            <InputLabel :value="lang.gender"/>
+                            <InputLabel :value="lang.gender" />
 
-                            <SelectInput v-model="form.gender" :items="gender" :text="(item) => lang[item.text]"
-                                         hide-search/>
+                            <SelectInput
+                                v-model="form.gender"
+                                :items="gender"
+                                :text="(item) => lang[item.text]"
+                                hide-search
+                            />
 
-                            <InputError :message="form.errors.gender"/>
+                            <InputError :message="form.errors.gender" />
                         </FormGroup>
                     </div>
                 </div>
             </Card>
         </AppLayout>
     </form>
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

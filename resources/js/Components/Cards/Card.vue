@@ -36,21 +36,21 @@ const { hide } = defineProps({
             </h6>
             <div v-if="collapse || reload || remove" class="header-elements">
                 <div class="list-icons">
-                    <a
+                    <button
                         v-if="collapse"
                         class="list-icons-item"
                         data-action="collapse"
-                    ></a>
-                    <a
+                    ></button>
+                    <button
                         v-if="reload"
                         class="list-icons-item"
                         data-action="reload"
-                    ></a>
-                    <a
+                    ></button>
+                    <button
                         v-if="remove"
                         class="list-icons-item"
                         data-action="remove"
-                    ></a>
+                    ></button>
                 </div>
             </div>
         </div>
@@ -62,5 +62,3 @@ const { hide } = defineProps({
         </div>
     </div>
 </template>
-
-<style scoped></style>

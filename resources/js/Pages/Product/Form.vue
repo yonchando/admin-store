@@ -1,14 +1,14 @@
 <script setup>
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import Card from "@/Components/Card/Card.vue";
-import FileInput from "@/Components/Form/FileInput.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import SelectInput from "@/Components/Form/SelectInput.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import Card from "@/Components/Cards/Card.vue";
+import FileInput from "@/Components/Forms/FileInput.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, router, useForm } from "@inertiajs/vue3";
-import InfoButton from "@/Components/Button/InfoButton.vue";
+import InfoButton from "@/Components/Buttons/InfoButton.vue";
 
 const { lang, product, categories } = defineProps([
     "lang",

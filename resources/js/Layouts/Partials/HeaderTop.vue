@@ -1,15 +1,15 @@
 <script setup>
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import Dropdown from "@/Components/Dropdown/Dropdown.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
 import { Link } from "@inertiajs/vue3";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineEmits(["open-sidebar"]);
 </script>
 
 <template>
     <div
-        class="fixed left-0 right-0 top-0 z-20 flex min-h-14 items-center justify-between bg-dark-200 p-2 text-white sm:left-64"
+        class="static left-0 right-0 top-0 z-20 flex min-h-14 items-center justify-between bg-dark-200 p-2 text-white sm:fixed sm:left-64"
     >
         <div>
             <div class="inline-block sm:hidden">

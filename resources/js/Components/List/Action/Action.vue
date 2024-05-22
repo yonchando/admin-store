@@ -1,7 +1,6 @@
 <script setup>
-
-import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
-import Dropdown from "@/Components/Dropdown/Dropdown.vue";
+import DropdownToggle from "@/Components/Dropdowns/DropdownToggle.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 </script>
 
 <template>
@@ -12,10 +11,8 @@ import Dropdown from "@/Components/Dropdown/Dropdown.vue";
             </DropdownToggle>
         </template>
 
-        <slot/>
+        <slot />
     </Dropdown>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

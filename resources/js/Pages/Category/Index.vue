@@ -1,20 +1,20 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import Card from "@/Components/Card/Card.vue";
-import Table from "@/Components/Table/Table.vue";
-import Dropdown from "@/Components/Dropdown/Dropdown.vue";
-import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
-import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import Modal from "@/Components/Modal/Modal.vue";
-import FormGroup from "@/Components/Form/FormGroup.vue";
-import InputLabel from "@/Components/Form/InputLabel.vue";
-import TextInput from "@/Components/Form/TextInput.vue";
-import DefaultButton from "@/Components/Button/DefaultButton.vue";
+import Card from "@/Components/Cards/Card.vue";
+import Table from "@/Components/Tables/Table.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
+import DropdownToggle from "@/Components/Dropdowns/DropdownToggle.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
+import BreadcrumbItem from "@/Components/Breadcrumbs/BreadcrumbItem.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import Modal from "@/Components/Modals/Modal.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import DefaultButton from "@/Components/Buttons/DefaultButton.vue";
 import { inject, onMounted, ref } from "vue";
-import FlashMessage from "@/Components/Alert/FlashMessage.vue";
+import FlashMessage from "@/Components/Alerts/FlashMessage.vue";
 import Paginate from "@/Components/Paginate.vue";
 
 const { lang, categories } = defineProps(["lang", "categories"]);

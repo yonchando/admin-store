@@ -2,8 +2,6 @@
 import useMenu from "@/menu.js";
 import Nav from "@/Layouts/Partials/Nav.vue";
 import { reactive, ref } from "vue";
-import NavLink from "@/Components/Navbar/NavLink.vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineEmits(["close-sidebar"]);
 
@@ -13,7 +11,7 @@ const config = reactive({
     mobileExpand: false,
 });
 
-const sideBarClass = ref(["w-64"]);
+const sideBarClass = ref(["min-w-64", "w-64", "sm:w-auto"]);
 
 function toggleExpand() {
     if (config.mobileExpand) {
@@ -50,7 +48,13 @@ function toggleExpand() {
         </div>
 
         <div class="my-4 flex justify-center p-2">
-            <ApplicationLogo width="120" height="120" />
+            <div class="h-32 w-32 overflow-hidden rounded-full">
+                <img
+                    class="h-auto w-full"
+                    src="/assets/images/logos/logo.png"
+                    alt="Logo"
+                />
+            </div>
         </div>
 
         <div class="text-white">
