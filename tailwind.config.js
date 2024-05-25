@@ -10,7 +10,8 @@ export default {
     theme: {
         extend: {
             colors: {
-                light: "#ddd",
+                "light-200": "#ddd",
+                "light-400": "#fafafa",
                 "dark-200": "#324148",
                 "dark-400": "#263238",
                 "dark-600": "#1e272c",

@@ -15,7 +15,7 @@ const { multiple } = defineProps({
 
 const lang = usePage().props.lang;
 
-let src = ref("/images/placeholders/placeholder.jpg");
+let src = ref("/assets/images/placeholders/placeholder.jpg");
 
 const $emit = defineEmits(["update:modelValue"]);
 
@@ -36,15 +36,15 @@ const modelChange = ($event) => {
 };
 </script>
 <template>
-    <div class="tw-relative">
+    <div class="relative">
         <img
             :src="src"
-            class="tw-w-full tw-rounded-md tw-shadow"
-            alt="place holder image"
+            class="w-full rounded-md shadow"
+            alt="product feature"
         />
         <span
-            v-if="src == '/images/placeholders/placeholder.jpg'"
-            class="tw-absolute tw-inset-0 tw-flex tw-items-center tw-justify-center tw-rounded-md tw-bg-black/30 tw-text-lg tw-font-medium tw-text-white"
+            v-if="src == '/assets/images/placeholders/placeholder.jpg'"
+            class="absolute inset-0 flex items-center justify-center rounded-md bg-black/30 text-lg font-medium text-white"
         >
             {{ lang.browse_image }}
         </span>
@@ -52,7 +52,7 @@ const modelChange = ($event) => {
             type="file"
             @input="modelChange($event)"
             accept="image/*"
-            class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-cursor-pointer tw-items-center tw-justify-center tw-rounded-md tw-bg-red-50 tw-opacity-0"
+            class="absolute inset-0 flex h-full w-full cursor-pointer items-center justify-center rounded-md bg-red-50 opacity-0"
         />
     </div>
 </template>

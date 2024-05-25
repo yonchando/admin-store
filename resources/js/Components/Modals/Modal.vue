@@ -1,5 +1,5 @@
 <script setup>
-import {reactive} from "vue";
+import { reactive } from "vue";
 
 const props = defineProps({
     size: {
@@ -23,7 +23,7 @@ const dialog = reactive({
 </script>
 
 <template>
-    <div class="modal fade" :class="{ show }" tabindex="-1">
+    <div class="hidden" tabindex="-1">
         <div class="modal-dialog" :class="dialog">
             <div class="modal-content">
                 <div class="modal-header" :class="bg">
@@ -36,7 +36,7 @@ const dialog = reactive({
                 </div>
 
                 <div class="modal-body">
-                    <slot/>
+                    <slot />
                 </div>
 
                 <div class="modal-footer" v-if="footer"></div>

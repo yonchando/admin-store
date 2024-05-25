@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import Card from "@/Components/Cards/Card.vue";
 import Table from "@/Components/Tables/Table.vue";
 import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
@@ -13,8 +13,7 @@ import FormGroup from "@/Components/Forms/FormGroup.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import DefaultButton from "@/Components/Buttons/DefaultButton.vue";
-import { inject, onMounted, ref } from "vue";
-import FlashMessage from "@/Components/Alerts/FlashMessage.vue";
+import { onMounted, ref } from "vue";
 import Paginate from "@/Components/Paginate.vue";
 
 const { lang, categories } = defineProps(["lang", "categories"]);
@@ -29,17 +28,13 @@ let category = null;
 
 let title = ref("");
 
-let $category;
-
 function create() {
-    $category.modal("show");
     form.reset();
     category = null;
     title.value = "Create Form";
 }
 
 function edit(getCategory) {
-    $category.modal("show");
     form.category_name = getCategory.category_name;
     category = getCategory;
     title.value = "Update Form";
@@ -56,54 +51,26 @@ function save() {
             onSuccess: () => form.reset("category_name"),
         });
     }
-
-    $category.modal("hide");
 }
 
-const swal = inject("$swal");
-
-function destroy(category) {
+function destroy() {
     index = categories.from;
-    swal({
-        title: "Are you sure?",
-        text: lang.do_you_want_to_delete_this.replace(
-            ":attribute",
-            category.category_name,
-        ),
-        icon: "warning",
-        confirmButtonClass: "btn btn-danger",
-    }).then((res) => {
-        if (res.value) {
-            useForm({}).delete(route("category.destroy", category));
-        }
-    });
 }
 
-onMounted(() => {
-    $category = $("#category-form");
-});
+onMounted(() => {});
 </script>
 
 <template>
-    <Head title="Category" />
-
-    <AppLayout>
-        <template #breadcrumb>
-            <BreadcrumbItem
-                :title="lang.category"
-                icon="icon-grid4"
-                :href="route('category.index')"
-            />
-        </template>
-
-        <template #action>
-            <PrimaryButton type="button" @click="create()">
-                <i class="icon-plus2"></i>
-                {{ lang.add }}
-            </PrimaryButton>
-        </template>
-
-        <FlashMessage />
+    <AppLayout title="Categories">
+        <BreadcrumbItem
+            :title="lang.category"
+            icon="icon-grid4"
+            :href="route('category.index')"
+        />
+        <PrimaryButton type="button" @click="create()">
+            <i class="icon-plus2"></i>
+            {{ lang.add }}
+        </PrimaryButton>
 
         <Card title="Categories">
             <Table>

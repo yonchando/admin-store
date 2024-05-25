@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import Icon from "@/Components/Icons/Icon.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -41,6 +42,7 @@ createInertiaApp({
         app.component("Checkbox", Checkbox);
         app.component("TextInput", TextInput);
         app.component("fa-icon", FontAwesomeIcon);
+        app.component("Icon", Icon);
 
         app.config.globalProperties.$lang = props.initialPage.props.lang;
         app.mount(el);

@@ -62,22 +62,7 @@ const save = () => {
 </script>
 
 <template>
-    <Head v-if="product == null" title="Prodcut Add" />
-    <Head v-else title="Prodcut Edit" />
-
-    <AppLayout>
-        <template #breadcrumb>
-            <BreadcrumbItem
-                icon="icon-box"
-                :href="route('product.index')"
-                :title="lang.products"
-            />
-            <BreadcrumbItem
-                :icon="product ? 'icon-pencil7' : 'icon-plus2'"
-                :title="product ? lang.prodcut_edit : lang.product_create"
-            />
-        </template>
-
+    <AppLayout :title="product ? 'Product Add' : 'Product Edit'">
         <form @submit.prevent="save()" enctype="multipart/form-data">
             <Card :title="product ? lang.prodcut_edit : lang.product_create">
                 <div class="row">

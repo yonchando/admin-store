@@ -28,7 +28,9 @@ const open = ref(false);
 
     <div class="block sm:flex">
         <div>
-            <HeaderTop @open-sidebar="open = true" />
+            <HeaderTop @open-sidebar="open = true">
+                {{ title }}
+            </HeaderTop>
             <Sidebar
                 v-if="showSidebar"
                 :show="open"
@@ -37,7 +39,7 @@ const open = ref(false);
         </div>
 
         <div class="z-10 w-full grid-cols-1 overflow-auto">
-            <div class="max-h-screen sm:pt-14">
+            <div class="max-h-screen sm:pt-24">
                 <div class="m-4">
                     <slot />
                 </div>

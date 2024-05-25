@@ -15,7 +15,7 @@ export default function useMenu() {
             link: route("dashboard"),
             label: lang.dashboard,
             icon: "icon-home2",
-            active: $page.url === "/",
+            active: isActive("dashboard"),
         },
         {
             label: lang.product_management,
@@ -25,6 +25,9 @@ export default function useMenu() {
                 "product.show",
                 "product.create",
                 "product.edit",
+                "category.index",
+                "product.option.group.index",
+                "product.option.index",
             ),
             children: [
                 {
