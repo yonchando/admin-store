@@ -1,18 +1,22 @@
 <script setup>
 import Navbar from "@/Layouts/Partials/Navbar.vue";
-import { nextTick, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 
 const emit = defineEmits(["close-sidebar"]);
 const props = defineProps({
     show: Boolean,
 });
 
+const sidebar = ref();
+
+const mobileExpand = ref(false);
+
 function eventListener(e) {
-    const sidebar = document.querySelector("#sidebar");
     const btnToggle = document.querySelector("#btn-open-sidebar");
 
     if (sidebar != null && btnToggle != null) {
-        if (!sidebar.contains(e.target) && !btnToggle.contains(e.target)) {
+        const navbar = sidebar.value.navbar;
+        if (!navbar.contains(e.target) && !btnToggle.contains(e.target)) {
             emit("close-sidebar");
         }
     }
@@ -28,19 +32,20 @@ watch(
         }
     },
 );
-
-onMounted(() => {});
 </script>
 
 <template>
     <Transition
-        enter-active-class="transform duration-100 ease-in-out"
-        leave-active-class="-translate-x-full transform duration-100 ease-in-out"
-        enter-from-class="-translate-x-full transform duration-100 ease-in-out"
-        enter-to-class="translate-x-0 transform duration-100 ease-in-out"
+        enter-active-class="transform duration-500 ease-in-out"
+        leave-active-class="-translate-x-full transform duration-500 ease-in-out"
+        enter-from-class="-translate-x-full transform duration-500 ease-in-out"
+        enter-to-class="translate-x-0 transform duration-500 ease-in-out"
     >
-        <div class="fixed inset-0 overflow-auto" v-if="show">
-            <Navbar id="sidebar" @close-sidebar="$emit('close-sidebar')" />
+        <div class="fixed inset-0 z-50 overflow-auto" v-if="show">
+            <Navbar ref="sidebar"
+                    :mobile-expand="mobileExpand"
+                    @expand-change="mobileExpand = !mobileExpand"
+                    @close-sidebar="$emit('close-sidebar')" />
         </div>
     </Transition>
 </template>

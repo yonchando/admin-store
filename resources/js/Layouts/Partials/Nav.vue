@@ -35,9 +35,6 @@ defineProps({
 
         <template v-else>
             <Collapse
-                :pt="{
-                    button: '',
-                }"
                 :show="menu.active"
             >
                 <template #button="slotProps">
@@ -53,14 +50,12 @@ defineProps({
                             class="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
                             @click="slotProps.toggleClick"
                         >
-                            <i
-                                v-if="!slotProps.isShow"
-                                class="fa fa-chevron-down"
-                            ></i>
-                            <i
-                                v-if="slotProps.isShow"
-                                class="fa fa-chevron-up"
-                            ></i>
+                            <span :class="[slotProps.isShow ? 'hidden' : '']">
+                                <i class="fa fa-chevron-down"></i>
+                            </span>
+                            <span :class="[!slotProps.isShow ? 'hidden' : '']">
+                                <i class="fa fa-chevron-up"></i>
+                            </span>
                         </div>
                     </div>
                 </template>

@@ -2,23 +2,19 @@
 
 namespace App\Casts\Setting;
 
-use App\ValueObjects\Setting\SettingPropertyObject;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
+use Yonchando\CastAttributes\CastAttributes;
 
-class PropertyCast implements CastsAttributes
+class PropertyCast extends CastAttributes
 {
-    public function get(Model $model, string $key, mixed $value, array $attributes): SettingPropertyObject
+    private ?int $currencyId = null;
+
+    public function getCurrencyId(): ?int
     {
-        return new SettingPropertyObject(json_decode($value));
+        return $this->currencyId;
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): ?string
+    public function setCurrencyId(?int $currencyId): void
     {
-        if($value instanceof SettingPropertyObject){
-            return json_encode($value->toArray());
-        }
-        
-        return $value ? json_encode($value) : null;
+        $this->currencyId = $currencyId;
     }
 }

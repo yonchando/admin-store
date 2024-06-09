@@ -1,11 +1,13 @@
 <script setup>
 
+import DataTable from "primevue/datatable";
+
 </script>
 
 <template>
-    <table class="table table-hover table-sm">
-        <slot/>
-    </table>
+    <DataTable>
+        
+    </DataTable>
 </template>
 
 <style scoped>

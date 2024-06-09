@@ -1,9 +1,13 @@
 <?php
 
-namespace App\ValueObjects;
+namespace App\Casts;
 
-class ImageProperty extends JsonProperty
+use Yonchando\CastAttributes\Traits\CastProperty;
+
+class ImageProperty
 {
+    use CastProperty;
+    
     private ?string $filename = null;
 
     private ?string $originalName = null;

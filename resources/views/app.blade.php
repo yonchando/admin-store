@@ -12,7 +12,6 @@
 
         <link rel="shortcut icon" href="{{asset('assets/images/logos/logo.png')}}">
 
-        <link rel="stylesheet" href="{{asset('assets/icons/icomoon/styles.min.css')}}">
         <!-- Scripts -->
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

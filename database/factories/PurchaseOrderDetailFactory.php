@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Casts\ImageProperty;
 use App\Models\Product;
-use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrder;
-use App\ValueObjects\ImageProperty;
+use App\Models\PurchaseOrderDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

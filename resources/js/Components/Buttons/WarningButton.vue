@@ -1,27 +1,19 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import Button from "@/Components/Buttons/Button.vue";
 
-defineProps({
-    href: String,
-    icon: String,
-    text: String,
-});
+const className = [
+    "bg-warning",
+    "hover:bg-warning/90",
+    "hover:ring-warning",
+    "text-white",
+    "hover:outline-0",
+];
 </script>
 
 <template>
-    <Link v-if="href" :href="href" class="btn btn-warning btn-sm tw-space-x-2">
-        <slot>
-            <i :class="icon"></i>
-            <span>{{ text }}</span>
-        </slot>
-    </Link>
-
-    <button type="button" v-else class="btn btn-warning btn-sm tw-space-x-2">
-        <slot>
-            <i :class="icon"></i>
-            <span>{{ text }}</span>
-        </slot>
-    </button>
+    <Button :class="className">
+        <slot />
+    </Button>
 </template>
 
 <style scoped></style>

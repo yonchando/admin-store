@@ -2,19 +2,10 @@
 
 namespace App\Casts\Product;
 
-use App\ValueObjects\Product\ProductObject;
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
-use Illuminate\Database\Eloquent\Model;
+use App\Casts\ImageProperty;
+use Yonchando\CastAttributes\CastAttributes;
 
-class JsonCast implements CastsAttributes
+class JsonCast extends CastAttributes
 {
-    public function get(Model $model, string $key, mixed $value, array $attributes): ProductObject
-    {
-        return new ProductObject(json_decode($value));
-    }
-
-    public function set(Model $model, string $key, mixed $value, array $attributes): ?string
-    {
-        return $value ? json_encode($value) : null;
-    }
+    public ImageProperty $image;
 }

@@ -1,31 +1,49 @@
 <script setup>
 import useMenu from "@/menu.js";
 import Nav from "@/Layouts/Partials/Nav.vue";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 
-defineEmits(["close-sidebar"]);
+const emit = defineEmits(["close-sidebar", "expandChange"]);
+
+const props = defineProps({
+    mobileExpand: Boolean,
+});
 
 const menus = useMenu();
 
 const config = reactive({
-    mobileExpand: false,
+    mobileExpand: props.mobileExpand,
 });
 
-const sideBarClass = ref(["min-w-64", "w-64", "sm:w-auto"]);
+const navbar = ref();
+
+const sideBarClass = computed(() => {
+    let className;
+    if (!config.mobileExpand) {
+        className = ["w-64", "expand-in"];
+    } else {
+        className = ["w-full", "expand-out"];
+    }
+
+    return className;
+});
 
 function toggleExpand() {
-    if (config.mobileExpand) {
-        sideBarClass.value = ["w-64", "expand-in"];
-        config.mobileExpand = false;
-    } else {
-        sideBarClass.value = ["w-full", "expand-out"];
-        config.mobileExpand = true;
-    }
+    config.mobileExpand = !config.mobileExpand;
+    emit("expandChange");
 }
+
+defineExpose({
+    navbar,
+});
 </script>
 
 <template>
-    <div class="min-h-screen bg-dark-400 shadow" :class="sideBarClass">
+    <div
+        ref="navbar"
+        class="min-h-screen bg-dark-400 shadow"
+        :class="sideBarClass"
+    >
         <div
             class="flex items-center justify-between border-y border-b-white/10 border-t-transparent bg-dark-600 px-1 text-white sm:hidden"
         >
@@ -36,14 +54,12 @@ function toggleExpand() {
             YON Chando
 
             <button @click="toggleExpand" class="px-5 py-3.5">
-                <i
-                    :class="[!config.mobileExpand ? 'hidden' : '']"
-                    class="icon-screen-normal"
-                ></i>
-                <i
-                    :class="[config.mobileExpand ? 'hidden' : '']"
-                    class="icon-screen-full"
-                ></i>
+                <span :class="[!config.mobileExpand ? 'hidden' : '']">
+                    <i class="icon-screen-normal"></i>
+                </span>
+                <span :class="[config.mobileExpand ? 'hidden' : '']">
+                    <i class="icon-screen-full"></i>
+                </span>
             </button>
         </div>
 

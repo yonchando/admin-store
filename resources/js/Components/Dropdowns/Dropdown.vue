@@ -1,57 +1,24 @@
 <script setup>
-import { ref } from "vue";
-import SlideDown from "@/Components/Transitions/SlideDown.vue";
+import PrimeDropdown from "primevue/dropdown";
+import {Link} from "@inertiajs/vue3";
+import Icon from "@/Components/Icons/Icon.vue";
 
-defineOptions({
-    inheritAttrs: false,
-});
-
-const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false,
-    },
-    toggle: {
-        type: Boolean,
-        default: false,
-    },
-    pt: {
-        type: Object,
-        default: {
-            root: "",
-        },
-        validator(value) {
-            return ["root", "button"].includes(value);
-        },
-    },
-});
-
-const open = ref(false);
 </script>
 
 <template>
-    <div class="relative" :class="pt.root">
-        <template v-if="$slots.button">
-            <button
-                class="w-full pr-6"
-                :class="pt.button"
-                @click="open = !open"
-            >
-                <div class="flex w-full items-center justify-between">
-                    <slot name="button" />
-                    <i v-if="toggle" class="fa fa-chevron-down"></i>
-                </div>
-            </button>
+    <prime-dropdown>
+        <template #option="slotProps">
+            <slot name="option">
+                <Link :href="slotProps.option.href" :method="slotProps.option.method">
+                    <Icon v-if="slotProps.option.icon" 
+                          class="min-w-6"
+                          :icon="slotProps.option.icon" />
+                    {{slotProps.option.label}}
+                </Link>
+            </slot>
         </template>
-
-        <SlideDown>
-            <div
-                class="relative right-0 top-full flex min-w-44 flex-col rounded border text-sm shadow sm:absolute"
-                v-bind="$attrs"
-                v-if="open || show"
-            >
-                <slot />
-            </div>
-        </SlideDown>
-    </div>
+        <template #value="slotProps">
+            <slot name="value" />
+        </template>
+    </prime-dropdown>
 </template>

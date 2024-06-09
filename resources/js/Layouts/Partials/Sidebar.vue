@@ -10,13 +10,13 @@ const props = defineProps({
 </script>
 
 <template>
-    <div
-        :class="{
-            'fixed inset-0 z-50 bg-dark-400/25': show,
-        }"
-    >
-        <MobileNav :show="show" @close-sidebar="$emit('close-sidebar')" />
-    </div>
+        <div
+            :class="{
+                'fixed inset-0 z-50 bg-dark-400/25': show,
+            }"
+        >
+            <MobileNav :show="show" @close-sidebar="$emit('close-sidebar')" />
+        </div>
 
-    <Navbar class="hidden flex-col sm:inline-flex" />
+        <Navbar class="hidden flex-col sm:inline-flex" />
 </template>

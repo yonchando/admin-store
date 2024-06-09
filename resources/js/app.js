@@ -11,6 +11,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Icon from "@/Components/Icons/Icon.vue";
+import PrimeVue from "primevue/config";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -26,6 +27,7 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(PrimeVue)
             .use(Sweetalert2, {
                 confirmButtonText: props.initialPage.props.lang.yes,
                 showCancelButton: true,

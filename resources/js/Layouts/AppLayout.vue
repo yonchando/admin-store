@@ -1,8 +1,9 @@
 <script setup>
-import HeaderTop from "@/Layouts/Partials/HeaderTop.vue";
+import Header from "@/Layouts/Partials/Header.vue";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import { ref } from "vue";
 import { Head } from "@inertiajs/vue3";
+import Breadcrumb from "@/Components/Breadcrumbs/Breadcrumb.vue";
 
 defineProps({
     title: String,
@@ -26,22 +27,30 @@ const open = ref(false);
         </slot>
     </Head>
 
-    <div class="block sm:flex">
-        <div>
-            <HeaderTop @open-sidebar="open = true">
-                {{ title }}
-            </HeaderTop>
-            <Sidebar
-                v-if="showSidebar"
-                :show="open"
-                @close-sidebar="open = false"
-            />
-        </div>
+    <div class="flex">
+        <Sidebar
+            v-if="showSidebar"
+            :show="open"
+            @close-sidebar="open = false"
+        />
 
-        <div class="z-10 w-full grid-cols-1 overflow-auto">
-            <div class="max-h-screen sm:pt-24">
-                <div class="m-4">
-                    <slot />
+        <div class="flex-grow flex flex-col">
+            <Header @open-sidebar="open = true">
+                {{ title }}
+            </Header>
+            
+            <Breadcrumb>
+                <slot name="breadcrumb" />
+            </Breadcrumb>
+            
+            <div class="h-10 w-full bg-gray-400"></div>
+            
+            <!-- body -->
+            <div class="z-10 w-full grid-cols-1 overflow-auto">
+                <div class="max-h-screen">
+                    <div class="m-4">
+                        <slot />
+                    </div>
                 </div>
             </div>
         </div>
