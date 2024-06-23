@@ -12,6 +12,16 @@ import Checkbox from "@/Components/Forms/Checkbox.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import Icon from "@/Components/Icons/Icon.vue";
 import PrimeVue from "primevue/config";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Badge from "primevue/badge";
+import InputError from "@/Components/Forms/InputError.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
+import SelectInput from "@/Components/Forms/SelectInput.vue";
+import FormGroup from "@/Components/Forms/FormGroup.vue";
+import FileInput from "@/Components/Forms/FileInput.vue";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import Editor from "@/Components/Forms/Editor.vue";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -25,6 +35,7 @@ createInertiaApp({
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
+            .use(CKEditor)
             .use(plugin)
             .use(ZiggyVue)
             .use(PrimeVue)
@@ -43,8 +54,17 @@ createInertiaApp({
         app.component("PrimaryButton", PrimaryButton);
         app.component("Checkbox", Checkbox);
         app.component("TextInput", TextInput);
+        app.component("InputError", InputError);
+        app.component("InputLabel", InputLabel);
+        app.component("SelectInput", SelectInput);
+        app.component("FormGroup", FormGroup);
+        app.component("FileInput", FileInput);
+        app.component("Editor", Editor);
         app.component("fa-icon", FontAwesomeIcon);
         app.component("Icon", Icon);
+        app.component("DataTable", DataTable);
+        app.component("Column", Column);
+        app.component("Badge", Badge);
 
         app.config.globalProperties.$lang = props.initialPage.props.lang;
         app.mount(el);

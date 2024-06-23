@@ -33,8 +33,8 @@ const breadcrumbs = computed(() => {
     </div>
 </template>
 
-<style scoped>
-.breadcrumbs .breadcrumb-item + .breadcrumb-item:before {
+<style scoped lang="scss">
+.breadcrumbs :deep(.breadcrumb-item + .breadcrumb-item:before) {
     content: "/";
     padding-right: 0.625rem;
     color: inherit;

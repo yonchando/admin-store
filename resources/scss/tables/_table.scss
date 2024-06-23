@@ -1,0 +1,92 @@
+.p-datatable {
+    @apply border bg-white p-4;
+
+    .p-datatable-table {
+        @apply w-full m-0 text-dark-200;
+
+        .p-datatable-thead {
+            @apply table-header-group align-middle border-transparent isolate bg-white;
+
+            tr th {
+                @apply text-left px-3 py-4 border-b border-b-light-200 font-semibold bg-white transition-colors duration-200;
+                
+                .p-column-header-content {
+                    @apply flex justify-start gap-2;
+                }
+            }
+        }
+        
+        .p-datatable-tbody {
+            tr {
+                @apply bg-white text-dark-400 transition-colors duration-200;
+                
+                &.p-highlight {
+                    @apply bg-gray-100;
+                }
+
+                &:hover {
+                    @apply bg-gray-100;
+                }
+
+                td {
+                    @apply text-left border-b border-gray-200 px-3 py-4;
+                }
+                
+                &:last-child td {
+                    @apply border-b-0;
+                }
+            }
+        }
+    }
+}
+
+.p-datatable.p-datatable-sm {
+    @apply border bg-white p-4;
+
+    .p-datatable-table {
+        @apply w-full m-0 text-dark-200;
+
+        .p-datatable-thead {
+            @apply table-header-group align-middle border-transparent isolate bg-white;
+
+            tr th {
+                @apply text-left px-3 py-2 border-b border-b-light-200 font-semibold bg-white transition-colors duration-200;
+
+                .p-column-header-content {
+                    @apply flex justify-start gap-2;
+                }
+            }
+        }
+
+        .p-datatable-tbody {
+            tr {
+                @apply bg-white text-dark-400 transition-colors duration-200;
+
+                &.p-highlight {
+                    @apply bg-gray-100;
+                }
+                
+                &[data-p-highlight="true"] {
+                    @apply bg-gray-100;
+                }
+
+
+                &:hover {
+                    @apply bg-gray-100;
+                }
+
+                td {
+                    @apply text-left border-b border-gray-200 px-3 py-2;
+                }
+
+                &:last-child td {
+                    @apply border-b-0;
+                }
+            }
+        }
+    }
+}
+
+.p-datatable-hoverable-rows .p-selectable-row {
+    @apply cursor-pointer;
+}

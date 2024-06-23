@@ -6,6 +6,7 @@ export default {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.vue",
+        "./resources/js/**/*.js",
     ],
     theme: {
         extend: {
@@ -19,7 +20,7 @@ export default {
                 primary: "#2196F3",
                 warning: "#FF7043",
                 info: "#00BCD4",
-                success: "#2e7d32",
+                success: "#4caf50",
                 active: "#26a69a",
             },
         },

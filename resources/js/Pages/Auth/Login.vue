@@ -71,13 +71,14 @@ const submit = () => {
                     <div
                         class="form-group d-flex align-items-center tw-justify-between"
                     >
-                        <div class="">
+                        <div class="flex gap-1.5 items-center">
                             <Checkbox
                                 name="remember"
-                                id="remember"
+                                input-id="remember"
                                 v-model="form.remember"
-                                label="Remember"
+                                value="remember"
                             />
+                            <label for="remember">Remember</label>
                         </div>
                     </div>
 

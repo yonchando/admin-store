@@ -1,0 +1,26 @@
+.dropdown {
+    &.p-dropdown {
+        @apply flex gap-2 items-center bg-transparent text-white border-transparent outline-transparent;
+
+        .p-dropdown-label {
+            @apply flex gap-2 items-center text-white;
+        }
+    }
+}
+
+.dropdown-panel {
+    &.p-dropdown-panel {
+        top: 55px !important;
+
+        .p-dropdown-items {
+            min-width: 11.25rem;
+            background-clip: padding-box;
+
+            .p-dropdown-item {
+                @apply flex items-center relative outline-0 overflow-hidden text-ellipsis cursor-pointer mb-0 transition-colors ease-in-out duration-150 font-normal;
+                color: #333;
+                @apply w-full py-2 px-4 whitespace-nowrap bg-transparent border-0 hover:bg-gray-200;
+            }
+        }
+    }
+}

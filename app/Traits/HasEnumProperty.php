@@ -27,4 +27,23 @@ trait HasEnumProperty
                 ]
             )->toArray();
     }
+
+    public function getValue()
+    {
+        if(method_exists($this,'severities')){
+            $severities = $this->severities();
+            
+            if(!data_get($severities,$this->value)){
+                return null;
+            }
+            
+            return [
+                'text' => __('lang.'.Str::lower($this->value)),
+                'id' => $this->value,
+                'severity' => $severities[$this->value],
+            ];
+        }
+        
+        return $this->value;
+    }
 }

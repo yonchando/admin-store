@@ -1,0 +1,7 @@
+.p-badge {
+    @apply text-xs min-w-6 h-6 font-bold inline-flex items-center justify-center rounded text-center px-2;
+
+    &.p-badge-success {
+        @apply bg-success text-white;
+    }
+}

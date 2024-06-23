@@ -20,7 +20,7 @@ const navbar = ref();
 const sideBarClass = computed(() => {
     let className;
     if (!config.mobileExpand) {
-        className = ["w-64", "expand-in"];
+        className = ["w-64","md:w-auto","md:min-w-64", "expand-in"];
     } else {
         className = ["w-full", "expand-out"];
     }

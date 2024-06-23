@@ -1,5 +1,4 @@
 <script setup>
-import {onMounted, onUnmounted} from "vue";
 
 const props = defineProps({
     modelValue: {
@@ -39,7 +38,7 @@ const updateValue = (event) => {
 }
 </script>
 <template>
-    <select class="form-control" @change="updateValue($event)">
+    <select @change="updateValue($event)">
         <option value=""></option>
         <template v-if="items.length > 0">
             <option v-for="item in items"

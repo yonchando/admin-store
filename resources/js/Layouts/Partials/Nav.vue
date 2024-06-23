@@ -30,7 +30,7 @@ defineProps({
             :class="{ 'bg-black/15': menu.active, 'pl-8': subMenu }"
             class="mb-px"
         >
-            <NavLink :href="menu.link" :icon="menu.icon" :label="menu.label" />
+            <NavLink class="w-full" :href="menu.link" :icon="menu.icon" :label="menu.label" />
         </div>
 
         <template v-else>

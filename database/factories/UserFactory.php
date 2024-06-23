@@ -26,7 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $genders = Enum::toArray(GenderEnum::cases(), true);
+        $genders = collect(GenderEnum::toArray())->pluck('id');
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),

@@ -28,11 +28,12 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query->with([
             'category',
+            'createdBy',
         ]);
 
         $query->filters($filters);
 
-        return $query->paginate(@$filters['perPage'] ?? 15);
+        return $query->paginate(@$filters['perPage'] ?? 25);
     }
 
     public function find(int $id): ?Product

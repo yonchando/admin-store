@@ -2,7 +2,7 @@
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
-const { multiple } = defineProps({
+const props = defineProps({
     modelValue: {
         type: Object,
         default: null,
@@ -15,12 +15,12 @@ const { multiple } = defineProps({
 
 const lang = usePage().props.lang;
 
-let src = ref("/assets/images/placeholders/placeholder.jpg");
+let src = ref();
 
 const $emit = defineEmits(["update:modelValue"]);
 
 const modelChange = ($event) => {
-    if (multiple) {
+    if (props.multiple) {
         $emit("update:modelValue", $event.target.files);
     } else {
         const reader = new FileReader();
@@ -36,18 +36,19 @@ const modelChange = ($event) => {
 };
 </script>
 <template>
-    <div class="relative">
+    <div class="relative w-full">
+        <span
+            v-if="!src"
+            class="flex items-center justify-center rounded-md text-lg font-medium border-2 border-gray-300 p-10 w-full border-dashed text-gray-400"
+        >
+            Drop and drag image here
+        </span>
         <img
             :src="src"
+            v-else
             class="w-full rounded-md shadow"
             alt="product feature"
         />
-        <span
-            v-if="src == '/assets/images/placeholders/placeholder.jpg'"
-            class="absolute inset-0 flex items-center justify-center rounded-md bg-black/30 text-lg font-medium text-white"
-        >
-            {{ lang.browse_image }}
-        </span>
         <input
             type="file"
             @input="modelChange($event)"

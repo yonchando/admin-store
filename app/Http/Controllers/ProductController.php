@@ -49,6 +49,7 @@ class ProductController extends Controller
             'filters' => $filters,
             'statuses' => $statuses,
             'categories' => $categories,
+            'request' => $request->all()
         ]);
     }
 

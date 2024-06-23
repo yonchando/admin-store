@@ -23,6 +23,8 @@ return new class extends Migration
             $table->tinyText('status')->default(ProductStatus::ACTIVE->name);
             $table->json('json')->nullable();
             $table->timestamps();
+            $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('updated_by')->nullable();
             $table->softDeletes();
         });
     }

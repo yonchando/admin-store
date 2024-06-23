@@ -18,7 +18,7 @@ trait HasAttributes
     public function statusText(): Attribute
     {
         return Attribute::make(
-            get: fn() => __('lang.'.Str::lower($this->status->name)),
+            get: fn() => $this->status->getValue()
         );
     }
 

@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-    <label class="tw-font-medium">
+    <label class="font-medium">
         <slot>
             {{ value }}
             <span v-if="required" class="text-danger">*</span>

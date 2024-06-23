@@ -1,4 +1,4 @@
-@layer tailwind-base, primevue, tailwind-utilities, custom;
+@layer  tailwind-base, primevue, custom, tailwind-utilities;
 
 @layer tailwind-base {
     @tailwind base;
@@ -10,7 +10,11 @@
 }
 
 @layer custom {
-    @import "forms/dropdown";
+    @import "forms/select";
+    @import "forms/checkbox";
+    @import "tables/table";
+    @import "badges/badge";
+    @import "dropdown/dropdown";
 }
 
 @layer base {

@@ -12,7 +12,7 @@ const className = [
     "rounded",
     "inline-block",
     "font-normal",
-    "elect-none",
+    "select-none",
     "text-sm",
     "leading-6",
     "text-center",
@@ -22,24 +22,17 @@ const className = [
     "duration-150",
     "relative",
     "border",
-    "border-transparent",
 ];
 </script>
 
 <template>
     <Link :class="className" v-if="$attrs.href" v-bind="$attrs">
-        <template v-if="icon">
-            <i v-if="typeof icon === 'string'" :class="icon"></i>
-            <fa v-else :icon="icon" />
-        </template>
+        <Icon :icon="icon" />
         <slot>{{ title }}</slot>
     </Link>
 
-    <button class="" :class="className" v-else v-bind="$attrs">
-        <template v-if="icon">
-            <i v-if="typeof icon === 'string'" :class="icon"></i>
-            <fa v-else :icon="icon" />
-        </template>
+    <button :class="className" v-else v-bind="$attrs">
+        <Icon :icon="icon" />
         <slot>{{ title }}</slot>
     </button>
 </template>

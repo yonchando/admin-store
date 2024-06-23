@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from "vue";
+import InputText from "primevue/inputtext";
 
 defineOptions({
     inheritAttrs: false,
@@ -31,7 +32,7 @@ const className = [
     "w-full",
     "rounded",
     "bg-clip-border",
-    "px-3",
+    "px-4",
     "py-1.5",
     "bg-white",
     "border",
@@ -51,10 +52,9 @@ const className = [
 
 <template>
     <div class="relative">
-        <input
+        <InputText
             v-bind="$attrs"
             :class="className"
-            class=""
             v-model="model"
             ref="input"
         />

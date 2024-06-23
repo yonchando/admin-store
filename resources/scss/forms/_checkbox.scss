@@ -1,0 +1,15 @@
+.p-checkbox {
+    @apply w-5 h-5 relative inline-flex select-none align-bottom;
+
+    .p-checkbox-input {
+        @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 z-10 outline-0 border border-gray-50 rounded-md cursor-pointer;
+    }
+
+    .p-checkbox-box {
+        @apply border border-gray-400/75 bg-white w-5 h-5 text-dark-400 outline-transparent duration-200 transition-all flex justify-center items-center rounded;
+    }
+    
+    &.p-highlight .p-checkbox-box {
+        @apply border-success bg-success text-white;
+    }
+}
