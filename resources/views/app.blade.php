@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title inertia> {{ config('app.name', 'E-Store') }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logos/logo.png') }}">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
-
+    
     <!-- Scripts -->
     @routes
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])

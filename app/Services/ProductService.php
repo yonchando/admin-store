@@ -8,9 +8,9 @@ use App\Models\ProductHasOption;
 use App\Repositories\Contracts\ProductHasOptionGroupRepositoryInterface;
 use App\Repositories\Contracts\ProductHasOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProductService
 {

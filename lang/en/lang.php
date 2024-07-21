@@ -19,6 +19,7 @@ return [
     'delete' => 'Delete',
     'edit' => 'Edit',
     'add' => 'Add',
+    'new' => 'New',
     'category_name' => 'Category Name',
     'save' => 'Save',
     'close' => 'Close',
@@ -102,6 +103,7 @@ return [
     'option_group' => 'Option Group',
     'delete_group' => 'Delete Group',
     'page' => 'Page',
+    'group_options' => "Group Options",
     
     UserStatus::ACTIVE->value => 'Active',
     UserStatus::INACTIVE->value => 'Inactive',

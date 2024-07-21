@@ -2,16 +2,22 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 trait HasEnumProperty
 {
+    public static function toCollection(): Collection
+    {
+        return collect(self::cases());
+    }
+
     public static function toArray(array $excepts = []): array
     {
         return collect(self::cases())
             ->map(
                 fn($value) => [
-                    'text' => __('lang.'.Str::lower($value->value)),
+                    'text' => __('lang.' . Str::lower($value->value)),
                     'id' => $value->value,
                 ]
             )->filter(fn($value) => !in_array($value['id'], $excepts))

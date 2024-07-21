@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
 use App\Enums\GenderEnum;
 use App\Enums\User\UserStatus;
 use App\Facades\Enum;
 use App\Facades\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;

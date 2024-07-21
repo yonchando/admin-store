@@ -39,11 +39,11 @@ it('can fitler by gender', function () {
         );
 });
 
-it('can fitler by status', function () {
+it('can filter by status', function () {
 
     User::factory(3)->female()->create();
 
-    $user = User::factory()->status(UserStatus::INACTIVE->name)->create();
+    $user = User::factory()->status(UserStatus::INACTIVE->value)->create();
 
     $filters = [
         'status' => $user->status,

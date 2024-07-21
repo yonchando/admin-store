@@ -32,7 +32,7 @@ class ProductHasOption extends Model
         return Attribute::make(
             get: function () {
                 if ($this->price_adjustment) {
-                    return number_format($this->price_adjustment, 2)." ".Helper::setting()?->currency->code;
+                    return number_format($this->price_adjustment, 2)." ".Helper::setting()?->currency?->code;
                 }
 
                 return $this->productOption->price_adjustment_text;

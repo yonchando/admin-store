@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Casts\PurchaseDetail\ImageCast;
 use App\Models\Product;
-use App\Models\PurchaseOrderDetail;
 use App\Models\PurchaseOrder;
-use App\ValueObjects\ImageProperty;
+use App\Models\PurchaseOrderDetail;
+use App\Traits\ImageProperty;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -25,17 +26,17 @@ class PurchaseOrderDetailFactory extends Factory
         $qty = $this->faker->numberBetween(1, 10);
         $product_price = $this->faker->randomFloat(2, 10, 100);
         $product = Product::factory()->category()->create();
-        
+
         $file = UploadedFile::fake()->image('image.png');
         $path = $file->hashName(config('paths.product_image'));
-        
-        $image = new ImageProperty();
-        $image->setFilename($file->hashName());
-        $image->setPath($path);
-        $image->setUrl(Storage::fake()->url($path));
-        $image->setExtension($file->extension());
-        $image->setOriginalName($file->getClientOriginalName());
-        
+
+        $image = new ImageCast();
+        $image->filename = $file->hashName();
+        $image->path = $path;
+        $image->url = Storage::fake()->url($path);
+        $image->extension = $file->extension();
+        $image->originalName = $file->getClientOriginalName();
+
         return [
             'purchase_order_id' => PurchaseOrder::factory(),
             'product_name' => $product->product_name,

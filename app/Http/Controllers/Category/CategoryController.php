@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Category;
 
 use App\Facades\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;

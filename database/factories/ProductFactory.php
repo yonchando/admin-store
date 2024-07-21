@@ -25,7 +25,8 @@ class ProductFactory extends Factory
         $name = $this->faker->unique()->name;
 
         $file = UploadedFile::fake()->image("{$this->faker->word}.png", 40, 40);
-        $path = $file->hashName(config('paths.product_image'));
+        $path = config('paths.product_image');
+        Storage::putFileAs($path,$file,$file->hashName());
 
         return [
             'product_name' => $name,
@@ -38,7 +39,7 @@ class ProductFactory extends Factory
                     'filename' => $file->hashName(),
                     'original_name' => $file->getClientOriginalName(),
                     'path' => $path,
-                    'url' => Storage::url($path),
+                    'url' => Storage::url($path . $file->hashName()),
                     'extension' => $file->extension(),
                 ],
             ],

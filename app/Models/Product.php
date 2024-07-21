@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\Product\JsonCast;
+use App\Casts\Product\ProductJsonCast;
 use App\Enums\Product\ProductStatus;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
@@ -32,7 +32,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'json' => JsonCast::class,
+        'json' => ProductJsonCast::class,
         'price' => 'decimal:2',
         'status' => ProductStatus::class,
     ];

@@ -16,6 +16,7 @@ defineProps({
         type: Boolean,
         default: true,
     },
+    actions: Array
 });
 
 const loading = ref(false);
@@ -60,9 +61,12 @@ onMounted(() => {
                     </div>
 
                     <div class="header-elements d-none">
-                        <Breadcrumb class="justify-content-center">
-                            <slot name="action" />
-                        </Breadcrumb>
+                        <div class="d-flex tw-gap-2">
+                            <template v-for="action in actions">
+                                <component :is="action.component"
+                                           v-bind="action.props" />
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>

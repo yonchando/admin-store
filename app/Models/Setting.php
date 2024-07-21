@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\Setting\PropertyCast;
+use App\Casts\Setting\SettingPropertyCast;
 use App\Models\Concerns\Setting\HasAttributes;
 use App\Models\Concerns\Setting\HasRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +19,6 @@ class Setting extends Model
     ];
 
     protected $casts = [
-        'properties' => PropertyCast::class,
+        'properties' => SettingPropertyCast::class,
     ];
 }

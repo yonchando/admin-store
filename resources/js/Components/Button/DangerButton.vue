@@ -2,23 +2,31 @@
 import { Link } from "@inertiajs/vue3";
 
 defineProps({
-    href: String,
     icon: String,
-    text: String,
+    label: String,
 });
 </script>
 <template>
-    <Link v-if="href" :href="href" class="btn btn-danger btn-sm tw-space-x-2">
+    <Link
+        v-if="$attrs.href"
+        v-bind="$attrs"
+        class="btn btn-danger btn-sm tw-space-x-2"
+    >
         <slot>
             <i :class="icon"></i>
-            <span>{{ text }}</span>
+            <span>{{ label }}</span>
         </slot>
     </Link>
 
-    <button v-else class="btn btn-danger btn-sm tw-space-x-2">
+    <button
+        v-else
+        v-bind="$attrs"
+        type="button"
+        class="btn btn-danger btn-sm tw-space-x-2"
+    >
         <slot>
             <i :class="icon"></i>
-            <span>{{ text }}</span>
+            <span>{{ label }}</span>
         </slot>
     </button>
 </template>

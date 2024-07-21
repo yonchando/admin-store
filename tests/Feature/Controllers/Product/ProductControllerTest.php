@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\Product\ProductStatus;
-use App\Facades\Enum;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductHasOption;
@@ -14,7 +13,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\get;
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
 
 test('index methods', function () {
 
@@ -33,10 +36,10 @@ test('index methods', function () {
     get(route('product.index', ['perPage' => $perPage]))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Product/Index')
+            fn(AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $perPage)
                 ->has('categories', $categories->count())
-                ->where('statuses', Enum::toSelectedForm(ProductStatus::cases()))
+                ->where('statuses', ProductStatus::toArray())
                 ->where('products.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
@@ -49,7 +52,7 @@ describe('show product detail', function () {
         $this->get(route('product.show', $product))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Show')
+                fn(AssertableInertia $page) => $page->component('Product/Show')
                     ->where('product.id', $product->id)
                     ->where('product.product_name', $product->product_name)
             );
@@ -66,7 +69,7 @@ describe('show product detail', function () {
             ->optionGroup($group->id)
             ->product($product->id)->create();
 
-        $hasOptions = ProductHasOption::factory(3)
+        ProductHasOption::factory(3)
             ->hasGroupId($hasGroup->id)
             ->option(
                 new Sequence(
@@ -77,10 +80,10 @@ describe('show product detail', function () {
             )
             ->create();
 
-        $this->get(route('product.show', $product))
+        getJson(route('product.show', $product))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Show')
+                fn(AssertableInertia $page) => $page->component('Product/Show')
                     ->where('product.id', $product->id)
                     ->where('product.product_name', $product->product_name)
                     ->has('product.product_has_option_groups', 1)
@@ -98,7 +101,7 @@ describe('create product', function () {
         $this->get(route('product.create'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Form')
+                fn(AssertableInertia $page) => $page->component('Product/Form')
                     ->has('categories', $categories->count())
             );
     });
@@ -115,7 +118,7 @@ describe('create product', function () {
 
         $data = $product->toArray();
 
-        $this->post(route('product.store'), $data)
+        postJson(route('product.store'), $data)
             ->assertRedirect()
             ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
 
@@ -128,9 +131,9 @@ describe('create product', function () {
 
         expect($product->json->image)->not()->toBeNull();
 
-        Storage::assertExists($product->json->image->getPath());
+        Storage::assertExists($product->json->image->path);
 
-        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$image->hashName()));
+        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image').'/'.$image->hashName()));
     });
 });
 
@@ -143,11 +146,11 @@ describe('product edit', function () {
         $this->get(route('product.edit', $product))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Form')
+                fn(AssertableInertia $page) => $page->component('Product/Form')
                     ->has('categories', $categories->count())
                     ->has(
                         'product',
-                        fn (AssertableInertia $page) => $page
+                        fn(AssertableInertia $page) => $page
                             ->where('id', $product->id)
                             ->where('product_name', $product->product_name)->etc()
                     )
@@ -161,7 +164,7 @@ describe('product edit', function () {
             'image' => null,
         ]);
 
-        $this->patch(route('product.update', $product), $changed->toArray())
+        putJson(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'))
             ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product')]));
 
@@ -188,38 +191,39 @@ describe('product edit', function () {
             'image' => $file,
         ]);
 
-        $this->patch(route('product.update', $product), $changed->toArray())
-            ->assertRedirect(route('product.index'));
+        putJson(route('product.update', $product), $changed->toArray())
+            ->assertRedirect(route('product.index'))
+            ->assertSessionDoesntHaveErrors();
 
-        $image = $product->json->image->getUrl();
+        $image = $product->json->image->url;
 
         $product->refresh();
 
-        $this->assertNotEquals($image, $product->json->image->getUrl());
+        $this->assertNotEquals($image, $product->json->image->url);
 
-        Storage::assertExists($product->json->image->getPath());
+        Storage::assertExists($product->json->image->path);
 
-        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$file->hashName()));
+        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image').'/'.$file->hashName()));
     });
 
     it('can update product status active to inactive and inactive to active', function () {
         $product = Product::factory()->active()->create();
 
-        $this->patchJson(route('product.update.status', $product))
-            ->assertOk()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::INACTIVE->value)
-                    ->etc()
-            );
+        putJson(route('product.update.status', $product))
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirectToRoute('product.index');
+        
+        $product->refresh();
+        
+        expect($product->status->value)->toEqual(ProductStatus::INACTIVE->value);
 
-        $this->patchJson(route('product.update.status', $product))
-            ->assertOk()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::ACTIVE->value)
-                    ->etc()
-            );
+        putJson(route('product.update.status', $product))
+            ->assertSessionDoesntHaveErrors()
+            ->assertRedirectToRoute('product.index');
+        
+        $product->refresh();
+
+        expect($product->status->value)->toEqual(ProductStatus::ACTIVE->value);
     });
 });
 
@@ -251,7 +255,7 @@ describe('delete function', function () {
 
         $this->from(route('product.show', $product));
 
-        $this->delete(route('product.destroy.product.option.group', $productHasOptionGroup))
+        deleteJson(route('product.destroy.product.option.group', $productHasOptionGroup))
             ->assertRedirect(route('product.show', $product))
             ->assertSessionHas(
                 'message.text',

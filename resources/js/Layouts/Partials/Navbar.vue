@@ -40,7 +40,7 @@ const menus = [
         children: [
             {
                 link: route("product.option.group.index"),
-                text: lang.option_groups,
+                text: lang.group_options,
                 icon: "icon-price-tags",
                 active: isActive("ProductOptionGroup/Index"),
             },

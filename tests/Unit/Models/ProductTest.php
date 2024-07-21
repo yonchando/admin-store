@@ -1,5 +1,6 @@
 <?php
 
+use App\Casts\Product\ProductJsonCast;
 use App\Enums\Product\ProductStatus;
 use App\Models\Casts\ProductObjectCast;
 use App\Models\Product;
@@ -14,7 +15,7 @@ it('must has attribute image url', function () {
 it('must be has casts json field to product object', function () {
     $product = new Product();
 
-    expect($product->getCasts())->toHaveKey('json', ProductObjectCast::class);
+    expect($product->getCasts())->toHaveKey('json', ProductJsonCast::class);
 });
 
 it('must be has casts price field to decimal', function () {

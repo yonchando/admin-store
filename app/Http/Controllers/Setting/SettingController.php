@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Setting;
 
 use App\Facades\Helper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Setting\SettingRequest;
 use App\Repositories\Contracts\CurrencyRepositoryInterface;
 use App\Repositories\Contracts\SettingRepositoryInterface;

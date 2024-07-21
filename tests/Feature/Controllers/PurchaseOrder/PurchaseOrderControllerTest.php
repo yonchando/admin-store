@@ -5,16 +5,17 @@ use App\Enums\PurchaseOrder\PurchaseOrderStatus;
 use App\Models\Customer;
 use App\Models\PurchaseOrder;
 use Inertia\Testing\AssertableInertia;
+use function Pest\Laravel\getJson;
 
 test('list orders in index methods', function () {
 
-    $purchases = PurchaseOrder::factory(3)->customer()->hasOrderItems(3)
+    $purchases = PurchaseOrder::factory(3)->customer()->hasPurchaseDetails(3)
         ->purchasedAt(now()->subDay()->toDateTimeString())->create();
 
-    $first = PurchaseOrder::factory()->customer()->hasOrderItems(2)
+    $first = PurchaseOrder::factory()->customer()->hasPurchaseDetails(2)
         ->purchasedAt()->create();
 
-    $this->get(route('purchase.order.index', ['perPage' => 2]))
+    getJson(route('purchase.order.index', ['perPage' => 2]))
         ->assertOk()
         ->assertInertia(
             fn(AssertableInertia $page) => $page->component('PurchaseOrder/Index')
@@ -23,7 +24,7 @@ test('list orders in index methods', function () {
                     'purchaseOrders.data.0',
                     fn(AssertableInertia $page) => $page->where('id', $first->id)
                         ->where('customer.name', $first->customer->name)
-                        ->where('order_items_count', 2)
+                        ->where('purchase_details_count', 2)
                         ->where('purchased_date', $first->purchased_date)
                         ->where('status_text', $first->status_text)
                         ->etc()
@@ -36,9 +37,9 @@ test('list orders in index methods', function () {
 test('show detail purchase', function () {
 
     $customer = Customer::factory()->create();
-    $purchase = PurchaseOrder::factory()->hasOrderItems(3)->customer($customer->id)->create();
+    $purchase = PurchaseOrder::factory()->hasPurchaseDetails(3)->customer($customer->id)->create();
 
-    $this->get(route('purchase.order.show', $purchase))
+    getJson(route('purchase.order.show', $purchase))
         ->assertOk()
         ->assertInertia(
             fn(AssertableInertia $page) => $page->component('PurchaseOrder/Show')
@@ -46,7 +47,7 @@ test('show detail purchase', function () {
                     'purchase',
                     fn(AssertableInertia $page) => $page->where('id', $purchase->id)
                         ->where('customer.name', $customer->name)
-                        ->has('order_items', 3)
+                        ->has('purchase_details', 3)
                         ->etc()
                 )
         );

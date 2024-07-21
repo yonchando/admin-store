@@ -20,7 +20,7 @@ class SettingRepository implements SettingRepositoryInterface
     public function update(SettingRequest $request): Setting
     {
         $setting = $this->first();
-        $setting->properties->currency_id = $request->get('currency_id');
+        $setting->properties->currencyId = $request->get('currency_id');
         $setting->save();
         $setting->refresh();
 

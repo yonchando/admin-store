@@ -2,6 +2,7 @@
 
 use App\Models\ProductOption;
 use Inertia\Testing\AssertableInertia;
+use function Pest\Laravel\putJson;
 
 test('list product option response ok', function () {
     ProductOption::factory(3)->create();
@@ -61,7 +62,7 @@ describe('update product option', function () {
 
         $changed = ProductOption::factory()->make();
 
-        $this->patch(route('product.option.update', $option), $changed->toArray())
+        putJson(route('product.option.update', $option), $changed->toArray())
             ->assertRedirectToRoute('product.option.index')
             ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product_option')]));
 

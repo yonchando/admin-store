@@ -1,5 +1,5 @@
 <script setup>
-const { hide } = defineProps({
+const props = defineProps({
     title: String,
     noHeader: {
         type: Boolean,

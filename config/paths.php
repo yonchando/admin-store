@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'product_image' => 'products/images',
+    'product_image' => 'products/images/',
 ];

@@ -14,6 +14,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        \Storage::deleteDirectory(config('paths.product_image'));
         Product::factory(1000)->state(
             new Sequence(
                 ['category_id' => null],

@@ -13,7 +13,7 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-        $purchaseOrders = PurchaseOrder::factory(5)->hasOrderItems(5);
+        $purchaseOrders = PurchaseOrder::factory(5)->hasPurchaseDetails(5);
         Customer::factory(100)->has($purchaseOrders)->create();
     }
 }

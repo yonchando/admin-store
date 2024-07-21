@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use Inertia\Testing\AssertableInertia;
+use function Pest\Laravel\putJson;
 
 test('index method', function () {
 
@@ -66,19 +67,19 @@ test('store mehtod', function () {
 });
 
 test('update method', function () {
-    $cateogry = Category::factory()->create();
+    $category = Category::factory()->create();
 
     $name = 'changed name';
 
-    $this->patch(route('category.update', $cateogry), [
+    putJson(route('category.update', $category), [
         'category_name' => $name,
     ])->assertRedirect(route('category.index'))
         ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.category')]));
 
-    $changed = $cateogry->fresh();
+    $changed = $category->fresh();
 
-    expect($changed->category_name)->toBe($name);
-    expect($changed->slug)->toBe(Str::slug($name));
+    expect($changed->category_name)->toBe($name)
+        ->and($changed->slug)->toBe(Str::slug($name));
 });
 
 test('destroy methods', function () {

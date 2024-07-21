@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Purchase;
 
 use App\Enums\PurchaseOrder\PurchaseOrderStatus;
 use App\Facades\Helper;
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseOrder;
 use App\Repositories\Contracts\PurchaseOrderRepositoryInterface;
 use Illuminate\Http\Request;

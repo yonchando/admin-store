@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\GenderEnum;
-use App\Facades\Enum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +25,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $genders = Enum::toArray(GenderEnum::cases(), true);
+        $genders = GenderEnum::toCollection()->pluck('value')->toArray();
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),

@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductOptionController;
-use App\Http\Controllers\ProductOptionGroupController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Option\OptionController;
+use App\Http\Controllers\Option\OptionGroupController;
+use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Product\ProductGroupOptionController;
+use App\Http\Controllers\Product\ProductOptionController;
+use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Purchase\PurchaseOrderController;
+use App\Http\Controllers\Setting\SettingController;
+use App\Http\Controllers\Staff\StaffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +33,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
             Route::post('store', [CategoryController::class, 'store'])->name('store');
-            Route::patch('update/{category}', [CategoryController::class, 'update'])->name('update');
+            Route::put('update/{category}', [CategoryController::class, 'update'])->name('update');
             Route::delete('delete/{category}', [CategoryController::class, 'destroy'])->name('destroy');
         });
 
@@ -45,23 +47,23 @@ Route::middleware('auth')->group(function () {
             Route::post('store', [ProductController::class, 'store'])->name('store');
 
             Route::post('add-product-option/{product}', [
-                ProductController::class, 'storeProductOption',
+                ProductGroupOptionController::class, 'store',
             ])->name('store.product.option');
 
             Route::post('/{product}/add-option', [
-                ProductController::class, 'storeOption',
+                ProductOptionController::class, 'store',
             ])->name('add.option');
 
             Route::get('edit/{product:slug}', [ProductController::class, 'edit'])->name('edit');
-            Route::patch('update/{product:slug}', [ProductController::class, 'update'])->name('update');
-            Route::patch('update-status/{id}', [ProductController::class, 'updateStatus'])->name(
+            Route::put('update/{product:slug}', [ProductController::class, 'update'])->name('update');
+            Route::put('update-status/{id}', [ProductController::class, 'updateStatus'])->name(
                 'update.status'
             );
 
             Route::delete('destroy/{product:slug}', [ProductController::class, 'destroy'])->name('destroy');
             Route::delete(
                 'destroy-option-group/{productHasOptionGroup}',
-                [ProductController::class, 'destroyProductOptionGroup']
+                [ProductGroupOptionController::class, 'destroy']
             )->name('destroy.product.option.group');
             Route::delete(
                 'destroy-option/{productHasOption}',
@@ -72,38 +74,38 @@ Route::middleware('auth')->group(function () {
     Route::prefix('product-option')
         ->name('product.option.')
         ->group(function () {
-            Route::get('/', [ProductOptionController::class, 'index'])->name('index');
+            Route::get('/', [OptionController::class, 'index'])->name('index');
 
-            Route::post('store', [ProductOptionController::class, 'store'])->name('store');
+            Route::post('store', [OptionController::class, 'store'])->name('store');
 
-            Route::post('store-many', [ProductOptionController::class, 'storeMany'])->name('store.many');
+            Route::post('store-many', [OptionController::class, 'storeMany'])->name('store.many');
 
-            Route::patch('update/{productOption}', [
-                ProductOptionController::class, 'update',
+            Route::put('update/{productOption}', [
+                OptionController::class, 'update',
             ])->name('update');
 
             Route::delete('delete/{productOption}', [
-                ProductOptionController::class, 'destroy',
+                OptionController::class, 'destroy',
             ])->name('destroy');
 
             Route::delete('delete-multiple', [
-                ProductOptionController::class, 'destroyMany',
+                OptionController::class, 'destroyMany',
             ])->name('destroy.many');
         });
 
     Route::prefix('product-option-group')
         ->name('product.option.group.')
         ->group(function () {
-            Route::get('/', [ProductOptionGroupController::class, 'index'])->name('index');
+            Route::get('/', [OptionGroupController::class, 'index'])->name('index');
 
-            Route::post('/save', [ProductOptionGroupController::class, 'store'])->name('store');
+            Route::post('/save', [OptionGroupController::class, 'store'])->name('store');
 
-            Route::patch('update/{productOptionGroup}', [
-                ProductOptionGroupController::class, 'update',
+            Route::put('update/{productOptionGroup}', [
+                OptionGroupController::class, 'update',
             ])->name('update');
 
             Route::delete('delete/{productOptionGroup}', [
-                ProductOptionGroupController::class, 'destroy',
+                OptionGroupController::class, 'destroy',
             ])->name('destroy');
         });
 
@@ -113,7 +115,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [PurchaseOrderController::class, 'index'])->name('index');
             Route::get('detail/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
 
-            Route::patch(
+            Route::put(
                 'update-status/{purchaseOrder}',
                 [PurchaseOrderController::class, 'updateStatus']
             )->name('update.status');
@@ -124,12 +126,12 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [CustomerController::class, 'index'])->name('index');
             Route::get('/show/{customer}', [CustomerController::class, 'show'])->name('show');
-            Route::patch('update-status/{customer}', [CustomerController::class, 'updateStatus'])
+            Route::put('update-status/{customer}', [CustomerController::class, 'updateStatus'])
                 ->name('update.status');
         });
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('staff')
@@ -142,8 +144,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/save', [StaffController::class, 'store'])->name('store');
 
             Route::get('edit/{user}', [StaffController::class, 'edit'])->name('edit');
-            Route::patch('update/{user}', [StaffController::class, 'update'])->name('update');
-            Route::patch('update-status/{user}', [StaffController::class, 'updateStatus'])->name('update.status');
+            Route::put('update/{user}', [StaffController::class, 'update'])->name('update');
+            Route::put('update-status/{user}', [StaffController::class, 'updateStatus'])->name('update.status');
 
             Route::delete('destroy/{user}', [StaffController::class, 'destroy'])->name('destroy');
 

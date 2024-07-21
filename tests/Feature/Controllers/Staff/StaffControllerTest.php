@@ -108,7 +108,7 @@ describe('edit staff', function () {
 
         $changed = User::factory()->make();
 
-        $this->patch(route('staff.update', $user), $changed->toArray())
+        putJson(route('staff.update', $user), $changed->toArray())
             ->assertRedirect(route('staff.index'))
             ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.staff')]));
 
@@ -127,7 +127,7 @@ describe('edit staff', function () {
     it('can update status', function () {
         $user = User::factory()->create();
 
-        $this->patch(route('staff.update.status', $user))
+        putJson(route('staff.update.status', $user))
             ->assertRedirect()
             ->assertSessionHas('message.text',
                 __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
@@ -136,7 +136,7 @@ describe('edit staff', function () {
 
         $this->assertEquals(UserStatus::INACTIVE, $user->status);
 
-        $this->patch(route('staff.update.status', $user))
+        putJson(route('staff.update.status', $user))
             ->assertRedirect()
             ->assertSessionHas('message.text',
                 __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));

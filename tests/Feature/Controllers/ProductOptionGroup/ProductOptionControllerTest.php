@@ -3,6 +3,7 @@
 
 use App\Models\ProductOptionGroup;
 use Inertia\Testing\AssertableInertia;
+use function Pest\Laravel\putJson;
 
 test('listing product option', function () {
 
@@ -43,7 +44,7 @@ test('update product option group', function () {
 
     $this->from(route('product.option.group.index'));
 
-    $this->patch(route('product.option.group.update', $group), [
+    putJson(route('product.option.group.update', $group), [
         ...$change->only('name'),
     ])
         ->assertRedirectToRoute('product.option.group.index')

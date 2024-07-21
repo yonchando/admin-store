@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('stock_quantity')->default(0);
             $table->bigInteger('category_id')->nullable();
             $table->string('slug')->nullable();
-            $table->tinyText('status')->default(ProductStatus::ACTIVE->name);
+            $table->tinyText('status')->default(ProductStatus::ACTIVE->value);
             $table->json('json')->nullable();
             $table->timestamps();
             $table->softDeletes();

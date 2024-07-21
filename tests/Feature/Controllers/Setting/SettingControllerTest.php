@@ -35,5 +35,5 @@ test('user can update currency', function () {
 
     $setting->refresh();
 
-    $this->assertEquals($currency->id, $setting->properties->currency_id);
+    $this->assertEquals($currency->id, $setting->properties->currencyId);
 });
