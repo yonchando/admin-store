@@ -11005,26 +11005,6 @@ body:not(.swal2-no-backdrop) .swal2-container.swal2-shown {
     border-radius: 0.1875rem;
 }
 
-.ui-selectmenu-images .demo-img-amazon {
-    background: url("../images/brands/amazon.png") no-repeat;
-}
-
-.ui-selectmenu-images .demo-img-youtube {
-    background: url("../images/brands/youtube.png") no-repeat;
-}
-
-.ui-selectmenu-images .demo-img-twitter {
-    background: url("../images/brands/twitter.png") no-repeat;
-}
-
-.ui-selectmenu-images .demo-img-bing {
-    background: url("../images/brands/bing.png") no-repeat;
-}
-
-.ui-selectmenu-images .demo-img-spotify {
-    background: url("../images/brands/spotify.png") no-repeat;
-}
-
 .ui-slider {
     position: relative;
     text-align: left;
@@ -18474,7 +18454,6 @@ textarea#HandsontableCopyPaste {
  *
  * ---------------------------------------------------------------------------- */
 .login-cover {
-    background: url(../images/login_cover.jpg) no-repeat;
     background-size: cover;
 }
 

@@ -13,7 +13,7 @@ import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 const {lang, setting} = defineProps(["lang", "setting", "currencies"]);
 
 const form = useForm({
-    currency_id: setting.properties.currency_id,
+    currency_id: setting?.properties?.currency_id,
 });
 
 const update = () => {
