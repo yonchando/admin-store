@@ -1,19 +1,16 @@
 <script setup>
 
-import PrimaryButton from "@/Components/Button/PrimaryButton.vue";
-import {Head, Link, router, useForm} from "@inertiajs/vue3";
+import {Head, router, useForm} from "@inertiajs/vue3";
 import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
 
 import Card from "@/Components/Card/Card.vue";
 import DropdownToggle from "@/Components/Dropdown/DropdownToggle.vue";
 import DropdownLink from "@/Components/Dropdown/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown/Dropdown.vue";
-import {inject, ref} from "vue";
+import {computed, inject, ref} from "vue";
 import ProductFilter from "@/Pages/Product/ProductFilter.vue";
 import ProductStatusText from "@/Pages/Product/ProductStatusText.vue";
-import {computed} from "vue";
 import Paginate from "@/Components/Paginate.vue";
-import WarningButton from "@/Components/Button/WarningButton.vue";
 import useActions from "@/actions.js";
 import FadeIn from "@/Components/Animate/FadeIn.vue";
 
@@ -29,8 +26,6 @@ const {lang, products} = defineProps([
 let index = computed(() => {
     return products.from;
 });
-
-const isFilter = ref(false);
 
 const swal = inject("$swal");
 
@@ -75,7 +70,7 @@ function destroy(product) {
         </template>
 
         <FadeIn>
-            <Card v-if="isShowFilter" no-header v-if="isFilter">
+            <Card v-if="isShowFilter" no-header>
                 <ProductFilter
                     :errors="errors"
                     :categories="categories"
