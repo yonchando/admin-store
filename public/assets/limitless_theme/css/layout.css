@@ -135,9 +135,7 @@ body {
 }
 
 .content {
-    /*padding: 1.25rem 1.25rem;*/
     padding-top: 1rem;
-    -ms-flex-positive: 1;
     flex-grow: 1;
 }
 
@@ -200,10 +198,6 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.page-header-light.has-cover {
-    background: url(../images/backgrounds/seamless.png);
-}
-
 .page-header-dark {
     background-color: #273246;
     color: #fff;
@@ -230,7 +224,6 @@ body {
 }
 
 .page-header-dark.has-cover {
-    background: url(../images/login_cover.jpg);
     background-size: cover;
 }
 
@@ -416,7 +409,7 @@ body {
 
 .nav-item-submenu > .nav-link:after {
     content: "";
-    font-family: "icomoon";
+    font-family: "icomoon", serif;
     display: inline-block;
     font-size: 1rem;
     vertical-align: middle;
@@ -427,7 +420,6 @@ body {
     right: 1.25rem;
     transition: -webkit-transform 0.25s ease-in-out;
     transition: transform 0.25s ease-in-out;
-    transition: transform 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -439,7 +431,6 @@ body {
 }
 
 .nav-item-submenu.nav-item-open > .nav-link:after {
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 
@@ -473,7 +464,6 @@ body {
 }
 
 .nav-scrollspy .nav-link.active:after {
-    -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 
@@ -855,8 +845,7 @@ body {
     .sidebar-xs .sidebar-main .nav-sidebar > .nav-item-submenu > .nav-group-sub[data-submenu-title]:before {
         content: attr(data-submenu-title);
         display: block;
-        padding: 0.75rem 1.25rem;
-        padding-bottom: 0;
+        padding: 0.75rem 1.25rem 0;
         margin-top: 0.5rem;
         opacity: 0.5;
     }
@@ -1058,7 +1047,7 @@ body {
     }
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 576px) {
     .sidebar-expand-sm:not(.sidebar-component) {
         border: 0;
     }
@@ -1156,7 +1145,7 @@ body {
     }
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
     .sidebar-expand-md:not(.sidebar-component) {
         border: 0;
     }
@@ -1254,7 +1243,7 @@ body {
     }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 992px) {
     .sidebar-expand-lg:not(.sidebar-component) {
         border: 0;
     }
@@ -1352,7 +1341,7 @@ body {
     }
 }
 
-@media (max-width: 1199.98px) {
+@media (max-width: 1200px) {
     .sidebar-expand-xl:not(.sidebar-component) {
         border: 0;
     }
@@ -1578,10 +1567,6 @@ body {
  *  Styles for main structure of content area in boxed layout
  *
  * ---------------------------------------------------------------------------- */
-.layout-boxed-bg {
-    background: url(../images/backgrounds/boxed_bg.png) repeat;
-}
-
 .layout-boxed {
     box-shadow: -4px 2px 4px rgba(0, 0, 0, 0.15), 4px 2px 4px rgba(0, 0, 0, 0.15);
 }
