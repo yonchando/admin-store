@@ -13,6 +13,10 @@ class Card extends Model
 
     protected $fillable = [
         'name',
+        'number',
+        'expiry_date',
+        'points_balance',
+        'cashback_balance',
         'status',
     ];
 }

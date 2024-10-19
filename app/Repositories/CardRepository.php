@@ -40,7 +40,9 @@ class CardRepository implements Contracts\CardRepositoryInterface
 
     public function store(CardRequest $request): Card
     {
-        return Card::create($request->validated());
+        $data = $request->validated();
+        $data['number'] = rand(0000000000000000, 9999999999999999);
+        return Card::create($data);
     }
 
     public function update(CardRequest $request, int $id): Card

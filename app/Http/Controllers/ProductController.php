@@ -24,14 +24,15 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
     public function __construct(
-        private readonly ProductRepositoryInterface $productRepository,
-        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly ProductRepositoryInterface            $productRepository,
+        private readonly CategoryRepositoryInterface           $categoryRepository,
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
-        private readonly ProductOptionRepositoryInterface $productOptionRepository,
-        private readonly ProductService $productService,
+        private readonly ProductOptionRepositoryInterface      $productOptionRepository,
+        private readonly ProductService                        $productService,
         private readonly ProductHasOptionGroupRepositoryInterface $productHasOptionGroupRepository,
-        private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
-    ) {
+        private readonly ProductHasOptionRepositoryInterface   $productHasOptionRepository,
+    )
+    {
     }
 
     public function index(ProductFilterRequest $request)
