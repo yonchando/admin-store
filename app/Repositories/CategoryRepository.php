@@ -14,8 +14,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     public function __construct(
         private readonly Request $request,
-    ) {
-    }
+    ) {}
 
     public function get(): Collection
     {
@@ -26,12 +25,12 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::query()
             ->latest()
-            ->paginate($this->request->get('perPage', 15));
+            ->paginate($this->request->get('perPage', 30));
     }
 
     public function store(CategoryRequest $request): Category
     {
-        $category = new Category();
+        $category = new Category;
         $category->fill($request->validated());
         $category->slug = Str::slug($request->get('category_name'));
         $category->save();
@@ -45,6 +44,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category->fill($request->validated());
         $category->slug = Str::slug($request->get('category_name'));
         $category->save();
+
         return $category;
     }
 

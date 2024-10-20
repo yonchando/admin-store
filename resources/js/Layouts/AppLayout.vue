@@ -7,7 +7,9 @@ defineProps<{
     title?: string;
 }>();
 
-const theme = ref(localStorage.getItem("theme"));
+const theme = ref(
+    localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
+);
 </script>
 
 <template>
@@ -15,22 +17,23 @@ const theme = ref(localStorage.getItem("theme"));
         <link rel="icon" type="image/x-icon" href="@assets/images/logos/logo.png" />
     </Head>
 
-    <div :class="{ dark: theme === 'dark' }">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <div class="grid grid-cols-12">
-                <Sidebar v-model="theme" class="col-span-2" />
+    <div :class="[theme]">
+        <div class="bg-gray-100 dark:bg-gray-900">
+            <div class="flex">
+                <Sidebar v-model="theme" />
 
-                <div class="col-span-9">
-                    <!-- Page Heading -->
-                    <header class="bg-white shadow dark:bg-gray-800" v-if="$slots.header">
-                        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div class="flex-grow">
+                    <header class="bg-white px-2 py-3 shadow dark:bg-gray-800" v-if="$slots.header">
+                        <h3 class="">
                             <slot name="header" />
-                        </div>
+                        </h3>
                     </header>
 
                     <!-- Page Content -->
-                    <main>
-                        <slot />
+                    <main class="max-h-[95.5vh] overflow-auto p-4">
+                        <div class="rounded-md bg-white p-4 text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                            <slot />
+                        </div>
                     </main>
                 </div>
             </div>

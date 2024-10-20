@@ -11,15 +11,13 @@ use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
-
     public function __construct(
         private readonly CategoryRepositoryInterface $categoryRepository,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
-        $categories = $this->categoryRepository->paginate($request);
+        $categories = $this->categoryRepository->paginate();
 
         return Inertia::render('Category/Index', [
             'categories' => $categories,

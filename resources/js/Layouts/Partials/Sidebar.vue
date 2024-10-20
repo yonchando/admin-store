@@ -24,39 +24,39 @@ function themeMode() {
 
 <template>
     <div
-        class="dark:border-dark-700 dark:bg-dark-800 flex h-full max-h-screen min-h-screen flex-col overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4">
+        class="dark:border-dark-700 dark:bg-dark-800 relative flex h-full max-h-screen min-h-screen flex-col overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4">
         <div class="mb-4 self-center overflow-hidden rounded-full">
-            <img class="size-48" src="@assets/images/logos/logo.png" alt="Logo" />
+            <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>
         <!-- Profile -->
-        <div class="mb-6 px-2">
+        <div class="lg:mb-6 lg:px-2">
             <div
-                class="group flex cursor-pointer items-center rounded-md border border-gray-300 p-2 hover:border-gray-300 hover:bg-gray-200 dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-900">
+                class="group flex cursor-pointer items-center rounded-md border-gray-300 p-2 hover:border-gray-300 hover:bg-gray-200 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-900">
                 <img v-if="user.profile" src="" alt="" />
                 <div
                     v-else
-                    class="group-hover:dark:bg-dark-800 dark:bg-dark-900 mr-3 flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white">
+                    class="group-hover:dark:bg-dark-800 dark:bg-dark-900 flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3">
                     <span class="text-dark-800 font-semibold dark:text-gray-100">{{ user.name[0] }}</span>
                 </div>
-                <div class="flex flex-col gap-1">
+                <div class="hidden flex-col gap-1 lg:flex">
                     <span class="font-base font-medium">{{ user.name }}</span>
                     <span class="text-light-400 text-xs dark:text-slate-400">{{ user.position }}</span>
                 </div>
-                <div class="ml-auto">
+                <div class="ml-auto hidden lg:block">
                     <i class="fa fa-chevron-down"></i>
                 </div>
             </div>
         </div>
 
         <!-- Search -->
-        <div class="px-2">
+        <div class="hidden px-2 lg:block">
             <TextInput v-model="search" placeholder="Search..." />
         </div>
 
         <!-- Menu -->
         <nav class="mt-4 w-full px-2">
             <ul class="flex flex-col">
-                <li class="" v-for="menu in menus">
+                <li class="w-full text-center" v-for="menu in menus">
                     <span v-if="!menu.url">
                         {{ menu.title }}
                     </span>
@@ -65,18 +65,20 @@ function themeMode() {
                         :class="[menu.isActive ? 'bg-light-200 dark:bg-gray-900' : '']"
                         v-else
                         :href="menu.url">
-                        <div class="w-7">
-                            <i v-if="typeof menu.icon === 'string'" :class="menu.icon"></i>
-                            <fa-icon v-else :icon="menu.icon" />
+                        <div class="w-full lg:w-8">
+                            <i v-if="typeof menu.icon === 'string'" :class="menu.icon" class="text-base lg:text-sm"></i>
+                            <fa-icon v-else :icon="menu.icon" class="size-5 lg:size-4" />
                         </div>
-                        {{ menu.title }}
+                        <span class="hidden lg:block">
+                            {{ menu.title }}
+                        </span>
                     </Link>
                 </li>
             </ul>
         </nav>
 
         <!-- Footer -->
-        <div class="mt-auto px-2 text-right">
+        <div class="mt-auto px-2 text-center lg:text-right">
             <button type="button" @click="themeMode">
                 <svg v-if="theme == 'light'" viewBox="0 0 24 24" fill="none" class="h-6 w-6">
                     <path

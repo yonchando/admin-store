@@ -14,6 +14,8 @@ class Category extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'json' => 'object'
+        'json' => 'object',
+        'created_at' => 'date:Y-m-d | h:i A',
+        'updated_at' => 'date:Y-m-d | h:i A',
     ];
 }
