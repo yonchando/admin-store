@@ -7,7 +7,7 @@ defineProps<{
     title?: string;
 }>();
 
-const theme = ref(localStorage.getItem("theme") ?? "light");
+const theme = ref(localStorage.getItem("theme"));
 </script>
 
 <template>
