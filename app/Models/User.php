@@ -21,10 +21,11 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
-        'role',
         'is_admin',
         'gender',
         'remember_token',
+        'profile',
+        'status',
     ];
 
     protected $hidden = [

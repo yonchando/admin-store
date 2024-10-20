@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->boolean('is_admin')->default(false);
             $table->string('gender')->nullable();
             $table->string('status')->default(UserStatus::ACTIVE->name);
+            $table->string("profile")->nullable();
+            $table->string("position")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

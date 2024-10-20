@@ -1,3 +1,37 @@
+@import "@fortawesome/fontawesome-free/css/all.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+    html, body {
+        @apply text-sm leading-5 font-normal;
+    }
+
+    span, label, a, h1, h2, h3, h4, h5, h6, p, blockquote, i {
+        @apply text-gray-900 dark:text-gray-100;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}

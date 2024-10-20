@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Route;
 use Inertia\Middleware;
 use Session;
 
@@ -41,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn() => $request->session()->get('message'),
             ],
             'setting' => fn() => Session::get('setting'),
+            'routeName' => Route::currentRouteName()
         ];
     }
 }

@@ -1,7 +1,7 @@
-import { PageProps as InertiaPageProps } from '@inertiajs/core';
-import { AxiosInstance } from 'axios';
-import { route as ziggyRoute } from 'ziggy-js';
-import { PageProps as AppPageProps } from './';
+import {PageProps as InertiaPageProps} from '@inertiajs/core';
+import {AxiosInstance} from 'axios';
+import {route as ziggyRoute} from 'ziggy-js';
+import {PageProps as AppPageProps} from './';
 
 declare global {
     interface Window {
@@ -9,7 +9,7 @@ declare global {
     }
 
     /* eslint-disable no-var */
-    var route: typeof ziggyRoute;
+    let route: typeof ziggyRoute;
 }
 
 declare module 'vue' {
@@ -19,5 +19,6 @@ declare module 'vue' {
 }
 
 declare module '@inertiajs/core' {
-    interface PageProps extends InertiaPageProps, AppPageProps {}
+    interface PageProps extends InertiaPageProps, AppPageProps {
+    }
 }
