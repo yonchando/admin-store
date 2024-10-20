@@ -1,40 +1,52 @@
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
+<script setup lang="ts">
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import {Head} from '@inertiajs/vue3';
-import BreadcrumbItem from "@/Components/Breadcrumb/BreadcrumbItem.vue";
+import { Head } from '@inertiajs/vue3';
 
+defineProps<{
+    mustVerifyEmail?: boolean;
+    status?: string;
+}>();
 </script>
 
 <template>
-    <Head title="Profile"/>
+    <Head title="Profile" />
 
-    <AppLayout>
+    <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Profile</h2>
+            <h2
+                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+            >
+                Profile
+            </h2>
         </template>
-        
-        <template #breadcrumb>
-            <BreadcrumbItem icon="icon-user" title="Profile" />
-        </template>
-        
-        <div class="">
-            <div class="tw-space-y-6">
-                <div class="tw-p-4 sm:tw-p-8 bg-white dark:tw-bg-gray-800 tw-shadow sm:tw-rounded-lg">
-                    <UpdateProfileInformationForm class="tw-max-w-xl"/>
+
+        <div class="py-12">
+            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
+                    <UpdateProfileInformationForm
+                        :must-verify-email="mustVerifyEmail"
+                        :status="status"
+                        class="max-w-xl"
+                    />
                 </div>
 
-                <div class="tw-p-4 sm:tw-p-8 bg-white dark:tw-bg-gray-800 tw-shadow sm:tw-rounded-lg">
-                    <UpdatePasswordForm class="tw-max-w-xl"/>
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
+                    <UpdatePasswordForm class="max-w-xl" />
                 </div>
-                
-                <div class="tw-p-4 sm:tw-p-8 bg-white dark:tw-bg-gray-800 tw-shadow sm:tw-rounded-lg"
-                     v-if="!$page.props.auth.user.is_admin">
-                    <DeleteUserForm class="tw-max-w-xl"/>
+
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
+                    <DeleteUserForm class="max-w-xl" />
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </AuthenticatedLayout>
 </template>

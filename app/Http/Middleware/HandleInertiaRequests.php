@@ -36,11 +36,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'lang' => fn () => Lang::get('lang'),
+            'lang' => fn() => Lang::get('lang'),
             'flash' => [
-                'message' => fn () => $request->session()->get('message'),
+                'message' => fn() => $request->session()->get('message'),
             ],
-            'setting' => fn () => Session::get('setting'),
+            'setting' => fn() => Session::get('setting'),
         ];
     }
 }

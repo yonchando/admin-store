@@ -1,35 +1,22 @@
-<script setup>
-import {Head, router} from "@inertiajs/vue3";
-import { ref } from "vue";
-import Loading from "./Partials/Loading.vue";
-
-defineProps({
-    title: String
-})
-
-const loading = ref(false);
-
-router.on("start", () => {
-    loading.value = true;
-});
-
-router.on("finish", () => {
-    loading.value = false;
-});
+<script setup lang="ts">
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head :title="title" />
+    <div
+        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0 dark:bg-gray-900"
+    >
+        <div>
+            <Link href="/">
+                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
+            </Link>
+        </div>
 
-    <div class="page-content">
-        <div class="content-wrapper">
-            <div
-                class="content d-flex justify-content-center align-items-center tw-h-screen"
-            >
-                <slot />
-            </div>
+        <div
+            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg dark:bg-gray-800"
+        >
+            <slot />
         </div>
     </div>
-
-    <Loading v-if="loading" />
 </template>

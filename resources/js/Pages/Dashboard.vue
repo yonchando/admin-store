@@ -1,22 +1,30 @@
-<script setup>
-
-import {Head} from "@inertiajs/vue3";
+<script setup lang="ts">
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Dashboard"/>
+    <Head title="Dashboard" />
 
-    <AppLayout>
-        <Card>
+    <AuthenticatedLayout>
+        <template #header>
             <h2
-                class="tw-mb-4 tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800 dark:tw-text-gray-200"
+                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
             >
                 Dashboard
             </h2>
+        </template>
 
-            <div class="tw-text-gray-900 dark:tw-text-gray-100">
-                You're logged in!
+        <div class="py-12">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div
+                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800"
+                >
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        You're logged in!
+                    </div>
+                </div>
             </div>
-        </Card>
-    </AppLayout>
+        </div>
+    </AuthenticatedLayout>
 </template>

@@ -3,26 +3,27 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "vue-tsc && vite build",
         "test": "jest"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^1.0.15",
+        "@inertiajs/vue3": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
-        "@vitejs/plugin-vue": "^4.5.0",
+        "@vitejs/plugin-vue": "^5.0.0",
         "animate.css": "^4.1.1",
-        "autoprefixer": "^10.4.16",
+        "autoprefixer": "^10.4.12",
         "axios": "^1.6.1",
         "jest": "^29.7.0",
         "laravel-vite-plugin": "^1.0.0",
-        "postcss": "^8.4.33",
+        "postcss": "^8.4.31",
         "prettier": "^3.1.1",
         "prettier-plugin-tailwindcss": "^0.5.11",
         "sweetalert2": "^11.6.13",
-        "tailwindcss": "^3.4.1",
-        "typescript": "^5.3.3",
+        "tailwindcss": "^3.2.1",
+        "typescript": "^5.5.3",
         "vite": "^5.0.0",
-        "vue": "^3.2.41",
-        "vue-sweetalert2": "^5.0.5"
+        "vue": "^3.4.0",
+        "vue-sweetalert2": "^5.0.5",
+        "vue-tsc": "^2.0.24"
     }
 }
