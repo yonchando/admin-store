@@ -2,7 +2,7 @@
 import { Column } from "@/types/datatable/column.d";
 import { computed, ref } from "vue";
 import { Paginate } from "@/types/paginate";
-import Checkbox from "@/Components/Checkbox.vue";
+import Checkbox from "@/Components/Forms/Checkbox.vue";
 
 const props = defineProps<{
     values: any;

@@ -3,7 +3,9 @@ import useSidebar from "@/Services/menu";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
-import TextInput from "@/Components/TextInput.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
+import NavLink from "@/Components/Navs/NavLink.vue";
 
 const theme = defineModel();
 
@@ -24,28 +26,45 @@ function themeMode() {
 
 <template>
     <div
-        class="dark:border-dark-700 dark:bg-dark-800 relative flex h-full max-h-screen min-h-screen flex-col overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4">
+        class="relative flex h-full max-h-screen min-h-screen flex-col overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>
         <!-- Profile -->
         <div class="lg:mb-6 lg:px-2">
-            <div
-                class="group flex cursor-pointer items-center rounded-md border-gray-300 p-2 hover:border-gray-300 hover:bg-gray-200 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-900">
-                <img v-if="user.profile" src="" alt="" />
-                <div
-                    v-else
-                    class="group-hover:dark:bg-dark-800 dark:bg-dark-900 flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3">
-                    <span class="text-dark-800 font-semibold dark:text-gray-100">{{ user.name[0] }}</span>
-                </div>
-                <div class="hidden flex-col gap-1 lg:flex">
-                    <span class="font-base font-medium">{{ user.name }}</span>
-                    <span class="text-light-400 text-xs dark:text-slate-400">{{ user.position }}</span>
-                </div>
-                <div class="ml-auto hidden lg:block">
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-            </div>
+            <dropdown width="full" align="bottom">
+                <template #trigger="{ active }">
+                    <div
+                        :class="{ 'dark:bg-gray-700': active }"
+                        class="group flex cursor-pointer items-center rounded-md border-gray-300 bg-dark-900 p-2 hover:border-gray-300 hover:bg-gray-700 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-700">
+                        <img v-if="user.profile" src="" alt="" />
+                        <div
+                            v-else
+                            :class="{ 'dark:!bg-dark-800': active }"
+                            class="flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3 dark:bg-dark-700 group-hover:dark:bg-dark-800">
+                            <span class="font-semibold text-dark-800 dark:text-gray-100">{{ user.name[0] }}</span>
+                        </div>
+                        <div class="hidden flex-col gap-1 lg:flex">
+                            <span class="font-base font-medium">{{ user.name }}</span>
+                            <span class="text-xs text-light-400 dark:text-slate-400">{{ user.position }}</span>
+                        </div>
+                        <div class="ml-auto hidden lg:block">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </template>
+
+                <template #content>
+                    <ul>
+                        <li>
+                            <nav-link :href="route('profile.edit')"> Profile </nav-link>
+                        </li>
+                        <li>
+                            <nav-link method="post" :href="route('logout')"> Logout</nav-link>
+                        </li>
+                    </ul>
+                </template>
+            </dropdown>
         </div>
 
         <!-- Search -->
@@ -61,7 +80,7 @@ function themeMode() {
                         {{ menu.title }}
                     </span>
                     <Link
-                        class="hover:bg-light-200 inline-flex w-full rounded-md px-2 py-2.5 font-medium hover:dark:bg-gray-900"
+                        class="inline-flex w-full rounded-md px-2 py-2.5 font-medium hover:bg-light-200 hover:dark:bg-gray-900"
                         :class="[menu.isActive ? 'bg-light-200 dark:bg-gray-900' : '']"
                         v-else
                         :href="menu.url">
