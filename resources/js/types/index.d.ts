@@ -6,3 +6,11 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     };
     lang: Object<string, string>;
 };
+
+export interface Menu {
+    title: string;
+    url: string;
+    icon?: any;
+    children?: Menu[];
+    isActive?: boolean;
+}

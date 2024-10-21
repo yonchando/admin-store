@@ -7,8 +7,6 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import NavLink from "@/Components/Navs/NavLink.vue";
 
-const theme = defineModel();
-
 const menus = useSidebar();
 
 const page = usePage();
@@ -17,16 +15,30 @@ const user = computed(() => page.props.auth.user);
 
 const search = ref();
 
-function themeMode() {
-    let mode = localStorage.getItem("theme") === "light" ? "dark" : "light";
-    localStorage.setItem("theme", mode);
-    theme.value = mode;
+const theme = ref(
+    localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
+);
+
+document.body.classList.add(theme.value);
+
+function changeThemeMode() {
+    if (theme.value === "dark") {
+        document.body.classList.remove("dark");
+        document.body.classList.add("light");
+        theme.value = "light";
+    } else {
+        document.body.classList.remove("light");
+        document.body.classList.add("dark");
+        theme.value = "dark";
+    }
+
+    localStorage.setItem("theme", theme.value);
 }
 </script>
 
 <template>
     <div
-        class="relative flex h-full max-h-screen min-h-screen flex-col overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
+        class="relative flex max-w-64 flex-col overflow-hidden overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>
@@ -57,7 +69,7 @@ function themeMode() {
                 <template #content>
                     <ul>
                         <li>
-                            <nav-link :href="route('profile.edit')"> Profile </nav-link>
+                            <nav-link :href="route('profile.edit')"> Profile</nav-link>
                         </li>
                         <li>
                             <nav-link method="post" :href="route('logout')"> Logout</nav-link>
@@ -84,7 +96,7 @@ function themeMode() {
                         :class="[menu.isActive ? 'bg-light-200 dark:bg-gray-900' : '']"
                         v-else
                         :href="menu.url">
-                        <div class="w-full lg:w-8">
+                        <div class="w-full lg:max-w-8">
                             <i v-if="typeof menu.icon === 'string'" :class="menu.icon" class="text-base lg:text-sm"></i>
                             <fa-icon v-else :icon="menu.icon" class="size-5 lg:size-4" />
                         </div>
@@ -98,7 +110,7 @@ function themeMode() {
 
         <!-- Footer -->
         <div class="mt-auto px-2 text-center lg:text-right">
-            <button type="button" @click="themeMode">
+            <button type="button" @click="changeThemeMode">
                 <svg v-if="theme == 'light'" viewBox="0 0 24 24" fill="none" class="h-6 w-6">
                     <path
                         fill-rule="evenodd"

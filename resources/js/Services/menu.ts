@@ -10,15 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
-import { PageProps } from "@/types";
-
-interface Menu {
-    title: string;
-    url: string;
-    icon?: any;
-    children?: Menu[];
-    isActive?: boolean;
-}
+import { Menu } from "@/types";
 
 function add(item: Menu): Menu {
     return {
