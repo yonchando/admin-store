@@ -7,7 +7,7 @@
 
 @layer base {
     html, body {
-        @apply text-sm leading-6 font-normal;
+        @apply text-sm leading-3 font-normal;
     }
 
     span, label, a, h1, h2, h3, h4, h5, h6, p, blockquote, i {
@@ -35,7 +35,6 @@
         background: #555;
     }
 }
-
 
 .toast-close {
     @apply text-red-500 opacity-100;

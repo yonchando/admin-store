@@ -19,7 +19,9 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function paginate(): LengthAwarePaginator
     {
-        return Product::query()->with(['category'])->paginate(request('perPage') ?? 20);
+        return Product::query()
+            ->with(['category'])
+            ->paginate(request('perPage') ?? 20);
     }
 
     public function filterByAndPaginate(array $filters): LengthAwarePaginator|Collection

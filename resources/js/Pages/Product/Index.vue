@@ -2,7 +2,6 @@
 import DataTable from "@/Components/Tables/DataTable.vue";
 import { Column } from "@/types/datatable/column.d";
 import { computed, ref } from "vue";
-import categoryService from "@/services/category.service";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import Form from "@/Pages/Category/Form.vue";
@@ -12,7 +11,7 @@ defineProps<{
     products: Products;
 }>();
 
-const columns: Column[] = categoryService.columns;
+const columns: Column[] = productService.columns;
 
 const selected = ref<Array<number>>([]);
 

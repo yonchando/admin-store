@@ -55,10 +55,9 @@ watch(
                             <slot name="header" />
                         </h3>
 
-                        <div class="ml-auto flex gap-2">
+                        <div class="ml-auto flex items-center justify-center gap-2">
                             <template v-for="action in actions">
-                                <component :is="action.component" v-bind="action.props">
-                                    <fa-icon :icon="action.icon" class="mr-2" />
+                                <component :is="action.component" :icon="action.icon" v-bind="action.props">
                                     {{ action.label }}
                                 </component>
                             </template>

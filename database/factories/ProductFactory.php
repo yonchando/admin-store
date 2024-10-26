@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'slug' => Str::slug($name),
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(1, 100),
-            'stock_quantity' => $this->faker->numberBetween(1, 1000),
+            'stock_qty' => $this->faker->numberBetween(1, 1000),
             'json' => [
                 'image' => [
                     'filename' => $file->hashName(),

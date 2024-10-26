@@ -18,17 +18,10 @@ export default {
                 sans: ["Poppins", "Figtree", ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                dark: {
-                    700: colors.gray[700],
-                    800: colors.gray[800],
-                    900: colors.gray[900],
-                },
-                light: {
-                    100: colors.gray[100],
-                    200: colors.gray[200],
-                    300: colors.gray[300],
-                    400: colors.gray[400],
-                },
+                success: colors.teal["600"],
+                info: colors.sky["600"],
+                warning: colors.amber["600"],
+                error: colors.rose["600"],
             },
         },
     },

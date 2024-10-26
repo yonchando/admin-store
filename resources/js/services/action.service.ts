@@ -1,5 +1,14 @@
 import { Action, ButtonActions } from "@/types/button";
-import { faEye, faFloppyDisk, faPenAlt, faPlus, faRefresh, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+    faEye,
+    faFloppyDisk,
+    faPen,
+    faPenToSquare,
+    faPlus,
+    faRefresh,
+    faTimes,
+    faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import Button from "@/Components/Button.vue";
 
 export default function useAction() {
@@ -46,7 +55,7 @@ export default function useAction() {
         },
         edit: {
             label: "Edit",
-            icon: faPenAlt,
+            icon: faPenToSquare,
             component: Button,
             props: {
                 severity: "info",

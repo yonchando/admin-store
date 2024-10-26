@@ -1,8 +1,9 @@
 import { PageProps as InertiaPageProps } from "@inertiajs/core";
 import { AxiosInstance } from "axios";
-import { route as ziggyRoute } from "ziggy-js";
+import { Config, route as ziggyRoute } from "ziggy-js";
 import { PageProps as AppPageProps } from "./";
 import { __ } from "@/locale";
+import Alert from "@/plugins/alerts/Alert.vue";
 
 type LaravelRoutes = {
     [key: string]: { uri: string; methods: string[] };

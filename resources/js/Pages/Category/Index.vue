@@ -7,6 +7,7 @@ import categoryService from "@/services/category.service";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import Form from "@/Pages/Category/Form.vue";
+import Alert from "@/Components/Alert/Alert.vue";
 
 defineProps<{
     categories: Categories;
@@ -18,8 +19,10 @@ const selected = ref<Array<number>>([]);
 
 const showForm = ref<boolean>(false);
 
+const show = ref(false);
+
 const actions = computed(() => {
-    const { add, edit, refresh } = useAction();
+    const { add, edit, remove, refresh } = useAction();
 
     add.props.onClick = () => {
         showForm.value = true;
@@ -35,10 +38,24 @@ const actions = computed(() => {
     edit.props.disabled = category.value == null;
     edit.props.onClick = () => (showForm.value = true);
 
-    return [add, edit, refresh];
+    remove.props.disabled = category.value == null;
+    remove.props.onClick = () => {
+        show.value = true;
+    };
+
+    return [add, edit, remove, refresh];
 });
 
 const category = ref<Category | null>(null);
+
+function destroy() {
+    router.delete(route("category.destroy", category.value?.id), {
+        onSuccess: () => {
+            show.value = false;
+            category.value = null;
+        },
+    });
+}
 </script>
 
 <template>
@@ -48,13 +65,20 @@ const category = ref<Category | null>(null);
         <DataTable
             :values="categories"
             :columns="columns"
-            :paginate="false"
             @page="(p) => router.reload({ data: { perPage: p } })"
             v-model:checked="selected"
             v-model:selected="category"
             checkbox />
 
         <Form v-if="showForm" v-model:show="showForm" :category="category" />
+
+        <Alert
+            @confirmed="destroy()"
+            type="warning"
+            title="Are you sure?"
+            text="Do you want to delete this?"
+            v-model:show="show"
+            confirm-button-type="error" />
     </AppLayout>
 </template>
 

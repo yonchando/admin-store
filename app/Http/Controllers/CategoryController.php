@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\Helper;
 use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
@@ -16,7 +15,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = $this->categoryRepository->get();
+        $categories = $this->categoryRepository->paginate();
 
         return Inertia::render('Category/Index', [
             'categories' => $categories,
@@ -42,8 +41,6 @@ class CategoryController extends Controller
     {
         $this->categoryRepository->destroy($category);
 
-        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.category')]));
-
-        return redirect()->back();
+        return redirect()->back()->with('success', __('lang.deleted_success', ['attribute' => __('lang.category')]));
     }
 }

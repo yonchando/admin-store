@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 
 const props = withDefaults(
     defineProps<{
         size?: "sm" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
+        icon?: IconDefinition;
     }>(),
     {
         size: "sm",
@@ -70,6 +73,7 @@ const severityClass = computed(() => {
         ],
         warning: [
             "bg-amber-600",
+            "border-transparent",
             "text-white",
             "hover:bg-amber-700",
             "focus:bg-amber-700",
@@ -80,7 +84,6 @@ const severityClass = computed(() => {
         error: [
             "border-transparent",
             "bg-rose-600",
-            "uppercase",
             "text-white",
             "hover:bg-rose-700",
             "focus:bg-rose-700",
@@ -90,8 +93,9 @@ const severityClass = computed(() => {
         ],
         success: [
             "bg-teal-600",
+            "border-transparent",
             "text-gray-300",
-            "hover:bg--700",
+            "hover:bg-teal-700",
             "focus:bg-teal-700",
             "focus:ring-2",
             "focus:ring-teal-600",
@@ -103,7 +107,10 @@ const severityClass = computed(() => {
 <template>
     <button
         :class="[sizeClass, ...severityClass]"
-        class="inline-flex items-center rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        <template v-if="icon">
+            <fa-icon :icon="icon" :size="size as any" />
+        </template>
         <slot />
     </button>
 </template>

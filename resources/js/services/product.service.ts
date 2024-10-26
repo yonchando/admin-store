@@ -3,18 +3,18 @@ import { Column } from "@/types/datatable/column";
 export const columns: Column[] = [
     {
         label: "Name",
-        field: "category_name",
+        field: "product_name",
     },
     {
-        label: "Created date",
-        field: "created_at",
+        label: "Price",
+        field: "price",
         props: {
             class: "w-48",
         },
     },
     {
-        label: "Updated date",
-        field: "updated_at",
+        label: "Stock qty",
+        field: "stock_qty",
         props: {
             class: "w-48",
         },

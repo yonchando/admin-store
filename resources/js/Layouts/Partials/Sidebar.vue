@@ -38,7 +38,7 @@ function changeThemeMode() {
 
 <template>
     <div
-        class="relative flex max-w-64 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
+        class="relative flex min-w-72 max-w-72 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-gray-700 dark:bg-gray-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>
@@ -48,13 +48,13 @@ function changeThemeMode() {
                 <template #trigger="{ active }">
                     <div
                         :class="{ 'dark:bg-gray-700': active }"
-                        class="group flex cursor-pointer items-center rounded-md border-gray-300 bg-dark-900 p-2 hover:border-gray-300 hover:bg-gray-700 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-700">
+                        class="group flex cursor-pointer items-center rounded-md border-gray-300 bg-gray-900 p-2 hover:border-gray-300 hover:bg-gray-700 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-700">
                         <img v-if="user.profile" src="" alt="" />
                         <div
                             v-else
-                            :class="{ 'dark:!bg-dark-800': active }"
-                            class="flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3 dark:bg-dark-700 group-hover:dark:bg-dark-800">
-                            <span class="font-semibold text-dark-800 dark:text-gray-100">{{ user.name[0] }}</span>
+                            :class="{ 'dark:!bg-gray-800': active }"
+                            class="flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3 dark:bg-gray-700 group-hover:dark:bg-gray-800">
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ user.name[0] }}</span>
                         </div>
                         <div class="hidden flex-col gap-1 lg:flex">
                             <span class="font-base font-medium">{{ user.name }}</span>

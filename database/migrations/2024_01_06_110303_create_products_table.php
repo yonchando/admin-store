@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->longText('description');
             $table->decimal('price', 11, 2, true)->nullable();
-            $table->bigInteger('stock_quantity')->default(0);
+            $table->bigInteger('stock_qty')->default(0);
             $table->bigInteger('category_id')->nullable();
             $table->string('slug')->nullable();
             $table->tinyText('status')->default(ProductStatus::ACTIVE->name);

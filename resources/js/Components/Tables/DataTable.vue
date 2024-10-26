@@ -11,7 +11,6 @@ const props = withDefaults(
         columns: Column[];
         checkbox?: boolean;
         rowProps?: any;
-        rowClick?: boolean;
         paginate: boolean;
         actions?: Action[];
     }>(),
@@ -21,7 +20,6 @@ const props = withDefaults(
 );
 
 defineEmits<{
-    "update:checked": [item: Array<number>];
     page: [page: number];
 }>();
 
@@ -83,10 +81,10 @@ function changeCheckedAll(event: Event) {
             <th v-if="checkbox" class="w-10 border border-light-200 text-center dark:border-gray-700">
                 <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
             </th>
-            <th v-for="column in columns" class="border border-gray-700 py-1.5 pl-1.5 text-left" v-bind="column.props">
+            <th v-for="column in columns" class="border border-gray-700 py-3 pl-2 text-left" v-bind="column.props">
                 {{ column.label }}
             </th>
-            <th class="w-40 border border-gray-700 py-1.5 pl-1.5 text-left" v-if="actions">Action</th>
+            <th class="w-40 border border-gray-700 py-3 pl-2 text-left" v-if="actions">Action</th>
         </tr>
 
         <template v-if="data.length">
@@ -102,7 +100,7 @@ function changeCheckedAll(event: Event) {
                         v-bind="rowProps"
                         @click="selectRow = selectRow?.id == item.id ? null : item"
                         :class="[selectRow?.id == item.id ? 'bg-gray-700' : '']"
-                        class="border border-dark-700 py-1.5 pl-1.5 text-left group-hover:bg-gray-700">
+                        class="border border-gray-700 py-3 pl-2 text-left align-middle group-hover:bg-gray-700">
                         <template v-if="column.component">
                             <component
                                 :is="column.component.el"
@@ -126,7 +124,7 @@ function changeCheckedAll(event: Event) {
         <template v-if="data.length === 0">
             <tr>
                 <td
-                    class="border border-light-200 py-3 pl-4 text-left group-hover:bg-dark-700 dark:border-dark-700"
+                    class="border border-light-200 py-3 pl-4 text-left group-hover:bg-gray-700 dark:border-gray-700"
                     :colspan="columns.length + 1">
                     Empty Data
                 </td>

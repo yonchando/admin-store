@@ -67,8 +67,6 @@ class ProductController extends Controller
     {
         $this->productService->storeProductWithProductOption($request);
 
-        Helper::message(__('lang.created_success', ['attribute' => __('lang.product')]));
-
         return redirect()->route('product.index');
     }
 

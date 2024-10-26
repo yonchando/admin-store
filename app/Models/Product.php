@@ -23,7 +23,7 @@ class Product extends Model
         'product_name',
         'description',
         'price',
-        'stock_quantity',
+        'stock_qty',
         'category_id',
         'image',
         'slug',
