@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useSidebar from "@/Services/menu";
+import useSidebar from "@/services/menu";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
@@ -38,7 +38,7 @@ function changeThemeMode() {
 
 <template>
     <div
-        class="relative flex max-w-64 flex-col overflow-hidden overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
+        class="relative flex max-w-64 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-dark-700 dark:bg-dark-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>

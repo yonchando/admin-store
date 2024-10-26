@@ -11,7 +11,11 @@ class Category extends Model
     use HasFactory;
     use HasScopes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'category_name',
+        'slug',
+        'json',
+    ];
 
     protected $casts = [
         'json' => 'object',

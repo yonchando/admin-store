@@ -4,23 +4,12 @@ namespace App\Helpers;
 
 use App\Models\Setting;
 use App\Repositories\Contracts\SettingRepositoryInterface;
-use Illuminate\Support\Facades\Session;
 
-class HelperService
+readonly class HelperService
 {
-
     public function __construct(
-        private readonly SettingRepositoryInterface $settingRepository,
-    ) {
-    }
-
-    public function message($message, $type = 'success', $key = 'message'): void
-    {
-        Session::flash($key, [
-            'text' => $message,
-            'type' => $type,
-        ]);
-    }
+        private SettingRepositoryInterface $settingRepository,
+    ) {}
 
     public function generateCardNumber($length = 16): string
     {
@@ -38,10 +27,7 @@ class HelperService
         return $cardNumber;
     }
 
-    /**
-     * @return Setting|null
-     */
-    public function setting(): Setting|null
+    public function setting(): ?Setting
     {
         return $this->settingRepository->first();
     }

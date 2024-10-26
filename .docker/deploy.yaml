@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    creationTimestamp: null
+    labels:
+        app: admin-store
+    name: admin-store
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: admin-store
+    strategy: {}
+    template:
+        metadata:
+            creationTimestamp: null
+            labels:
+                app: admin-store
+        spec:
+            containers:
+                - image: postgres
+                  name: postgres
+                  env:
+                      - POSTGRES_DB: admin_store
+                      - POSTGRES_PASSWORD: ${DB_PASS}
+                  resources: {}
+                - image: admin-store
+                  name: admin-store
+                  resources: {}
+status: {}

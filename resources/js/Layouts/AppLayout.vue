@@ -1,12 +1,42 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import { Action } from "@/types/button";
+import { watch } from "vue";
+import StartToastifyInstance from "toastify-js";
 
 defineProps<{
     title?: string;
     actions?: Action[];
 }>();
+
+const page = usePage();
+
+const severities: any = {
+    success: "bg-none shadow bg-teal-600 text-gray-300",
+    info: "bg-none shadow bg-sky-600 text-gray-300",
+    warning: "bg-none shadow bg-amber-600 text-gray-300",
+    error: "bg-none shadow bg-rose-600 text-white",
+};
+
+watch(
+    () => page.props.flash,
+    (newValue: any) => {
+        for (const flash in newValue) {
+            if (newValue[flash]) {
+                StartToastifyInstance({
+                    text: newValue[flash],
+                    duration: 3000,
+                    newWindow: true,
+                    close: false,
+                    gravity: "top",
+                    position: "center",
+                    className: severities[flash],
+                }).showToast();
+            }
+        }
+    },
+);
 </script>
 
 <template>
@@ -14,33 +44,31 @@ defineProps<{
         <link rel="icon" type="image/x-icon" href="@assets/images/logos/logo.png" />
     </Head>
 
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="bg-gray-100 dark:bg-gray-900">
         <div class="flex">
             <Sidebar />
 
-            <div class="relative flex-grow">
-                <header class="sticky min-h-14 bg-white px-4 shadow dark:bg-gray-800" v-if="$slots.header">
-                    <div class="flex w-full items-center">
+            <div class="flex max-h-screen min-h-screen w-full flex-col overflow-auto">
+                <header class="" v-if="$slots.header">
+                    <div class="flex w-full items-center px-4 py-2">
                         <h3 class="">
                             <slot name="header" />
                         </h3>
 
-                        <div class="ml-auto mt-4 inline-flex gap-2">
+                        <div class="ml-auto flex gap-2">
                             <template v-for="action in actions">
-                                <div>
-                                    <component :is="action.component" v-bind="action.props">
-                                        <fa-icon :icon="action.icon" class="mr-2" />
-                                        {{ action.label }}
-                                    </component>
-                                </div>
+                                <component :is="action.component" v-bind="action.props">
+                                    <fa-icon :icon="action.icon" class="mr-2" />
+                                    {{ action.label }}
+                                </component>
                             </template>
                         </div>
                     </div>
                 </header>
 
                 <!-- Page Content -->
-                <main class="mt-4 px-4">
-                    <div class="rounded-md bg-white p-4 text-gray-900 dark:bg-gray-800 dark:text-gray-100">
+                <main class="p-2">
+                    <div class="rounded-md p-1 text-gray-900 dark:bg-gray-800 dark:text-gray-200">
                         <slot />
                     </div>
                 </main>

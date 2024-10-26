@@ -25,7 +25,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return Category::query()
             ->latest()
-            ->paginate($this->request->get('perPage', 25));
+            ->paginate($this->request->get('perPage', 20));
     }
 
     public function store(CategoryRequest $request): Category

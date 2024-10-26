@@ -37,12 +37,15 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'lang' => fn() => Lang::get('lang'),
+            'lang' => fn () => Lang::get('lang'),
             'flash' => [
-                'message' => fn() => $request->session()->get('message'),
+                'success' => fn () => $request->session()->get('success'),
+                'info' => fn () => $request->session()->get('info'),
+                'error' => fn () => $request->session()->get('error'),
+                'warning' => fn () => $request->session()->get('warning'),
             ],
-            'setting' => fn() => Session::get('setting'),
-            'routeName' => Route::currentRouteName()
+            'setting' => fn () => Session::get('setting'),
+            'routeName' => Route::currentRouteName(),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Product\ProductStatus;
-use App\Facades\Enum;
 use App\Facades\Helper;
 use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
@@ -24,16 +23,14 @@ use Inertia\Inertia;
 class ProductController extends Controller
 {
     public function __construct(
-        private readonly ProductRepositoryInterface            $productRepository,
-        private readonly CategoryRepositoryInterface           $categoryRepository,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
-        private readonly ProductOptionRepositoryInterface      $productOptionRepository,
-        private readonly ProductService                        $productService,
+        private readonly ProductOptionRepositoryInterface $productOptionRepository,
+        private readonly ProductService $productService,
         private readonly ProductHasOptionGroupRepositoryInterface $productHasOptionGroupRepository,
-        private readonly ProductHasOptionRepositoryInterface   $productHasOptionRepository,
-    )
-    {
-    }
+        private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
+    ) {}
 
     public function index(ProductFilterRequest $request)
     {
@@ -41,7 +38,7 @@ class ProductController extends Controller
 
         $categories = $this->categoryRepository->get();
 
-        $products = $this->productRepository->filterByAndPaginate($filters)->withQueryString();
+        $products = $this->productRepository->paginate();
 
         $statuses = ProductStatus::toArray();
 

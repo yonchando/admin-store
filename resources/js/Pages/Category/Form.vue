@@ -2,17 +2,22 @@
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
-import useAction from "@/Services/action.service";
+import { computed, onMounted } from "vue";
+import useAction from "@/services/action.service";
+import InputError from "@/Components/Forms/InputError.vue";
+import { Category } from "@/types/models/category";
 
 const show = defineModel("show");
+const props = defineProps<{
+    category?: Category | null;
+}>();
 
 const form = useForm({
-    name: "",
+    category_name: props.category?.category_name ?? "",
 });
 
 const actions = computed(() => {
-    const { save, close, refresh } = useAction();
+    const { save, close } = useAction();
 
     save.props.onClick = submit;
 
@@ -20,18 +25,33 @@ const actions = computed(() => {
         show.value = false;
     };
 
-    return [save, close, refresh];
+    return [save, close];
 });
 
-function submit() {}
+function submit() {
+    if (props.category) {
+        form.put(route("category.update", props.category?.id), {
+            onSuccess: () => {
+                show.value = false;
+                form.reset();
+            },
+        });
+    } else {
+        form.post(route("category.store"), {
+            onSuccess: () => {
+                show.value = false;
+                form.reset();
+            },
+        });
+    }
+}
 </script>
 
 <template>
-    <Modal :actions="actions" :show="!!show" title="Add new" position="center">
+    <Modal :actions="actions" :show="!!show" @close="show = false" title="Add new" max-width="xl" position="center">
         <div>
-            <form class="space-y-4">
-                <TextInput label="Name" v-model="form.name" />
-            </form>
+            <TextInput autofocus label="Name" v-model="form.category_name" />
+            <InputError :message="form.errors.category_name" />
         </div>
     </Modal>
 </template>

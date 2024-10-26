@@ -5,6 +5,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         user: User;
     };
     lang: Object<string, string>;
+    flash: { success: string | object; info: string | object; warning: string | object; error: string | object };
 };
 
 export interface Menu {

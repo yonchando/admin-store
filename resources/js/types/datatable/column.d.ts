@@ -1,14 +1,12 @@
-type FieldCallback<Type> = (e: Type) => string;
-
 export interface Component {
     el: any;
     label: string;
     props?: any;
 }
 
-export interface Column<Type> {
+export interface Column {
     label: string;
-    field?: string | FieldCallback<Type>;
+    field?: string | any;
     props?: any;
     component?: Component;
 }

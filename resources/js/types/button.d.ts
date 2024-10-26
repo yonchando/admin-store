@@ -7,6 +7,8 @@ export interface ButtonActions<Type> {
     save: Action;
     refresh: Action;
     close: Action;
+    edit: Action;
+    remove: Action;
 }
 
 export interface Action {
@@ -14,7 +16,7 @@ export interface Action {
     label: string;
     icon?: string | IconDefinition;
     props: {
-        onClick?: (e: Event) => void;
+        onClick?: (e: Event, ...arg) => void;
         disabled?: boolean;
         size?: "sm" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";

@@ -19,7 +19,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function paginate(): LengthAwarePaginator
     {
-        return Product::query()->with(['category'])->paginate();
+        return Product::query()->with(['category'])->paginate(request('perPage') ?? 20);
     }
 
     public function filterByAndPaginate(array $filters): LengthAwarePaginator|Collection
@@ -32,7 +32,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query->filters($filters);
 
-        return $query->paginate(@$filters['perPage'] ?? 15);
+        return $query->paginate(@$filters['perPage'] ?? 20);
     }
 
     public function find(int $id): ?Product
@@ -46,7 +46,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function store(ProductRequest $request): Product
     {
-        $product = new Product();
+        $product = new Product;
 
         $product->fill($request->except(['slug', 'image']));
 
@@ -61,7 +61,7 @@ class ProductRepository implements ProductRepositoryInterface
                 'filename' => $filename,
                 'original_name' => $file->getClientOriginalName(),
                 'path' => $path,
-                "url" => Storage::url("$path/$filename"),
+                'url' => Storage::url("$path/$filename"),
             ]);
         }
 

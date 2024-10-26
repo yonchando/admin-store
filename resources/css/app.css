@@ -35,3 +35,8 @@
         background: #555;
     }
 }
+
+
+.toast-close {
+    @apply text-red-500 opacity-100;
+}

@@ -1,3 +1,4 @@
+import "toastify-js/src/toastify.css";
 import "../css/app.css";
 import "./bootstrap";
 

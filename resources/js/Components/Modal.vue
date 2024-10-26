@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, watch } from "vue";
-import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
-import SecondaryButton from "@/Components/Buttons/SecondaryButton.vue";
-import InfoButton from "@/Components/Buttons/InfoButton.vue";
 import { Action } from "@/types/button";
 
 const props = withDefaults(
@@ -108,10 +105,12 @@ const positionClass = computed(() => {
                         class="h-fit transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:w-full dark:bg-gray-800"
                         :class="[maxWidthClass, positionClass]">
                         <div
-                            class="mb-4 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
-                            <div class="flex px-4 py-3">
+                            class="mb-4 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex items-center px-4 py-3">
                                 <slot name="title">
-                                    <h3 class="text-lg font-semibold leading-5">{{ title }}</h3>
+                                    <h3 class="text-lg font-semibold leading-5">
+                                        {{ title }}
+                                    </h3>
                                 </slot>
 
                                 <div class="ml-auto space-x-2">

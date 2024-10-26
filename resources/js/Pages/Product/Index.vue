@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Categories, Category } from "@/types/models/category";
 import DataTable from "@/Components/Tables/DataTable.vue";
 import { Column } from "@/types/datatable/column.d";
 import { computed, ref } from "vue";
@@ -7,9 +6,10 @@ import categoryService from "@/services/category.service";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import Form from "@/Pages/Category/Form.vue";
+import { Products } from "@/types/models/product";
 
 defineProps<{
-    categories: Categories;
+    products: Products;
 }>();
 
 const columns: Column[] = categoryService.columns;
@@ -19,26 +19,21 @@ const selected = ref<Array<number>>([]);
 const showForm = ref<boolean>(false);
 
 const actions = computed(() => {
-    const { add, edit, refresh } = useAction();
+    const { add, refresh } = useAction();
 
-    add.props.onClick = () => {
-        showForm.value = true;
-        category.value = null;
-    };
+    add.props.onClick = addForm;
 
     refresh.props.onClick = () => {
         router.reload({
             only: ["categories"],
         });
     };
-
-    edit.props.disabled = category.value == null;
-    edit.props.onClick = () => (showForm.value = true);
-
-    return [add, edit, refresh];
+    return [add, refresh];
 });
 
-const category = ref<Category | null>(null);
+function addForm() {
+    showForm.value = true;
+}
 </script>
 
 <template>
@@ -46,15 +41,13 @@ const category = ref<Category | null>(null);
         <template #header> Category Lists </template>
 
         <DataTable
-            :values="categories"
+            :values="products"
             :columns="columns"
-            :paginate="false"
             @page="(p) => router.reload({ data: { perPage: p } })"
             v-model:checked="selected"
-            v-model:selected="category"
             checkbox />
 
-        <Form v-if="showForm" v-model:show="showForm" :category="category" />
+        <Form v-model:show="showForm" />
     </AppLayout>
 </template>
 
