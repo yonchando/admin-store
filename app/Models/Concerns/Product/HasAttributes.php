@@ -11,21 +11,21 @@ trait HasAttributes
     public function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->json->image->getUrl(),
+            get: fn () => $this->json->image->url,
         );
     }
 
     public function statusText(): Attribute
     {
         return Attribute::make(
-            get: fn() => __('lang.'.Str::lower($this->status->name)),
+            get: fn () => __('lang.'.Str::lower($this->status->name)),
         );
     }
 
     public function isActive(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->status->name == ProductStatus::ACTIVE->name,
+            get: fn () => $this->status->name == ProductStatus::ACTIVE->name,
         );
     }
 }

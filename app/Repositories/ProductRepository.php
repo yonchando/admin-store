@@ -12,37 +12,30 @@ use Storage;
 
 class ProductRepository implements ProductRepositoryInterface
 {
+    /**
+     * @return Collection<Product>
+     */
     public function get(): Collection
     {
-        return Product::query()->get();
+        return Product::query()
+            ->applyFilter(request()->all())
+            ->get();
     }
 
+    /**
+     * @return LengthAwarePaginator<Product>
+     */
     public function paginate(): LengthAwarePaginator
     {
         return Product::query()
-            ->with(['category'])
+            ->applyFilter(request()->all())
             ->paginate(request('perPage') ?? 20);
-    }
-
-    public function filterByAndPaginate(array $filters): LengthAwarePaginator|Collection
-    {
-        $query = Product::query();
-
-        $query->with([
-            'category',
-        ]);
-
-        $query->filters($filters);
-
-        return $query->paginate(@$filters['perPage'] ?? 20);
     }
 
     public function find(int $id): ?Product
     {
         return Product::query()->with([
             'category',
-            'productHasOptionGroups.productOptionGroup',
-            'productHasOptionGroups.productHasOptions.productOption',
         ])->find($id);
     }
 
@@ -107,17 +100,15 @@ class ProductRepository implements ProductRepositoryInterface
         return $product;
     }
 
-    public function destroy(Product $product): void
+    public function destroy(int|array $ids): void
     {
-        $product->delete();
+        Product::destroy($ids);
     }
 
     public function findBySlug($slug): Product
     {
         return Product::query()->with([
             'category',
-            'productHasOptionGroups.productOptionGroup',
-            'productHasOptionGroups.productHasOptions.productOption',
         ])->slug($slug)->first();
     }
 }

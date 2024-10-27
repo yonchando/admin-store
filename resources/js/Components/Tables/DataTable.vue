@@ -8,9 +8,9 @@ import { Paginate } from "@/types/paginate";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import { faAngleDoubleLeft, faAngleDoubleRight, faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/Components/Button.vue";
-import { router } from "@inertiajs/vue3";
 import ArrowUpDown from "@/Components/Icon/ArrowUpDown.vue";
 import _ from "lodash";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps<{
     values: Array<any>;
@@ -41,7 +41,7 @@ const checkedAll = computed<boolean>(() => {
 
 const selectRow = defineModel<any>("selected");
 
-const sortable = defineModel<any>("sortable");
+const sortBy = defineModel<any>("sortBy");
 
 function changeCheckedAll(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -54,12 +54,16 @@ function changeCheckedAll(event: Event) {
 }
 
 function sort(item: Column) {
+    if (!item.sortable) {
+        return;
+    }
+
     let direction;
 
-    if (sortable.value.field == item.field) {
-        if (sortable.value.direction == null) {
+    if (sortBy.value.field == item.sortable) {
+        if (sortBy.value.direction == null) {
             direction = "asc";
-        } else if (sortable.value.direction == "asc") {
+        } else if (sortBy.value.direction == "asc") {
             direction = "desc";
         } else {
             direction = null;
@@ -68,7 +72,7 @@ function sort(item: Column) {
         direction = "asc";
     }
 
-    sortable.value = { field: item.field, direction };
+    sortBy.value = { field: item.sortable, direction };
 }
 
 const inputSearch = _.debounce(function (e: Event) {
@@ -78,13 +82,18 @@ const inputSearch = _.debounce(function (e: Event) {
 
 <template>
     <div class="flex px-2 py-4">
-        <div>
-            <TextInput
-                @input="inputSearch"
-                :root="{ class: '!gap-2' }"
-                label="Filter:"
-                direction="horizontal"
-                v-model="search" />
+        <div class="flex">
+            <div>
+                <TextInput
+                    @input="inputSearch"
+                    :root="{ class: '!gap-2' }"
+                    label="Filter:"
+                    direction="horizontal"
+                    v-model="search" />
+            </div>
+            <div>
+                <slot name="filters" />
+            </div>
         </div>
 
         <div class="ml-auto inline-flex items-center gap-2" v-if="paginate">
@@ -103,49 +112,57 @@ const inputSearch = _.debounce(function (e: Event) {
     <div class="mb-4">
         <p>Total: {{ paginate ? paginate.total : values.length }}</p>
     </div>
-    <table class="w-full table-auto border-collapse rounded-md">
+    <table class="w-full table-fixed border-collapse rounded-md">
         <tr>
-            <th v-if="checkbox" class="border-light-200 w-10 border text-center dark:border-gray-700">
+            <th
+                v-if="checkbox"
+                class="w-10 border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-700">
                 <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
             </th>
             <th
                 v-for="column in columns"
                 :class="[column.sortable ? 'cursor-pointer' : '']"
                 @click="sort(column)"
-                class="border border-gray-700 py-3 pl-2 text-left align-middle"
+                class="border border-gray-300 bg-gray-200 py-3 pl-2 text-left align-middle font-semibold dark:border-gray-600 dark:bg-gray-700"
                 v-bind="column.props">
-                <div class="flex">
-                    {{ column.label }}
-                    <span class="ml-4 mr-2 inline-flex" v-if="column.sortable">
+                <div class="flex items-center">
+                    <span>
+                        {{ column.label }}
+                    </span>
+                    <span class="ml-3 inline-flex" v-if="column.sortable">
                         <ArrowUpDown
-                            v-if="sortable.field != column.field || (sortable.field && sortable.direction == null)"
+                            v-if="sortBy?.field != column.sortable || (sortBy?.field && sortBy?.direction == null)"
                             class="size-3.5" />
                         <fa-icon
-                            v-if="sortable.field === column.field && sortable.direction == 'asc'"
+                            v-if="sortBy?.field === column.sortable && sortBy?.direction == 'desc'"
                             :icon="faArrowDown" />
                         <fa-icon
-                            v-if="sortable.field === column.field && sortable.direction == 'desc'"
+                            v-if="sortBy?.field === column.sortable && sortBy.direction == 'asc'"
                             :icon="faArrowUp" />
                     </span>
                 </div>
             </th>
-            <th class="w-40 border border-gray-700 py-3 pl-2 text-left" v-if="actions">Action</th>
+            <th
+                class="w-40 border border-gray-200 bg-gray-200 py-3 pl-2 text-left align-middle dark:border-gray-600 dark:bg-gray-800"
+                v-if="actions">
+                Action
+            </th>
         </tr>
 
         <template v-if="values.length">
             <tr v-for="item in values" class="group">
                 <td
                     v-if="checkbox"
-                    :class="[selectRow?.id == item.id ? 'bg-gray-700' : '']"
-                    class="border-light-200 border text-center group-hover:bg-gray-700 dark:border-gray-700">
+                    :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
+                    class="border border-gray-300 text-center align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700">
                     <Checkbox :value="item.id" v-model:checked="checked" />
                 </td>
                 <template v-for="column in columns">
                     <td
                         v-bind="rowProps"
                         @click="selectRow = selectRow?.id == item.id ? null : item"
-                        :class="[selectRow?.id == item.id ? 'bg-gray-700' : '']"
-                        class="border border-gray-700 py-3 pl-2 text-left align-middle group-hover:bg-gray-700">
+                        :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
+                        class="border border-gray-300 py-3 pl-2 text-left align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700">
                         <template v-if="column.component">
                             <component
                                 :is="column.component.el"
@@ -155,7 +172,7 @@ const inputSearch = _.debounce(function (e: Event) {
                         </template>
                         <template v-else>
                             <template v-if="typeof column.field === 'string'">
-                                {{ item[column.field] ?? "-" }}
+                                {{ _.get(item, column.field) ?? "-" }}
                             </template>
                             <template v-else>
                                 {{ column.field ? column.field(item) : "-" }}
@@ -180,32 +197,38 @@ const inputSearch = _.debounce(function (e: Event) {
         <template v-if="paginate?.data.length">
             <p>Showing: {{ paginate.current_page }} of {{ paginate.last_page }} pages</p>
 
-            <div class="ml-auto flex">
+            <div class="ml-auto flex" v-if="paginate.links.length > 0">
                 <template v-for="(link, index) in paginate.links">
-                    <Button
-                        @click="router.get(link.url)"
-                        v-if="index == 0"
-                        :disabled="!link.url"
-                        class="rounded-s-full border-r-0 !px-3">
-                        <fa-icon :icon="faAngleDoubleLeft"></fa-icon>
-                        Previous
-                    </Button>
+                    <template v-if="index == 0">
+                        <Button
+                            @click="router.get(link.url)"
+                            :disabled="!link.url"
+                            class="rounded-s-full border-r-0 !px-3">
+                            <fa-icon :icon="faAngleDoubleLeft"></fa-icon>
+                            Previous
+                        </Button>
+                    </template>
                     <template v-if="index != 0 && index != paginate.links.length - 1">
                         <Button
-                            :severity="link.active ? 'info' : 'primary'"
+                            v-if="link.url"
+                            :severity="link.active ? 'info' : 'secondary'"
                             @click="router.get(link.url)"
-                            class="rounded-none border-0 border-l">
+                            class="rounded-none border-l-0">
+                            {{ link.label }}
+                        </Button>
+                        <Button v-else class="rounded-none border-l-0" severity="secondary">
                             {{ link.label }}
                         </Button>
                     </template>
-                    <Button
-                        @click="router.get(link.url)"
-                        v-if="index == paginate.links.length - 1"
-                        :disabled="!link.url"
-                        class="rounded-e-full border-l-0 !px-3">
-                        Next
-                        <fa-icon :icon="faAngleDoubleRight"></fa-icon>
-                    </Button>
+                    <template v-if="index == paginate.links.length - 1">
+                        <Button
+                            @click="router.get(link.url)"
+                            :disabled="!link.url"
+                            class="rounded-e-full border-l-0 !px-3">
+                            Next
+                            <fa-icon :icon="faAngleDoubleRight"></fa-icon>
+                        </Button>
+                    </template>
                 </template>
             </div>
         </template>

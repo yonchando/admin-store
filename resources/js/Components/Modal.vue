@@ -78,7 +78,7 @@ const positionClass = computed(() => {
 </script>
 
 <template>
-    <Teleport to="#app">
+    <Teleport to="body">
         <Transition leave-active-class="duration-200">
             <div v-show="show" class="fixed inset-0 z-50 flex overflow-y-auto px-4 py-6 sm:px-0" scroll-region>
                 <Transition

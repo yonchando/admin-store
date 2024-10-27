@@ -8,6 +8,6 @@ export interface Column {
     label: string;
     field?: any;
     props?: any;
-    sortable: boolean;
+    sortable?: string;
     component?: Component;
 }

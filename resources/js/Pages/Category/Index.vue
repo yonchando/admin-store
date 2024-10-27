@@ -20,11 +20,6 @@ const filters = reactive(categoryService.filters);
 
 filters.page = props.categories.current_page;
 
-filters.sortable = {
-    field: props.sort?.field ?? "created_at",
-    direction: props.sort?.direction ?? "asc",
-};
-
 const selected = ref<Array<number>>([]);
 
 const showForm = ref<boolean>(false);
@@ -100,7 +95,7 @@ function destroy() {
             @page="(p) => router.reload({ data: { perPage: p, page: 1 } })"
             v-model:checked="selected"
             v-model:selected="category"
-            v-model:sortable="filters.sortable"
+            v-model:sort-by="filters.sortBy"
             checkbox />
 
         <Form v-if="showForm" v-model:show="showForm" :category="category" />

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\Product\JsonCast;
+use App\Casts\Product\ProductJson;
 use App\Enums\Product\ProductStatus;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property ProductJson $json
+ */
 class Product extends Model
 {
     use HasAttributes;
@@ -32,9 +35,10 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'json' => JsonCast::class,
+        'json' => ProductJson::class,
         'price' => 'decimal:2',
         'status' => ProductStatus::class,
+        'created_at' => 'datetime:Y-m-d h:i A',
     ];
 
     protected $appends = [

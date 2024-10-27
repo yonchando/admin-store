@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\Product;
 use App\Models\ProductHasOptionGroup;
 use App\Models\ProductOption;
@@ -15,7 +14,7 @@ it('can store product with product option', function () {
     $data['product_options'][] = [
         'product_option_group_id' => $group->id,
         'options' => $options->map(
-            fn($value) => [
+            fn ($value) => [
                 'product_option_id' => $value->id,
                 'price_adjustment' => fake()->randomFloat(2, 0, 1),
             ]
@@ -61,7 +60,7 @@ it('can add more product option from product detail', function () {
             [
                 'product_option_group_id' => $group->id,
                 'options' => $options->map(
-                    fn($value) => [
+                    fn ($value) => [
                         'product_option_id' => $value->id,
                         'price_adjustment' => fake()->randomFloat(2, 0, 5),
                     ]
@@ -123,7 +122,7 @@ describe('store option to product option group', function () {
         ]);
 
         $request = [
-            'options' => $options->map(fn($value) => [
+            'options' => $options->map(fn ($value) => [
                 'product_has_option_group_id' => $productHasOptionGroup->id,
                 'product_option_id' => $value->id,
                 'price_adjustment' => fake()->randomFloat(2, 0, 1),

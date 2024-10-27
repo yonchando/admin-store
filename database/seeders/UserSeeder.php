@@ -12,12 +12,11 @@ class UserSeeder extends Seeder
         if (User::first() == null) {
             User::create([
                 'name' => 'Super Admin',
+                'position' => 'Super Admin',
                 'username' => 'admin',
                 'password' => bcrypt('password'),
                 'is_admin' => true,
             ]);
         }
-
-//        User::factory(20)->create();
     }
 }

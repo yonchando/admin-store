@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Product\ProductStatus;
-use App\Models\Category\Category;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
@@ -33,6 +33,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(1, 100),
             'stock_qty' => $this->faker->numberBetween(1, 1000),
+            'category_id' => Category::inRandomOrder()->first()?->id,
             'json' => [
                 'image' => [
                     'filename' => $file->hashName(),
@@ -43,6 +44,7 @@ class ProductFactory extends Factory
                 ],
             ],
             'status' => ProductStatus::ACTIVE->value,
+            'created_at' => $this->faker->dateTimeBetween('-2 months')->format('Y-m-d H:i:s'),
         ];
     }
 

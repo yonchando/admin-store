@@ -47,6 +47,7 @@ export default function useSidebar() {
             title: "Products",
             url: route("product.index"),
             icon: faDolly,
+            isActive: isActive("product.index", "product.create", "product.show", "product.edit"),
         }),
         add({
             title: "Purchase Orders",

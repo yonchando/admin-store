@@ -4,12 +4,12 @@ export const columns: Column[] = [
     {
         label: "Name",
         field: "category_name",
-        sortable: true,
+        sortable: "category_name",
     },
     {
         label: "Created date",
         field: "created_at",
-        sortable: true,
+        sortable: "created_at",
         props: {
             class: "w-48",
         },
@@ -17,7 +17,7 @@ export const columns: Column[] = [
     {
         label: "Updated date",
         field: "updated_at",
-        sortable: true,
+        sortable: "updated_at",
         props: {
             class: "w-48",
         },
@@ -26,7 +26,7 @@ export const columns: Column[] = [
 
 export const filters = {
     page: 1,
-    sortable: {
+    sortBy: {
         field: "created_at",
         direction: "desc",
     },

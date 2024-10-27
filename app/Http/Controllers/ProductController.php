@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\Product\ProductStatus;
 use App\Facades\Helper;
-use App\Http\Requests\Product\ProductFilterRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductHasOption;
@@ -32,11 +31,15 @@ class ProductController extends Controller
         private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
     ) {}
 
-    public function index(ProductFilterRequest $request)
+    public function index(Request $request)
     {
-        $filters = $request->validated();
-
         $categories = $this->categoryRepository->get();
+
+        $request->merge([
+            'includes' => ['category' => function ($query) {
+                $query->select(['id', 'category_name as name']);
+            }],
+        ]);
 
         $products = $this->productRepository->paginate();
 
@@ -44,9 +47,9 @@ class ProductController extends Controller
 
         return Inertia::render('Product/Index', [
             'products' => $products,
-            'filters' => $filters,
-            'statuses' => $statuses,
-            'categories' => $categories,
+            'statuses' => fn () => $statuses,
+            'categories' => Inertia::lazy(fn () => $categories),
+            'requests' => $request->except('includes'),
         ]);
     }
 

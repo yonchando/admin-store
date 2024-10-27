@@ -2,7 +2,6 @@ import { Action, ButtonActions } from "@/types/button";
 import {
     faEye,
     faFloppyDisk,
-    faPen,
     faPenToSquare,
     faPlus,
     faRefresh,
@@ -39,6 +38,14 @@ export default function useAction() {
         },
         close: {
             label: "Close",
+            icon: faTimes,
+            component: Button,
+            props: {
+                severity: "secondary",
+            },
+        },
+        cancel: {
+            label: "Cancel",
             icon: faTimes,
             component: Button,
             props: {

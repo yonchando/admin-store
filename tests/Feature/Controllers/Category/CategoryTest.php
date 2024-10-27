@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Category\Category;
+use App\Models\Category;
 use Inertia\Testing\AssertableInertia;
 
 test('index method', function () {

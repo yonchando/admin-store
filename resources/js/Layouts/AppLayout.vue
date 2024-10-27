@@ -67,7 +67,7 @@ watch(
 
                 <!-- Page Content -->
                 <main class="p-2">
-                    <div class="rounded-md p-1 text-gray-900 dark:bg-gray-800 dark:text-gray-200">
+                    <div class="rounded-md bg-white p-1 text-gray-900 dark:bg-gray-800 dark:text-gray-200">
                         <slot />
                     </div>
                 </main>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\Helper;
 use App\Http\Requests\Setting\SettingRequest;
 use App\Repositories\Contracts\CurrencyRepositoryInterface;
 use App\Repositories\Contracts\SettingRepositoryInterface;
@@ -13,8 +12,7 @@ class SettingController extends Controller
     public function __construct(
         private readonly SettingRepositoryInterface $settingRepository,
         private readonly CurrencyRepositoryInterface $currencyRepository,
-    ) {
-    }
+    ) {}
 
     public function show()
     {
@@ -31,8 +29,6 @@ class SettingController extends Controller
         session()->forget('setting');
         session()->put('setting', $setting);
 
-        Helper::message(__('lang.updated_success', ['attribute' => __('lang.setting')]));
-
-        return redirect()->route('setting.show');
+        return redirect()->route('setting.show')->with('success', __('lang.updated_success', ['attribute' => __('lang.setting')]));
     }
 }

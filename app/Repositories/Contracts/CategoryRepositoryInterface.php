@@ -3,7 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category\Category;
+use App\Models\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 

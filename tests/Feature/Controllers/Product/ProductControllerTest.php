@@ -2,7 +2,7 @@
 
 use App\Enums\Product\ProductStatus;
 use App\Facades\Enum;
-use App\Models\Category\Category;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;

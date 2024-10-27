@@ -47,18 +47,16 @@ function changeThemeMode() {
             <dropdown width="full" align="bottom">
                 <template #trigger="{ active }">
                     <div
-                        :class="{ 'dark:bg-gray-700': active }"
-                        class="group flex cursor-pointer items-center rounded-md border-gray-300 bg-gray-900 p-2 hover:border-gray-300 hover:bg-gray-700 lg:border dark:border-gray-700 hover:dark:border-gray-700 hover:dark:bg-gray-700">
+                        class="group flex cursor-pointer items-center rounded-md border-gray-300 bg-gray-200 p-2 hover:border-gray-300 hover:bg-gray-300 lg:border dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-700">
                         <img v-if="user.profile" src="" alt="" />
                         <div
                             v-else
-                            :class="{ 'dark:!bg-gray-800': active }"
-                            class="flex size-10 items-center justify-center rounded-full bg-gray-200 group-hover:bg-white lg:mr-3 dark:bg-gray-700 group-hover:dark:bg-gray-800">
+                            class="flex size-10 items-center justify-center rounded-full bg-gray-300 group-hover:bg-gray-200 lg:mr-3 dark:bg-gray-700 group-hover:dark:bg-gray-800">
                             <span class="font-semibold text-gray-800 dark:text-gray-100">{{ user.name[0] }}</span>
                         </div>
-                        <div class="hidden flex-col gap-1 lg:flex">
+                        <div class="hidden flex-col gap-2 lg:flex">
                             <span class="font-base font-medium">{{ user.name }}</span>
-                            <span class="text-light-400 text-xs dark:text-slate-400">{{ user.position }}</span>
+                            <span class="text-xs text-gray-600 dark:text-slate-400">{{ user.position }}</span>
                         </div>
                         <div class="ml-auto hidden lg:block">
                             <i class="fa fa-chevron-down"></i>
@@ -68,11 +66,11 @@ function changeThemeMode() {
 
                 <template #content>
                     <ul>
-                        <li>
-                            <nav-link :href="route('profile.edit')"> Profile</nav-link>
+                        <li class="border-b dark:border-b-gray-800">
+                            <nav-link :href="route('profile.edit')">Profile</nav-link>
                         </li>
                         <li>
-                            <nav-link method="post" :href="route('logout')"> Logout</nav-link>
+                            <nav-link method="post" :href="route('logout')">Logout</nav-link>
                         </li>
                     </ul>
                 </template>
@@ -92,8 +90,12 @@ function changeThemeMode() {
                         {{ menu.title }}
                     </span>
                     <Link
-                        class="hover:bg-light-200 inline-flex w-full items-center rounded-md px-2 py-2.5 font-medium hover:dark:bg-gray-900"
-                        :class="[menu.isActive ? 'bg-light-200 dark:bg-gray-900' : '']"
+                        class="inline-flex w-full items-center rounded-md px-2 py-2.5 font-medium hover:bg-gray-200 hover:dark:bg-gray-900"
+                        :class="[
+                            menu.isActive
+                                ? 'bg-light-200 border border-gray-300 dark:border-gray-700 dark:bg-gray-900'
+                                : '',
+                        ]"
                         v-else
                         :href="menu.url">
                         <div class="w-full lg:max-w-8">

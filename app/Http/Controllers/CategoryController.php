@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category\Category;
+use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,11 +18,9 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryRepository->paginate();
 
-        $sortable = $request->get('sortable', []);
-
         return Inertia::render('Category/Index', [
             'categories' => $categories,
-            'sort' => [___($sortable, 'field') => ___($sortable, 'direction')],
+            'requests' => $request->all(),
         ]);
     }
 

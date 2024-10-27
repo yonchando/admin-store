@@ -15,7 +15,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "3.0",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "yonchando/laravel-cast-attributes": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Category;
+namespace App\Models;
 
+use App\Filters\Category\CategoryFilter;
 use App\Models\Concerns\Category\HasScopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,8 +21,8 @@ class Category extends Model
 
     protected $casts = [
         'json' => 'object',
-        'created_at' => 'date:Y-m-d | h:i A',
-        'updated_at' => 'date:Y-m-d | h:i A',
+        'created_at' => 'datetime:Y-m-d | h:i A',
+        'updated_at' => 'datetime:Y-m-d | h:i A',
     ];
 
     public function scopeApplyFilter(Builder $query, array $data): Builder

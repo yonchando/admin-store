@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category\Category;
+use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $query->applyFilter(request()->all());
 
-        return $query->paginate($this->request->get('perPage', 20))->onEachSide(2)->withQueryString();
+        return $query->paginate($this->request->get('perPage', 20));
     }
 
     public function store(CategoryRequest $request): Category
@@ -46,6 +46,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $category->fill($request->validated());
         $category->slug = Str::slug($request->get('category_name'));
+        $category->updated_at = now();
         $category->save();
 
         return $category;
