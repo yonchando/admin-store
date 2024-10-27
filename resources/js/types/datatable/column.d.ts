@@ -6,7 +6,8 @@ export interface Component {
 
 export interface Column {
     label: string;
-    field?: string | any;
+    field?: any;
     props?: any;
+    sortable: boolean;
     component?: Component;
 }

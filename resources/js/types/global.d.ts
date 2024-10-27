@@ -3,7 +3,7 @@ import { AxiosInstance } from "axios";
 import { Config, route as ziggyRoute } from "ziggy-js";
 import { PageProps as AppPageProps } from "./";
 import { __ } from "@/locale";
-import Alert from "@/plugins/alerts/Alert.vue";
+import { Router } from "@inertiajs/core/types/router";
 
 type LaravelRoutes = {
     [key: string]: { uri: string; methods: string[] };

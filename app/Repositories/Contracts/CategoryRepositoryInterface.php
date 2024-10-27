@@ -3,7 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category;
+use App\Models\Category\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -23,5 +23,5 @@ interface CategoryRepositoryInterface
 
     public function update(CategoryRequest $request, Category $category): Category;
 
-    public function destroy(Category $category): void;
+    public function destroy(int|array $ids): void;
 }

@@ -1,10 +1,9 @@
 <?php
 
 use App\Enums\Product\ProductStatus;
-use App\Models\Category;
+use App\Models\Category\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
 describe('product filters', function () {
@@ -27,18 +26,18 @@ describe('product filters', function () {
 
         $res->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/Index')
                     ->has('products.data', 1)
                     ->has(
                         'products.data.0',
-                        fn(AssertableInertia $page) => $page->where('id', $product->id)
+                        fn (AssertableInertia $page) => $page->where('id', $product->id)
                             ->where('product_name', $product->product_name)
                             ->etc()
                     )
                     ->where('categories.0', $category)
                     ->has(
                         'filters',
-                        fn(AssertableInertia $page) => $page->where('search', 'product')
+                        fn (AssertableInertia $page) => $page->where('search', 'product')
                             ->where('category_id', "$category->id")
                             ->where('min_price', '50')
                             ->where('max_price', '200')
@@ -48,11 +47,11 @@ describe('product filters', function () {
     });
 
     it('filter by product name', function () {
-        Product::factory()->create(['product_name' => "Other Name"],);
+        Product::factory()->create(['product_name' => 'Other Name']);
         $products = Product::factory(2)->create(
             new Sequence(
-                ['product_name' => "Search Name"],
-                ['product_name' => "Search Other"],
+                ['product_name' => 'Search Name'],
+                ['product_name' => 'Search Other'],
             ));
 
         $res = $this->get(route('product.index', [
@@ -61,7 +60,7 @@ describe('product filters', function () {
 
         $res->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/Index')
                     ->has('products.data', $products->count())
                     ->where('products.data.0.product_name', 'Search Name')
                     ->where('products.data.1.product_name', 'Search Other')
@@ -80,7 +79,7 @@ describe('product filters', function () {
 
         $res->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component("Product/Index")
+                fn (AssertableInertia $page) => $page->component('Product/Index')
                     ->has('products.data', $products->count())
             );
     });
@@ -102,7 +101,7 @@ describe('product filters', function () {
 
         $res->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/Index')
                     ->has('products.data', $expectation)
             );
     })->with([
@@ -118,14 +117,14 @@ describe('product filters', function () {
         $this->get(route('product.index', [
             'status' => ProductStatus::ACTIVE->value,
         ]))->assertOk()->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Product/Index')
+            fn (AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $actives->count())
         );
 
         $this->get(route('product.index', [
             'status' => ProductStatus::INACTIVE->value,
         ]))->assertOk()->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Product/Index')
+            fn (AssertableInertia $page) => $page->component('Product/Index')
                 ->has('products.data', $inactives->count())
         );
     });

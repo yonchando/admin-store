@@ -2,10 +2,9 @@
 
 namespace App\Models\Concerns\Product;
 
-use App\Models\Category;
+use App\Models\Category\Category;
 use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;
-use App\Models\ProductOption;
 use App\Models\ProductOptionGroup;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -37,5 +36,4 @@ trait HasRelationships
             ->withPivot(['id', 'created_at', 'updated_at'])
             ->using(ProductOptionGroupPivot::class);
     }
-
 }

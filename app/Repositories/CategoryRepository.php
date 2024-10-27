@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category;
+use App\Models\Category\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -23,9 +23,12 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function paginate(): LengthAwarePaginator
     {
-        return Category::query()
-            ->latest()
-            ->paginate($this->request->get('perPage', 20));
+        $query = Category::query()
+            ->latest();
+
+        $query->applyFilter(request()->all());
+
+        return $query->paginate($this->request->get('perPage', 20))->onEachSide(2)->withQueryString();
     }
 
     public function store(CategoryRequest $request): Category
@@ -48,8 +51,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $category;
     }
 
-    public function destroy(Category $category): void
+    public function destroy(int|array $ids): void
     {
-        $category->delete();
+        Category::destroy($ids);
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryRequest;
-use App\Models\Category;
+use App\Models\Category\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -13,12 +14,15 @@ class CategoryController extends Controller
         private readonly CategoryRepositoryInterface $categoryRepository,
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
         $categories = $this->categoryRepository->paginate();
 
+        $sortable = $request->get('sortable', []);
+
         return Inertia::render('Category/Index', [
             'categories' => $categories,
+            'sort' => [___($sortable, 'field') => ___($sortable, 'direction')],
         ]);
     }
 
@@ -37,9 +41,13 @@ class CategoryController extends Controller
         return redirect()->route('category.index')->with('success', __('lang.updated_success', ['attribute' => __('lang.category')]));
     }
 
-    public function destroy(Category $category)
+    public function destroy(Request $request)
     {
-        $this->categoryRepository->destroy($category);
+        $request->validate([
+            'ids' => 'required|array',
+        ]);
+
+        $this->categoryRepository->destroy($request->get('ids', []));
 
         return redirect()->back()->with('success', __('lang.deleted_success', ['attribute' => __('lang.category')]));
     }

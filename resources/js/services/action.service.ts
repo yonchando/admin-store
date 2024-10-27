@@ -58,7 +58,7 @@ export default function useAction() {
             icon: faPenToSquare,
             component: Button,
             props: {
-                severity: "info",
+                severity: "warning",
             },
         },
         remove: {
