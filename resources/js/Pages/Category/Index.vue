@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Categories, Category, CategorySortable } from "@/types/models/category";
+import { Categories, Category } from "@/types/models/category";
 import DataTable from "@/Components/Tables/DataTable.vue";
 import { Column } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
@@ -85,7 +85,7 @@ function destroy() {
 </script>
 
 <template>
-    <AppLayout title="Categories" :actions="actions">
+    <AppLayout title="Category Lists" :actions="actions">
         <template #header> Category Lists</template>
 
         <DataTable

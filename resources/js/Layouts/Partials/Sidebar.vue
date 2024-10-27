@@ -58,7 +58,7 @@ function changeThemeMode() {
                         </div>
                         <div class="hidden flex-col gap-1 lg:flex">
                             <span class="font-base font-medium">{{ user.name }}</span>
-                            <span class="text-xs text-light-400 dark:text-slate-400">{{ user.position }}</span>
+                            <span class="text-light-400 text-xs dark:text-slate-400">{{ user.position }}</span>
                         </div>
                         <div class="ml-auto hidden lg:block">
                             <i class="fa fa-chevron-down"></i>
@@ -92,7 +92,7 @@ function changeThemeMode() {
                         {{ menu.title }}
                     </span>
                     <Link
-                        class="inline-flex w-full rounded-md px-2 py-2.5 font-medium hover:bg-light-200 hover:dark:bg-gray-900"
+                        class="hover:bg-light-200 inline-flex w-full items-center rounded-md px-2 py-2.5 font-medium hover:dark:bg-gray-900"
                         :class="[menu.isActive ? 'bg-light-200 dark:bg-gray-900' : '']"
                         v-else
                         :href="menu.url">

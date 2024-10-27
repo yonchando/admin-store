@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import DangerButton from "@/Components/Buttons/DangerButton.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import Modal from "@/Components/Modal.vue";
-import SecondaryButton from "@/Components/Buttons/SecondaryButton.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
 import { nextTick, ref } from "vue";
@@ -51,7 +49,7 @@ const closeModal = () => {
             </p>
         </header>
 
-        <DangerButton @click="confirmUserDeletion">Delete Account</DangerButton>
+        <Button severity="error" @click="confirmUserDeletion">Delete Account</Button>
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
@@ -80,15 +78,16 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <Button severity="secondary" @click="closeModal"> Cancel </Button>
 
-                    <DangerButton
+                    <Button
+                        severity="error"
                         class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser">
                         Delete Account
-                    </DangerButton>
+                    </Button>
                 </div>
             </div>
         </Modal>
