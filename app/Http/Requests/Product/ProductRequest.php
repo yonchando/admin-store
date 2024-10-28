@@ -12,11 +12,10 @@ class ProductRequest extends FormRequest
             'product_name' => ['required'],
             'description' => ['required'],
             'price' => ['nullable', 'numeric'],
-            'stock_quantity' => ['nullable', 'integer'],
+            'stock_qty' => ['nullable', 'integer'],
             'category_id' => ['nullable', 'integer'],
             'image' => ['nullable'],
             'slug' => ['nullable'],
-            'product_options' => ['nullable', 'array'],
         ];
     }
 

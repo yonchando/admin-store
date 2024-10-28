@@ -29,6 +29,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::query()
             ->applyFilter(request()->all())
+            ->latest()
             ->paginate(request('perPage') ?? 20);
     }
 
@@ -43,7 +44,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product = new Product;
 
-        $product->fill($request->except(['slug', 'image']));
+        $product->fill(collect($request->validated())->except(['slug', 'image'])->toArray());
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');

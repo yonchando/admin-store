@@ -14,9 +14,7 @@ use App\Repositories\Contracts\ProductHasOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -26,7 +24,6 @@ class ProductController extends Controller
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
         private readonly ProductOptionRepositoryInterface $productOptionRepository,
-        private readonly ProductService $productService,
         private readonly ProductHasOptionGroupRepositoryInterface $productHasOptionGroupRepository,
         private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
     ) {}
@@ -53,73 +50,26 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create()
     {
-        $categories = $this->categoryRepository->get();
-        $groups = $this->productOptionGroupRepository->get($request);
-        $options = $this->productOptionRepository->get($request);
+        $statuses = ProductStatus::toArray();
 
         return Inertia::render('Product/Form', [
-            'categories' => $categories,
-            'groups' => $groups,
-            'options' => $options,
+            'statuses' => $statuses,
         ]);
     }
 
     public function store(ProductRequest $request)
     {
-        $this->productService->storeProductWithProductOption($request);
+        $this->productRepository->store($request);
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.index')
+            ->with('success', __('lang.created_success', ['attribute' => __('lang.product')]));
     }
 
-    public function storeProductOption(Request $request, Product $product)
+    public function show(Request $request, $id)
     {
-        $this->validate($request, [
-            'product_options' => 'required|array',
-            'product_options.*.product_option_group_id' => 'required|int',
-            'product_options.*.options.*.product_option_id' => 'required|int',
-            'product_options.*.options.*.price_adjustment' => ['nullable', 'numeric', 'min:0'],
-        ], [], [
-            'product_options.*.product_option_group_id' => __('lang.product_option_group'),
-            'product_options.*.options.*.product_option_id' => __('lang.product_option'),
-            'product_options.*.options.*.price_adjustment' => __('lang.price_adjustment'),
-        ]);
-
-        $this->productService->storeProductOption($product, $request->get('product_options', []));
-
-        Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
-
-        return redirect()->route('product.show', $product);
-    }
-
-    public function storeOption(Request $request, Product $product)
-    {
-        $this->validate($request, [
-            'options' => 'required|array',
-            'options.*.product_option_id' => [
-                'required', 'int',
-                Rule::exists('product_options', 'id'),
-            ],
-            'options.*.product_has_option_group_id' => [
-                'required', 'int',
-                Rule::exists('product_has_option_groups', 'id'),
-            ],
-        ], [], [
-            'options.*.product_option_id' => __('lang.product_option'),
-            'options.*.product_has_option_group_id' => __('lang.product_option_group'),
-        ]);
-
-        $this->productService->addOptionToGroup($request);
-
-        Helper::message(__('lang.add_success', ['attribute' => __('lang.product_option')]));
-
-        return to_route('product.show', $product);
-    }
-
-    public function show(Request $request, $slug)
-    {
-        $product = $this->productRepository->findBySlug($slug);
+        $product = $this->productRepository->find($id);
         $groups = $this->productOptionGroupRepository->get($request);
         $options = $this->productOptionRepository->get($request);
 
@@ -130,9 +80,10 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
         $categories = $this->categoryRepository->get();
+        $product = $this->productRepository->find($id);
 
         return Inertia::render('Product/Form', [
             'categories' => $categories,

@@ -31,6 +31,8 @@ const directionClass = computed(() => {
 
 const inputClass = [
     "w-full",
+    "px-4",
+    "py-2.5",
     "rounded-md",
     "border-gray-200",
     "focus:border-gray-300",

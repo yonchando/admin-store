@@ -5,7 +5,7 @@ import { computed, reactive, ref, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import Form from "@/Pages/Category/Form.vue";
-import { Products } from "@/types/models/product";
+import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ const columns: Column[] = productService.columns;
 
 const selectRows = ref<Array<number>>([]);
 
-const product = ref(null);
+const product = ref<Product | null>(null);
 
 const filters = reactive(productService.filters);
 
@@ -28,12 +28,15 @@ watch(filters, () => {
 });
 
 const actions = computed(() => {
-    const { add, refresh } = useAction();
+    const { add, edit, refresh } = useAction();
 
     add.props.onClick = () => router.get(route("product.create"));
 
+    edit.props.onClick = () => router.get(route("product.edit", product.value?.id));
+    edit.props.disabled = product.value == null;
+
     refresh.props.onClick = getData;
-    return [add, refresh];
+    return [add, edit, refresh];
 });
 
 function getData() {

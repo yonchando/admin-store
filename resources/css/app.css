@@ -22,18 +22,21 @@
 
     /* width */
     ::-webkit-scrollbar {
-        width: 8px;
-        border-radius: 10px;
+        scrollbar-width: thin;
+        width: 6px;
     }
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: transparent;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888;
+        background: #ababab;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        background-clip: padding-box;
     }
 
     /* Handle on hover */

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
@@ -17,6 +18,10 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $categories = $this->categoryRepository->paginate();
+
+        if ($request->wantsJson()) {
+            return CategoryResource::collection($categories);
+        }
 
         return Inertia::render('Category/Index', [
             'categories' => $categories,

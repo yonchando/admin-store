@@ -10,11 +10,11 @@ trait HasEnumProperty
     {
         return collect(self::cases())
             ->map(
-                fn($value) => [
-                    'text' => __('lang.'.Str::lower($value->value)),
+                fn ($value) => [
+                    'name' => __('lang.'.Str::lower($value->value)),
                     'id' => $value->value,
                 ]
-            )->filter(fn($value) => !in_array($value['id'], $excepts))
+            )->filter(fn ($value) => ! in_array($value['id'], $excepts))
             ->toArray();
     }
 
@@ -22,7 +22,7 @@ trait HasEnumProperty
     {
         return collect(self::cases())
             ->flatMap(
-                fn($value) => [
+                fn ($value) => [
                     $value->name => $value->value,
                 ]
             )->toArray();

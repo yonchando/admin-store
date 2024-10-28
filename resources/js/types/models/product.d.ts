@@ -9,8 +9,14 @@ export interface Product {
     stock_qty: number;
     category?: Category;
     status: string;
+    slug: string;
     created_at: string;
     updated_at: string;
+}
+
+export interface ProductStatus {
+    active: string;
+    inactive: string;
 }
 
 export interface Products extends Paginate<Product> {

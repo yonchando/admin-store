@@ -6,7 +6,12 @@ import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextareaInput from "@/Components/Forms/TextareaInput.vue";
 import InputError from "@/Components/Forms/InputError.vue";
-import InputLabel from "@/Components/Forms/InputLabel.vue";
+import Select from "@/Components/Forms/Select.vue";
+import { Category } from "@/types/models/category";
+
+defineProps<{
+    statuses: Array<string>;
+}>();
 
 const form = useForm({
     product_name: "",
@@ -50,17 +55,23 @@ const actions = computed(() => {
                     <InputError :message="form.errors.stock_qty" />
                 </div>
                 <div>
-                    <InputLabel value="Category" />
-
+                    <Select
+                        label="Category"
+                        v-model="form.category_id"
+                        :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
+                        :options="[]"
+                        :paginate="{ data: [] }"
+                        :option-label="(option: Category) => option.category_name" />
                     <InputError :message="form.errors.category_id" />
                 </div>
                 <div>
-                    <TextInput label="Status" v-model="form.status" />
+                    <Select label="Status" v-model="form.status" :options="statuses" />
                     <InputError :message="form.errors.status" />
                 </div>
             </div>
             <div>
                 <TextareaInput v-model="form.description" label="Description" cols="30" rows="10"></TextareaInput>
+                <InputError :message="form.errors.description" />
             </div>
         </div>
     </AppLayout>

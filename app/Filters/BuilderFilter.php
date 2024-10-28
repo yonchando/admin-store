@@ -14,8 +14,10 @@ abstract class BuilderFilter
     public function apply(): Builder
     {
         foreach ($this->filters as $name => $filter) {
-            if (method_exists($this, $name)) {
-                call_user_func([$this, $name], $filter);
+            if ($filter) {
+                if (method_exists($this, $name)) {
+                    call_user_func([$this, $name], $filter);
+                }
             }
         }
 

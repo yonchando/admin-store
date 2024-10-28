@@ -16,11 +16,11 @@ return new class extends Migration
             $table->id();
             $table->string('product_name');
             $table->longText('description');
-            $table->decimal('price', 11, 2, true)->nullable();
-            $table->bigInteger('stock_qty')->default(0);
+            $table->decimal('price', 11)->nullable();
+            $table->bigInteger('stock_qty')->default(0)->nullable();
             $table->bigInteger('category_id')->nullable();
             $table->string('slug')->nullable();
-            $table->tinyText('status')->default(ProductStatus::ACTIVE->name);
+            $table->tinyText('status')->default(ProductStatus::ACTIVE->value);
             $table->json('json')->nullable();
             $table->timestamps();
             $table->softDeletes();
