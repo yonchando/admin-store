@@ -2,7 +2,7 @@
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { useForm } from "@inertiajs/vue3";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import useAction from "@/services/action.service";
 import InputError from "@/Components/Forms/InputError.vue";
 import { Category } from "@/types/models/category";
@@ -49,10 +49,12 @@ function submit() {
 
 <template>
     <Modal :actions="actions" :show="!!show" @close="show = false" title="Add new" max-width="xl" position="center">
-        <div>
-            <TextInput autofocus label="Name" v-model="form.category_name" />
-            <InputError :message="form.errors.category_name" />
-        </div>
+        <form @submit.prevent="submit">
+            <div>
+                <TextInput autofocus label="Name" v-model="form.category_name" />
+                <InputError :message="form.errors.category_name" />
+            </div>
+        </form>
     </Modal>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import { faChevronDown, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import { Paginate } from "@/types/paginate";
 const props = withDefaults(
     defineProps<{
         label?: string;
-        options: Array<any>;
+        options?: Array<any>;
         optionValue?: any;
         optionLabel?: any;
         placeholder?: string;
@@ -26,6 +26,8 @@ const props = withDefaults(
     },
 );
 
+const data = ref<Array<any>>(props.options ?? []);
+
 const model = defineModel();
 
 const inputClass = [
@@ -34,6 +36,7 @@ const inputClass = [
     "px-4 py-2.5",
     "cursor-pointer",
     "rounded-md",
+    "border",
     "border-gray-200",
     "focus:border-gray-300 focus:ring-gray-300",
     "text-sm",
@@ -47,13 +50,15 @@ const dropdown = ref();
 
 const open = ref(false);
 
-const selected = ref(null);
+const selected = computed(() => {
+    return data.value.find((item) => {
+        return get(item, "optionValue") === model.value;
+    });
+});
 
 const search = ref<string>("");
 
 const inputSearch = ref<HTMLInputElement | null>(null);
-
-const data = ref<Array<any>>([]);
 
 const page = reactive({
     current_page: props.paginate?.current_page ?? 2,
@@ -64,9 +69,10 @@ const processing = ref(false);
 const searching = _.debounce(
     () => {
         if (!props.url) {
-            data.value = props.options.filter((item: any) => {
-                return _.get(item, props.optionLabel).toLowerCase().startsWith(search.value.toLowerCase());
-            });
+            data.value =
+                props.options?.filter((item: any) => {
+                    return get(item, "optionLabel").toLowerCase().startsWith(search.value.toLowerCase());
+                }) ?? [];
         } else {
             fetchData({
                 search: search.value,
@@ -87,6 +93,14 @@ const searching = _.debounce(
     props.url ? 500 : 0,
 );
 
+function get(option: any, type: "optionValue" | "optionLabel") {
+    if (typeof props[type] === "string") {
+        return _.get(option, props[type]);
+    } else {
+        return props[type](option);
+    }
+}
+
 function fetchData(params = {}) {
     processing.value = true;
     return new Promise((resolve, reject) => {
@@ -95,10 +109,18 @@ function fetchData(params = {}) {
                 params,
             })
             .then((res) => {
+                const v = res.data;
+                data.value = v.data;
+                if (res.data.meta) {
+                    page.current_page = v.meta.current_page;
+                    page.last_page = v.meta.last_page;
+                } else {
+                    page.last_page = 0;
+                }
                 resolve(res);
             })
             .catch((e) => {
-                reject(e.response);
+                console.log(e);
             })
             .finally(() => {
                 processing.value = false;
@@ -150,24 +172,14 @@ function setModel(option: any) {
         model.value = props.optionValue(option);
     }
 
-    selected.value = option;
     open.value = false;
 }
 
 watch(open, (value: boolean) => {
     if (value) {
-        if (data.value.length == 0) {
+        if (data.value.length == 0 && props.url) {
             fetchData({
                 search: search.value,
-            }).then((res: any) => {
-                const v = res.data;
-                data.value = v.data;
-                if (res.data.meta) {
-                    page.current_page = v.meta.current_page;
-                    page.last_page = v.meta.last_page;
-                } else {
-                    page.last_page = 0;
-                }
             });
         }
         document.addEventListener("keydown", closeOnEscape);
@@ -177,6 +189,12 @@ watch(open, (value: boolean) => {
         document.removeEventListener("click", closeOnClickOutside);
     }
 });
+
+onMounted(() => {
+    if (model.value && props.url) {
+        fetchData();
+    }
+});
 </script>
 
 <template>
@@ -184,29 +202,13 @@ watch(open, (value: boolean) => {
     <div class="relative mt-2" ref="dropdown">
         <div class="relative">
             <div :class="[inputClass]" @click="openToggle">
-                <span v-if="!selected" class="text-gray-400">
-                    {{ placeholder ?? "Select option" }}
-                </span>
-                <span v-else class="text-gray-400">
-                    <template v-if="(typeof optionLabel as any) == 'string'">
-                        {{ _.get(selected, optionLabel) }}
-                    </template>
-                    <template v-else>
-                        {{ optionLabel(selected) }}
-                    </template>
+                <span v-if="selected === undefined" class="text-gray-400"> Select option </span>
+                <span v-else>
+                    {{ get(selected, "optionLabel") }}
                 </span>
             </div>
             <div class="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer">
-                <fa-icon
-                    @click="
-                        () => {
-                            model = null;
-                            selected = null;
-                        }
-                    "
-                    v-if="selected"
-                    :icon="faTimes" />
-                <fa-icon @click="openToggle" v-else :icon="faChevronDown" />
+                <fa-icon @click="openToggle" :icon="faChevronDown" />
             </div>
         </div>
 
@@ -217,31 +219,29 @@ watch(open, (value: boolean) => {
             leave-active-class="transition-all ease-in-out duration-100 overflow-hidden"
             leave-from-class="max-h-96 opacity-100"
             leave-to-class="max-h-0 opacity-0">
-            <div v-show="open" class="absolute inset-x-0 mt-2 rounded-md py-2 shadow-lg dark:bg-gray-700">
+            <div
+                v-show="open"
+                class="absolute inset-x-0 z-50 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
                 <div class="max-h-80 overflow-auto">
-                    <div class="mb-3 px-2" v-if="showSearch && data.length">
+                    <div class="mb-2 px-2" v-if="showSearch && data.length">
                         <TextInput @input="searching" v-model="search" ref="inputSearch" />
                     </div>
                     <div class="flex flex-shrink-0 flex-grow-0 flex-col">
                         <template v-if="data.length > 0">
                             <template v-for="option in data">
-                                <button
+                                <div
                                     @click="setModel(option)"
-                                    class="cursor-pointer py-3.5 pl-4 text-left hover:bg-gray-900">
-                                    <template v-if="typeof optionLabel == 'string'">
-                                        {{ _.get(option, optionLabel) }}
-                                    </template>
-                                    <template v-else>
-                                        {{ optionLabel(option) }}
-                                    </template>
-                                </button>
+                                    :class="[get(option, 'optionValue') == model ? 'bg-gray-200 dark:bg-gray-900' : '']"
+                                    class="cursor-pointer py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
+                                    {{ get(option, "optionLabel") }}
+                                </div>
                             </template>
-                            <button
+                            <div
                                 v-if="page.current_page !== page.last_page && page.last_page !== 0"
                                 class="cursor-pointer bg-gray-800 py-3.5 pl-4"
                                 @click="fetchMore">
                                 View more
-                            </button>
+                            </div>
                         </template>
                         <span class="py-3.5 pl-4" v-else>No option</span>
                     </div>

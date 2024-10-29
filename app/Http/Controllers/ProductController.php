@@ -6,11 +6,7 @@ use App\Enums\Product\ProductStatus;
 use App\Facades\Helper;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
-use App\Models\ProductHasOption;
-use App\Models\ProductHasOptionGroup;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
-use App\Repositories\Contracts\ProductHasOptionGroupRepositoryInterface;
-use App\Repositories\Contracts\ProductHasOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
 use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
@@ -24,8 +20,6 @@ class ProductController extends Controller
         private readonly CategoryRepositoryInterface $categoryRepository,
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
         private readonly ProductOptionRepositoryInterface $productOptionRepository,
-        private readonly ProductHasOptionGroupRepositoryInterface $productHasOptionGroupRepository,
-        private readonly ProductHasOptionRepositoryInterface $productHasOptionRepository,
     ) {}
 
     public function index(Request $request)
@@ -42,7 +36,7 @@ class ProductController extends Controller
 
         $statuses = ProductStatus::toArray();
 
-        return Inertia::render('Product/Index', [
+        return Inertia::render('Product/ProductIndex', [
             'products' => $products,
             'statuses' => fn () => $statuses,
             'categories' => Inertia::lazy(fn () => $categories),
@@ -54,7 +48,7 @@ class ProductController extends Controller
     {
         $statuses = ProductStatus::toArray();
 
-        return Inertia::render('Product/Form', [
+        return Inertia::render('Product/ProductForm', [
             'statuses' => $statuses,
         ]);
     }
@@ -84,20 +78,22 @@ class ProductController extends Controller
     {
         $categories = $this->categoryRepository->get();
         $product = $this->productRepository->find($id);
+        $statuses = ProductStatus::toArray();
 
-        return Inertia::render('Product/Form', [
+        return Inertia::render('Product/ProductForm', [
             'categories' => $categories,
             'product' => $product,
+            'statuses' => $statuses,
         ]);
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, $id)
     {
+        $product = Product::find($id);
         $this->productRepository->update($request, $product);
 
-        Helper::message(__('lang.updated_success', ['attribute' => __('lang.product')]));
-
-        return redirect()->route('product.index');
+        return redirect()->route('product.index')
+            ->with('success', __('lang.updated_success', ['attribute' => __('lang.product')]));
     }
 
     public function updateStatus($id)
@@ -109,28 +105,12 @@ class ProductController extends Controller
         return to_route('product.index');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
-        $this->productRepository->destroy($product);
+        $ids = $request->get('ids', []);
+
+        $this->productRepository->destroy($ids);
 
         return redirect()->route('product.index', request()->toArray());
-    }
-
-    public function destroyProductOptionGroup(ProductHasOptionGroup $productHasOptionGroup)
-    {
-        $this->productHasOptionGroupRepository->destroy($productHasOptionGroup->id);
-
-        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option_group')]));
-
-        return redirect()->back();
-    }
-
-    public function destroyProductOption(ProductHasOption $productHasOption)
-    {
-        $this->productHasOptionRepository->destroy($productHasOption->id);
-
-        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.product_option')]));
-
-        return redirect()->back();
     }
 }

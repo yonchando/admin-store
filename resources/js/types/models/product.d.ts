@@ -2,12 +2,13 @@ import { Paginate } from "@/types/paginate";
 import { Category } from "@/types/models/category";
 
 export interface Product {
-    id: bigint;
+    id: number;
     product_name: string;
     description: string;
     price: number;
     stock_qty: number;
     category?: Category;
+    category_id?: number;
     status: string;
     slug: string;
     created_at: string;

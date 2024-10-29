@@ -23,7 +23,7 @@ class CategoryController extends Controller
             return CategoryResource::collection($categories);
         }
 
-        return Inertia::render('Category/Index', [
+        return Inertia::render('Category/CategoryIndex', [
             'categories' => $categories,
             'requests' => $request->all(),
         ]);

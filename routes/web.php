@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
             Route::put('update-status/{id}', [ProductController::class, 'updateStatus'])
                 ->name('update.status');
 
-            Route::delete('destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::delete('destroy', [ProductController::class, 'destroy'])->name('destroy');
         });
 
     Route::prefix('purchase-order')

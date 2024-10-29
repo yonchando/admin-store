@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import useSidebar from "@/services/menu";
+import useMenu from "@/services/menu";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import NavLink from "@/Components/Navs/NavLink.vue";
+import { Menu } from "@/types";
 
-const menus = useSidebar();
+const menus = computed(() => {
+    if (search.value) {
+        return useMenu().filter((item: Menu) => {
+            return item.title.toLowerCase().startsWith(search.value?.toLowerCase() ?? "");
+        });
+    }
+    return useMenu();
+});
 
 const page = usePage();
 
 const user = computed(() => page.props.auth.user);
 
-const search = ref();
+const search = ref(sessionStorage.getItem("menu-search"));
 
 const theme = ref(
     localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
@@ -33,6 +41,15 @@ function changeThemeMode() {
     }
 
     localStorage.setItem("theme", theme.value);
+}
+
+function inputChange() {
+    sessionStorage.setItem("menu-search", search.value ?? "");
+}
+
+function clearMenuSearch() {
+    sessionStorage.removeItem("menu-search");
+    search.value = null;
 }
 </script>
 
@@ -78,8 +95,14 @@ function changeThemeMode() {
         </div>
 
         <!-- Search -->
-        <div class="hidden px-2 lg:block">
-            <TextInput v-model="search" placeholder="Search..." />
+        <div class="relative hidden px-2 lg:block">
+            <TextInput @input="inputChange" v-model="search" placeholder="Search..." />
+            <div
+                v-if="search"
+                @click="clearMenuSearch"
+                class="absolute right-6 top-1/2 -translate-y-1/2 transform cursor-pointer">
+                <i class="fa fa-times"></i>
+            </div>
         </div>
 
         <!-- Menu -->
@@ -93,7 +116,7 @@ function changeThemeMode() {
                         class="inline-flex w-full items-center rounded-md px-2 py-2.5 font-medium hover:bg-gray-200 hover:dark:bg-gray-900"
                         :class="[
                             menu.isActive
-                                ? 'bg-light-200 border border-gray-300 dark:border-gray-700 dark:bg-gray-900'
+                                ? 'border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-900'
                                 : '',
                         ]"
                         v-else

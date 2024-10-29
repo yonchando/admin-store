@@ -29,7 +29,7 @@ function isActive(...items: string[]) {
     return items.includes(routeName.value as string);
 }
 
-export default function useSidebar() {
+export default function useMenu() {
     return [
         add({
             title: "Dashboard",

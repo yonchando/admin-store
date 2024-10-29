@@ -39,7 +39,7 @@ const checkedAll = computed<boolean>(() => {
     return checked.value?.length === props.values.length && props.values.length !== 0;
 });
 
-const selectRow = defineModel<any>("selected");
+const selectRow = defineModel<any>("selectRow");
 
 const sortBy = defineModel<any>("sortBy");
 
