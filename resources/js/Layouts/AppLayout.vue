@@ -51,7 +51,7 @@ watch(
             <div class="flex max-h-screen min-h-screen w-full flex-col overflow-auto">
                 <header class="" v-if="$slots.header">
                     <div class="flex w-full items-center px-4 py-2">
-                        <h3 class="">
+                        <h3 class="text-lg font-semibold">
                             <slot name="header" />
                         </h3>
 

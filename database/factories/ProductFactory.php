@@ -6,8 +6,6 @@ use App\Enums\Product\ProductStatus;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -24,9 +22,6 @@ class ProductFactory extends Factory
     {
         $name = $this->faker->unique()->name;
 
-        $file = UploadedFile::fake()->image("{$this->faker->word}.png", 40, 40);
-        $path = $file->hashName(config('paths.product_image'));
-
         return [
             'product_name' => $name,
             'slug' => Str::slug($name),
@@ -34,15 +29,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(1, 100),
             'stock_qty' => $this->faker->numberBetween(1, 1000),
             'category_id' => Category::inRandomOrder()->first()?->id,
-            'json' => [
-                'image' => [
-                    'filename' => $file->hashName(),
-                    'original_name' => $file->getClientOriginalName(),
-                    'path' => $path,
-                    'url' => Storage::url($path),
-                    'extension' => $file->extension(),
-                ],
-            ],
+            'json' => [],
             'status' => ProductStatus::ACTIVE->value,
             'created_at' => $this->faker->dateTimeBetween('-2 months')->format('Y-m-d H:i:s'),
         ];

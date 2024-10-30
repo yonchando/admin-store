@@ -7,8 +7,6 @@ use App\Facades\Helper;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
-use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
-use App\Repositories\Contracts\ProductOptionRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,8 +16,6 @@ class ProductController extends Controller
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly CategoryRepositoryInterface $categoryRepository,
-        private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
-        private readonly ProductOptionRepositoryInterface $productOptionRepository,
     ) {}
 
     public function index(Request $request)
@@ -27,12 +23,10 @@ class ProductController extends Controller
         $categories = $this->categoryRepository->get();
 
         $request->merge([
-            'includes' => ['category' => function ($query) {
-                $query->select(['id', 'category_name as name']);
-            }],
+            'includes' => 'category',
         ]);
 
-        $products = $this->productRepository->paginate();
+        $products = $this->productRepository->paginate($request->all());
 
         $statuses = ProductStatus::toArray();
 
@@ -61,23 +55,27 @@ class ProductController extends Controller
             ->with('success', __('lang.created_success', ['attribute' => __('lang.product')]));
     }
 
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $product = $this->productRepository->find($id);
-        $groups = $this->productOptionGroupRepository->get($request);
-        $options = $this->productOptionRepository->get($request);
+        $product = $this->productRepository->find($id, [
+            'includes' => ['category'],
+        ]);
 
-        return Inertia::render('Product/Show', [
+        return Inertia::render('Product/ProductShow', [
             'product' => $product,
-            'groups' => $groups,
-            'options' => $options,
         ]);
     }
 
     public function edit($id)
     {
-        $categories = $this->categoryRepository->get();
         $product = $this->productRepository->find($id);
+
+        if (is_null($product)) {
+            abort(404);
+        }
+
+        $categories = $this->categoryRepository->get();
+
         $statuses = ProductStatus::toArray();
 
         return Inertia::render('Product/ProductForm', [

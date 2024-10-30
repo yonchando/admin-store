@@ -2,12 +2,14 @@
 import { computed } from "vue";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
+import { Link } from "@inertiajs/vue3";
 
 const props = withDefaults(
     defineProps<{
-        size?: "sm" | "md" | "lg" | "xl";
+        size?: "xs" | "sm" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         icon?: IconDefinition;
+        href?: string;
     }>(),
     {
         size: "sm",
@@ -17,6 +19,7 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
+        xs: "px-2 py-1 text-xxs",
         sm: "px-4 py-2 text-xs",
         md: "px-5 py-3 text-md",
         lg: "px-6 py-4 text-lg",
@@ -114,6 +117,7 @@ const severityClass = computed(() => {
 </script>
 <template>
     <button
+        v-if="!href"
         :class="[sizeClass, ...severityClass]"
         class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
@@ -121,4 +125,14 @@ const severityClass = computed(() => {
         </template>
         <slot />
     </button>
+    <Link
+        v-else
+        :href="href"
+        :class="[sizeClass, ...severityClass]"
+        class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        <template v-if="icon">
+            <fa-icon :icon="icon" :size="size as any" />
+        </template>
+        <slot />
+    </Link>
 </template>

@@ -7,13 +7,15 @@ import useAction from "@/services/action.service";
 import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
 import Alert from "@/Components/Alert/Alert.vue";
+import ButtonGroup from "@/Components/ButtonGroup.vue";
+import { useDatatable } from "@/services/datatable.service";
 
 const props = defineProps<{
     products: Products;
     requests: any;
 }>();
 
-const columns: Column[] = productService.columns;
+const columns: Column<Product>[] = useDatatable(productService.columns);
 
 const selectRows = ref<Array<number>>([]);
 
@@ -28,8 +30,12 @@ watch(filters, () => {
 });
 
 const confirmed = ref(false);
+
 const actions = computed(() => {
-    const { add, edit, remove, refresh } = useAction();
+    const { view, add, edit, remove, refresh } = useAction();
+
+    view.props.onClick = () => router.get(route("product.show", product.value?.id));
+    view.props.disabled = product.value == null;
 
     add.props.onClick = () => router.get(route("product.create"));
 
@@ -42,7 +48,7 @@ const actions = computed(() => {
     };
 
     refresh.props.onClick = getData;
-    return [add, edit, remove, refresh];
+    return [add, refresh, remove];
 });
 
 function getData() {
@@ -69,28 +75,44 @@ function destroy() {
         },
     });
 }
+
+function search(e: string) {
+    filters.search = e;
+    filters.page = 1;
+}
+
+function pageChange(p: number) {
+    router.reload({ data: { perPage: p } });
+}
+
+function show(item: Product) {
+    router.get(route("product.show", item.id));
+}
 </script>
 
 <template>
     <AppLayout title="Product Lists" :actions="actions">
-        <template #header> Product Lists </template>
+        <template #header> Product Lists</template>
 
         <DataTable
             :values="products.data"
             :paginate="products"
             :columns="columns"
-            @search="
-                (e) => {
-                    filters.search = e;
-                    filters.page = 1;
-                }
-            "
             :search="filters.search"
-            @page="(p) => router.reload({ data: { perPage: p } })"
+            @search="search"
+            @page="pageChange"
+            @row-dbclick="show"
             v-model:checked="selectRows"
-            v-model:selectRow="product"
+            v-model:select-row="product"
             v-model:sortBy="filters.sortBy"
-            checkbox />
+            checkbox>
+            <template #actions="{ item }">
+                <ButtonGroup>
+                    <Button size="xs" :href="route('product.show', item.id)" severity="info">View</Button>
+                    <Button size="xs" :href="route('product.edit', item.id)" severity="warning">Edit</Button>
+                </ButtonGroup>
+            </template>
+        </DataTable>
 
         <Alert
             @confirmed="destroy()"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useMenu from "@/services/menu";
+import useMenu from "@/services/menu.service";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";

@@ -39,6 +39,7 @@ class Product extends Model
         'price' => 'decimal:2',
         'status' => ProductStatus::class,
         'created_at' => 'datetime:Y-m-d h:i A',
+        'updated_at' => 'datetime:Y-m-d h:i A',
     ];
 
     protected $appends = [

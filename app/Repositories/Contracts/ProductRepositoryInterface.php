@@ -17,9 +17,9 @@ interface ProductRepositoryInterface
     /**
      * @return LengthAwarePaginator<Product>
      */
-    public function paginate(): LengthAwarePaginator;
+    public function paginate(array $filters = []): LengthAwarePaginator;
 
-    public function find(int $id): ?Product;
+    public function find(int $id, array $filters = []): ?Product;
 
     public function store(ProductRequest $request): Product;
 

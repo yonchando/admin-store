@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Casts\Images\ImageCast;
 use App\Enums\Product\ProductStatus;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
@@ -25,19 +26,17 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @return LengthAwarePaginator<Product>
      */
-    public function paginate(): LengthAwarePaginator
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
         return Product::query()
-            ->applyFilter(request()->all())
+            ->applyFilter($filters)
             ->latest()
             ->paginate(request('perPage') ?? 20);
     }
 
-    public function find(int $id): ?Product
+    public function find(int $id, array $filters = []): ?Product
     {
-        return Product::query()->with([
-            'category',
-        ])->find($id);
+        return Product::query()->applyFilter($filters)->find($id);
     }
 
     public function store(ProductRequest $request): Product
@@ -77,7 +76,7 @@ class ProductRepository implements ProductRepositoryInterface
             $filename = $file->hashName();
             Storage::putFileAs($path, $file, $filename);
 
-            $image = $product->json->image;
+            $image = new ImageCast($product->json?->image);
 
             $image->originalName = $file->getClientOriginalName();
             $image->filename = $filename;

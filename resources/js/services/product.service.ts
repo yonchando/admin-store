@@ -1,6 +1,8 @@
 import { Column } from "@/types/datatable/column";
+import Badge from "@/Components/Badges/Badge.vue";
+import { Product } from "@/types/models/product";
 
-export const columns: Column[] = [
+export const columns: Column<Product>[] = [
     {
         label: "Name",
         field: "product_name",
@@ -9,7 +11,7 @@ export const columns: Column[] = [
     },
     {
         label: "Category",
-        field: "category.name",
+        field: "category.category_name",
         sortable: "category",
         props: {},
     },
@@ -35,11 +37,29 @@ export const columns: Column[] = [
         props: {
             class: "w-28",
         },
+        component: {
+            el: Badge,
+            props: (item) => {
+                return {
+                    severity: item.status == "active" ? "info" : "error",
+                    class: "text-xs",
+                };
+            },
+        },
     },
     {
         label: "Created date",
         field: "created_at",
         sortable: "created_at",
+        props: {
+            class: "w-48",
+        },
+    },
+    {
+        label: "Updated date",
+        field: "updated_at",
+        sortable: "updated_at",
+        notOnTable: true,
         props: {
             class: "w-48",
         },
@@ -56,6 +76,11 @@ export const filters = {
     status: null,
     category: null,
     page: 1,
+};
+
+export const status = {
+    active: "success",
+    inactive: "error",
 };
 
 export default {

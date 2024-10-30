@@ -11,10 +11,11 @@ import Button from "@/Components/Button.vue";
 import ArrowUpDown from "@/Components/Icon/ArrowUpDown.vue";
 import _ from "lodash";
 import { router } from "@inertiajs/vue3";
+import DataValue from "@/Components/DataValue.vue";
 
 const props = defineProps<{
     values: Array<any>;
-    columns: Column[];
+    columns: Column<any>[];
     checkbox?: boolean;
     rowProps?: any;
     paginate?: Paginate<any>;
@@ -25,6 +26,7 @@ const emit = defineEmits<{
     page: [page: number];
     sort: [];
     search: [s: string];
+    "row-dbclick": [item: any];
 }>();
 
 const shows = [10, 20, 50, 100];
@@ -78,6 +80,14 @@ function sort(item: Column) {
 const inputSearch = _.debounce(function (e: Event) {
     emit("search", (e.target as HTMLInputElement).value);
 }, 500);
+
+function get(item, key: string | ((t: type) => string)) {
+    if (typeof key === "string") {
+        return _.get(item, key);
+    } else {
+        return key(item);
+    }
+}
 </script>
 
 <template>
@@ -108,9 +118,6 @@ const inputSearch = _.debounce(function (e: Event) {
                 </select>
             </div>
         </div>
-    </div>
-    <div class="mb-4">
-        <p>Total: {{ paginate ? paginate.total : values.length }}</p>
     </div>
     <table class="w-full table-fixed border-collapse rounded-md">
         <tr>
@@ -144,8 +151,8 @@ const inputSearch = _.debounce(function (e: Event) {
             </th>
             <th
                 class="w-40 border border-gray-200 bg-gray-200 py-3 pl-2 text-left align-middle dark:border-gray-600 dark:bg-gray-800"
-                v-if="actions">
-                Action
+                v-if="$slots.actions">
+                Actions
             </th>
         </tr>
 
@@ -154,48 +161,52 @@ const inputSearch = _.debounce(function (e: Event) {
                 <td
                     v-if="checkbox"
                     :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
-                    class="border border-gray-300 text-center align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700">
+                    class="column">
                     <Checkbox :value="item.id" v-model:checked="checked" />
                 </td>
                 <template v-for="column in columns">
                     <td
                         v-bind="rowProps"
+                        @dblclick="$emit('row-dbclick', item)"
                         @click="selectRow = selectRow?.id == item.id ? null : item"
                         :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
-                        class="border border-gray-300 py-3 pl-2 text-left align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700">
-                        <template v-if="column.component">
-                            <component
-                                :is="column.component.el"
-                                v-bind="column.component.props"
-                                v-html="column.component.label">
-                            </component>
-                        </template>
-                        <template v-else>
-                            <template v-if="typeof column.field === 'string'">
-                                {{ _.get(item, column.field) ?? "-" }}
-                            </template>
-                            <template v-else>
-                                {{ column.field ? column.field(item) : "-" }}
-                            </template>
-                        </template>
+                        class="column">
+                        <DataValue :item="item" :column="column" />
                     </td>
                 </template>
+                <td
+                    v-if="$slots.actions"
+                    :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
+                    class="column">
+                    <slot name="actions" :item="item"></slot>
+                </td>
             </tr>
         </template>
 
         <template v-if="values.length === 0">
             <tr>
-                <td
-                    class="border-light-200 border py-3 pl-4 text-left group-hover:bg-gray-700 dark:border-gray-700"
-                    :colspan="columns.length + 1">
-                    Empty Data
-                </td>
+                <td class="column !py-4" :colspan="columns.length + ($slots.actions ? 2 : 1)">Empty Data</td>
             </tr>
         </template>
     </table>
     <div class="flex items-center px-2 py-4">
         <template v-if="paginate?.data.length">
-            <p>Showing: {{ paginate.current_page }} of {{ paginate.last_page }} pages</p>
+            <div class="flex gap-4">
+                <p class="">
+                    Total:
+                    <span class="font-semibold">
+                        {{ paginate ? paginate.total : values.length }}
+                    </span>
+                </p>
+                <p>
+                    Showing:
+                    <span class="font-semibold">
+                        {{ paginate.current_page }} of
+                        {{ paginate.last_page }}
+                        pages
+                    </span>
+                </p>
+            </div>
 
             <div class="ml-auto flex" v-if="paginate.links.length > 0">
                 <template v-for="(link, index) in paginate.links">
@@ -234,3 +245,9 @@ const inputSearch = _.debounce(function (e: Event) {
         </template>
     </div>
 </template>
+
+<style scoped>
+.column {
+    @apply border border-gray-300 py-1.5 pl-2 text-left align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700;
+}
+</style>

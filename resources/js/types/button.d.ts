@@ -3,14 +3,18 @@ import Button from "@/Components/Button.vue";
 import { Link } from "@inertiajs/vue3";
 
 export interface ButtonActions<Type> {
-    view: Action;
-    add: Action;
-    save: Action;
-    refresh: Action;
-    close: Action;
-    cancel: Action;
-    edit: Action;
-    remove: Action;
+    view: Type;
+    add: Type;
+    save: Type;
+    refresh: Type;
+    close: Type;
+    cancel: Type;
+    edit: Type;
+    remove: Type;
+}
+
+export interface ButtonGroup {
+    [key: "view" | "add" | "save" | "refresh" | "close" | "cancel" | "edit" | "remove"]: (t: Type) => Type;
 }
 
 export interface Action {

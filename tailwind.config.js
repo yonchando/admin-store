@@ -18,6 +18,9 @@ export default {
             fontFamily: {
                 sans: ["Poppins", "Figtree", ...defaultTheme.fontFamily.sans],
             },
+            fontSize: {
+                xxs: "0.65rem",
+            },
             colors: {
                 success: colors.teal["600"],
                 info: colors.sky["600"],

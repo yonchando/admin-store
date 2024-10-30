@@ -3,11 +3,13 @@ import { AxiosInstance } from "axios";
 import { route as ziggyRoute } from "ziggy-js";
 import { PageProps as AppPageProps } from "./";
 import { __ } from "@/locale";
+import get from "@/bootstrap";
 
 declare global {
     interface Window {
         axios: AxiosInstance;
         __: __;
+        get: get;
     }
 
     /* eslint-disable no-var */
