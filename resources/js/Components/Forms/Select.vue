@@ -18,11 +18,13 @@ const props = withDefaults(
         url?: string;
         showSearch?: boolean;
         paginate?: Paginate<any>;
+        labelInline: boolean;
     }>(),
     {
         optionValue: "id",
         optionLabel: "name",
         showSearch: true,
+        labelInline: false,
     },
 );
 
@@ -94,6 +96,10 @@ const searching = _.debounce(
 );
 
 function get(option: any, type: "optionValue" | "optionLabel") {
+    if (Object.keys(option).length === 0) {
+        return option;
+    }
+
     if (typeof props[type] === "string") {
         return _.get(option, props[type]);
     } else {
@@ -166,11 +172,7 @@ function fetchMore() {
 }
 
 function setModel(option: any) {
-    if (typeof props.optionValue === "string") {
-        model.value = _.get(option, props.optionValue);
-    } else {
-        model.value = props.optionValue(option);
-    }
+    model.value = get(option, "optionValue");
 
     open.value = false;
 }
@@ -198,56 +200,61 @@ onMounted(() => {
 </script>
 
 <template>
-    <InputLabel :value="label" />
-    <div class="relative mt-2" ref="dropdown">
-        <div class="relative">
-            <div :class="[inputClass]" @click="openToggle">
-                <span v-if="selected === undefined" class="text-gray-400"> Select option </span>
-                <span v-else>
-                    {{ get(selected, "optionLabel") }}
-                </span>
-            </div>
-            <div class="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer">
-                <fa-icon @click="openToggle" :icon="faChevronDown" />
-            </div>
-        </div>
+    <div :class="[labelInline ? 'flex items-center' : 'flex flex-col']" class="w-full flex-1 gap-2">
+        <InputLabel :value="label" />
 
-        <Transition
-            enter-active-class="transition-[max-height,opacity] ease-in-out duration-100 overflow-hidden"
-            enter-from-class="max-h-0 opacity-0"
-            enter-to-class="max-h-96 opacity-100"
-            leave-active-class="transition-all ease-in-out duration-100 overflow-hidden"
-            leave-from-class="max-h-96 opacity-100"
-            leave-to-class="max-h-0 opacity-0">
-            <div
-                v-show="open"
-                class="absolute inset-x-0 z-50 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
-                <div class="max-h-80 overflow-auto">
-                    <div class="mb-2 px-2" v-if="showSearch && data.length">
-                        <TextInput @input="searching" v-model="search" ref="inputSearch" />
-                    </div>
-                    <div class="flex flex-shrink-0 flex-grow-0 flex-col">
-                        <template v-if="data.length > 0">
-                            <template v-for="option in data">
-                                <div
-                                    @click="setModel(option)"
-                                    :class="[get(option, 'optionValue') == model ? 'bg-gray-200 dark:bg-gray-900' : '']"
-                                    class="cursor-pointer py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
-                                    {{ get(option, "optionLabel") }}
-                                </div>
-                            </template>
-                            <div
-                                v-if="page.current_page !== page.last_page && page.last_page !== 0"
-                                class="cursor-pointer bg-gray-800 py-3.5 pl-4"
-                                @click="fetchMore">
-                                View more
-                            </div>
-                        </template>
-                        <span class="py-3.5 pl-4" v-else>No option</span>
-                    </div>
+        <div class="relative w-full" ref="dropdown">
+            <div class="relative w-full">
+                <div :class="[inputClass]" @click="openToggle">
+                    <span v-if="selected === undefined" class="text-gray-400"> Select option </span>
+                    <span v-else>
+                        {{ get(selected, "optionLabel") }}
+                    </span>
+                </div>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer">
+                    <fa-icon @click="openToggle" :icon="faChevronDown" />
                 </div>
             </div>
-        </Transition>
+
+            <Transition
+                enter-active-class="transition-[max-height,opacity] ease-in-out duration-100 overflow-hidden"
+                enter-from-class="max-h-0 opacity-0"
+                enter-to-class="max-h-96 opacity-100"
+                leave-active-class="transition-all ease-in-out duration-100 overflow-hidden"
+                leave-from-class="max-h-96 opacity-100"
+                leave-to-class="max-h-0 opacity-0">
+                <div
+                    v-show="open"
+                    class="absolute inset-x-0 z-50 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
+                    <div class="max-h-80 overflow-auto">
+                        <div class="mb-2 px-2" v-if="showSearch && data.length">
+                            <TextInput @input="searching" v-model="search" ref="inputSearch" />
+                        </div>
+                        <div class="flex flex-shrink-0 flex-grow-0 flex-col">
+                            <template v-if="data.length > 0">
+                                <template v-for="option in data">
+                                    <div
+                                        @click="setModel(option)"
+                                        :class="[
+                                            get(option, 'optionValue') == model ? 'bg-gray-200 dark:bg-gray-900' : '',
+                                        ]"
+                                        class="cursor-pointer py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
+                                        {{ get(option, "optionLabel") }}
+                                    </div>
+                                </template>
+                                <div
+                                    v-if="page.current_page !== page.last_page && page.last_page !== 0"
+                                    class="cursor-pointer bg-gray-800 py-3.5 pl-4"
+                                    @click="fetchMore">
+                                    View more
+                                </div>
+                            </template>
+                            <span class="py-3.5 pl-4" v-else>No option</span>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </div>
     </div>
 </template>
 

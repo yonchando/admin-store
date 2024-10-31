@@ -48,7 +48,7 @@ function submit() {
 </script>
 
 <template>
-    <Modal :actions="actions" :show="!!show" @close="show = false" title="Add new" max-width="xl" position="center">
+    <Modal :actions="actions" :show="!!show" @close="show = false" title="Add new" max-width="xl" class="!top-8">
         <form @submit.prevent="submit">
             <div>
                 <TextInput autofocus label="Name" v-model="form.category_name" />

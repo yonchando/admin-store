@@ -62,45 +62,46 @@ function submit() {
         <form @submit.prevent="submit" method="POST">
             <div class="p-4">
                 <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-8 mb-4 grid grid-cols-2 gap-4">
-                        <div class="">
-                            <TextInput required label="Name" v-model="form.product_name" />
-                            <InputError :message="form.errors.product_name" />
-                        </div>
-                        <div class="">
-                            <TextInput label="Price" type="number" v-model="form.price" />
-                            <InputError :message="form.errors.price" />
-                        </div>
-                        <div class="">
-                            <TextInput label="Stock qty" type="number" v-model="form.stock_qty" />
-                            <InputError :message="form.errors.stock_qty" />
-                        </div>
-                        <div class="">
-                            <Select
-                                label="Category"
-                                v-model="form.category_id"
-                                :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
-                                :options="[]"
-                                :paginate="{ data: [] }"
-                                option-label="category_name" />
-                            <InputError :message="form.errors.category_id" />
-                        </div>
-                        <div>
-                            <Select label="Status" v-model="form.status" :options="statuses" />
-                            <InputError :message="form.errors.status" />
-                        </div>
+                    <div class="col-start-1 col-end-5">
+                        <TextInput required label="Name" v-model="form.product_name" />
+                        <InputError :message="form.errors.product_name" />
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-start-5 col-end-9">
+                        <TextInput label="Price" type="number" v-model="form.price" />
+                        <InputError :message="form.errors.price" />
+                    </div>
+                    <div class="col-start-1 col-end-5">
+                        <TextInput label="Stock qty" type="number" v-model="form.stock_qty" />
+                        <InputError :message="form.errors.stock_qty" />
+                    </div>
+                    <div class="col-start-5 col-end-9">
+                        <Select
+                            label="Category"
+                            v-model="form.category_id"
+                            :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
+                            :options="[]"
+                            :paginate="{ data: [] }"
+                            option-label="category_name" />
+                        <InputError :message="form.errors.category_id" />
+                    </div>
+                    <div class="col-start-1 col-end-5">
+                        <Select label="Status" v-model="form.status" :options="statuses" :show-search="false" />
+                        <InputError :message="form.errors.status" />
+                    </div>
+                    <div class="col-start-9 col-end-13 row-start-1 row-end-4">
                         <InputLabel value="Feature image" />
                         <FileUpload
                             v-model="form.image"
                             :values="product?.json?.image?.url ? [product?.json?.image?.url] : null" />
                     </div>
-                </div>
-
-                <div>
-                    <TextareaInput v-model="form.description" label="Description" cols="30" rows="10"></TextareaInput>
-                    <InputError :message="form.errors.description" />
+                    <div class="col-start-1 col-end-13">
+                        <TextareaInput
+                            v-model="form.description"
+                            label="Description"
+                            cols="30"
+                            rows="10"></TextareaInput>
+                        <InputError :message="form.errors.description" />
+                    </div>
                 </div>
             </div>
         </form>

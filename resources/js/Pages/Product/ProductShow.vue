@@ -31,7 +31,7 @@ const actions = computed(() => {
     return [edit, remove];
 });
 
-const columns: Column[] = productService.columns;
+const columns: Column<Product>[] = productService.columns;
 
 function destroy() {
     useForm({
@@ -48,23 +48,25 @@ function destroy() {
             <h3 class="text-lg font-semibold">Product Information</h3>
             <div class="mt-4 flex gap-3">
                 <div class="flex w-8/12 flex-col gap-4">
-                    <template v-for="column in columns">
-                        <div class="flex">
-                            <span class="w-1/4">{{ column.label }}:</span>
-                            <span class="">
-                                <DataValue :column="column" :item="product" />
-                            </span>
-                        </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <template v-for="column in columns">
+                            <div class="flex">
+                                <span class="w-1/3">{{ column.label }}:</span>
+                                <span class="font-semibold">
+                                    <DataValue :column="column" :item="product" />
+                                </span>
+                            </div>
+                        </template>
+                    </div>
 
-                        <div class="border border-gray-50" />
-                    </template>
                     <div class="leading-6" v-html="product.description"></div>
                 </div>
                 <div class="w-1/3">
                     <img
-                        class="w-full rounded-md"
+                        class="w-3/4 rounded-md"
                         v-if="product.json?.image?.url"
                         :src="product.json?.image?.url"
+                        onerror="() => '@assets/images/placeholders/placeholder.jpg'"
                         :alt="product.product_name" />
                     <img class="w-full" v-else src="@assets/images/placeholders/placeholder.jpg" alt="" />
                 </div>

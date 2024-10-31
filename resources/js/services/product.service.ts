@@ -39,10 +39,9 @@ export const columns: Column<Product>[] = [
         },
         component: {
             el: Badge,
-            props: (item) => {
+            props: (item: Product) => {
                 return {
                     severity: item.status == "active" ? "info" : "error",
-                    class: "text-xs",
                 };
             },
         },

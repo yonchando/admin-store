@@ -1,0 +1,73 @@
+<script setup lang="ts">
+import { router } from "@inertiajs/vue3";
+import { faAngleDoubleLeft, faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
+import Button from "@/Components/Button.vue";
+import { Paginate } from "@/types/paginate";
+
+defineProps<{
+    values: Array<string>;
+    paginate?: Paginate<any>;
+}>();
+</script>
+
+<template>
+    <div class="flex items-center px-2 py-4">
+        <template v-if="paginate?.data.length">
+            <div class="flex gap-4">
+                <p class="">
+                    Total:
+                    <span class="font-semibold">
+                        {{ paginate ? paginate.total : values.length }}
+                    </span>
+                </p>
+                <p>
+                    Showing:
+                    <span class="font-semibold">
+                        {{ paginate.current_page }} of
+                        {{ paginate.last_page }}
+                        pages
+                    </span>
+                </p>
+            </div>
+
+            <template v-if="paginate && paginate.links">
+                <div class="ml-auto flex" v-if="paginate && paginate.links.length > 0">
+                    <template v-for="(link, index) in paginate.links">
+                        <template v-if="index == 0">
+                            <Button
+                                @click="router.get(link.url ?? '')"
+                                :disabled="!link.url"
+                                class="rounded-s-full border-r-0 !px-3">
+                                <fa-icon :icon="faAngleDoubleLeft"></fa-icon>
+                                Previous
+                            </Button>
+                        </template>
+                        <template v-if="index != 0 && index != paginate.links.length - 1">
+                            <Button
+                                v-if="link.url"
+                                :severity="link.active ? 'info' : 'secondary'"
+                                @click="router.get(link.url)"
+                                class="rounded-none border-l-0">
+                                {{ link.label }}
+                            </Button>
+                            <Button v-else class="rounded-none border-l-0" severity="secondary">
+                                {{ link.label }}
+                            </Button>
+                        </template>
+                        <template v-if="index == paginate?.links?.length - 1">
+                            <Button
+                                @click="router.get(link.url ?? '')"
+                                :disabled="!link.url"
+                                class="rounded-e-full border-l-0 !px-3">
+                                Next
+                                <fa-icon :icon="faAngleDoubleRight"></fa-icon>
+                            </Button>
+                        </template>
+                    </template>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>
+
+<style scoped></style>

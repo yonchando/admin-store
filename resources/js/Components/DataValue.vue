@@ -3,7 +3,7 @@ import { dataGet } from "@/services/helper.service";
 import { Column } from "@/types/datatable/column";
 
 defineProps<{
-    column: Column;
+    column: Column<any>;
     item: any;
 }>();
 </script>

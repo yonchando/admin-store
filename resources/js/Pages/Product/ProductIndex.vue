@@ -100,7 +100,7 @@ function show(item: Product) {
             :columns="columns"
             :search="filters.search"
             @search="search"
-            @page="pageChange"
+            @showPage="pageChange"
             @row-dbclick="show"
             v-model:checked="selectRows"
             v-model:select-row="product"

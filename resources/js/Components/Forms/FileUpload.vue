@@ -59,7 +59,7 @@ function getFiles(e: Event) {
 
 <template>
     <div
-        class="relative mt-2 flex flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-900">
+        class="relative mt-2 flex h-full flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-900">
         <p class="text-xs font-medium">Select file or drop file here</p>
         <p class="text-xs font-medium">Max size: {{ size }} <span class="text-error">*</span></p>
         <p class="text-xs font-medium">File: {{ type }} <span class="text-error">*</span></p>

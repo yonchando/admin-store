@@ -8,11 +8,22 @@ const props = withDefaults(
         type: "outline" | "fill";
     }>(),
     {
-        size: "default",
+        size: "sm",
         severity: "primary",
         type: "fill",
     },
 );
+
+const sizeClass = computed(() => {
+    return {
+        xs: "text-xxs",
+        sm: "text-xs",
+        default: "text-sm",
+        md: "text-base",
+        lg: "text-lg",
+        xl: "text-xl",
+    }[props.size];
+});
 
 const className = computed(() => {
     return {

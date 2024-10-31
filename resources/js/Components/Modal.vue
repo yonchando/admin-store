@@ -2,6 +2,10 @@
 import { computed, onMounted, onUnmounted, watch } from "vue";
 import { Action } from "@/types/button";
 
+defineOptions({
+    inheritAttrs: false,
+});
+
 const props = withDefaults(
     defineProps<{
         show?: boolean;
@@ -80,7 +84,11 @@ const positionClass = computed(() => {
 <template>
     <Teleport to="body">
         <Transition leave-active-class="duration-200">
-            <div v-show="show" class="fixed inset-0 z-50 flex overflow-y-auto px-4 py-6 sm:px-0" scroll-region>
+            <div
+                v-show="show"
+                class="fixed inset-0 z-50 flex overflow-y-auto px-4 py-6 sm:px-0"
+                v-bind="$attrs"
+                scroll-region>
                 <Transition
                     enter-active-class="ease-out duration-300"
                     enter-from-class="opacity-0"

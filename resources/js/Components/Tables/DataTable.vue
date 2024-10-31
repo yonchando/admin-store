@@ -6,24 +6,27 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import { Action } from "@/types/button";
 import { Paginate } from "@/types/paginate";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
-import { faAngleDoubleLeft, faAngleDoubleRight, faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import Button from "@/Components/Button.vue";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import ArrowUpDown from "@/Components/Icon/ArrowUpDown.vue";
 import _ from "lodash";
-import { router } from "@inertiajs/vue3";
 import DataValue from "@/Components/DataValue.vue";
+import Select from "@/Components/Forms/Select.vue";
+import Pagination from "@/Components/Tables/Pagination.vue";
 
 const props = defineProps<{
     values: Array<any>;
     columns: Column<any>[];
     checkbox?: boolean;
     rowProps?: any;
-    paginate?: Paginate<any>;
+    paginate?: Paginate<any> | undefined;
     actions?: Action[];
+    root?: {
+        actionClass?: string[];
+    };
 }>();
 
 const emit = defineEmits<{
-    page: [page: number];
+    showPage: [page: number];
     sort: [];
     search: [s: string];
     "row-dbclick": [item: any];
@@ -55,7 +58,7 @@ function changeCheckedAll(event: Event) {
     }
 }
 
-function sort(item: Column) {
+function sort(item: Column<any>) {
     if (!item.sortable) {
         return;
     }
@@ -80,18 +83,10 @@ function sort(item: Column) {
 const inputSearch = _.debounce(function (e: Event) {
     emit("search", (e.target as HTMLInputElement).value);
 }, 500);
-
-function get(item, key: string | ((t: type) => string)) {
-    if (typeof key === "string") {
-        return _.get(item, key);
-    } else {
-        return key(item);
-    }
-}
 </script>
 
 <template>
-    <div class="flex px-2 py-4">
+    <div class="flex items-center px-2 py-4">
         <div class="flex">
             <div>
                 <TextInput
@@ -106,20 +101,20 @@ function get(item, key: string | ((t: type) => string)) {
             </div>
         </div>
 
-        <div class="ml-auto inline-flex items-center gap-2" v-if="paginate">
-            <label for="show">Show:</label>
-            <div class="">
-                <select
-                    id="show"
-                    class="w-full rounded-md bg-gray-700 text-gray-100"
-                    @change="$emit('page', showPerPage)"
-                    v-model="showPerPage">
-                    <option v-for="show in shows" :value="show">{{ show }}</option>
-                </select>
-            </div>
+        <div class="max-w-xxs ml-auto w-full" v-if="paginate">
+            <Select
+                :show-search="false"
+                label-inline
+                label="Show:"
+                :options="shows"
+                id="show"
+                @change="$emit('showPage', showPerPage)"
+                v-model="showPerPage">
+            </Select>
         </div>
     </div>
-    <table class="w-full table-fixed border-collapse rounded-md">
+    <table class="min-w-full table-fixed border-collapse rounded-md xl:w-full">
+        <!-- Headers -->
         <tr>
             <th
                 v-if="checkbox"
@@ -149,19 +144,13 @@ function get(item, key: string | ((t: type) => string)) {
                     </span>
                 </div>
             </th>
-            <th
-                class="w-40 border border-gray-200 bg-gray-200 py-3 pl-2 text-left align-middle dark:border-gray-600 dark:bg-gray-800"
-                v-if="$slots.actions">
-                Actions
-            </th>
+            <th :class="root?.actionClass" class="column head w-40" v-if="$slots.actions">Actions</th>
         </tr>
 
+        <!-- Rows -->
         <template v-if="values.length">
             <tr v-for="item in values" class="group">
-                <td
-                    v-if="checkbox"
-                    :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
-                    class="column">
+                <td v-if="checkbox" :class="[selectRow?.id == item.id ? 'active' : '']" class="column">
                     <Checkbox :value="item.id" v-model:checked="checked" />
                 </td>
                 <template v-for="column in columns">
@@ -169,85 +158,41 @@ function get(item, key: string | ((t: type) => string)) {
                         v-bind="rowProps"
                         @dblclick="$emit('row-dbclick', item)"
                         @click="selectRow = selectRow?.id == item.id ? null : item"
-                        :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
+                        :class="[selectRow?.id == item.id ? 'active' : '']"
                         class="column">
                         <DataValue :item="item" :column="column" />
                     </td>
                 </template>
-                <td
-                    v-if="$slots.actions"
-                    :class="[selectRow?.id == item.id ? 'bg-gray-200 dark:bg-gray-700' : 'dark:bg-gray-800']"
-                    class="column">
+                <td v-if="$slots.actions" :class="[selectRow?.id == item.id ? 'active' : '']" class="column">
                     <slot name="actions" :item="item"></slot>
                 </td>
             </tr>
         </template>
 
+        <!-- Paginate -->
         <template v-if="values.length === 0">
             <tr>
                 <td class="column !py-4" :colspan="columns.length + ($slots.actions ? 2 : 1)">Empty Data</td>
             </tr>
         </template>
     </table>
-    <div class="flex items-center px-2 py-4">
-        <template v-if="paginate?.data.length">
-            <div class="flex gap-4">
-                <p class="">
-                    Total:
-                    <span class="font-semibold">
-                        {{ paginate ? paginate.total : values.length }}
-                    </span>
-                </p>
-                <p>
-                    Showing:
-                    <span class="font-semibold">
-                        {{ paginate.current_page }} of
-                        {{ paginate.last_page }}
-                        pages
-                    </span>
-                </p>
-            </div>
-
-            <div class="ml-auto flex" v-if="paginate.links.length > 0">
-                <template v-for="(link, index) in paginate.links">
-                    <template v-if="index == 0">
-                        <Button
-                            @click="router.get(link.url)"
-                            :disabled="!link.url"
-                            class="rounded-s-full border-r-0 !px-3">
-                            <fa-icon :icon="faAngleDoubleLeft"></fa-icon>
-                            Previous
-                        </Button>
-                    </template>
-                    <template v-if="index != 0 && index != paginate.links.length - 1">
-                        <Button
-                            v-if="link.url"
-                            :severity="link.active ? 'info' : 'secondary'"
-                            @click="router.get(link.url)"
-                            class="rounded-none border-l-0">
-                            {{ link.label }}
-                        </Button>
-                        <Button v-else class="rounded-none border-l-0" severity="secondary">
-                            {{ link.label }}
-                        </Button>
-                    </template>
-                    <template v-if="index == paginate.links.length - 1">
-                        <Button
-                            @click="router.get(link.url)"
-                            :disabled="!link.url"
-                            class="rounded-e-full border-l-0 !px-3">
-                            Next
-                            <fa-icon :icon="faAngleDoubleRight"></fa-icon>
-                        </Button>
-                    </template>
-                </template>
-            </div>
-        </template>
-    </div>
+    <Pagination :values="values" :paginate="paginate" />
 </template>
 
-<style scoped>
-.column {
-    @apply border border-gray-300 py-1.5 pl-2 text-left align-middle group-hover:bg-gray-200 dark:border-gray-600 group-hover:dark:bg-gray-700;
+<style scoped lang="postcss">
+:deep(.column) {
+    @apply border border-gray-300 py-1.5 pl-2 text-left align-middle
+    group-hover:bg-gray-200
+    dark:border-gray-600
+    dark:bg-gray-800
+    group-hover:dark:bg-gray-700;
+}
+
+:deep(.column.head) {
+    @apply dark:border-gray-600 dark:bg-gray-700;
+}
+
+:deep(.column.active) {
+    @apply bg-gray-200 dark:bg-gray-700;
 }
 </style>

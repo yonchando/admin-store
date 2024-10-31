@@ -8,13 +8,14 @@ import useAction from "@/services/action.service";
 import CategoryForm from "@/Pages/Category/CategoryForm.vue";
 import Alert from "@/Components/Alert/Alert.vue";
 import { router } from "@inertiajs/vue3";
+import ButtonGroup from "@/Components/ButtonGroup.vue";
 
 const props = defineProps<{
     categories: Categories;
     sort: any;
 }>();
 
-const columns: Column[] = categoryService.columns;
+const columns: Column<Category>[] = categoryService.columns;
 
 const filters = reactive(categoryService.filters);
 
@@ -27,7 +28,7 @@ const showForm = ref<boolean>(false);
 const confirmed = ref(false);
 
 const actions = computed(() => {
-    const { add, edit, remove, refresh } = useAction();
+    const { add, remove, refresh } = useAction();
 
     add.props.onClick = () => {
         showForm.value = true;
@@ -36,15 +37,12 @@ const actions = computed(() => {
 
     refresh.props.onClick = getData;
 
-    edit.props.disabled = category.value == null;
-    edit.props.onClick = () => (showForm.value = true);
-
     remove.props.disabled = category.value == null && selectRows.value.length === 0;
     remove.props.onClick = () => {
         confirmed.value = true;
     };
 
-    return [add, edit, remove, refresh];
+    return [add, refresh, remove];
 });
 
 const category = ref<Category | null>(null);
@@ -53,10 +51,19 @@ watch(filters, () => {
     getData();
 });
 
+function search(e: string) {
+    filters.search = e;
+}
+
 function getData() {
     router.reload({
         data: filters,
     });
+}
+
+function edit(item: Category) {
+    showForm.value = true;
+    category.value = item;
 }
 
 function destroy() {
@@ -77,6 +84,10 @@ function destroy() {
         },
     });
 }
+
+function changePage(p: number) {
+    router.reload({ data: { perPage: p, page: 1 } });
+}
 </script>
 
 <template>
@@ -84,19 +95,25 @@ function destroy() {
         <template #header> Category Lists</template>
 
         <DataTable
+            :root="{
+                actionClass: ['!w-20'],
+            }"
             :values="categories.data"
             :paginate="categories"
             :columns="columns"
-            @search="
-                (e) => {
-                    filters.search = e;
-                }
-            "
-            @page="(p) => router.reload({ data: { perPage: p, page: 1 } })"
+            @search="search"
+            @showPage="changePage"
+            @row-dbclick="edit"
             v-model:checked="selectRows"
             v-model:selectRow="category"
             v-model:sort-by="filters.sortBy"
-            checkbox />
+            checkbox>
+            <template #actions="{ item }">
+                <ButtonGroup>
+                    <Button size="xs" @click="edit(item)" severity="warning">Edit</Button>
+                </ButtonGroup>
+            </template>
+        </DataTable>
 
         <CategoryForm v-if="showForm" v-model:show="showForm" :category="category" />
 

@@ -27,6 +27,9 @@ export default {
                 warning: colors.amber["600"],
                 error: colors.rose["600"],
             },
+            maxWidth: {
+                xxs: "12rem",
+            },
         },
     },
 
