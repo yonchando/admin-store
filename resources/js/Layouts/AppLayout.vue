@@ -2,7 +2,7 @@
 import { Head, usePage } from "@inertiajs/vue3";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import { Action } from "@/types/button";
-import { watch } from "vue";
+import { onMounted, watch } from "vue";
 import StartToastifyInstance from "toastify-js";
 
 defineProps<{
@@ -22,21 +22,29 @@ const severities: any = {
 watch(
     () => page.props.flash,
     (newValue: any) => {
-        for (const flash in newValue) {
-            if (newValue[flash]) {
-                StartToastifyInstance({
-                    text: newValue[flash],
-                    duration: 3000,
-                    newWindow: true,
-                    close: false,
-                    gravity: "top",
-                    position: "center",
-                    className: severities[flash],
-                }).showToast();
-            }
-        }
+        alertMessage(newValue);
     },
 );
+
+function alertMessage(messages: any) {
+    for (const flash in messages) {
+        if (messages[flash]) {
+            StartToastifyInstance({
+                text: messages[flash],
+                duration: 3000,
+                newWindow: true,
+                close: false,
+                gravity: "top",
+                position: "center",
+                className: severities[flash],
+            }).showToast();
+        }
+    }
+}
+
+onMounted(() => {
+    alertMessage(page.props.flash);
+});
 </script>
 
 <template>
