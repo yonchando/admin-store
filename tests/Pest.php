@@ -48,8 +48,11 @@ function something()
     // ..
 }
 
+function refresh(): void {}
+
 function asUser()
 {
     $user = User::factory()->admin()->create();
+
     return test()->actingAs($user);
 }

@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
-use App\Facades\Helper;
 use App\Http\Requests\CardRequest;
 use App\Models\Card;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class CardRepository implements Contracts\CardRepositoryInterface
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getAll(): Collection
     {
@@ -21,7 +17,7 @@ class CardRepository implements Contracts\CardRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getAllByUserId(int $id): Collection
     {
@@ -42,6 +38,7 @@ class CardRepository implements Contracts\CardRepositoryInterface
     {
         $data = $request->validated();
         $data['number'] = rand(0000000000000000, 9999999999999999);
+
         return Card::create($data);
     }
 

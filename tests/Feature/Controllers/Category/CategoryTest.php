@@ -3,6 +3,13 @@
 use App\Models\Category;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\from;
+use function Pest\Laravel\putJson;
+
+beforeEach(function () {
+    asUser();
+});
+
 test('index method', function () {
 
     $category = Category::factory(3)->create();
@@ -13,13 +20,13 @@ test('index method', function () {
 
     $res->assertOk();
     $res->assertInertia(
-        fn (AssertableInertia $page) => $page->component('Category/Index')
+        fn (AssertableInertia $page) => $page->component('Category/CategoryIndex')
             ->has('categories.data', $perPage)
             ->where('categories.total', $category->count())
     );
 });
 
-it('order cateogry by latest', function () {
+it('order category by latest', function () {
     $first = Category::factory()->create([
         'created_at' => now()->subMinutes(3),
     ]);
@@ -30,7 +37,7 @@ it('order cateogry by latest', function () {
     $this->get(route('category.index'))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Category/Index')
+            fn (AssertableInertia $page) => $page->component('Category/CategoryIndex')
                 ->where('categories.data.0.id', $second->id)
                 ->where('categories.data.1.id', $first->id)
         );
@@ -52,42 +59,42 @@ it('validate data before store', function () {
 
 });
 
-test('store mehtod', function () {
-    $cateogry = Category::factory()->make();
+test('store method', function () {
+    $category = Category::factory()->make();
 
-    $this->post(route('category.store'), $cateogry->toArray())
+    $this->post(route('category.store'), $category->toArray())
         ->assertRedirect(route('category.index'))
-        ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.category')]));
+        ->assertSessionHas('success', __('lang.created_success', ['attribute' => __('lang.category')]));
 
-    $this->assertDatabaseHas($cateogry->getTable(), [
-        'category_name' => $cateogry->category_name,
-        'slug' => Str::slug($cateogry->category_name),
+    $this->assertDatabaseHas($category->getTable(), [
+        'category_name' => $category->category_name,
+        'slug' => Str::slug($category->category_name),
     ]);
 });
 
 test('update method', function () {
-    $cateogry = Category::factory()->create();
+    $category = Category::factory()->create();
 
     $name = 'changed name';
 
-    $this->patch(route('category.update', $cateogry), [
+    putJson(route('category.update', $category), [
         'category_name' => $name,
     ])->assertRedirect(route('category.index'))
-        ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.category')]));
+        ->assertSessionHas('success', __('lang.updated_success', ['attribute' => __('lang.category')]));
 
-    $changed = $cateogry->fresh();
+    $changed = $category->fresh();
 
-    expect($changed->category_name)->toBe($name);
-    expect($changed->slug)->toBe(Str::slug($name));
+    expect($changed->category_name)->toBe($name)
+        ->and($changed->slug)->toBe(Str::slug($name));
 });
 
 test('destroy methods', function () {
     $category = Category::factory()->create();
 
-    $this->from(route('category.index'))
-        ->delete(route('category.destroy', $category))
+    from(route('category.index'))
+        ->delete(route('category.destroy'), ['ids' => [$category->id]])
         ->assertRedirect(route('category.index'))
-        ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.category')]));
+        ->assertSessionHas('success', __('lang.deleted_success', ['attribute' => __('lang.category')]));
 
     $this->assertDatabaseMissing($category->getTable(), [
         'category_name' => $category->category_name,

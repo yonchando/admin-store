@@ -1,24 +1,21 @@
 <?php
 
 use App\Enums\Product\ProductStatus;
-use App\Facades\Enum;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductHasOption;
-use App\Models\ProductHasOptionGroup;
-use App\Models\ProductOption;
-use App\Models\ProductOptionGroup;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
+use function Pest\Laravel\putJson;
+
+beforeEach(function () {
+    asUser();
+});
 
 test('index methods', function () {
-
-    $categories = Category::factory(2)->create();
 
     $products = Product::factory(3)->create([
         'created_at' => now()->subDay(),
@@ -33,10 +30,9 @@ test('index methods', function () {
     get(route('product.index', ['perPage' => $perPage]))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Product/Index')
+            fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $perPage)
-                ->has('categories', $categories->count())
-                ->where('statuses', Enum::toSelectedForm(ProductStatus::cases()))
+                ->where('statuses', ProductStatus::toArray())
                 ->where('products.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
@@ -49,44 +45,10 @@ describe('show product detail', function () {
         $this->get(route('product.show', $product))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Show')
+                fn (AssertableInertia $page) => $page->component('Product/ProductShow')
                     ->where('product.id', $product->id)
                     ->where('product.product_name', $product->product_name)
             );
-    });
-
-    it('can load product option and options', function () {
-        $group = ProductOptionGroup::factory()->create();
-
-        $options = ProductOption::factory(3)->create();
-
-        $product = Product::factory()->create();
-
-        $hasGroup = ProductHasOptionGroup::factory()
-            ->optionGroup($group->id)
-            ->product($product->id)->create();
-
-        $hasOptions = ProductHasOption::factory(3)
-            ->hasGroupId($hasGroup->id)
-            ->option(
-                new Sequence(
-                    $options->first()->id,
-                    $options->get(1)->id,
-                    $options->last()->id,
-                )
-            )
-            ->create();
-
-        $this->get(route('product.show', $product))
-            ->assertOk()
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Show')
-                    ->where('product.id', $product->id)
-                    ->where('product.product_name', $product->product_name)
-                    ->has('product.product_has_option_groups', 1)
-                    ->has('product.product_has_option_groups.0.product_has_options', $options->count())
-            );
-
     });
 });
 
@@ -98,8 +60,9 @@ describe('create product', function () {
         $this->get(route('product.create'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Form')
-                    ->has('categories', $categories->count())
+                fn (AssertableInertia $page) => $page->component('Product/ProductForm')
+                    ->where('statuses', ProductStatus::toArray())
+                    ->etc()
             );
     });
 
@@ -117,7 +80,7 @@ describe('create product', function () {
 
         $this->post(route('product.store'), $data)
             ->assertRedirect()
-            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.product')]));
+            ->assertSessionHas('success', __('lang.created_success', ['attribute' => __('lang.product')]));
 
         $this->assertDatabaseHas($product->getTable(), [
             'product_name' => $product->product_name,
@@ -128,23 +91,21 @@ describe('create product', function () {
 
         expect($product->json->image)->not()->toBeNull();
 
-        Storage::assertExists($product->json->image->getPath());
+        Storage::assertExists($product->json->image->path);
 
-        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$image->hashName()));
+        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image').'/'.$image->hashName()));
     });
 });
 
 describe('product edit', function () {
 
     it('can load form edit', function () {
-        $categories = Category::factory(3)->create();
         $product = Product::factory()->create();
 
-        $this->get(route('product.edit', $product))
+        get(route('product.edit', $product))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Form')
-                    ->has('categories', $categories->count())
+                fn (AssertableInertia $page) => $page->component('Product/ProductForm')
                     ->has(
                         'product',
                         fn (AssertableInertia $page) => $page
@@ -161,9 +122,9 @@ describe('product edit', function () {
             'image' => null,
         ]);
 
-        $this->patch(route('product.update', $product), $changed->toArray())
+        putJson(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'))
-            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.product')]));
+            ->assertSessionHas('success', __('lang.updated_success', ['attribute' => __('lang.product')]));
 
         $this->assertDatabaseMissing($product->getTable(), [
             'product_name' => $product->product_name,
@@ -188,38 +149,36 @@ describe('product edit', function () {
             'image' => $file,
         ]);
 
-        $this->patch(route('product.update', $product), $changed->toArray())
+        putJson(route('product.update', $product), $changed->toArray())
             ->assertRedirect(route('product.index'));
 
-        $image = $product->json->image->getUrl();
+        $image = $product->json->image->url;
 
         $product->refresh();
 
-        $this->assertNotEquals($image, $product->json->image->getUrl());
+        $this->assertNotEquals($image, $product->json->image->url);
 
-        Storage::assertExists($product->json->image->getPath());
+        Storage::assertExists($product->json->image->path);
 
-        expect($product->json->image->getUrl())->toEqual(Storage::url(config('paths.product_image').'/'.$file->hashName()));
+        expect($product->json->image->url)->toEqual(Storage::url(config('paths.product_image').'/'.$file->hashName()));
     });
 
     it('can update product status active to inactive and inactive to active', function () {
         $product = Product::factory()->active()->create();
 
-        $this->patchJson(route('product.update.status', $product))
-            ->assertOk()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::INACTIVE->value)
-                    ->etc()
-            );
+        putJson(route('product.update.status', $product))
+            ->assertRedirectToRoute('product.index');
 
-        $this->patchJson(route('product.update.status', $product))
-            ->assertOk()
-            ->assertJson(
-                fn (AssertableJson $json) => $json->where('product.id', $product->id)
-                    ->where('product.status', ProductStatus::ACTIVE->value)
-                    ->etc()
-            );
+        $product->refresh();
+
+        expect($product->status)->toBe(ProductStatus::INACTIVE);
+
+        putJson(route('product.update.status', $product))
+            ->assertRedirectToRoute('product.index');
+
+        $product->refresh();
+
+        expect($product->status)->toBe(ProductStatus::ACTIVE);
     });
 });
 
@@ -227,68 +186,10 @@ describe('delete function', function () {
     it('can delete product', function () {
         $product = Product::factory()->create();
 
-        $this->delete(route('product.destroy', $product))
-            ->assertRedirect(route('product.index'));
+        delete(route('product.destroy'), [
+            'ids' => [$product->id],
+        ])->assertRedirect(route('product.index', request()->all()));
 
         $this->assertSoftDeleted($product);
-    });
-
-    it('can delete product option group in product detail', function () {
-        $group = ProductOptionGroup::factory()->create();
-        $option = ProductOption::factory()->create();
-
-        $product = Product::factory()->create();
-
-        $productHasOptionGroup = ProductHasOptionGroup::create([
-            'product_id' => $product->id,
-            'product_option_group_id' => $group->id,
-        ]);
-
-        $productHasOption = ProductHasOption::create([
-            'product_has_option_group_id' => $productHasOptionGroup->id,
-            'product_option_id' => $option->id,
-        ]);
-
-        $this->from(route('product.show', $product));
-
-        $this->delete(route('product.destroy.product.option.group', $productHasOptionGroup))
-            ->assertRedirect(route('product.show', $product))
-            ->assertSessionHas(
-                'message.text',
-                __('lang.deleted_success', ['attribute' => __('lang.product_option_group')])
-            );
-
-        $product->refresh();
-
-        $this->assertModelMissing($productHasOptionGroup);
-        $this->assertDatabaseEmpty($productHasOption->getTable());
-        $this->assertEmpty($product->productOptionGroups);
-        $this->assertEmpty($product->productOptions);
-    });
-
-    it('can delete option from groups', function () {
-        $group = ProductOptionGroup::factory()->create();
-        $option = ProductOption::factory()->create();
-
-        $product = Product::factory()->create();
-
-        $productHasOptionGroup = ProductHasOptionGroup::create([
-            'product_id' => $product->id,
-            'product_option_group_id' => $group->id,
-        ]);
-
-        $productHasOption = ProductHasOption::create([
-            'product_has_option_group_id' => $productHasOptionGroup->id,
-            'product_option_id' => $option->id,
-        ]);
-
-        $this->from(route('product.show', $product));
-
-        $this->delete(route('product.destroy.product.option', $productHasOption))
-            ->assertRedirectToRoute('product.show', $product)
-            ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.product_option')]));
-
-        $this->assertModelMissing($productHasOption);
-        $this->assertEmpty($product->productHasOptions);
     });
 });

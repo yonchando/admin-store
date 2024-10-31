@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\GenderEnum;
-use App\Facades\Enum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -26,13 +25,14 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $genders = Enum::toArray(GenderEnum::cases(), true);
+        $genders = GenderEnum::toJson();
+
         return [
             'name' => fake()->name(),
             'username' => fake()->unique()->userName(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'gender' => $this->faker->randomElement($genders),
+            'gender' => $this->faker->randomElement(array_values($genders)),
             'is_admin' => false,
         ];
     }

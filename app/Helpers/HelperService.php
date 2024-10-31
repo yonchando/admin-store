@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Setting;
-use App\Repositories\Contracts\SettingRepositoryInterface;
+use App\Services\Contracts\SettingRepositoryInterface;
 
 readonly class HelperService
 {

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Models\Customer;
-use App\Repositories\Contracts\CustomerRepositoryInterface;
+use App\Services\Contracts\CustomerRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class CustomerRepository implements CustomerRepositoryInterface
 {
-
     public function paginate(Request $request): LengthAwarePaginator
     {
         $query = Customer::query();
@@ -24,7 +23,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $query = Customer::query();
 
         $query->with([
-            'purchaseOrders' => fn($query) => $query->withCount(['purchaseDetails']),
+            'purchaseOrders' => fn ($query) => $query->withCount(['purchaseDetails']),
         ]);
 
         $query->withCount(['purchaseOrders']);

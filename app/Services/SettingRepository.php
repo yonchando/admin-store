@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Http\Requests\Setting\SettingRequest;
 use App\Models\Setting;
-use App\Repositories\Contracts\SettingRepositoryInterface;
+use App\Services\Contracts\SettingRepositoryInterface;
 
 class SettingRepository implements SettingRepositoryInterface
 {
@@ -27,4 +27,3 @@ class SettingRepository implements SettingRepositoryInterface
         return $setting;
     }
 }
-

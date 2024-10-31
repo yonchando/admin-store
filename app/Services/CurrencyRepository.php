@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Models\Currency;
-use App\Repositories\Contracts\CurrencyRepositoryInterface;
+use App\Services\Contracts\CurrencyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class CurrencyRepository implements CurrencyRepositoryInterface
 {
-
     public function get(): Collection
     {
         return Currency::get();

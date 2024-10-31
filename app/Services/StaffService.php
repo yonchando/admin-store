@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Enums\User\UserStatus;
 use App\Http\Requests\User\UserRequest;
@@ -10,20 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
-class UserRepository implements Contracts\UserRepositoryInterface
+class StaffService
 {
-
-    /**
-     * @inheritDoc
-     */
     public function get(Request $request): Collection
     {
         return User::isNotAdmin()->filters($request)->get();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function paginate(Request $request): LengthAwarePaginator
     {
         $query = User::query();
@@ -33,22 +26,16 @@ class UserRepository implements Contracts\UserRepositoryInterface
         return $query->isNotAdmin()->latest()->paginate();
     }
 
-    public function findById(int $id): User
-    {
-        // TODO: Implement findById() method.
-    }
-
     public function save(UserRequest $request): User
     {
 
-        $user = new User();
+        $user = new User;
 
         $user->fill($request->except('password'));
 
         $user->password = bcrypt($request->get('password'));
 
         $user->save();
-
 
         return $user;
     }
@@ -57,7 +44,7 @@ class UserRepository implements Contracts\UserRepositoryInterface
     {
         $user->fill($request->except('password'));
 
-        if (!is_null($password = $request->get('password'))) {
+        if (! is_null($password = $request->get('password'))) {
             $user->password = bcrypt($password);
         }
 
@@ -82,6 +69,7 @@ class UserRepository implements Contracts\UserRepositoryInterface
     public function updateStatus(User $user): bool
     {
         $user->status = $user->status === UserStatus::ACTIVE ? UserStatus::INACTIVE : UserStatus::ACTIVE;
+
         return $user->save();
     }
 }

@@ -4,19 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Facades\Helper;
 use App\Http\Requests\CardRequest;
-use App\Models\Card;
-use App\Repositories\Contracts\CardRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Services\Contracts\CardRepositoryInterface;
 use Inertia\Inertia;
 
 class CardController extends Controller
 {
-
-
     public function __construct(
         private readonly CardRepositoryInterface $cardRepository,
-    ) {
-    }
+    ) {}
 
     public function index()
     {
@@ -35,12 +30,14 @@ class CardController extends Controller
         $card = $this->cardRepository->store($request);
 
         Helper::message(__('lang.created_success', ['attribute' => __('lang.card')]));
+
         return to_route('card.show', $card);
     }
 
     public function show($id)
     {
         $card = $this->cardRepository->findById($id);
+
         return Inertia::render('Card/Show', compact('card'));
     }
 
@@ -49,6 +46,7 @@ class CardController extends Controller
         $this->cardRepository->update($request, $id);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.card')]));
+
         return back();
     }
 
@@ -57,6 +55,7 @@ class CardController extends Controller
         $this->cardRepository->destroy($id);
 
         Helper::message(__('lang.deleted_success', ['attribute' => __('lang.card')]));
+
         return to_route('card.index');
     }
 }

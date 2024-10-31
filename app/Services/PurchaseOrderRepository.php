@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Models\PurchaseOrder;
-use App\Repositories\Contracts\PurchaseOrderRepositoryInterface;
+use App\Services\Contracts\PurchaseOrderRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PurchaseOrderRepository implements PurchaseOrderRepositoryInterface
 {
-
     public function all(): Collection
     {
         return PurchaseOrder::all();
@@ -52,5 +51,4 @@ class PurchaseOrderRepository implements PurchaseOrderRepositoryInterface
 
         return $purchase;
     }
-
 }

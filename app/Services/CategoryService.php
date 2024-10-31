@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Http\Requests\Category\CategoryRequest;
 use App\Models\Category;
-use App\Repositories\Contracts\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class CategoryRepository implements CategoryRepositoryInterface
+readonly class CategoryService
 {
     public function __construct(
-        private readonly Request $request,
+        private Request $request,
     ) {}
 
     public function get(): Collection

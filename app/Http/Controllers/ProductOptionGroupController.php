@@ -5,21 +5,20 @@ namespace App\Http\Controllers;
 use App\Facades\Helper;
 use App\Http\Requests\ProductOpion\ProductOptionGroupRequest;
 use App\Models\ProductOptionGroup;
-use App\Repositories\Contracts\ProductOptionGroupRepositoryInterface;
+use App\Services\Contracts\ProductOptionGroupRepositoryInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductOptionGroupController extends Controller
 {
-
     public function __construct(
         private readonly ProductOptionGroupRepositoryInterface $productOptionGroupRepository,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
         $groups = $this->productOptionGroupRepository->get($request);
+
         return Inertia::render('ProductOptionGroup/Index', [
             'groups' => $groups,
         ]);

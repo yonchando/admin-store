@@ -4,25 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Enums\GenderEnum;
 use App\Enums\User\UserStatus;
-use App\Facades\Enum;
-use App\Facades\Helper;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
-use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Services\StaffService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StaffController extends Controller
 {
-
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+        private readonly StaffService $staffService,
+    ) {}
 
     public function index(Request $request)
     {
-        $staffs = $this->userRepository->paginate($request);
+        $staffs = $this->staffService->paginate($request);
 
         return Inertia::render('Staff/Index', [
             'staffs' => $staffs,
@@ -35,51 +31,47 @@ class StaffController extends Controller
     public function create()
     {
         return Inertia::render('Staff/Form', [
-            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
+            'gender' => GenderEnum::toArray(),
         ]);
     }
 
     public function store(UserRequest $request)
     {
-        $this->userRepository->save($request);
+        $this->staffService->save($request);
 
-        Helper::message(__('lang.created_success', ['attribute' => __('lang.staff')]));
-
-        return redirect()->route('staff.index');
+        return redirect()->route('staff.index')
+            ->with('success', __('lang.created_success', ['attribute' => __('lang.staff')]));
     }
-    
+
     public function edit(User $user)
     {
         return Inertia::render('Staff/Form', [
             'staff' => $user,
-            'gender' => Enum::toSelectedForm(GenderEnum::cases(), true),
+            'gender' => GenderEnum::toArray(),
         ]);
     }
 
     public function update(UserRequest $request, User $user)
     {
-        $this->userRepository->update($request, $user);
+        $this->staffService->update($request, $user);
 
-        Helper::message(__('lang.updated_success', ['attribute' => __('lang.staff')]));
-
-        return to_route('staff.index');
+        return to_route('staff.index')
+            ->with('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
     }
 
     public function updateStatus(User $user)
     {
-        $this->userRepository->updateStatus($user);
+        $this->staffService->updateStatus($user);
 
-        Helper::message(__('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
-
-        return redirect()->back();
+        return redirect()->back()
+            ->with('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
     }
 
     public function destroy(User $user)
     {
-        $this->userRepository->destroy($user);
+        $this->staffService->destroy($user);
 
-        Helper::message(__('lang.deleted_success', ['attribute' => __('lang.staff')]));
-
-        return redirect()->back();
+        return redirect()->back()
+            ->with('success', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
     }
 }

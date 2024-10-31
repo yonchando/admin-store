@@ -4,7 +4,12 @@ namespace App\Filters\Product;
 
 use App\Filters\BuilderFilter;
 use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Validation\ValidationException;
 
+/**
+ * @property Product $builder
+ */
 class ProductFilter extends BuilderFilter
 {
     public function includes($withs): void
@@ -35,5 +40,32 @@ class ProductFilter extends BuilderFilter
                 $this->builder->orderBy($column, $direction);
             }
         }
+    }
+
+    public function price(array $price = []): void
+    {
+        if (count($price) !== 2) {
+            throw ValidationException::withMessages([
+                'price' => 'Price range must be only has 2 values',
+            ]);
+        }
+
+        if ($price[0] == null) {
+            $this->builder->where('price', '<=', $price[1]);
+        } elseif ($price[1] == null) {
+            $this->builder->where('price', '>=', $price[0]);
+        } else {
+            $this->builder->whereBetween('price', $price);
+        }
+    }
+
+    public function category($categoryId): void
+    {
+        $this->builder->where('category_id', $categoryId);
+    }
+
+    public function status($status): void
+    {
+        $this->builder->where('status', $status);
     }
 }

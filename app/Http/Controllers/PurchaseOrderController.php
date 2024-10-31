@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PurchaseOrder\PurchaseOrderStatus;
 use App\Facades\Helper;
 use App\Models\PurchaseOrder;
-use App\Repositories\Contracts\PurchaseOrderRepositoryInterface;
+use App\Services\Contracts\PurchaseOrderRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -14,8 +14,7 @@ class PurchaseOrderController extends Controller
 {
     public function __construct(
         private readonly PurchaseOrderRepositoryInterface $purchaseOrderRepository,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -46,6 +45,7 @@ class PurchaseOrderController extends Controller
         $this->purchaseOrderRepository->updateStatus($request, $purchaseOrder->id);
 
         Helper::message(__('lang.updated_success', ['attribute' => __('lang.purchase_status')]));
+
         return redirect()->back();
     }
 }

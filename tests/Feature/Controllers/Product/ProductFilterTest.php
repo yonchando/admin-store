@@ -6,6 +6,12 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\get;
+
+beforeEach(function () {
+    asUser();
+});
+
 describe('product filters', function () {
 
     it('filter all', function () {
@@ -17,16 +23,15 @@ describe('product filters', function () {
                 'price' => 100,
             ])->refresh();
 
-        $res = $this->get(route('product.index', [
+        $res = get(route('product.index', [
             'search' => 'product',
-            'category_id' => $category->id,
-            'min_price' => 50,
-            'max_price' => 200,
+            'category' => $category->id,
+            'price' => [50, 200],
         ]));
 
         $res->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                     ->has('products.data', 1)
                     ->has(
                         'products.data.0',
@@ -34,13 +39,11 @@ describe('product filters', function () {
                             ->where('product_name', $product->product_name)
                             ->etc()
                     )
-                    ->where('categories.0', $category)
                     ->has(
-                        'filters',
+                        'requests',
                         fn (AssertableInertia $page) => $page->where('search', 'product')
-                            ->where('category_id', "$category->id")
-                            ->where('min_price', '50')
-                            ->where('max_price', '200')
+                            ->where('category', "$category->id")
+                            ->where('price', ['50', '200'])
                             ->etc()
                     )
             );
@@ -50,8 +53,8 @@ describe('product filters', function () {
         Product::factory()->create(['product_name' => 'Other Name']);
         $products = Product::factory(2)->create(
             new Sequence(
-                ['product_name' => 'Search Name'],
-                ['product_name' => 'Search Other'],
+                ['product_name' => 'Search Name', 'created_at' => now()],
+                ['product_name' => 'Search Other', 'created_at' => now()->addMinute()],
             ));
 
         $res = $this->get(route('product.index', [
@@ -60,10 +63,13 @@ describe('product filters', function () {
 
         $res->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Index')
-                    ->has('products.data', $products->count())
-                    ->where('products.data.0.product_name', 'Search Name')
-                    ->where('products.data.1.product_name', 'Search Other')
+                function (AssertableInertia $page) use ($products) {
+                    return $page->component('Product/ProductIndex')
+                        ->has('products.data', $products->count())
+                        ->where('requests.search', 'search')
+                        ->where('products.data.0.product_name', 'Search Other')
+                        ->where('products.data.1.product_name', 'Search Name');
+                }
             );
     });
 
@@ -74,12 +80,12 @@ describe('product filters', function () {
         $products = Product::factory(2)->category($category->id)->create();
 
         $res = $this->get(route('product.index', [
-            'category_id' => $category->id,
+            'category' => $category->id,
         ]));
 
         $res->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                     ->has('products.data', $products->count())
             );
     });
@@ -95,19 +101,18 @@ describe('product filters', function () {
         );
 
         $res = $this->get(route('product.index', [
-            'min_price' => $min_price,
-            'max_price' => $max_price,
+            'price' => [$min_price, $max_price],
         ]));
 
         $res->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Product/Index')
+                fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                     ->has('products.data', $expectation)
             );
     })->with([
-        'fiter between' => [19, 40, 3],
-        'filter min price to highter price' => [19, null, 3],
-        'filter max price to lower price' => [null, 39, 3],
+        'filter between' => [19, 40, 3],
+        'filter min price to higher price' => [19, '', 3],
+        'filter max price to lower price' => ['', 39, 3],
     ]);
 
     it('filter by status', function () {
@@ -117,14 +122,14 @@ describe('product filters', function () {
         $this->get(route('product.index', [
             'status' => ProductStatus::ACTIVE->value,
         ]))->assertOk()->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Product/Index')
+            fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $actives->count())
         );
 
         $this->get(route('product.index', [
             'status' => ProductStatus::INACTIVE->value,
         ]))->assertOk()->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Product/Index')
+            fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $inactives->count())
         );
     });

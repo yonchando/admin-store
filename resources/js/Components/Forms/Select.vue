@@ -28,6 +28,10 @@ const props = withDefaults(
     },
 );
 
+const emit = defineEmits<{
+    change: [item: any];
+}>();
+
 const data = ref<Array<any>>(props.options ?? []);
 
 const model = defineModel();
@@ -175,6 +179,8 @@ function setModel(option: any) {
     model.value = get(option, "optionValue");
 
     open.value = false;
+
+    emit("change", option);
 }
 
 watch(open, (value: boolean) => {

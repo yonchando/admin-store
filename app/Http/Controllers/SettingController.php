@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Setting\SettingRequest;
-use App\Repositories\Contracts\CurrencyRepositoryInterface;
-use App\Repositories\Contracts\SettingRepositoryInterface;
+use App\Services\Contracts\CurrencyRepositoryInterface;
+use App\Services\Contracts\SettingRepositoryInterface;
 use Inertia\Inertia;
 
 class SettingController extends Controller

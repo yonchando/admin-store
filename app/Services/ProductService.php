@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Casts\Images\ImageCast;
 use App\Enums\Product\ProductStatus;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
-use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Storage;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductService
 {
     /**
      * @return Collection<Product>
@@ -103,12 +102,5 @@ class ProductRepository implements ProductRepositoryInterface
     public function destroy(int|array $ids): void
     {
         Product::destroy($ids);
-    }
-
-    public function findBySlug($slug): Product
-    {
-        return Product::query()->with([
-            'category',
-        ])->slug($slug)->first();
     }
 }
