@@ -4,13 +4,16 @@ import { route as ziggyRoute } from "ziggy-js";
 import { PageProps as AppPageProps } from "./";
 import { __ } from "@/locale";
 import get from "@/bootstrap";
+import Cropper from "cropperjs";
 
 declare global {
     interface Window {
         axios: AxiosInstance;
-        __: __;
         get: get;
+        Cropper: Cropper;
     }
+
+    let __: __;
 
     /* eslint-disable no-var */
     let route: typeof ziggyRoute;

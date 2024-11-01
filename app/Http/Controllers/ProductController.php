@@ -49,6 +49,18 @@ class ProductController extends Controller
             ->with('success', __('lang.created_success', ['attribute' => __('lang.product')]));
     }
 
+    public function upload(Request $request, $id)
+    {
+        $request->validate([
+            'file' => 'required|file|image:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $this->productService->upload($product, $request->file('file'));
+
+        return to_route('product.show', $id)->with('success', 'Image upload success');
+    }
+
     public function show($id)
     {
         $product = $this->productService->find($id, [

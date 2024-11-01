@@ -10,6 +10,7 @@ const props = withDefaults(
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         icon?: IconDefinition;
         href?: string;
+        disabled?: boolean;
     }>(),
     {
         size: "sm",
@@ -119,6 +120,7 @@ const severityClass = computed(() => {
     <button
         v-if="!href"
         :class="[sizeClass, ...severityClass]"
+        :disabled="disabled"
         class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
             <fa-icon :icon="icon" :size="size as any" />
@@ -129,6 +131,7 @@ const severityClass = computed(() => {
         v-else
         :href="href"
         :class="[sizeClass, ...severityClass]"
+        :disabled="disabled"
         class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
             <fa-icon :icon="icon" :size="size as any" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { Action } from "@/types/button";
 
 defineOptions({
@@ -8,7 +8,6 @@ defineOptions({
 
 const props = withDefaults(
     defineProps<{
-        show?: boolean;
         maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
         closeable?: boolean;
         title?: string;
@@ -16,7 +15,6 @@ const props = withDefaults(
         actions?: Array<Action>;
     }>(),
     {
-        show: false,
         maxWidth: "3xl",
         closeable: true,
         position: "top",
@@ -25,16 +23,15 @@ const props = withDefaults(
 
 const emit = defineEmits(["close"]);
 
-watch(
-    () => props.show,
-    () => {
-        if (props.show) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "visible";
-        }
-    },
-);
+const show = defineModel("show");
+
+watch(show, (newValue) => {
+    if (newValue) {
+        document.body.style.overflow = "hidden";
+    } else {
+        document.body.style.overflow = "visible";
+    }
+});
 
 const close = () => {
     if (props.closeable) {
@@ -43,7 +40,7 @@ const close = () => {
 };
 
 const closeOnEscape = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && props.show) {
+    if (e.key === "Escape" && show.value) {
         close();
     }
 };
@@ -122,16 +119,19 @@ const positionClass = computed(() => {
                                 </slot>
 
                                 <div class="ml-auto space-x-2">
-                                    <template v-for="action in actions">
-                                        <component :is="action.component" v-bind="action.props">
-                                            {{ action.label }}
-                                        </component>
+                                    <template v-if="actions && actions.length">
+                                        <template v-for="action in actions">
+                                            <component :is="action.component" v-bind="action.props">
+                                                {{ action.label }}
+                                            </component>
+                                        </template>
                                     </template>
+                                    <Button @click="show = false" severity="secondary">Close</Button>
                                 </div>
                             </div>
                         </div>
                         <div class="max-h-[85vh] overflow-auto px-4 pb-6">
-                            <slot v-if="show" />
+                            <slot />
                         </div>
                     </div>
                 </Transition>

@@ -7,9 +7,9 @@ import {
     faRefresh,
     faTimes,
     faTrash,
+    faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/Components/Button.vue";
-import _ from "lodash";
 
 export default function useAction() {
     const actions: ButtonActions<Action> = {
@@ -75,6 +75,14 @@ export default function useAction() {
             component: Button,
             props: {
                 severity: "error",
+            },
+        },
+        upload: {
+            label: "Upload",
+            icon: faUpload,
+            component: Button,
+            props: {
+                severity: "info",
             },
         },
     };

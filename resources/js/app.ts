@@ -1,6 +1,7 @@
 import "toastify-js/src/toastify.css";
 import "../css/app.css";
 import "./bootstrap.ts";
+import "./cropper";
 
 import { createInertiaApp } from "@inertiajs/vue3";
 import { createApp, DefineComponent, h } from "vue";
@@ -11,6 +12,8 @@ import colors from "tailwindcss/colors";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import Button from "@/Components/Button.vue";
 import Badge from "@/Components/Badges/Badge.vue";
+import Modal from "@/Components/Modal.vue";
+import { __ } from "@/locale";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -27,6 +30,9 @@ createInertiaApp({
         app.component("FaIcon", FontAwesomeIcon);
         app.component("Button", Button);
         app.component("Badge", Badge);
+        app.component("Modal", Modal);
+
+        app.config.globalProperties.__ = __;
 
         app.mount(el);
     },

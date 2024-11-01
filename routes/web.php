@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('store', [ProductController::class, 'store'])->name('store');
+            Route::post('upload-image/{id}', [ProductController::class, 'upload'])->name('upload.image');
 
             Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [ProductController::class, 'update'])->name('update');

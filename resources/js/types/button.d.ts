@@ -11,10 +11,7 @@ export interface ButtonActions<Type> {
     cancel: Type;
     edit: Type;
     remove: Type;
-}
-
-export interface ButtonGroup {
-    [key: "view" | "add" | "save" | "refresh" | "close" | "cancel" | "edit" | "remove"]: (t: Type) => Type;
+    upload: Type;
 }
 
 export interface Action {
