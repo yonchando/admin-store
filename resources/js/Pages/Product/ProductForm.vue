@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextareaInput from "@/Components/Forms/TextareaInput.vue";
@@ -10,11 +10,15 @@ import Select from "@/Components/Forms/Select.vue";
 import { Product } from "@/types/models/product";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import FileUpload from "@/Components/Forms/FileUpload.vue";
+import { UploadFile } from "@/types";
 
 const props = defineProps<{
     statuses: Array<string>;
     product?: Product;
 }>();
+
+const imagePreview = ref();
+const files = ref<UploadFile[]>([]);
 
 const product = props.product;
 
@@ -61,39 +65,60 @@ function submit() {
 
         <form @submit.prevent="submit" method="POST">
             <div class="p-4">
-                <div class="grid grid-cols-12 gap-4">
-                    <div class="col-start-1 col-end-5">
-                        <TextInput required label="Name" v-model="form.product_name" />
-                        <InputError :message="form.errors.product_name" />
+                <div class="flex gap-4">
+                    <div class="grid w-full grid-cols-2 gap-4">
+                        <div class="">
+                            <TextInput required label="Name" v-model="form.product_name" />
+                            <InputError :message="form.errors.product_name" />
+                        </div>
+                        <div class="">
+                            <TextInput label="Price" type="number" v-model="form.price" />
+                            <InputError :message="form.errors.price" />
+                        </div>
+                        <div class="">
+                            <TextInput label="Stock qty" type="number" v-model="form.stock_qty" />
+                            <InputError :message="form.errors.stock_qty" />
+                        </div>
+                        <div class="">
+                            <Select
+                                label="Category"
+                                v-model="form.category_id"
+                                :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
+                                :options="[]"
+                                :paginate="{ data: [] }"
+                                option-label="category_name" />
+                            <InputError :message="form.errors.category_id" />
+                        </div>
+                        <div class="">
+                            <Select label="Status" v-model="form.status" :options="statuses" :show-search="false" />
+                            <InputError :message="form.errors.status" />
+                        </div>
+                        <div class="">
+                            <div class="w-full">
+                                <FileUpload
+                                    label="Feature image"
+                                    class="mt-auto"
+                                    v-model="form.image"
+                                    v-model:files="files"
+                                    is-cropper
+                                    :previewContent="imagePreview"
+                                    :values="product?.json?.image?.url ? [product?.json?.image?.url] : null" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-start-5 col-end-9">
-                        <TextInput label="Price" type="number" v-model="form.price" />
-                        <InputError :message="form.errors.price" />
+                    <div class="flex w-1/4 flex-col" v-if="form.image || product?.json?.image?.url">
+                        <InputLabel value="Preview image" />
+                        <div class="mt-2 w-full rounded-md dark:bg-gray-900">
+                            <img
+                                ref="imagePreview"
+                                class="rounded-md"
+                                :src="files[0]?.url ?? product?.json?.image?.url"
+                                alt="Product image" />
+                        </div>
                     </div>
-                    <div class="col-start-1 col-end-5">
-                        <TextInput label="Stock qty" type="number" v-model="form.stock_qty" />
-                        <InputError :message="form.errors.stock_qty" />
-                    </div>
-                    <div class="col-start-5 col-end-9">
-                        <Select
-                            label="Category"
-                            v-model="form.category_id"
-                            :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
-                            :options="[]"
-                            :paginate="{ data: [] }"
-                            option-label="category_name" />
-                        <InputError :message="form.errors.category_id" />
-                    </div>
-                    <div class="col-start-1 col-end-5">
-                        <Select label="Status" v-model="form.status" :options="statuses" :show-search="false" />
-                        <InputError :message="form.errors.status" />
-                    </div>
-                    <div class="col-start-9 col-end-13 row-start-1 row-end-4">
-                        <InputLabel value="Feature image" />
-                        <FileUpload
-                            v-model="form.image"
-                            :values="product?.json?.image?.url ? [product?.json?.image?.url] : null" />
-                    </div>
+                </div>
+
+                <div class="mt-4">
                     <div class="col-start-1 col-end-13">
                         <TextareaInput
                             v-model="form.description"

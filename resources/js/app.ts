@@ -14,6 +14,7 @@ import Button from "@/Components/Button.vue";
 import Badge from "@/Components/Badges/Badge.vue";
 import Modal from "@/Components/Modal.vue";
 import { __ } from "@/locale";
+import { createPinia } from "pinia";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -22,8 +23,10 @@ createInertiaApp({
     resolve: (name) =>
         resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob<DefineComponent>("./Pages/**/*.vue")),
     setup({ el, App, props, plugin }) {
+        const pinia = createPinia();
         const app = createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(pinia)
             .use(ZiggyVue);
 
         app.component("AppLayout", AppLayout);

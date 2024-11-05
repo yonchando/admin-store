@@ -52,11 +52,11 @@ class ProductController extends Controller
     public function upload(Request $request, $id)
     {
         $request->validate([
-            'file' => 'required|file|image:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|file|image:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
-        $this->productService->upload($product, $request->file('file'));
+        $this->productService->upload($product, $request->file('image'));
 
         return to_route('product.show', $id)->with('success', 'Image upload success');
     }

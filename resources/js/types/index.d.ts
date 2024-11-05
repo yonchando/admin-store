@@ -15,3 +15,10 @@ export interface Menu {
     children?: Menu[];
     isActive?: boolean;
 }
+
+export interface UploadFile {
+    name: string;
+    type: string;
+    size: string;
+    url: string;
+}

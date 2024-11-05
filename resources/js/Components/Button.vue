@@ -6,7 +6,7 @@ import { Link } from "@inertiajs/vue3";
 
 const props = withDefaults(
     defineProps<{
-        size?: "xs" | "sm" | "md" | "lg" | "xl";
+        size?: "xs" | "sm" | "base" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         icon?: IconDefinition;
         href?: string;
@@ -22,6 +22,7 @@ const sizeClass = computed(() => {
     return {
         xs: "px-2 py-1 text-xxs",
         sm: "px-4 py-2 text-xs",
+        base: "px-4 py-2.5 text-sm",
         md: "px-5 py-3 text-md",
         lg: "px-6 py-4 text-lg",
         xl: "px-7 py-5 text-xl",

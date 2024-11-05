@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { UploadFile } from "@/types";
+import { nextTick, ref } from "vue";
+import { useCropper } from "@/services/cropper.service";
+import Button from "@/Components/Button.vue";
+import InputLabel from "@/Components/Forms/InputLabel.vue";
 
 defineOptions({
     inheritAttrs: false,
@@ -7,10 +11,13 @@ defineOptions({
 
 const props = withDefaults(
     defineProps<{
+        label?: string;
         multiple?: boolean;
         values?: any;
         size?: string;
         type?: string;
+        isCropper?: boolean;
+        previewContent?: HTMLElement;
     }>(),
     {
         values: [],
@@ -19,16 +26,33 @@ const props = withDefaults(
     },
 );
 
+const emit = defineEmits<{
+    change: [file: UploadFile];
+}>();
+
 const model = defineModel();
 
-const files = ref<
-    {
-        name: string;
-        type: string;
-        size: string;
-        url: string;
-    }[]
->([]);
+const files = defineModel<UploadFile[] | any>("files");
+
+const cropper = useCropper();
+const showCropper = ref(false);
+const image = ref();
+
+cropper.action.disabled = false;
+cropper.action.onClick = (e) => {
+    cropper.getBlob().then((blob) => {
+        const file = cropper.file ?? ({} as any);
+        let f: UploadFile = {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            url: URL.createObjectURL(blob as Blob),
+        };
+        showCropper.value = false;
+        model.value = blob;
+        files.value.push(f);
+    });
+};
 
 function getFiles(e: Event) {
     files.value = [];
@@ -37,19 +61,28 @@ function getFiles(e: Event) {
 
     const fs: any = target.files;
 
-    model.value = props.multiple ? fs : fs[0];
-
     if (fs && fs.length > 0) {
         for (const file of fs) {
             const reader = new FileReader();
-            let f: any = {
+            let f: UploadFile = {
                 name: file.name,
                 type: file.type,
                 size: file.size,
+                url: "",
             };
             reader.onload = (e) => {
                 f.url = (e.target?.result as string) ?? "";
-                files.value.push(f);
+                if (props.isCropper) {
+                    image.value.src = f.url;
+                    cropper.createCropper(image.value);
+                    cropper.file = file;
+                    showCropper.value = true;
+                } else {
+                    files.value?.push(f);
+                    model.value = props.multiple ? fs : fs[0];
+                }
+
+                emit("change", f);
             };
             reader.readAsDataURL(file);
         }
@@ -58,33 +91,24 @@ function getFiles(e: Event) {
 </script>
 
 <template>
-    <div
-        class="relative mt-2 flex h-full flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-900">
-        <p class="text-xs font-medium">Select file or drop file here</p>
-        <p class="text-xs font-medium">Max size: {{ size }} <span class="text-error">*</span></p>
-        <p class="text-xs font-medium">File: {{ type }} <span class="text-error">*</span></p>
-        <div class="file mt-4 flex flex-wrap gap-4">
-            <div
-                v-if="files.length > 0"
-                v-for="file of files"
-                class="flex size-16 items-center justify-center rounded-md border border-gray-200">
-                <img class="h-16 w-auto" v-if="file.type.startsWith('image')" :src="file.url" :alt="file.name" />
-                <i v-else class="fa fa-file-pdf fa-2x"></i>
-            </div>
-            <div
-                v-if="files.length == 0 && values?.length > 0"
-                v-for="file of values"
-                class="flex size-16 items-center justify-center rounded-md border border-gray-200">
-                <img v-if="file" class="h-16 w-auto" :src="file" alt="File" />
-            </div>
+    <div class="flex flex-col gap-2">
+        <InputLabel v-if="label" :value="label" />
+        <div class="relative w-full rounded-md text-right dark:bg-gray-900">
+            <Button class="ml-auto" size="base" severity="success"> Browser file</Button>
+            <input
+                v-bind="$attrs"
+                @change="getFiles"
+                type="file"
+                :multiple="multiple"
+                class="absolute inset-0 cursor-pointer rounded-md bg-gray-700 opacity-0" />
         </div>
-        <input
-            v-bind="$attrs"
-            @change="getFiles"
-            multiple
-            type="file"
-            class="absolute inset-0 cursor-pointer rounded-md bg-gray-700 opacity-0" />
     </div>
+
+    <Modal v-model:show="showCropper" :actions="[cropper.actions()]" @close="cropper.remove" title="Upload file">
+        <div class="mt-4 rounded-md border border-gray-100 bg-gray-100">
+            <img ref="image" class="cropper-images block w-full max-w-full" src="" alt="Image cropper" />
+        </div>
+    </Modal>
 </template>
 
 <style scoped></style>

@@ -3,13 +3,17 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Product } from "@/types/models/product";
 import { Column } from "@/types/datatable/column";
 import productService from "@/services/product.service";
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import useAction from "@/services/action.service";
 import { router, useForm } from "@inertiajs/vue3";
 import Alert from "@/Components/Alert/Alert.vue";
 import DataValue from "@/Components/DataValue.vue";
-import placeholder from "@assets/images/placeholders/placeholder.jpg";
 import Button from "@/Components/Button.vue";
+import { useCropper } from "@/services/cropper.service";
+import FileUpload from "@/Components/Forms/FileUpload.vue";
+import { Action } from "@/types/button";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { UploadFile } from "@/types";
 
 const { product } = defineProps<{
     product: Product;
@@ -22,7 +26,7 @@ const showUpload = ref(false);
 const actions = computed(() => {
     const { upload, edit, remove } = useAction();
 
-    upload.props.onClick = btnUploadClick;
+    upload.props.onClick = () => (showUpload.value = true);
 
     edit.props.onClick = () => {
         router.get(route("product.edit", product.id));
@@ -37,72 +41,38 @@ const actions = computed(() => {
 
 const columns: Column<Product>[] = productService.columns;
 
-const file = ref();
-const src = ref<any>();
-const image = ref<any>();
-const crop = ref();
-const isBtnDisable = computed(() => !src.value);
+const cropper = useCropper();
+const image = ref();
+const files = ref<UploadFile[]>([]);
 
 const form = useForm<any>({
-    file: "",
+    image: "",
 });
 
-function btnUploadClick() {
-    showUpload.value = true;
-}
+const formActionUpload = computed(() => {
+    const { upload } = useAction();
+    upload.props.onClick = () => {
+        cropper.getBlob().then((blob) => {
+            form.image = blob;
 
-function selectFile(e: Event) {
-    cropRemove();
-    const input = e.target as HTMLInputElement;
-
-    if (input.files && input.files.length > 0) {
-        file.value = input.files[0];
-
-        const read = new FileReader();
-        read.onload = () => {
-            src.value = read.result;
-            cropper();
-
-            crop.value.replace(src.value);
-        };
-        read.readAsDataURL(file.value);
-    }
-}
-
-function cropper() {
-    crop.value = new Cropper(image.value, {
-        aspectRatio: 16 / 9,
-        minCropBoxHeight: 720,
-        minCropBoxWidth: 1280,
-        dragMode: "move",
-        background: false,
-        rotatable: false,
-        scalable: false,
-        zoomable: false,
-        movable: false,
-        cropBoxResizable: false,
-    });
-}
-
-function cropRemove() {
-    if (crop.value) {
-        crop.value.destroy();
-    }
-}
-
-function uploadFile() {
-    crop.value.getCroppedCanvas().toBlob((blob: Blob) => {
-        form.file = blob;
-        form.post(route("product.upload.image", product.id), {
-            onFinish: () => {
-                showUpload.value = false;
-                src.value = null;
-                router.reload({
-                    only: ["product"],
-                });
-                cropRemove();
-            },
+            form.post(route("product.upload.image", product.id), {
+                onFinish: () => {
+                    showUpload.value = false;
+                    cropper.$reset();
+                    form.reset();
+                    router.reload({
+                        only: ["product"],
+                    });
+                },
+            });
         });
+    };
+    return [upload];
+});
+
+function changeFile(f: UploadFile) {
+    nextTick(() => {
+        cropper.createCropper(image.value);
     });
 }
 
@@ -111,10 +81,6 @@ function destroy() {
         ids: [product.id],
     }).delete(route("product.destroy"));
 }
-
-onMounted(() => {
-    btnUploadClick();
-});
 </script>
 
 <template>
@@ -122,9 +88,9 @@ onMounted(() => {
         <template #header> Product Detail</template>
 
         <div class="p-4">
-            <h3 class="text-lg font-semibold">Product Information</h3>
-            <div class="mt-4 flex gap-3">
+            <div class="flex gap-3">
                 <div class="flex w-8/12 flex-col gap-4">
+                    <h3 class="text-lg font-semibold">Product Information</h3>
                     <div class="grid grid-cols-2 gap-6">
                         <template v-for="column in columns">
                             <div class="flex">
@@ -140,7 +106,7 @@ onMounted(() => {
                 </div>
                 <div class="w-1/3">
                     <img
-                        class="w-3/4 rounded-md"
+                        class="rounded-md"
                         v-if="product.json?.image?.url"
                         :src="product.json?.image?.url"
                         :alt="product.product_name" />
@@ -148,28 +114,22 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <Modal
-            v-model:show="showUpload"
-            :actions="[
-                {
-                    label: 'Crop',
-                    component: Button,
-                    props: { severity: 'primary', onClick: uploadFile, disabled: isBtnDisable },
-                },
-            ]"
-            @close="cropRemove"
-            title="Upload file">
+        <Modal v-model:show="showUpload" :actions="formActionUpload" title="Feature image upload">
             <div class="inline-block">
                 <div v-if="form.errors.file">
                     <span>{{ form.errors.file }}</span>
                 </div>
                 <div class="relative">
-                    <input type="file" @change="selectFile" class="absolute inset-0 opacity-0" />
-                    <Button severity="info">Select file</Button>
+                    <FileUpload v-model="form.image" @change="changeFile" v-model:files="files" />
                 </div>
             </div>
-            <div class="mt-4 rounded-md border border-gray-100 bg-gray-100" v-show="src">
-                <img ref="image" class="block w-full max-w-full" id="cropper-content" :src="src" alt="Image cropper" />
+            <div class="mt-4 h-auto rounded-md border border-gray-100 bg-gray-100" v-if="form.image">
+                <img
+                    ref="image"
+                    class="block w-full max-w-full"
+                    id="cropper-content"
+                    :src="files[0].url"
+                    alt="Image cropper" />
             </div>
         </Modal>
 
