@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
@@ -23,7 +23,7 @@ class ProductController extends Controller
 
         $products = $this->productService->paginate($request->all());
 
-        $statuses = ProductStatus::toArray();
+        $statuses = ProductStatusEnum::toArray();
 
         return Inertia::render('Product/ProductIndex', [
             'products' => $products,
@@ -34,7 +34,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $statuses = ProductStatus::toArray();
+        $statuses = ProductStatusEnum::toArray();
 
         return Inertia::render('Product/ProductForm', [
             'statuses' => $statuses,
@@ -80,7 +80,7 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $statuses = ProductStatus::toArray();
+        $statuses = ProductStatusEnum::toArray();
 
         return Inertia::render('Product/ProductForm', [
             'product' => $product,

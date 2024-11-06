@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('stock_qty')->default(0)->nullable();
             $table->bigInteger('category_id')->nullable();
             $table->string('slug')->nullable();
-            $table->tinyText('status')->default(ProductStatus::ACTIVE->value);
+            $table->tinyText('status')->default(ProductStatusEnum::ACTIVE->value);
             $table->json('json')->nullable();
             $table->timestamps();
             $table->softDeletes();

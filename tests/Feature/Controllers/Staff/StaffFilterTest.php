@@ -1,7 +1,6 @@
 <?php
 
-
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
 
@@ -16,7 +15,7 @@ it('can search by username or name', function () {
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Staff/Index')
+            fn (AssertableInertia $page) => $page->component('Staff/Index')
                 ->has('staffs.data', 1)
         );
 });
@@ -34,7 +33,7 @@ it('can fitler by gender', function () {
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Staff/Index')
+            fn (AssertableInertia $page) => $page->component('Staff/Index')
                 ->has('staffs.data', 1)
         );
 });
@@ -43,7 +42,7 @@ it('can fitler by status', function () {
 
     User::factory(3)->female()->create();
 
-    $user = User::factory()->status(UserStatus::INACTIVE->name)->create();
+    $user = User::factory()->status(UserStatusEnum::INACTIVE->name)->create();
 
     $filters = [
         'status' => $user->status,
@@ -52,7 +51,7 @@ it('can fitler by status', function () {
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Staff/Index')
+            fn (AssertableInertia $page) => $page->component('Staff/Index')
                 ->has('staffs.data', 1)
         );
 });

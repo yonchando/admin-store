@@ -6,8 +6,8 @@ use App\Models\Currency;
 
 trait HasRelationships
 {
-    public function currency()
+    public function currency(): Currency
     {
-        return $this->belongsTo(Currency::class);
+        return Currency::where('code', $this->value)->first();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models\Concerns\Product;
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Filters\Product\ProductFilter;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -15,12 +15,12 @@ trait HasScopes
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', ProductStatus::ACTIVE->name);
+        return $query->where('status', ProductStatusEnum::ACTIVE->name);
     }
 
     public function scopeInactive(Builder $query): Builder
     {
-        return $query->where('status', ProductStatus::INACTIVE);
+        return $query->where('status', ProductStatusEnum::INACTIVE);
     }
 
     public function scopeByCategoryId(Builder $query, int $id): Builder

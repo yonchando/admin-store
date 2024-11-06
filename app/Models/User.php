@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\GenderEnum;
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 use App\Models\Concerns\User\HasAttributes;
 use App\Models\Concerns\User\HasScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,6 +38,6 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'gender' => GenderEnum::class,
-        'status' => UserStatus::class,
+        'status' => UserStatusEnum::class,
     ];
 }

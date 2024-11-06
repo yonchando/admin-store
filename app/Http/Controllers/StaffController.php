@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\GenderEnum;
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use App\Services\StaffService;
@@ -23,7 +23,7 @@ class StaffController extends Controller
         return Inertia::render('Staff/Index', [
             'staffs' => $staffs,
             'gender' => GenderEnum::toArray(),
-            'statuses' => UserStatus::toArray(),
+            'statuses' => UserStatusEnum::toArray(),
             'filters' => $request->toArray(),
         ]);
     }

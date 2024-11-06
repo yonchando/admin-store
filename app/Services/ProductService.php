@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Casts\Images\ImageCast;
 use App\Casts\Product\ProductJson;
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -82,7 +82,7 @@ class ProductService
 
     public function updateStatus(Product $product): Product
     {
-        $product->status = $product->is_active ? ProductStatus::INACTIVE : ProductStatus::ACTIVE;
+        $product->status = $product->is_active ? ProductStatusEnum::INACTIVE : ProductStatusEnum::ACTIVE;
         $product->save();
 
         return $product;

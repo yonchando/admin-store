@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\UploadedFile;
@@ -32,7 +32,7 @@ test('index methods', function () {
         ->assertInertia(
             fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $perPage)
-                ->where('statuses', ProductStatus::toArray())
+                ->where('statuses', ProductStatusEnum::toArray())
                 ->where('products.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
@@ -61,7 +61,7 @@ describe('create product', function () {
             ->assertOk()
             ->assertInertia(
                 fn (AssertableInertia $page) => $page->component('Product/ProductForm')
-                    ->where('statuses', ProductStatus::toArray())
+                    ->where('statuses', ProductStatusEnum::toArray())
                     ->etc()
             );
     });
@@ -171,14 +171,14 @@ describe('product edit', function () {
 
         $product->refresh();
 
-        expect($product->status)->toBe(ProductStatus::INACTIVE);
+        expect($product->status)->toBe(ProductStatusEnum::INACTIVE);
 
         putJson(route('product.update.status', $product))
             ->assertRedirectToRoute('product.index');
 
         $product->refresh();
 
-        expect($product->status)->toBe(ProductStatus::ACTIVE);
+        expect($product->status)->toBe(ProductStatusEnum::ACTIVE);
     });
 });
 

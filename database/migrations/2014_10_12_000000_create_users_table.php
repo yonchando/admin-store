@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_admin')->default(false);
             $table->string('gender')->nullable();
-            $table->string('status')->default(UserStatus::ACTIVE->value);
+            $table->string('status')->default(UserStatusEnum::ACTIVE->value);
             $table->string('profile')->nullable();
             $table->string('position')->nullable();
             $table->rememberToken();

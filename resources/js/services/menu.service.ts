@@ -25,6 +25,10 @@ function add(item: Menu): Menu {
 const page = usePage();
 const routeName = computed(() => page.props.routeName);
 
+/**
+ *
+ * @param {route[]} items
+ */
 function isActive(...items: string[]) {
     return items.includes(routeName.value as string);
 }
@@ -73,6 +77,7 @@ export default function useMenu() {
             title: "Setting",
             url: route("setting.show"),
             icon: faGear,
+            isActive: isActive("setting.show"),
         }),
     ];
 }

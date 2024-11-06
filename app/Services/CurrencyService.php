@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use App\Models\Currency;
-use App\Services\Contracts\CurrencyRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-class CurrencyRepository implements CurrencyRepositoryInterface
+class CurrencyService
 {
     public function get(): Collection
     {

@@ -1,12 +1,10 @@
 <?php
 
-
 use App\Enums\GenderEnum;
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
+use App\Facades\Enum;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
-use App\Facades\Enum;
-
 
 describe('user lists', function () {
     test('index methods', function () {
@@ -15,7 +13,7 @@ describe('user lists', function () {
         $this->get(route('staff.index'))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Staff/Index')
+                fn (AssertableInertia $page) => $page->component('Staff/Index')
                     ->has('staffs.data', $staff->count())
                     ->has('gender', 2)
                     ->has('statuses', 2)
@@ -42,17 +40,17 @@ describe('user lists', function () {
         $filters = [
             'search_text' => $first->name,
             'gender' => $first->gender->value,
-            'status' => UserStatus::ACTIVE->name,
+            'status' => UserStatusEnum::ACTIVE->name,
         ];
 
         $this->get(route('staff.index', $filters))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Staff/Index')
+                fn (AssertableInertia $page) => $page->component('Staff/Index')
                     ->has('staffs.data', 1)
                     ->has(
                         'staffs.data.0',
-                        fn(AssertableInertia $page) => $page->where('id', $first->id)
+                        fn (AssertableInertia $page) => $page->where('id', $first->id)
                             ->where('name', $first->name)
                             ->where('username', $first->username)
                             ->etc()
@@ -66,7 +64,7 @@ describe('create staff', function () {
         $this->get(route('staff.create'))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Staff/Form')
+                fn (AssertableInertia $page) => $page->component('Staff/Form')
             );
     });
 
@@ -96,7 +94,7 @@ describe('edit staff', function () {
         $this->get(route('staff.edit', $user))
             ->assertOk()
             ->assertInertia(
-                fn(AssertableInertia $page) => $page->component('Staff/Form')
+                fn (AssertableInertia $page) => $page->component('Staff/Form')
                     ->where('staff.id', $user->id)
                     ->where('staff.name', $user->name)
                     ->where('staff.username', $user->username)
@@ -130,20 +128,20 @@ describe('edit staff', function () {
         $this->patch(route('staff.update.status', $user))
             ->assertRedirect()
             ->assertSessionHas('message.text',
-                __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
+                __('lang.updated_success', ['attribute' => __('lang.staff').' '.__('lang.status')]));
 
         $user->refresh();
 
-        $this->assertEquals(UserStatus::INACTIVE, $user->status);
+        $this->assertEquals(UserStatusEnum::INACTIVE, $user->status);
 
         $this->patch(route('staff.update.status', $user))
             ->assertRedirect()
             ->assertSessionHas('message.text',
-                __('lang.updated_success', ['attribute' => __('lang.staff')." ".__('lang.status')]));
+                __('lang.updated_success', ['attribute' => __('lang.staff').' '.__('lang.status')]));
 
         $user->refresh();
 
-        $this->assertEquals(UserStatus::ACTIVE, $user->status);
+        $this->assertEquals(UserStatusEnum::ACTIVE, $user->status);
     });
 });
 

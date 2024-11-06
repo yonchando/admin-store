@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 
 return [
     'success' => 'Success',
@@ -104,11 +104,11 @@ return [
     'delete_group' => 'Delete Group',
     'page' => 'Page',
     'card' => 'Card',
-    'cancel' => "Cancel",
-    'cards' => "Cards",
-    'card_management' => "Card Managements",
-    'group_options' => "Group Options",
+    'cancel' => 'Cancel',
+    'cards' => 'Cards',
+    'card_management' => 'Card Managements',
+    'group_options' => 'Group Options',
 
-    UserStatus::ACTIVE->value => 'Active',
-    UserStatus::INACTIVE->value => 'Inactive',
+    UserStatusEnum::ACTIVE->value => 'Active',
+    UserStatusEnum::INACTIVE->value => 'Inactive',
 ];

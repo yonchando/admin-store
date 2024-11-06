@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\Setting\SettingProperty;
 use App\Models\Concerns\Setting\HasAttributes;
 use App\Models\Concerns\Setting\HasRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,10 +14,7 @@ class Setting extends Model
     use HasRelationships;
 
     protected $fillable = [
-        'properties',
-    ];
-
-    protected $casts = [
-        'properties' => SettingProperty::class,
+        'key',
+        'value',
     ];
 }

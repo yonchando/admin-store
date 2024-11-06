@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -120,14 +120,14 @@ describe('product filters', function () {
         $inactives = Product::factory(2)->inactive()->create();
 
         $this->get(route('product.index', [
-            'status' => ProductStatus::ACTIVE->value,
+            'status' => ProductStatusEnum::ACTIVE->value,
         ]))->assertOk()->assertInertia(
             fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $actives->count())
         );
 
         $this->get(route('product.index', [
-            'status' => ProductStatus::INACTIVE->value,
+            'status' => ProductStatusEnum::INACTIVE->value,
         ]))->assertOk()->assertInertia(
             fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $inactives->count())

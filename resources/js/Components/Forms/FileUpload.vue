@@ -94,13 +94,17 @@ function getFiles(e: Event) {
     <div class="flex flex-col gap-2">
         <InputLabel v-if="label" :value="label" />
         <div class="relative w-full rounded-md text-right dark:bg-gray-900">
-            <Button class="ml-auto" size="base" severity="success"> Browser file</Button>
+            <Button class="ml-auto" size="md" severity="success"> Browser file</Button>
             <input
                 v-bind="$attrs"
                 @change="getFiles"
                 type="file"
                 :multiple="multiple"
                 class="absolute inset-0 cursor-pointer rounded-md bg-gray-700 opacity-0" />
+        </div>
+
+        <div v-for="file in files">
+            <img class="size-24" :src="file.url" alt="File" />
         </div>
     </div>
 

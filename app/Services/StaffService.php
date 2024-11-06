@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\User\UserStatus;
+use App\Enums\User\UserStatusEnum;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -68,7 +68,7 @@ class StaffService
 
     public function updateStatus(User $user): bool
     {
-        $user->status = $user->status === UserStatus::ACTIVE ? UserStatus::INACTIVE : UserStatus::ACTIVE;
+        $user->status = $user->status === UserStatusEnum::ACTIVE ? UserStatusEnum::INACTIVE : UserStatusEnum::ACTIVE;
 
         return $user->save();
     }

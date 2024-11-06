@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'stock_qty' => $this->faker->numberBetween(1, 1000),
             'category_id' => Category::inRandomOrder()->first()?->id,
             'json' => [],
-            'status' => ProductStatus::ACTIVE->value,
+            'status' => ProductStatusEnum::ACTIVE->value,
             'created_at' => $this->faker->dateTimeBetween('-2 months')->format('Y-m-d H:i:s'),
         ];
     }
@@ -38,14 +38,14 @@ class ProductFactory extends Factory
     public function active(): ProductFactory|Factory
     {
         return $this->state(fn () => [
-            'status' => ProductStatus::ACTIVE->value,
+            'status' => ProductStatusEnum::ACTIVE->value,
         ]);
     }
 
     public function inactive(): ProductFactory|Factory
     {
         return $this->state(fn () => [
-            'status' => ProductStatus::INACTIVE->value,
+            'status' => ProductStatusEnum::INACTIVE->value,
         ]);
     }
 

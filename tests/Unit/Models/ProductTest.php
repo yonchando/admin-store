@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Models\Casts\ProductObjectCast;
 use App\Models\Product;
 
@@ -25,9 +25,9 @@ it('must be has casts price field to decimal', function () {
 
 it('must be has casts status field to enum product status', function () {
     $product = new Product;
-    $product->status = ProductStatus::ACTIVE;
+    $product->status = ProductStatusEnum::ACTIVE;
 
-    expect($product->getCasts())->toHaveKey('status', ProductStatus::class);
+    expect($product->getCasts())->toHaveKey('status', ProductStatusEnum::class);
 });
 
 it('must be has relationship category', function () {

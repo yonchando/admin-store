@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Product\ProductJson;
-use App\Enums\Product\ProductStatus;
+use App\Enums\Product\ProductStatusEnum;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
 use App\Models\Concerns\Product\HasScopes;
@@ -37,7 +37,7 @@ class Product extends Model
     protected $casts = [
         'json' => ProductJson::class,
         'price' => 'decimal:2',
-        'status' => ProductStatus::class,
+        'status' => ProductStatusEnum::class,
         'created_at' => 'datetime:Y-m-d h:i A',
         'updated_at' => 'datetime:Y-m-d h:i A',
     ];

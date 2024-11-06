@@ -2,8 +2,7 @@
 
 namespace App\Models\Concerns\User;
 
-use App\Enums\User\UserStatus;
-use App\Facades\Enum;
+use App\Enums\User\UserStatusEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasAttributes
@@ -17,7 +16,7 @@ trait HasAttributes
                 $trans = __("lang.$status->value");
 
                 return match ($status->value) {
-                    UserStatus::ACTIVE->value => "<span class='badge badge-success'>$trans</span>",
+                    UserStatusEnum::ACTIVE->value => "<span class='badge badge-success'>$trans</span>",
                     default => "<span class='badge badge-danger'>$trans</span>"
                 };
             }
