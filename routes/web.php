@@ -97,16 +97,16 @@ Route::middleware('auth')->group(function () {
         ->name('staff.')
         ->group(function () {
             Route::get('/', [StaffController::class, 'index'])->name('index');
-            Route::get('/show/{user}', [StaffController::class, 'show'])->name('show');
+            Route::get('/show/{id}', [StaffController::class, 'show'])->name('show');
 
             Route::get('/create', [StaffController::class, 'create'])->name('create');
             Route::post('/save', [StaffController::class, 'store'])->name('store');
 
-            Route::get('edit/{user}', [StaffController::class, 'edit'])->name('edit');
-            Route::put('update/{user}', [StaffController::class, 'update'])->name('update');
-            Route::put('update-status/{user}', [StaffController::class, 'updateStatus'])->name('update.status');
+            Route::get('edit/{id}', [StaffController::class, 'edit'])->name('edit');
+            Route::put('update/{id}', [StaffController::class, 'update'])->name('update');
+            Route::put('update-status/{id}', [StaffController::class, 'updateStatus'])->name('update.status');
 
-            Route::delete('destroy/{user}', [StaffController::class, 'destroy'])->name('destroy');
+            Route::delete('destroy/{id}', [StaffController::class, 'destroy'])->name('destroy');
 
         });
 

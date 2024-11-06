@@ -25,7 +25,7 @@ class User extends Authenticatable
         'gender',
         'status',
         'remember_token',
-        'status_text',
+        'position',
     ];
 
     protected $hidden = [
@@ -40,4 +40,6 @@ class User extends Authenticatable
         'gender' => GenderEnum::class,
         'status' => UserStatusEnum::class,
     ];
+
+    protected $appends = ['status_text'];
 }

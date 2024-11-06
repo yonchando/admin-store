@@ -4,7 +4,7 @@ namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-abstract class BuilderFilter
+abstract class FilterBuilder
 {
     public function __construct(
         protected readonly Builder $builder,

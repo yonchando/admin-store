@@ -2,9 +2,9 @@
 
 namespace App\Filters\Category;
 
-use App\Filters\BuilderFilter;
+use App\Filters\FilterBuilder;
 
-class CategoryFilter extends BuilderFilter
+class CategoryFilter extends FilterBuilder
 {
     public function search($search): void
     {

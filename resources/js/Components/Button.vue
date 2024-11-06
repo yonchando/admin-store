@@ -11,6 +11,7 @@ const props = withDefaults(
         icon?: IconDefinition;
         href?: string;
         disabled?: boolean;
+        tabindex?: string;
     }>(),
     {
         size: "sm",
@@ -53,7 +54,7 @@ const severityClass = computed(() => {
         ],
         secondary: [
             "bg-white",
-            "disabled:bg-white",
+            "disabled:bg-white/25",
             "border-gray-300",
             "text-gray-700",
             "shadow-sm",
@@ -120,6 +121,7 @@ const severityClass = computed(() => {
 <template>
     <button
         v-if="!href"
+        :tabindex="tabindex"
         :class="[sizeClass, ...severityClass]"
         :disabled="disabled"
         class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
@@ -132,6 +134,7 @@ const severityClass = computed(() => {
         v-else
         :href="href"
         :class="[sizeClass, ...severityClass]"
+        :tabindex="tabindex"
         :disabled="disabled"
         class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">

@@ -11,7 +11,9 @@ export const columns: Column<Product>[] = [
     },
     {
         label: "Category",
-        field: "category.category_name",
+        field: (p) => {
+            return p.category?.category_name;
+        },
         sortable: "category",
         props: {},
     },

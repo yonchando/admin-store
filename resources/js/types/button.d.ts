@@ -24,5 +24,6 @@ export interface Action {
         size?: "sm" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         href?: string;
+        tabindex?: string;
     };
 }

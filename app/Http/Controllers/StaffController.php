@@ -20,7 +20,7 @@ class StaffController extends Controller
     {
         $staffs = $this->staffService->paginate($request);
 
-        return Inertia::render('Staff/Index', [
+        return Inertia::render('Staff/StaffIndex', [
             'staffs' => $staffs,
             'gender' => GenderEnum::toArray(),
             'statuses' => UserStatusEnum::toArray(),
@@ -30,8 +30,9 @@ class StaffController extends Controller
 
     public function create()
     {
-        return Inertia::render('Staff/Form', [
+        return Inertia::render('Staff/StaffForm', [
             'gender' => GenderEnum::toArray(),
+            'statuses' => UserStatusEnum::toArray(),
         ]);
     }
 
@@ -43,16 +44,21 @@ class StaffController extends Controller
             ->with('success', __('lang.created_success', ['attribute' => __('lang.staff')]));
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
-        return Inertia::render('Staff/Form', [
+        $user = $this->staffService->find($id);
+
+        return Inertia::render('Staff/StaffForm', [
             'staff' => $user,
             'gender' => GenderEnum::toArray(),
+            'statuses' => UserStatusEnum::toArray(),
         ]);
     }
 
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, $id)
     {
+        $user = $this->staffService->find($id);
+
         $this->staffService->update($request, $user);
 
         return to_route('staff.index')

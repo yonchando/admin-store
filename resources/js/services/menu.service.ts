@@ -72,6 +72,7 @@ export default function useMenu() {
             title: "Staffs",
             url: route("staff.index"),
             icon: faUsers,
+            isActive: isActive("staff.index", "staff.create", "staff.show", "staff.edit"),
         }),
         add({
             title: "Setting",

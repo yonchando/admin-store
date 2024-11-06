@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import { faChevronDown, faTimes } from "@fortawesome/free-solid-svg-icons";
-import _ from "lodash";
+import _, { drop } from "lodash";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import axios from "axios";
 import { Paginate } from "@/types/paginate";
@@ -19,12 +19,14 @@ const props = withDefaults(
         showSearch?: boolean;
         paginate?: Paginate<any>;
         labelInline: boolean;
+        tabindex: number | string;
     }>(),
     {
         optionValue: "id",
         optionLabel: "name",
         showSearch: true,
         labelInline: false,
+        tabindex: -1,
     },
 );
 
@@ -39,7 +41,7 @@ const model = defineModel();
 const inputClass = [
     "flex justify-between items-center",
     "w-full",
-    "px-4 py-2.5",
+    "px-4 py-2",
     "cursor-pointer",
     "rounded-md",
     "border",
@@ -209,7 +211,10 @@ onMounted(() => {
     <div :class="[labelInline ? 'flex items-center' : 'flex flex-col']" class="w-full flex-1 gap-2">
         <InputLabel :value="label" />
 
-        <div class="relative w-full" ref="dropdown">
+        <div
+            class="relative w-full focus-visible:outline-gray-800 focus-visible:ring-transparent"
+            :tabindex="tabindex"
+            ref="dropdown">
             <div class="relative w-full">
                 <div :class="[inputClass]" @click="openToggle">
                     <span v-if="selected === undefined" class="text-gray-400"> Select option </span>

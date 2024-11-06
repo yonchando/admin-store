@@ -14,27 +14,22 @@ class StaffService
 {
     public function get(Request $request): Collection
     {
-        return User::isNotAdmin()->filters($request)->get();
+        return User::isNotAdmin()->filters($request->all())->get();
     }
 
     public function paginate(Request $request): LengthAwarePaginator
     {
         $query = User::query();
 
-        $query->filters($request);
+        $query->filters($request->all());
 
         return $query->isNotAdmin()->latest()->paginate();
     }
 
     public function save(UserRequest $request): User
     {
-
         $user = new User;
-
-        $user->fill($request->except('password'));
-
-        $user->password = bcrypt($request->get('password'));
-
+        $user->fill($request->except('profile'));
         $user->save();
 
         return $user;
@@ -42,7 +37,7 @@ class StaffService
 
     public function update(UserRequest $request, User $user): User
     {
-        $user->fill($request->except('password'));
+        $user->fill($request->except('password', 'profile'));
 
         if (! is_null($password = $request->get('password'))) {
             $user->password = bcrypt($password);
@@ -71,5 +66,10 @@ class StaffService
         $user->status = $user->status === UserStatusEnum::ACTIVE ? UserStatusEnum::INACTIVE : UserStatusEnum::ACTIVE;
 
         return $user->save();
+    }
+
+    public function find($id): ?User
+    {
+        return User::findOrFail($id);
     }
 }

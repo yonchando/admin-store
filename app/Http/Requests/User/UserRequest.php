@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\User;
 
+use App\Enums\User\UserStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class UserRequest extends FormRequest
 {
@@ -13,15 +15,16 @@ class UserRequest extends FormRequest
             'name' => ['required'],
             'username' => ['required'],
             'password' => [
-                Rule::requiredIf($this->user == null),
-                Rule::when($this->user == null, [
-                    'confirmed',
+                Rule::requiredIf($this->id == null),
+                Rule::when($this->id == null, [
                     'min: 6',
                     'string:255',
                 ]),
             ],
-            'password_confirmation' => [Rule::requiredIf($this->user == null)],
+            'password_confirmation' => [Rule::requiredIf($this->id == null), 'same:password'],
             'gender' => ['nullable'],
+            'profile' => ['nullable', File::image()->extensions(['jpg', 'png', 'jpeg', 'gif'])->size('2mb')],
+            'status' => ['nullable', Rule::in(array_values(UserStatusEnum::toJson()))],
         ];
     }
 

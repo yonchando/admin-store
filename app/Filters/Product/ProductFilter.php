@@ -2,7 +2,7 @@
 
 namespace App\Filters\Product;
 
-use App\Filters\BuilderFilter;
+use App\Filters\FilterBuilder;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * @property Product $builder
  */
-class ProductFilter extends BuilderFilter
+class ProductFilter extends FilterBuilder
 {
     public function includes($withs): void
     {
