@@ -7,4 +7,5 @@ export interface Staff {
     profile: string;
     position: string;
     status: string;
+    status_text: string;
 }

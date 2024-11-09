@@ -1,6 +1,7 @@
 import { Column } from "@/types/datatable/column";
 import Badge from "@/Components/Badges/Badge.vue";
 import { Product } from "@/types/models/product";
+import { globalFilter } from "@/services/helper.service";
 
 export const columns: Column<Product>[] = [
     {
@@ -68,15 +69,10 @@ export const columns: Column<Product>[] = [
 ];
 
 export const filters = {
-    search: "",
-    sortBy: {
-        field: "created_at",
-        direction: "desc",
-    },
+    ...globalFilter,
     price: null,
     status: null,
     category: null,
-    page: 1,
 };
 
 export const status = {

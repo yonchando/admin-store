@@ -52,7 +52,7 @@ onMounted(() => {
         <link rel="icon" type="image/x-icon" href="@assets/images/logos/logo.png" />
     </Head>
 
-    <div class="bg-gray-100 dark:bg-gray-900">
+    <div class="bg-white dark:bg-gray-900">
         <div class="flex">
             <Sidebar />
 

@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\User\UserStatusEnum;
-
 return [
     'success' => 'Success',
     'add_success' => ':attribute added success.',
@@ -108,7 +106,8 @@ return [
     'cards' => 'Cards',
     'card_management' => 'Card Managements',
     'group_options' => 'Group Options',
-
-    UserStatusEnum::ACTIVE->value => 'Active',
-    UserStatusEnum::INACTIVE->value => 'Inactive',
+    'create' => 'Create',
+    'read' => 'Read',
+    'role' => 'Role',
+    'module' => 'Module',
 ];

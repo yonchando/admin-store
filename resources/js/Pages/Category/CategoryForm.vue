@@ -17,15 +17,11 @@ const form = useForm({
 });
 
 const actions = computed(() => {
-    const { save, close } = useAction();
+    const { save } = useAction();
 
     save.props.onClick = submit;
 
-    close.props.onClick = (e) => {
-        show.value = false;
-    };
-
-    return [save, close];
+    return [save];
 });
 
 function submit() {
@@ -48,7 +44,7 @@ function submit() {
 </script>
 
 <template>
-    <Modal :actions="actions" :show="!!show" @close="show = false" title="Add new" max-width="xl" class="!top-8">
+    <Modal :actions="actions" v-model:show="show" @close="show = false" title="Add new" max-width="xl" class="!top-8">
         <form @submit.prevent="submit">
             <div>
                 <TextInput autofocus label="Name" v-model="form.category_name" />

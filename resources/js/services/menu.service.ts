@@ -4,7 +4,9 @@ import {
     faDolly,
     faGear,
     faHome,
+    faIdCard,
     faLayerGroup,
+    faUser,
     faUsers,
     faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +19,7 @@ function add(item: Menu): Menu {
         title: item.title,
         url: item.url ?? "#",
         icon: item.icon ?? null,
-        children: item.children ?? [],
+        children: item.children ?? undefined,
         isActive: item.isActive ?? false,
     };
 }
@@ -69,10 +71,40 @@ export default function useMenu() {
             icon: faCreditCard,
         }),
         add({
-            title: "Staffs",
-            url: route("staff.index"),
+            title: "User Management",
+            url: "#",
             icon: faUsers,
-            isActive: isActive("staff.index", "staff.create", "staff.show", "staff.edit"),
+            isActive: isActive(
+                "staff.index",
+                "staff.create",
+                "staff.show",
+                "staff.edit",
+                "product.index",
+                "module.index",
+                "module.create",
+                "module.show",
+                "module.edit",
+            ),
+            children: [
+                {
+                    title: "Staffs",
+                    url: route("staff.index"),
+                    icon: faUser,
+                    isActive: isActive("staff.index", "staff.create", "staff.show", "staff.edit"),
+                },
+                {
+                    title: "Roles",
+                    url: route("staff.index"),
+                    icon: faIdCard,
+                    isActive: isActive("product.index", "role.create", "role.show", "role.edit"),
+                },
+                {
+                    title: "Module",
+                    url: route("module.index"),
+                    icon: faLayerGroup,
+                    isActive: isActive("module.index", "module.create", "module.show", "module.edit"),
+                },
+            ],
         }),
         add({
             title: "Setting",

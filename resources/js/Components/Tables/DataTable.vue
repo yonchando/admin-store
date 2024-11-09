@@ -21,7 +21,8 @@ const props = defineProps<{
     paginate?: Paginate<any> | undefined;
     actions?: Action[];
     root?: {
-        actionClass?: string[];
+        actionClass?: string[] | string;
+        checkBoxClass?: string[] | string;
     };
 }>();
 
@@ -101,7 +102,7 @@ const inputSearch = _.debounce(function (e: Event) {
             </div>
         </div>
 
-        <div class="max-w-xxs ml-auto w-full" v-if="paginate">
+        <div class="ml-auto w-full max-w-xxs" v-if="paginate">
             <Select
                 :show-search="false"
                 label-inline
@@ -118,7 +119,8 @@ const inputSearch = _.debounce(function (e: Event) {
         <tr>
             <th
                 v-if="checkbox"
-                class="w-10 border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-700">
+                :class="root?.checkBoxClass ?? 'w-10'"
+                class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-700">
                 <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
             </th>
             <th
@@ -150,7 +152,10 @@ const inputSearch = _.debounce(function (e: Event) {
         <!-- Rows -->
         <template v-if="values.length">
             <tr v-for="item in values" class="group">
-                <td v-if="checkbox" :class="[selectRow?.id == item.id ? 'active' : '']" class="column">
+                <td
+                    v-if="checkbox"
+                    :class="[selectRow?.id == item.id ? 'active' : '']"
+                    class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-800 group-hover:dark:bg-gray-700">
                     <Checkbox :value="item.id" v-model:checked="checked" />
                 </td>
                 <template v-for="column in columns">
@@ -192,7 +197,7 @@ const inputSearch = _.debounce(function (e: Event) {
     @apply dark:border-gray-600 dark:bg-gray-700;
 }
 
-:deep(.column.active) {
+:deep(.active) {
     @apply bg-gray-200 dark:bg-gray-700;
 }
 </style>

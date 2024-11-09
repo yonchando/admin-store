@@ -2,11 +2,11 @@
 import useMenu from "@/services/menu.service";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
-import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import NavLink from "@/Components/Navs/NavLink.vue";
 import { Menu } from "@/types";
+import NavMenu from "@/Components/Menu/NavMenu.vue";
 
 const menus = computed(() => {
     if (search.value) {
@@ -55,12 +55,12 @@ function clearMenuSearch() {
 
 <template>
     <div
-        class="relative flex min-w-72 max-w-72 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 dark:border-gray-700 dark:bg-gray-800">
+        class="relative flex min-w-16 max-w-72 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-gray-100 py-4 lg:min-w-72 dark:border-gray-700 dark:bg-gray-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>
         <!-- Profile -->
-        <div class="lg:mb-6 lg:px-2">
+        <div class="hidden lg:mb-6 lg:block lg:px-2">
             <dropdown width="full" align="bottom">
                 <template #trigger="{ active }">
                     <div
@@ -107,30 +107,7 @@ function clearMenuSearch() {
 
         <!-- Menu -->
         <nav class="mt-4 w-full px-2">
-            <ul class="flex flex-col">
-                <li class="w-full text-center" v-for="menu in menus">
-                    <span v-if="!menu.url">
-                        {{ menu.title }}
-                    </span>
-                    <Link
-                        class="inline-flex w-full items-center rounded-md px-2 py-2.5 font-medium hover:bg-gray-200 hover:dark:bg-gray-900"
-                        :class="[
-                            menu.isActive
-                                ? 'border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-900'
-                                : '',
-                        ]"
-                        v-else
-                        :href="menu.url">
-                        <div class="w-full lg:max-w-8">
-                            <i v-if="typeof menu.icon === 'string'" :class="menu.icon" class="text-base lg:text-sm"></i>
-                            <fa-icon v-else :icon="menu.icon" class="size-5 lg:size-4" />
-                        </div>
-                        <span class="hidden lg:block">
-                            {{ menu.title }}
-                        </span>
-                    </Link>
-                </li>
-            </ul>
+            <NavMenu :menus="menus" />
         </nav>
 
         <!-- Footer -->

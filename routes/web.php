@@ -4,6 +4,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -107,7 +108,15 @@ Route::middleware('auth')->group(function () {
             Route::put('update-status/{id}', [StaffController::class, 'updateStatus'])->name('update.status');
 
             Route::delete('destroy/{id}', [StaffController::class, 'destroy'])->name('destroy');
+        });
 
+    Route::prefix('module')
+        ->name('module.')
+        ->group(function () {
+            Route::get('/', [ModuleController::class, 'index'])->name('index');
+            Route::post('/save', [ModuleController::class, 'store'])->name('store');
+            Route::put('update/{id}', [ModuleController::class, 'update'])->name('update');
+            Route::delete('destroy', [ModuleController::class, 'destroy'])->name('destroy');
         });
 
     Route::prefix('setting')

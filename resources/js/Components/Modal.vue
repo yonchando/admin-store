@@ -83,7 +83,7 @@ const positionClass = computed(() => {
         <Transition leave-active-class="duration-200">
             <div
                 v-show="show"
-                class="fixed inset-0 z-50 flex overflow-y-auto px-4 py-6 sm:px-0"
+                class="fixed inset-0 z-10 flex overflow-y-auto px-4 py-6 sm:px-0"
                 v-bind="$attrs"
                 scroll-region>
                 <Transition
@@ -107,7 +107,7 @@ const positionClass = computed(() => {
                     leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     <div
                         v-show="show"
-                        class="h-fit transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:w-full dark:bg-gray-800"
+                        class="h-fit transform rounded-lg bg-white shadow-xl transition-all sm:w-full dark:bg-gray-800"
                         :class="[maxWidthClass, positionClass]">
                         <div
                             class="mb-4 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">

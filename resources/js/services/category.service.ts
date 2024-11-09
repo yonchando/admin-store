@@ -1,6 +1,8 @@
 import { Column } from "@/types/datatable/column";
+import { Category } from "@/types/models/category";
+import { globalFilter } from "@/services/helper.service";
 
-export const columns: Column[] = [
+export const columns: Column<Category>[] = [
     {
         label: "Name",
         field: "category_name",
@@ -25,12 +27,7 @@ export const columns: Column[] = [
 ];
 
 export const filters = {
-    page: 1,
-    sortBy: {
-        field: "created_at",
-        direction: "desc",
-    },
-    search: "",
+    ...globalFilter,
 };
 
 export default {

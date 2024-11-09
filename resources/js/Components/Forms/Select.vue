@@ -7,6 +7,7 @@ import _, { drop } from "lodash";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import axios from "axios";
 import { Paginate } from "@/types/paginate";
+import Badge from "@/Components/Badges/Badge.vue";
 
 const props = withDefaults(
     defineProps<{
@@ -20,6 +21,9 @@ const props = withDefaults(
         paginate?: Paginate<any>;
         labelInline: boolean;
         tabindex: number | string;
+        multiple?: boolean;
+        maxSelected?: number;
+        maxShow?: number;
     }>(),
     {
         optionValue: "id",
@@ -27,6 +31,8 @@ const props = withDefaults(
         showSearch: true,
         labelInline: false,
         tabindex: -1,
+        multiple: false,
+        maxShow: undefined,
     },
 );
 
@@ -59,9 +65,22 @@ const dropdown = ref();
 const open = ref(false);
 
 const selected = computed(() => {
-    return data.value.find((item) => {
+    if (props.multiple) {
+        const values = model.value as Array<any>;
+        return data.value
+            .filter((item, i) => {
+                return values.includes(get(item, "optionValue")) && (props.maxShow == undefined || i < props.maxShow);
+            })
+            .map((item) => {
+                return get(item, "optionLabel");
+            });
+    }
+
+    let item = data.value.find((item) => {
         return get(item, "optionValue") === model.value;
     });
+
+    return get(item, "optionLabel");
 });
 
 const search = ref<string>("");
@@ -101,8 +120,14 @@ const searching = _.debounce(
     props.url ? 500 : 0,
 );
 
+const minWidth = computed(() => {
+    const el = dropdown.value as HTMLElement;
+
+    return el?.clientWidth ?? 0;
+});
+
 function get(option: any, type: "optionValue" | "optionLabel") {
-    if (Object.keys(option).length === 0) {
+    if (!_.isObject(option)) {
         return option;
     }
 
@@ -178,11 +203,35 @@ function fetchMore() {
 }
 
 function setModel(option: any) {
-    model.value = get(option, "optionValue");
+    if (props.multiple) {
+        const values = model.value as Array<any>;
 
-    open.value = false;
+        if (props.maxSelected && values.length > props.maxSelected) {
+            return;
+        }
+
+        const index = values.findIndex((item) => item === get(option, "optionValue"));
+
+        if (index != -1) {
+            values.splice(index, 1);
+        } else {
+            values?.push(get(option, "optionValue"));
+        }
+    } else {
+        model.value = get(option, "optionValue");
+        open.value = false;
+    }
 
     emit("change", option);
+}
+
+function isSelected(option: any) {
+    if (props.multiple) {
+        const values = model.value as Array<any>;
+        return values.includes(get(option, "optionValue"));
+    } else {
+        return get(option, "optionValue") == model.value;
+    }
 }
 
 watch(open, (value: boolean) => {
@@ -217,9 +266,21 @@ onMounted(() => {
             ref="dropdown">
             <div class="relative w-full">
                 <div :class="[inputClass]" @click="openToggle">
-                    <span v-if="selected === undefined" class="text-gray-400"> Select option </span>
-                    <span v-else>
-                        {{ get(selected, "optionLabel") }}
+                    <span v-if="selected === undefined || selected.length === 0" class="text-gray-400">
+                        Select option
+                    </span>
+                    <span v-else class="flex items-center gap-2">
+                        <template v-if="props.multiple">
+                            <template v-for="label in selected">
+                                <Badge severity="info">{{ label }}</Badge>
+                            </template>
+                            <Badge severity="secondary" v-if="(model as []).length > maxShow">
+                                ({{ (model as []).length - maxShow }} more)
+                            </Badge>
+                        </template>
+                        <template v-if="!props.multiple">
+                            {{ selected }}
+                        </template>
                     </span>
                 </div>
                 <div class="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer">
@@ -236,7 +297,8 @@ onMounted(() => {
                 leave-to-class="max-h-0 opacity-0">
                 <div
                     v-show="open"
-                    class="absolute inset-x-0 z-50 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
+                    :style="[minWidth ? `min-width: ${minWidth}px` : '']"
+                    class="fixed z-40 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
                     <div class="max-h-80 overflow-auto">
                         <div class="mb-2 px-2" v-if="showSearch && data.length">
                             <TextInput @input="searching" v-model="search" ref="inputSearch" />
@@ -246,11 +308,13 @@ onMounted(() => {
                                 <template v-for="option in data">
                                     <div
                                         @click="setModel(option)"
-                                        :class="[
-                                            get(option, 'optionValue') == model ? 'bg-gray-200 dark:bg-gray-900' : '',
-                                        ]"
-                                        class="cursor-pointer py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
-                                        {{ get(option, "optionLabel") }}
+                                        class="flex cursor-pointer items-center py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
+                                        <div class="min-w-5">
+                                            <i v-show="isSelected(option)" class="fa fa-check text-xxs"></i>
+                                        </div>
+                                        <span class="text-capitalize">
+                                            {{ get(option, "optionLabel") }}
+                                        </span>
                                     </div>
                                 </template>
                                 <div

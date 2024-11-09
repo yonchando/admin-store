@@ -33,7 +33,7 @@ export const columns: Column<Staff>[] = [
     },
     {
         label: "Status",
-        field: "status",
+        field: "status_text",
         component: {
             el: Badge,
             props: (item: Staff) => {

@@ -120,6 +120,10 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
+
+                <div class="mt-6">
+                    <h2>Permission</h2>
+                </div>
             </div>
         </form>
     </AppLayout>
