@@ -7,6 +7,7 @@ use App\Enums\Product\ProductStatusEnum;
 use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
 use App\Models\Concerns\Product\HasScopes;
+use App\Traits\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,6 +21,7 @@ class Product extends Model
     use HasFactory;
     use HasRelationships;
     use HasScopes;
+    use HasTimestamps;
     use SoftDeletes;
 
     protected $fillable = [
@@ -38,8 +40,6 @@ class Product extends Model
         'json' => ProductJson::class,
         'price' => 'decimal:2',
         'status' => ProductStatusEnum::class,
-        'created_at' => 'datetime:Y-m-d h:i A',
-        'updated_at' => 'datetime:Y-m-d h:i A',
     ];
 
     protected $appends = [

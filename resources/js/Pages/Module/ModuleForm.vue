@@ -18,7 +18,7 @@ const props = defineProps<{
 
 const form = useForm({
     name: props.module?.name ?? "",
-    permissions: [],
+    permissions: [] as Array<any>,
     status: props.module?.status ?? "active",
 });
 
@@ -50,7 +50,7 @@ function submit() {
 
 onMounted(() => {
     if (props.module) {
-        form.permissions = props.module.permissions?.map((item) => item.id);
+        form.permissions = props.module.permissions?.map((item) => item.id) as Array<any>;
     }
 });
 </script>

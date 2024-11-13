@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Module\ModuleStatusEnum;
 use App\Filters\Module\ModuleFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,6 +26,7 @@ class Module extends Model
     protected function casts(): array
     {
         return [
+            'status' => ModuleStatusEnum::class,
             'created_at' => 'datetime:Y-m-d h:i A',
             'updated_at' => 'datetime:Y-m-d h:i A',
         ];
@@ -47,7 +49,7 @@ class Module extends Model
 
     public function statusText(): Attribute
     {
-        return Attribute::get(fn () => \Lang::get('lang.'.$this->status));
+        return Attribute::get(fn () => \Lang::get('lang.'.$this->status->value));
     }
 
     public function permissions(): BelongsToMany

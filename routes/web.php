@@ -8,6 +8,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
@@ -37,20 +38,20 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('product')
         ->name('product.')
+        ->controller(ProductController::class)
         ->group(function () {
-            Route::get('/', [ProductController::class, 'index'])->name('index');
-            Route::get('/show/{id}', [ProductController::class, 'show'])->name('show');
+            Route::get('/', 'index')->name('index');
+            Route::get('/show/{id}', 'show')->name('show');
 
-            Route::get('/create', [ProductController::class, 'create'])->name('create');
-            Route::post('store', [ProductController::class, 'store'])->name('store');
-            Route::post('upload-image/{id}', [ProductController::class, 'upload'])->name('upload.image');
+            Route::get('/create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::post('upload-image/{id}', 'upload')->name('upload.image');
 
-            Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
-            Route::put('update/{id}', [ProductController::class, 'update'])->name('update');
-            Route::put('update-status/{id}', [ProductController::class, 'updateStatus'])
-                ->name('update.status');
+            Route::get('edit/{id}', 'edit')->name('edit');
+            Route::put('update/{id}', 'update')->name('update');
+            Route::put('update-status/{id}', 'updateStatus')->name('update.status');
 
-            Route::delete('destroy', [ProductController::class, 'destroy'])->name('destroy');
+            Route::delete('destroy', 'destroy')->name('destroy');
         });
 
     Route::prefix('purchase-order')
@@ -67,11 +68,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('customer')
         ->name('customer.')
+        ->controller(CustomerController::class)
         ->group(function () {
-            Route::get('/', [CustomerController::class, 'index'])->name('index');
-            Route::get('/show/{customer}', [CustomerController::class, 'show'])->name('show');
-            Route::put('update-status/{customer}', [CustomerController::class, 'updateStatus'])
-                ->name('update.status');
+            Route::get('/', 'index')->name('index');
+            Route::get('/show/{customer}', 'show')->name('show');
+            Route::put('update-status/{customer}', 'updateStatus')->name('update.status');
         });
 
     Route::prefix('card')
@@ -90,40 +91,66 @@ Route::middleware('auth')->group(function () {
             Route::delete('destroy/{card}', 'destroy')->name('destroy');
         });
 
-    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')
+        ->name('profile.')
+        ->controller(ProfileController::class)
+        ->group(function () {
+            Route::get('profile', 'edit')->name('edit');
+            Route::put('profile', 'update')->name('update');
+            Route::delete('profile', 'destroy')->name('destroy');
+        });
 
     Route::prefix('staff')
         ->name('staff.')
+        ->controller(StaffController::class)
         ->group(function () {
-            Route::get('/', [StaffController::class, 'index'])->name('index');
-            Route::get('/show/{id}', [StaffController::class, 'show'])->name('show');
+            Route::get('/', 'index')->name('index');
+            Route::get('/show/{id}', 'show')->name('show');
 
-            Route::get('/create', [StaffController::class, 'create'])->name('create');
-            Route::post('/save', [StaffController::class, 'store'])->name('store');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/save', 'store')->name('store');
 
-            Route::get('edit/{id}', [StaffController::class, 'edit'])->name('edit');
-            Route::put('update/{id}', [StaffController::class, 'update'])->name('update');
-            Route::put('update-status/{id}', [StaffController::class, 'updateStatus'])->name('update.status');
+            Route::get('edit/{id}', 'edit')->name('edit');
+            Route::put('update/{id}', 'update')->name('update');
+            Route::put('update-status/{id}', 'updateStatus')->name('update.status');
 
-            Route::delete('destroy/{id}', [StaffController::class, 'destroy'])->name('destroy');
+            Route::delete('destroy/{id}', 'destroy')->name('destroy');
         });
 
     Route::prefix('module')
         ->name('module.')
+        ->controller(ModuleController::class)
         ->group(function () {
-            Route::get('/', [ModuleController::class, 'index'])->name('index');
-            Route::post('/save', [ModuleController::class, 'store'])->name('store');
-            Route::put('update/{id}', [ModuleController::class, 'update'])->name('update');
-            Route::delete('destroy', [ModuleController::class, 'destroy'])->name('destroy');
+            Route::get('/', 'index')->name('index');
+            Route::post('/save', 'store')->name('store');
+            Route::put('update/{id}', 'update')->name('update');
+            Route::delete('destroy', 'destroy')->name('destroy');
+        });
+
+    Route::prefix('role')
+        ->name('role.')
+        ->controller(RoleController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/show/{id}', 'show')->name('show');
+
+            Route::get('/create', 'create')->name('create');
+            Route::post('/save', 'store')->name('store');
+
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::put('update/{id}', 'update')->name('update');
+
+            Route::patch('update-permissions/{id}', 'patchPermissions')->name('patch.permissions');
+
+            Route::delete('destroy', 'destroy')->name('destroy');
         });
 
     Route::prefix('setting')
         ->name('setting.')
+        ->controller(SettingController::class)
         ->group(function () {
-            Route::get('/', [SettingController::class, 'show'])->name('show');
-            Route::put('update', [SettingController::class, 'update'])->name('update');
+            Route::get('/', 'show')->name('show');
+            Route::put('update', 'update')->name('update');
         });
 });
 

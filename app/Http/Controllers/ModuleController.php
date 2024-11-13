@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Module\ModuleStatusEnum;
 use App\Http\Requests\ModuleRequest;
+use App\Http\Resources\ModuleResource;
 use App\Models\Permission;
 use App\Services\ModuleService;
 use Illuminate\Http\Request;
@@ -17,8 +18,16 @@ class ModuleController extends Controller
 
     public function index(Request $request)
     {
+        $data = $this->moduleService->get($request->all());
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'modules' => ModuleResource::collection($data),
+            ]);
+        }
+
         return Inertia::render('Module/ModuleIndex', [
-            'data' => $this->moduleService->get($request->all()),
+            'data' => $data,
             'statuses' => ModuleStatusEnum::toArray(),
             'permissions' => Permission::get(),
         ]);

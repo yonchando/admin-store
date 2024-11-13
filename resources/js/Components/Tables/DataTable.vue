@@ -30,7 +30,7 @@ const emit = defineEmits<{
     showPage: [page: number];
     sort: [];
     search: [s: string];
-    "row-dbclick": [item: any];
+    rowDbclick: [item: any];
 }>();
 
 const shows = [10, 20, 50, 100];
@@ -116,70 +116,78 @@ const inputSearch = _.debounce(function (e: Event) {
     </div>
     <table class="min-w-full table-fixed border-collapse rounded-md xl:w-full">
         <!-- Headers -->
-        <tr>
-            <th
-                v-if="checkbox"
-                :class="root?.checkBoxClass ?? 'w-10'"
-                class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-700">
-                <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
-            </th>
-            <th
-                v-for="column in columns"
-                :class="[column.sortable ? 'cursor-pointer' : '']"
-                @click="sort(column)"
-                class="border border-gray-300 bg-gray-200 py-3 pl-2 text-left align-middle font-semibold dark:border-gray-600 dark:bg-gray-700"
-                v-bind="column.props">
-                <div class="flex items-center">
-                    <span>
-                        {{ column.label }}
-                    </span>
-                    <span class="ml-3 inline-flex" v-if="column.sortable">
-                        <ArrowUpDown
-                            v-if="sortBy?.field != column.sortable || (sortBy?.field && sortBy?.direction == null)"
-                            class="size-3.5" />
-                        <fa-icon
-                            v-if="sortBy?.field === column.sortable && sortBy?.direction == 'desc'"
-                            :icon="faArrowDown" />
-                        <fa-icon
-                            v-if="sortBy?.field === column.sortable && sortBy.direction == 'asc'"
-                            :icon="faArrowUp" />
-                    </span>
-                </div>
-            </th>
-            <th :class="root?.actionClass" class="column head w-40" v-if="$slots.actions">Actions</th>
-        </tr>
+        <thead>
+            <tr>
+                <th
+                    v-if="checkbox"
+                    :class="root?.checkBoxClass ?? 'w-10'"
+                    class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-700">
+                    <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
+                </th>
+                <template v-for="column in columns">
+                    <th
+                        :class="[column.sortable ? 'cursor-pointer' : '']"
+                        @click="sort(column)"
+                        class="border border-gray-300 bg-gray-200 py-3 pl-2 text-left align-middle font-semibold dark:border-gray-600 dark:bg-gray-700"
+                        v-bind="column.props">
+                        <div class="flex items-center">
+                            <span>
+                                {{ column.label }}
+                            </span>
+                            <span class="ml-3 inline-flex" v-if="column.sortable">
+                                <ArrowUpDown
+                                    v-if="
+                                        sortBy?.field != column.sortable || (sortBy?.field && sortBy?.direction == null)
+                                    "
+                                    class="size-3.5" />
+                                <fa-icon
+                                    v-if="sortBy?.field === column.sortable && sortBy?.direction == 'desc'"
+                                    :icon="faArrowDown" />
+                                <fa-icon
+                                    v-if="sortBy?.field === column.sortable && sortBy.direction == 'asc'"
+                                    :icon="faArrowUp" />
+                            </span>
+                        </div>
+                    </th>
+                </template>
+
+                <th :class="root?.actionClass" class="column head w-40" v-if="$slots.actions">Actions</th>
+            </tr>
+        </thead>
 
         <!-- Rows -->
-        <template v-if="values.length">
-            <tr v-for="item in values" class="group">
-                <td
-                    v-if="checkbox"
-                    :class="[selectRow?.id == item.id ? 'active' : '']"
-                    class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-800 group-hover:dark:bg-gray-700">
-                    <Checkbox :value="item.id" v-model:checked="checked" />
-                </td>
-                <template v-for="column in columns">
+        <tbody>
+            <template v-if="values.length">
+                <tr v-for="item in values" class="group">
                     <td
-                        v-bind="rowProps"
-                        @dblclick="$emit('row-dbclick', item)"
-                        @click="selectRow = selectRow?.id == item.id ? null : item"
+                        v-if="checkbox"
                         :class="[selectRow?.id == item.id ? 'active' : '']"
-                        class="column">
-                        <DataValue :item="item" :column="column" />
+                        class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-800 group-hover:dark:bg-gray-700">
+                        <Checkbox :value="item.id" v-model:checked="checked" />
                     </td>
-                </template>
-                <td v-if="$slots.actions" :class="[selectRow?.id == item.id ? 'active' : '']" class="column">
-                    <slot name="actions" :item="item"></slot>
-                </td>
-            </tr>
-        </template>
+                    <template v-for="column in columns">
+                        <td
+                            v-bind="rowProps"
+                            @dblclick="$emit('row-dbclick', item)"
+                            @click="selectRow = selectRow?.id == item.id ? null : item"
+                            :class="[selectRow?.id == item.id ? 'active' : '']"
+                            class="column">
+                            <DataValue :item="item" :column="column" />
+                        </td>
+                    </template>
+                    <td v-if="$slots.actions" :class="[selectRow?.id == item.id ? 'active' : '']" class="column">
+                        <slot name="actions" :item="item"></slot>
+                    </td>
+                </tr>
+            </template>
 
-        <!-- Paginate -->
-        <template v-if="values.length === 0">
-            <tr>
-                <td class="column !py-4" :colspan="columns.length + ($slots.actions ? 2 : 1)">Empty Data</td>
-            </tr>
-        </template>
+            <!-- Paginate -->
+            <template v-if="values.length === 0">
+                <tr>
+                    <td class="column !py-4" :colspan="columns.length + ($slots.actions ? 2 : 1)">Empty Data</td>
+                </tr>
+            </template>
+        </tbody>
     </table>
     <Pagination :values="values" :paginate="paginate" />
 </template>

@@ -15,7 +15,7 @@ return [
         'customer' => ['c', 'r', 'u', 'd'],
         'staff' => ['c', 'r', 'u', 'd'],
         'role' => ['c', 'r', 'u', 'd'],
-        'setting' => ['c', 'r', 'u', 'd'],
         'module' => ['c', 'r', 'u', 'd'],
+        'setting' => ['u'],
     ],
 ];

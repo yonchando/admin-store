@@ -15,11 +15,11 @@ defineProps<{
             v-bind="
                 typeof column.component.props == 'function' ? column.component.props(item) : column.component.props
             ">
-            {{ dataGet(item, column.field) ?? "-" }}
+            {{ dataGet(item, column?.field as any) ?? "-" }}
         </component>
     </template>
     <template v-else>
-        {{ dataGet(item, column.field) ?? "-" }}
+        {{ dataGet(item, column?.field as any) ?? "-" }}
     </template>
 </template>
 

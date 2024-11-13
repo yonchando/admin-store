@@ -1,3 +1,10 @@
+export interface Permission {
+    id: number;
+    code: string;
+    name: string;
+    created_at: string;
+    updated_at: string;
+}
 export interface Module {
     id: number;
     name: string;
@@ -5,9 +12,5 @@ export interface Module {
     status_text: string;
     created_at: string;
     updated_at: string;
-    permissions?: {
-        id: string;
-        code: string;
-        name: string;
-    }[];
+    permissions?: Permission[];
 }

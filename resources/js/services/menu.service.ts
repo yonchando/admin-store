@@ -79,11 +79,14 @@ export default function useMenu() {
                 "staff.create",
                 "staff.show",
                 "staff.edit",
-                "product.index",
                 "module.index",
                 "module.create",
                 "module.show",
                 "module.edit",
+                "role.index",
+                "role.create",
+                "role.show",
+                "role.edit",
             ),
             children: [
                 {
@@ -94,9 +97,9 @@ export default function useMenu() {
                 },
                 {
                     title: "Roles",
-                    url: route("staff.index"),
+                    url: route("role.index"),
                     icon: faIdCard,
-                    isActive: isActive("product.index", "role.create", "role.show", "role.edit"),
+                    isActive: isActive("role.index", "role.create", "role.show", "role.edit"),
                 },
                 {
                     title: "Module",

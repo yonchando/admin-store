@@ -52,7 +52,7 @@ function refresh(): void {}
 
 function asUser()
 {
-    $user = User::factory()->admin()->create();
+    $user = User::factory()->active()->admin()->create();
 
     return test()->actingAs($user);
 }

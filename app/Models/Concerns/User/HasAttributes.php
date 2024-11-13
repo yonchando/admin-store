@@ -8,11 +8,12 @@ trait HasAttributes
 {
     public function statusText(): Attribute
     {
+
         return Attribute::make(
             get: function () {
-                $status = $this->status;
+                $status = $this->status->value;
 
-                return __("lang.$status->value");
+                return __("lang.$status");
             }
         );
     }

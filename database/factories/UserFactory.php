@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\GenderEnum;
+use App\Enums\User\UserStatusEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -55,6 +56,13 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'is_admin' => true,
+        ]);
+    }
+
+    public function active(): Factory|UserFactory
+    {
+        return $this->state(fn () => [
+            'status' => UserStatusEnum::ACTIVE,
         ]);
     }
 
