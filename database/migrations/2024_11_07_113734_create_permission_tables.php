@@ -5,7 +5,7 @@ use App\Enums\Role\RoleStatusEnum;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Role;
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -46,9 +46,10 @@ return new class extends Migration
 
         Schema::create('model_has_permissions', function (Blueprint $table) {
             $table->foreignIdFor(Permission::class, 'permission_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Module::class, 'module_id')->constrained()->cascadeOnDelete();
 
             $table->string('model_type');
-            $table->foreignIdFor(User::class, 'model_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Staff::class, 'model_id')->constrained()->cascadeOnDelete();
             $table->index(['model_id', 'model_type'], 'model_has_permissions_model_id_model_type_index');
 
             $table->primary(['permission_id', 'model_id', 'model_type'],
@@ -90,9 +91,10 @@ return new class extends Migration
         Schema::drop('role_has_permissions');
         Schema::drop('model_has_roles');
         Schema::drop('model_has_permissions');
+        Schema::drop('module_has_permissions');
+
+        Schema::drop('modules');
         Schema::drop('roles');
         Schema::drop('permissions');
-        Schema::drop('modules');
-        Schema::drop('module_permissions');
     }
 };

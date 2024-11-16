@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import { Module, Permission } from "@/types/models/module";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import axios from "axios";
+import { Role } from "@/types/models/role";
 
-const props = defineProps<{
-    values: { [key: number]: number[] };
-}>();
+const props = withDefaults(
+    defineProps<{
+        values: number[][];
+        disabled: { [key: number]: number[] };
+    }>(),
+    {
+        disabled: {},
+    },
+);
 
 const data: { modules: Module[] } = reactive({
     modules: [],
@@ -14,7 +21,12 @@ const data: { modules: Module[] } = reactive({
 
 const permissions = defineModel<any>();
 
-const checked = ref<any>({});
+function isCheckedAll(module: Module) {
+    return (
+        module.permissions?.length === permissions.value[module.id].length ||
+        module.permissions?.length === props.disabled[module.id]?.length
+    );
+}
 
 function checkedAll(event: Event, module: Module) {
     const input = event.target as HTMLInputElement;
@@ -26,8 +38,23 @@ function checkedAll(event: Event, module: Module) {
     }
 }
 
-function check(module: Module) {
-    checked.value[module.id] = module.permissions?.length === permissions.value[module.id].length;
+function setDefaultValue(values: { [key: number]: number[] }) {
+    if (values) {
+        for (const key in values) {
+            const module = data.modules.find((item: Module) => item.id === Number(key));
+            if (module) {
+                permissions.value[key] = values[key];
+            }
+        }
+    }
+}
+
+function setDisabled(module: Module, permission: Permission) {
+    if (props.disabled && typeof props.disabled[module.id] != "undefined") {
+        return props.disabled[module.id].includes(permission.id);
+    }
+
+    return false;
 }
 
 onMounted(() => {
@@ -41,15 +68,7 @@ onMounted(() => {
             }
         })
         .then(() => {
-            if (props.values) {
-                for (const key in props.values) {
-                    const module = data.modules.find((item: Module) => item.id === Number(key));
-                    if (module) {
-                        checked.value[module.id] = module?.permissions?.length == props.values[key].length;
-                        permissions.value[key] = props.values[key];
-                    }
-                }
-            }
+            setDefaultValue(props.values);
         });
 });
 </script>
@@ -68,18 +87,24 @@ onMounted(() => {
                         <div class="flex items-center gap-2">
                             <Checkbox
                                 :id="`${module.id}-all`"
-                                v-model:checked="checked[module.id]"
-                                @change="checkedAll($event, module)"
-                                :value="module.id" />
+                                :checked="isCheckedAll(module)"
+                                :disabled="module.permissions?.length === disabled[module.id]?.length"
+                                @change="checkedAll($event, module)" />
                             <label class="cursor-pointer" :for="`${module.id}-all`">All</label>
                         </div>
 
                         <template v-for="permission in module.permissions">
                             <div class="flex items-center gap-2">
                                 <Checkbox
+                                    v-if="setDisabled(module, permission)"
+                                    :id="`${module.id}-${permission.id}`"
+                                    :checked="true"
+                                    :disabled="setDisabled(module, permission)" />
+
+                                <Checkbox
+                                    v-else
                                     :id="`${module.id}-${permission.id}`"
                                     v-model:checked="permissions[module.id]"
-                                    @change="check(module)"
                                     :value="permission.id" />
                                 <label class="cursor-pointer" :for="`${module.id}-${permission.id}`">
                                     {{ permission.name }}

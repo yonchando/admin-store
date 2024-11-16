@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\User;
 
-use App\Enums\User\UserStatusEnum;
+use App\Enums\Staff\StaffStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
-class UserRequest extends FormRequest
+class StaffRequest extends FormRequest
 {
     public function rules(): array
     {
@@ -22,9 +22,12 @@ class UserRequest extends FormRequest
                 ]),
             ],
             'password_confirmation' => [Rule::requiredIf($this->id == null), 'same:password'],
+            'position' => ['nullable', 'string'],
             'gender' => ['nullable'],
             'profile' => ['nullable', File::image()->extensions(['jpg', 'png', 'jpeg', 'gif'])->size('2mb')],
-            'status' => ['nullable', Rule::in(array_values(UserStatusEnum::toJson()))],
+            'status' => ['nullable', Rule::in(array_values(StaffStatusEnum::toJson()))],
+            'role_ids' => ['nullable', 'array'],
+            'permission_ids' => ['nullable', 'array'],
         ];
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Profile;
 
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +22,7 @@ class ProfileUpdateRequest extends FormRequest
                 'string',
                 'lowercase',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                Rule::unique(Staff::class)->ignore($this->user()->id),
             ],
         ];
     }

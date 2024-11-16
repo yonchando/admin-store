@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Enums\User;
+namespace App\Enums\Staff;
 
 use App\Traits\HasEnumProperty;
 
-enum UserStatusEnum: string
+enum StaffStatusEnum: string
 {
     use HasEnumProperty;
 

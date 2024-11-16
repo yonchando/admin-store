@@ -3,16 +3,16 @@
 namespace Database\Factories;
 
 use App\Enums\GenderEnum;
-use App\Enums\User\UserStatusEnum;
-use App\Models\User;
+use App\Enums\Staff\StaffStatusEnum;
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Staff>
  */
-class UserFactory extends Factory
+class StaffFactory extends Factory
 {
     /**
      * The current password being used by the factory.
@@ -35,17 +35,18 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'gender' => $this->faker->randomElement(array_values($genders)),
             'is_admin' => false,
+            'status' => StaffStatusEnum::ACTIVE->value,
         ];
     }
 
-    public function male(): Factory|UserFactory
+    public function male(): Factory|StaffFactory
     {
         return $this->state(fn () => [
             'gender' => GenderEnum::MALE->value,
         ]);
     }
 
-    public function female(): Factory|UserFactory
+    public function female(): Factory|StaffFactory
     {
         return $this->state(fn () => [
             'gender' => GenderEnum::FEMALE->value,
@@ -59,14 +60,14 @@ class UserFactory extends Factory
         ]);
     }
 
-    public function active(): Factory|UserFactory
+    public function active(): Factory|StaffFactory
     {
         return $this->state(fn () => [
-            'status' => UserStatusEnum::ACTIVE,
+            'status' => StaffStatusEnum::ACTIVE,
         ]);
     }
 
-    public function status($status): Factory|UserFactory
+    public function status($status): Factory|StaffFactory
     {
         return $this->state(fn () => [
             'status' => $status,

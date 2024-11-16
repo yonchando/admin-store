@@ -3,11 +3,11 @@
 namespace App\Filters\Staff;
 
 use App\Filters\FilterBuilder;
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property User $builder
+ * @property Staff $builder
  */
 class StaffFilter extends FilterBuilder
 {

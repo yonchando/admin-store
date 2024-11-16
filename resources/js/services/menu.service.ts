@@ -71,7 +71,7 @@ export default function useMenu() {
             icon: faCreditCard,
         }),
         add({
-            title: "User Management",
+            title: "Staff Management",
             url: "#",
             icon: faUsers,
             isActive: isActive(

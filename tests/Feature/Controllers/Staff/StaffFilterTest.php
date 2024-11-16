@@ -1,12 +1,12 @@
 <?php
 
-use App\Enums\User\UserStatusEnum;
-use App\Models\User;
+use App\Enums\Staff\StaffStatusEnum;
+use App\Models\Staff;
 use Inertia\Testing\AssertableInertia;
 
 it('can search by username or name', function () {
-    User::factory(3)->create();
-    $user = User::factory()->create();
+    Staff::factory(3)->create();
+    $user = Staff::factory()->create();
 
     $filters = [
         'search_text' => $user->name,
@@ -20,11 +20,11 @@ it('can search by username or name', function () {
         );
 });
 
-it('can fitler by gender', function () {
+it('can filter by gender', function () {
 
-    User::factory(3)->female()->create();
+    Staff::factory(3)->female()->create();
 
-    $user = User::factory()->male()->create();
+    $user = Staff::factory()->male()->create();
 
     $filters = [
         'gender' => $user->gender,
@@ -38,11 +38,11 @@ it('can fitler by gender', function () {
         );
 });
 
-it('can fitler by status', function () {
+it('can filter by status', function () {
 
-    User::factory(3)->female()->create();
+    Staff::factory(3)->female()->create();
 
-    $user = User::factory()->status(UserStatusEnum::INACTIVE->name)->create();
+    $user = Staff::factory()->status(StaffStatusEnum::INACTIVE->name)->create();
 
     $filters = [
         'status' => $user->status,

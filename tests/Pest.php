@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\User;
+use App\Models\Permission;
+use App\Models\Staff;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,11 +50,21 @@ function something()
     // ..
 }
 
+function initPermissions()
+{
+    return Permission::factory(4)->create(new Sequence(
+        ['code' => 'VIEW'],
+        ['code' => 'CREATE'],
+        ['code' => 'UPDATE'],
+        ['code' => 'DELETE'],
+    ));
+}
+
 function refresh(): void {}
 
 function asUser()
 {
-    $user = User::factory()->active()->admin()->create();
+    $user = Staff::factory()->active()->admin()->create();
 
     return test()->actingAs($user);
 }

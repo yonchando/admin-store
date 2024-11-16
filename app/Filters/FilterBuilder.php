@@ -11,6 +11,11 @@ abstract class FilterBuilder
         protected readonly array $filters = [],
     ) {}
 
+    public function includes($withs): void
+    {
+        $this->builder->with($withs);
+    }
+
     public function apply(): Builder
     {
         foreach ($this->filters as $name => $filter) {

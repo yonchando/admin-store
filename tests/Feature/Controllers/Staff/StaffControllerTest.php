@@ -1,60 +1,36 @@
 <?php
 
-use App\Enums\GenderEnum;
-use App\Enums\User\UserStatusEnum;
-use App\Facades\Enum;
-use App\Models\User;
+use App\Enums\Staff\StaffStatusEnum;
+use App\Models\Module;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\Staff;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Inertia\Testing\AssertableInertia;
+
+use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\get;
+use function Pest\Laravel\put;
+
+beforeEach(function () {
+    asUser();
+});
 
 describe('user lists', function () {
     test('index methods', function () {
-        $staff = User::factory(3)->create();
+        $staff = Staff::factory(50)->create();
 
-        $this->get(route('staff.index'))
+        get(route('staff.index'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Staff/Index')
-                    ->has('staffs.data', $staff->count())
-                    ->has('gender', 2)
-                    ->has('statuses', 2)
-                    ->has('filters')
-            );
-    });
-
-    test('filter user list', function () {
-
-        User::factory()->create([
-            'name' => fake()->name,
-            'username' => fake()->userName,
-            'gender' => fake()->randomElement(Enum::toArray(GenderEnum::cases(), true)),
-            'created_at' => now()->subHours(2),
-        ]);
-
-        $first = User::factory()->create([
-            'name' => fake()->name,
-            'username' => fake()->userName,
-            'gender' => fake()->randomElement(Enum::toArray(GenderEnum::cases(), true)),
-            'created_at' => now(),
-        ]);
-
-        $filters = [
-            'search_text' => $first->name,
-            'gender' => $first->gender->value,
-            'status' => UserStatusEnum::ACTIVE->name,
-        ];
-
-        $this->get(route('staff.index', $filters))
-            ->assertOk()
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Staff/Index')
-                    ->has('staffs.data', 1)
-                    ->has(
-                        'staffs.data.0',
-                        fn (AssertableInertia $page) => $page->where('id', $first->id)
-                            ->where('name', $first->name)
-                            ->where('username', $first->username)
-                            ->etc()
-                    )
+                function (AssertableInertia $page) use ($staff) {
+                    return $page->component('Staff/StaffIndex')
+                        ->where('staffs.total', $staff->count())
+                        ->has('staffs.data', $staff->take(20)->count())
+                        ->has('gender', 2)
+                        ->has('statuses', 2)
+                        ->has('filters');
+                }
             );
     });
 });
@@ -64,98 +40,172 @@ describe('create staff', function () {
         $this->get(route('staff.create'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Staff/Form')
+                fn (AssertableInertia $page) => $page->component('Staff/StaffForm')
             );
     });
 
-    it('can save data to database from submit form', function () {
-        $user = User::factory()->make();
+    it('can save staff data to database from submit form', function () {
+        $user = Staff::factory()->make();
 
         $form = $user->toArray();
 
         $form['password'] = 'password';
         $form['password_confirmation'] = 'password';
+        $form['status'] = StaffStatusEnum::ACTIVE->value;
 
         $this->post(route('staff.store'), $form)
             ->assertRedirect(route('staff.index'))
-            ->assertSessionHas('message.text', __('lang.created_success', ['attribute' => __('lang.staff')]));
+            ->assertSessionHas('success', __('lang.created_success', ['attribute' => __('lang.staff')]));
 
-        $this->assertDatabaseHas($user->getTable(), [
+        $this->assertDatabaseHas(Staff::class, [
             'name' => $user->name,
             'username' => $user->username,
         ]);
+    });
+
+    it('can create staff with role and permission', function () {
+        $other = Module::factory()->create();
+        $otherPermissions = Permission::factory(4)->create();
+        Role::factory()->hasAttached($otherPermissions, ['module_id' => $other->id])->create();
+
+        $user = Staff::factory()->make([
+            'username' => 'user',
+        ]);
+
+        $module = Module::factory()->create([
+            'name' => 'User',
+        ]);
+        $permissionsFromRoleManager = Permission::factory(4)->create();
+        $roleManager = Role::factory()
+            ->hasAttached($permissionsFromRoleManager, ['module_id' => $module->id])
+            ->active()
+            ->create();
+
+        $permissionsFromRoleOfficer = Permission::factory(2)->create();
+        $roleOfficer = Role::factory()
+            ->hasAttached($permissionsFromRoleOfficer, ['module_id' => $module->id])
+            ->active()
+            ->create();
+
+        $moduleUser = Module::factory()->create([
+            'name' => 'Role',
+        ]);
+        $permissions = Permission::factory(2)->create();
+
+        $form = $user->toArray();
+        $form['password'] = 'password';
+        $form['password_confirmation'] = 'password';
+        $form['status'] = StaffStatusEnum::ACTIVE->value;
+        $form['role_ids'] = [$roleManager->id, $roleOfficer->id];
+        $form['permission_ids'] = [$moduleUser->id => $permissions->pluck('id')->toArray()];
+
+        $this->post(route('staff.store'), $form)
+            ->assertRedirect(route('staff.index'))
+            ->assertSessionHas('success', __('lang.created_success', ['attribute' => __('lang.staff')]));
+
+        $staff = Staff::where('username', 'user')->first();
+
+        expect($staff)->not()->toBeNull()
+            ->and($staff->roles->pluck('id')->toArray())->toEqual($form['role_ids'])
+            ->and($staff->permissions->pluck('id')->toArray())->toBe([
+                ...$roleManager->permissions->pluck('id'),
+                ...$roleOfficer->permissions->pluck('id'),
+                ...$permissions->pluck('id'),
+            ]);
     });
 });
 
 describe('edit staff', function () {
     it('can render form for edition', function () {
-        $user = User::factory()->create();
+        $staff = Staff::factory()->create();
 
-        $this->get(route('staff.edit', $user))
+        $this->get(route('staff.edit', $staff))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page->component('Staff/Form')
-                    ->where('staff.id', $user->id)
-                    ->where('staff.name', $user->name)
-                    ->where('staff.username', $user->username)
+                fn (AssertableInertia $page) => $page->component('Staff/StaffForm')
+                    ->where('staff.id', $staff->id)
+                    ->where('staff.name', $staff->name)
+                    ->where('staff.username', $staff->username)
             );
     });
 
     it('can updated user data', function () {
-        $user = User::factory()->create();
+        $staff = Staff::factory()->create();
 
-        $changed = User::factory()->make();
+        $changed = Staff::factory()->make();
 
-        $this->patch(route('staff.update', $user), $changed->toArray())
+        put(route('staff.update', $staff), $changed->toArray())
             ->assertRedirect(route('staff.index'))
-            ->assertSessionHas('message.text', __('lang.updated_success', ['attribute' => __('lang.staff')]));
+            ->assertSessionHas('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
 
-        $updated = $user->fresh();
+        $updated = $staff->fresh();
 
         $this->assertEquals($changed->name, $updated->name);
         $this->assertEquals($changed->username, $updated->username);
         $this->assertEquals($changed->gender, $updated->gender);
-        $this->assertEquals($updated->password, $user->password);
+        $this->assertEquals($updated->password, $staff->password);
 
-        $this->assertNotEquals($user->name, $updated->name);
-        $this->assertNotEquals($user->username, $updated->username);
-
+        $this->assertNotEquals($staff->name, $updated->name);
+        $this->assertNotEquals($staff->username, $updated->username);
     });
 
-    it('can update status', function () {
-        $user = User::factory()->create();
+    it('can updated user permissions and roles', function () {
+        $permissions = initPermissions();
+        $module = Module::factory()->hasAttached($permissions)->create(['name' => 'Staff']);
+        $role = Role::factory()->givePermissions($module)->create(['code' => 'user']);
+        $staff = Staff::factory()->create();
+        $staff->assignRole([$role->id]);
+        $staff->givePermissionTo($module->id, $role->permissions);
+        $staff->givePermissionTo(Module::factory()->create()->id, Permission::factory(2)->create(
+            new Sequence(
+                ['code' => 'VIEW'],
+                ['code' => 'CREATE']
+            )
+        ));
 
-        $this->patch(route('staff.update.status', $user))
-            ->assertRedirect()
-            ->assertSessionHas('message.text',
-                __('lang.updated_success', ['attribute' => __('lang.staff').' '.__('lang.status')]));
+        $moduleRole = Module::factory()->create(['name' => 'Role']);
+        $roleUpdated = Role::factory()->hasAttached($permissions->take(2), ['module_id' => $moduleRole->id])
+            ->create(['code' => 'admin']);
+        $permissions = Permission::factory(2)
+            ->create(
+                new Sequence(
+                    ['code' => 'READ'],
+                    ['code' => 'UPDATE']
+                )
+            );
+        $data = [
+            'name' => $staff->name,
+            'username' => $staff->username,
+            'role_ids' => [$roleUpdated->id],
+            'permission_ids' => [
+                $module->id => $permissions->pluck('id')->toArray(),
+            ],
+        ];
 
-        $user->refresh();
+        put(route('staff.update', $staff), $data)
+            ->assertRedirect(route('staff.index'))
+            ->assertSessionHas('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
 
-        $this->assertEquals(UserStatusEnum::INACTIVE, $user->status);
+        $updated = $staff->fresh();
 
-        $this->patch(route('staff.update.status', $user))
-            ->assertRedirect()
-            ->assertSessionHas('message.text',
-                __('lang.updated_success', ['attribute' => __('lang.staff').' '.__('lang.status')]));
+        $perms = $updated->permissions->groupBy('module.module_id')->map(fn ($item) => $item->pluck('id'));
 
-        $user->refresh();
-
-        $this->assertEquals(UserStatusEnum::ACTIVE, $user->status);
+        expect($perms->toArray())->toEqual([
+            $module->id => $permissions->pluck('id')->toArray(),
+            $moduleRole->id => $roleUpdated->permissions->pluck('id')->toArray(),
+        ]);
     });
 });
 
 test('delete staff', function () {
-
-    $staff = User::factory()->create();
+    $staff = Staff::factory()->create();
 
     $this->from(route('staff.index'));
 
-    $this->delete(route('staff.destroy', $staff))
-        ->assertRedirect(route('staff.index'))
-        ->assertSessionHas('message.text', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
+    $this->delete(route('staff.destroy'), [
+        'ids' => [$staff->id],
+    ])->assertRedirect(route('staff.index'))
+        ->assertSessionHas('success', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
 
-    $this->delete(route('staff.destroy', $staff))
-        ->assertStatus(404);
-
+    assertModelMissing($staff);
 });

@@ -66,10 +66,10 @@ const open = ref(false);
 
 const selected = computed(() => {
     if (props.multiple) {
-        const values = model.value as Array<any>;
+        const values = (model.value as Array<any>) ?? [];
         return data.value
             .filter((item, i) => {
-                return values.includes(get(item, "optionValue")) && (props.maxShow == undefined || i < props.maxShow);
+                return values?.includes(get(item, "optionValue")) && (props.maxShow == undefined || i < props.maxShow);
             })
             .map((item) => {
                 return get(item, "optionLabel");
@@ -227,7 +227,7 @@ function setModel(option: any) {
 
 function isSelected(option: any) {
     if (props.multiple) {
-        const values = model.value as Array<any>;
+        const values = (model.value as Array<any>) ?? [];
         return values.includes(get(option, "optionValue"));
     } else {
         return get(option, "optionValue") == model.value;

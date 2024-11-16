@@ -27,6 +27,7 @@ class Role extends Model
 
     protected $appends = [
         'status_text',
+        'permission_ids',
     ];
 
     protected function casts(): array
@@ -41,14 +42,6 @@ class Role extends Model
         $this->permissions()->attach($permission, ['module_id' => $key]);
     }
 
-    public function syncPermissions(int|string $key, mixed $permission): void
-    {
-        $ids = $this->permissions()->detach($this->permissions->pluck('id'));
-        log_info('Detach', $ids);
-
-        $this->permissions()->attach($permission, ['module_id' => $key]);
-    }
-
     /**
      * Get permission ids with module id as key
      *
@@ -56,6 +49,6 @@ class Role extends Model
      */
     public function getPermissionIds(): Collection
     {
-        return $this->permissions->groupBy('pivot.module_id')->map(fn ($item) => $item->pluck('id')->values());
+        return $this->permissions->groupBy('module.module_id')->map(fn ($item) => $item->pluck('id')->values());
     }
 }

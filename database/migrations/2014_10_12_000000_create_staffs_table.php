@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\User\UserStatusEnum;
+use App\Enums\Staff\StaffStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('staffs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('username');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('profile')->nullable();
             $table->string('position')->nullable();
-            $table->string('status')->default(UserStatusEnum::ACTIVE->value);
+            $table->string('status')->default(StaffStatusEnum::ACTIVE->value);
             $table->rememberToken();
             $table->timestamps();
         });

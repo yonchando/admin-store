@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Helpers\HelperService;
+use App\Models\Customer;
+use App\Models\Staff;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Relation::enforceMorphMap([
+            'staff' => Staff::class,
+            'customer' => Customer::class,
+        ]);
+
         app()->bind(LengthAwarePaginator::class, function ($values, $data) {
 
             $data['perPage'] = 20;

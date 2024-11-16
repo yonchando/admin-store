@@ -46,14 +46,7 @@ export const filters = {
     ...globalFilter,
 };
 
-export const initModuleProps = (permissions: any, modules: any) => {
-    for (const module of modules) {
-        permissions[module.id] = [];
-    }
-};
-
 export default {
     columns,
     filters,
-    initModuleProps,
 };

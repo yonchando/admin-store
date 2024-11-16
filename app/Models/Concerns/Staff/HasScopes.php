@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Concerns\User;
+namespace App\Models\Concerns\Staff;
 
 use App\Filters\Staff\StaffFilter;
 use Illuminate\Database\Eloquent\Builder;

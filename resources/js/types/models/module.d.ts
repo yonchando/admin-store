@@ -4,6 +4,12 @@ export interface Permission {
     name: string;
     created_at: string;
     updated_at: string;
+    pivot?: {
+        module_id: number;
+        permission_id: number;
+        role_id: number;
+        user_id: number;
+    };
 }
 export interface Module {
     id: number;

@@ -12,11 +12,6 @@ use Illuminate\Validation\ValidationException;
  */
 class ProductFilter extends FilterBuilder
 {
-    public function includes($withs): void
-    {
-        $this->builder->with($withs);
-    }
-
     public function search($value): void
     {
         if ($value) {

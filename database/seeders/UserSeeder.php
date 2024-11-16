@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        if (User::first() == null) {
-            User::create([
+        if (Staff::first() == null) {
+            Staff::create([
                 'name' => 'Super Admin',
                 'position' => 'Super Admin',
                 'username' => 'admin',

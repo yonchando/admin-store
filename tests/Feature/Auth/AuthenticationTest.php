@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Models\Staff;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -11,7 +10,7 @@ test('login screen can be rendered', function () {
 });
 
 test('users admin can authenticate using the login screen', function () {
-    $user = User::factory()->admin()->create();
+    $user = Staff::factory()->admin()->create();
 
     $response = $this->post(route('login'), [
         'username' => $user->username,
@@ -24,7 +23,7 @@ test('users admin can authenticate using the login screen', function () {
 });
 
 test('users admin can not authenticate with invalid password', function () {
-    $user = User::factory()->admin()->create();
+    $user = Staff::factory()->admin()->create();
 
     $this->post('/login', [
         'username' => $user->username,
@@ -36,7 +35,7 @@ test('users admin can not authenticate with invalid password', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    $user = Staff::factory()->create();
 
     $response = $this->post(route('login'), [
         'username' => $user->username,
@@ -48,7 +47,7 @@ test('users can authenticate using the login screen', function () {
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = Staff::factory()->create();
 
     $this->post('/login', [
         'username' => $user->username,
@@ -59,7 +58,7 @@ test('users can not authenticate with invalid password', function () {
 });
 
 test('users can logout', function () {
-    $user = User::factory()->create();
+    $user = Staff::factory()->create();
 
     $response = $this->actingAs($user)->post('/logout');
 
