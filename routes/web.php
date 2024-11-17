@@ -112,6 +112,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::put('update/{id}', 'update')->name('update');
+            Route::patch('update-role-permission/{id}', 'updateRolePermission')->name('patch.role.permission');
 
             Route::delete('destroy', 'destroy')->name('destroy');
         });

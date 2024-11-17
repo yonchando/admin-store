@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('status')->default(StaffStatusEnum::ACTIVE->value);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

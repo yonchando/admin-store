@@ -4,15 +4,14 @@ import { Module, Permission } from "@/types/models/module";
 import { onMounted, reactive, ref, watch } from "vue";
 import axios from "axios";
 import { Role } from "@/types/models/role";
+import _ from "lodash";
 
 const props = withDefaults(
     defineProps<{
-        values: number[][];
-        disabled: { [key: number]: number[] };
+        values?: any;
+        disabled?: any;
     }>(),
-    {
-        disabled: {},
-    },
+    { disabled: {}, values: {} },
 );
 
 const data: { modules: Module[] } = reactive({
@@ -22,10 +21,19 @@ const data: { modules: Module[] } = reactive({
 const permissions = defineModel<any>();
 
 function isCheckedAll(module: Module) {
-    return (
-        module.permissions?.length === permissions.value[module.id].length ||
-        module.permissions?.length === props.disabled[module.id]?.length
-    );
+    if (
+        props.disabled[module.id] &&
+        module.permissions?.length === _.uniq([...props.disabled[module.id], ...permissions.value[module.id]]).length
+    ) {
+        console.log(props.disabled[module.id], module.name);
+        return true;
+    }
+
+    if (permissions.value[module.id] && module.permissions?.length === permissions.value[module.id].length) {
+        return true;
+    }
+
+    return module.permissions?.length === props.disabled[module.id]?.length;
 }
 
 function checkedAll(event: Event, module: Module) {
@@ -42,7 +50,7 @@ function setDefaultValue(values: { [key: number]: number[] }) {
     if (values) {
         for (const key in values) {
             const module = data.modules.find((item: Module) => item.id === Number(key));
-            if (module) {
+            if (module && values[key].length) {
                 permissions.value[key] = values[key];
             }
         }
@@ -58,6 +66,7 @@ function setDisabled(module: Module, permission: Permission) {
 }
 
 onMounted(() => {
+    permissions.value = {};
     axios
         .get(route("ajax.modules.index"))
         .then((res) => {

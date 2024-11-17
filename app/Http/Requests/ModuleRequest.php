@@ -9,6 +9,7 @@ class ModuleRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'code' => ['required'],
             'name' => ['required'],
             'status' => ['required'],
             'permissions' => ['required'],

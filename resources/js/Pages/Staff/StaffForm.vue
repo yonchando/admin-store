@@ -11,10 +11,10 @@ import { Staff } from "@/types/models/staff";
 import Permission from "@/Components/Permission/Permission.vue";
 import { Paginate } from "@/types/paginate";
 import { Role } from "@/types/models/role";
+import _ from "lodash";
 
 const props = defineProps<{
     staff: Staff;
-    permissions: number[][];
     statuses: [];
     gender: [];
     roles: Paginate<Role>;
@@ -29,8 +29,8 @@ const form: any = useForm({
     position: "",
     profile: "",
     status: "active",
-    permissions: {} as { [key: number]: number[] },
-    roles: [] as number[],
+    permission_ids: {} as { [key: number]: number[] },
+    role_ids: [] as number[],
 });
 
 const disabled = ref<{ [key: number]: number[] }>({});
@@ -63,21 +63,17 @@ function submit() {
 }
 
 function selectRole() {
-    let roles = props.roles.data.filter((item) => form.roles.includes(item.id));
+    let roles = props.roles.data.filter((item) => form.role_ids.includes(item.id));
 
     disabled.value = {};
     for (const role of roles) {
-        for (const module_id in role.permission_ids) {
-            if (typeof disabled.value[module_id] === "undefined") {
-                disabled.value[module_id] = role.permission_ids[module_id];
-            } else {
-                let permissions = role.permission_ids[module_id] as number[];
-                for (const permission of permissions) {
-                    if (!disabled.value[module_id].includes(permission)) {
-                        disabled.value[module_id].push(permission);
-                    }
-                }
+        for (const module_id in role.permission_id_by_module_keys) {
+            let value: Array<number> = [];
+            if (typeof disabled.value[module_id] !== "undefined") {
+                value = disabled.value[module_id];
             }
+
+            disabled.value[module_id] = _.uniq([...value, ...role.permission_id_by_module_keys[module_id]]);
         }
     }
 }
@@ -89,6 +85,9 @@ onMounted(() => {
                 form[key] = props.staff[key as keyof Staff];
             }
         }
+
+        form.role_ids = props.staff.roles?.map((item) => item.id);
+        selectRole();
     }
 });
 </script>
@@ -153,7 +152,7 @@ onMounted(() => {
                     <h2 class="text-xl">Role</h2>
                     <Select
                         multiple
-                        v-model="form.roles"
+                        v-model="form.role_ids"
                         @change="selectRole"
                         :options="roles.data"
                         :paginate="roles"
@@ -165,7 +164,10 @@ onMounted(() => {
                     <h2 class="text-xl">Permission</h2>
                 </div>
 
-                <Permission :values="permissions" :disabled="disabled" v-model="form.permissions" />
+                <Permission
+                    :values="staff.permission_id_by_module_keys"
+                    :disabled="disabled"
+                    v-model="form.permission_ids" />
             </div>
         </form>
     </AppLayout>

@@ -168,7 +168,7 @@ const inputSearch = _.debounce(function (e: Event) {
                     <template v-for="column in columns">
                         <td
                             v-bind="rowProps"
-                            @dblclick="$emit('row-dbclick', item)"
+                            @dblclick="$emit('rowDbclick', item)"
                             @click="selectRow = selectRow?.id == item.id ? null : item"
                             :class="[selectRow?.id == item.id ? 'active' : '']"
                             class="column">

@@ -13,6 +13,7 @@ export interface Permission {
 }
 export interface Module {
     id: number;
+    code: string;
     name: string;
     status: string;
     status_text: string;

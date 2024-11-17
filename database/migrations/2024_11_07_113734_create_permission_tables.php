@@ -19,7 +19,9 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->string('name');
+            $table->integer('order_column');
             $table->string('status', 50)->default(ModuleStatusEnum::ACTIVE->value);
             $table->timestamps();
         });
@@ -28,6 +30,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('code');
             $table->string('name');
+            $table->integer('order_column');
             $table->string('guard_name');
             $table->timestamps();
 
@@ -51,9 +54,6 @@ return new class extends Migration
             $table->string('model_type');
             $table->foreignIdFor(Staff::class, 'model_id')->constrained()->cascadeOnDelete();
             $table->index(['model_id', 'model_type'], 'model_has_permissions_model_id_model_type_index');
-
-            $table->primary(['permission_id', 'model_id', 'model_type'],
-                'model_has_permissions_permission_model_type_primary');
         });
 
         Schema::create('model_has_roles',
@@ -62,8 +62,10 @@ return new class extends Migration
 
                 $table->string('model_type');
                 $table->unsignedBigInteger('model_id');
-                $table->index(['model_id', 'model_type'],
-                    'model_has_roles_model_id_model_type_index');
+                $table->index(
+                    ['model_id', 'model_type'],
+                    'model_has_roles_model_id_model_type_index'
+                );
 
                 $table->primary(['role_id', 'model_id', 'model_type'],
                     'model_has_roles_role_model_type_primary');

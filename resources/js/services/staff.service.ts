@@ -21,7 +21,7 @@ export const columns: Column<Staff>[] = [
         label: "Gender",
         field: "gender",
         props: {
-            class: "w-48",
+            class: "w-48 capitalize",
         },
     },
     {

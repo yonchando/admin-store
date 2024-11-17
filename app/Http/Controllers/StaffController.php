@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\GenderEnum;
 use App\Enums\Staff\StaffStatusEnum;
 use App\Http\Requests\User\StaffRequest;
-use App\Models\Staff;
 use App\Services\RoleService;
 use App\Services\StaffService;
 use Illuminate\Http\Request;
@@ -49,14 +48,38 @@ class StaffController extends Controller
             ->with('success', __('lang.created_success', ['attribute' => __('lang.staff')]));
     }
 
+    public function show($id)
+    {
+        $staff = $this->staffService->find($id);
+        $staff->load(['roles']);
+
+        return Inertia::render('Staff/StaffShow', [
+            'staff' => $staff,
+            'roles' => $this->roleService->paginate([
+                'includes' => [
+                    'permissions' => function ($query) {
+                        return $query->ordered();
+                    },
+                ],
+            ]),
+        ]);
+    }
+
     public function edit($id)
     {
-        $user = $this->staffService->find($id);
+        $staff = $this->staffService->find($id);
+        $staff->load(['roles']);
 
         return Inertia::render('Staff/StaffForm', [
-            'staff' => $user,
+            'staff' => $staff,
             'gender' => GenderEnum::toArray(),
             'statuses' => StaffStatusEnum::toArray(),
+            'roles' => $this->roleService->paginate([
+                'includes' => [
+                    'permissions' => function ($query) {
+                        return $query->ordered();
+                    }],
+            ]),
         ]);
     }
 
@@ -70,11 +93,19 @@ class StaffController extends Controller
             ->with('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
     }
 
-    public function updateStatus(Staff $user)
+    public function updateRolePermission(Request $request, $id)
     {
-        $this->staffService->updateStatus($user);
+        $request->validate([
+            'role_ids' => ['nullable', 'array'],
+            'role_ids.*' => 'exists:roles,id',
+            'permission_ids' => ['nullable', 'array'],
+        ]);
 
-        return redirect()->back()
+        $user = $this->staffService->find($id);
+
+        $this->staffService->updateRolePermission($user, $request);
+
+        return to_route('staff.show', $id)
             ->with('success', __('lang.updated_success', ['attribute' => __('lang.staff')]));
     }
 
@@ -88,7 +119,7 @@ class StaffController extends Controller
 
         $this->staffService->destroy($ids);
 
-        return redirect()->back()
+        return redirect()->route('staff.index')
             ->with('success', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
     }
 }

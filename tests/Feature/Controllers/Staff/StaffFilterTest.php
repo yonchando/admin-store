@@ -4,18 +4,22 @@ use App\Enums\Staff\StaffStatusEnum;
 use App\Models\Staff;
 use Inertia\Testing\AssertableInertia;
 
+beforeEach(function () {
+    asUser();
+});
+
 it('can search by username or name', function () {
     Staff::factory(3)->create();
     $user = Staff::factory()->create();
 
     $filters = [
-        'search_text' => $user->name,
+        'search' => $user->name,
     ];
 
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Staff/Index')
+            fn (AssertableInertia $page) => $page->component('Staff/StaffIndex')
                 ->has('staffs.data', 1)
         );
 });
@@ -33,25 +37,25 @@ it('can filter by gender', function () {
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Staff/Index')
+            fn (AssertableInertia $page) => $page->component('Staff/StaffIndex')
                 ->has('staffs.data', 1)
         );
 });
 
 it('can filter by status', function () {
 
-    Staff::factory(3)->female()->create();
+    Staff::factory(3)->active()->create();
 
-    $user = Staff::factory()->status(StaffStatusEnum::INACTIVE->name)->create();
+    $inactives = Staff::factory(2)->status(StaffStatusEnum::INACTIVE)->create();
 
     $filters = [
-        'status' => $user->status,
+        'status' => StaffStatusEnum::INACTIVE->value,
     ];
 
     $this->get(route('staff.index', $filters))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Staff/Index')
-                ->has('staffs.data', 1)
+            fn (AssertableInertia $page) => $page->component('Staff/StaffIndex')
+                ->has('staffs.data', $inactives->count())
         );
 });

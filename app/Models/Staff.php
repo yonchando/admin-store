@@ -7,7 +7,10 @@ use App\Enums\Staff\StaffStatusEnum;
 use App\Models\Concerns\Staff\HasAttributes;
 use App\Models\Concerns\Staff\HasRelationships;
 use App\Models\Concerns\Staff\HasScopes;
+use App\Traits\HasPermission;
+use App\Traits\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -16,8 +19,11 @@ class Staff extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasAttributes;
+    use HasPermission;
     use HasRelationships;
     use HasScopes;
+    use HasTimestamps;
+    use SoftDeletes;
 
     protected $table = 'staffs';
 
@@ -45,7 +51,7 @@ class Staff extends Authenticatable
         'status' => StaffStatusEnum::class,
     ];
 
-    protected $appends = ['status_text'];
+    protected $appends = ['status_text', 'permission_id_by_module_keys'];
 
     public function assignRole(mixed $roles): void
     {
@@ -55,22 +61,5 @@ class Staff extends Authenticatable
     public function syncRole(mixed $roles): void
     {
         $this->roles()->sync($roles);
-    }
-
-    public function givePermissionTo($module_id, mixed $permission): void
-    {
-        $this->permissions()->attach($permission, ['module_id' => $module_id]);
-    }
-
-    public function revokePermissionTo($permissions): void
-    {
-        $this->permissions()->detach($permissions);
-    }
-
-    public function syncPermissions($module_id, mixed $permission): void
-    {
-        $this->permissions()->detach($this->permissions);
-
-        $this->givePermissionTo($module_id, $permission);
     }
 }

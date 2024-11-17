@@ -8,7 +8,7 @@ use App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Inertia\Testing\AssertableInertia;
 
-use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\get;
 use function Pest\Laravel\put;
 
@@ -64,40 +64,40 @@ describe('create staff', function () {
     });
 
     it('can create staff with role and permission', function () {
+        $permissions = initPermissions();
         $other = Module::factory()->create();
-        $otherPermissions = Permission::factory(4)->create();
-        Role::factory()->hasAttached($otherPermissions, ['module_id' => $other->id])->create();
+        Role::factory()->hasAttached($permissions, ['module_id' => $other->id])->create();
 
         $user = Staff::factory()->make([
             'username' => 'user',
         ]);
 
-        $module = Module::factory()->create([
-            'name' => 'User',
-        ]);
-        $permissionsFromRoleManager = Permission::factory(4)->create();
-        $roleManager = Role::factory()
-            ->hasAttached($permissionsFromRoleManager, ['module_id' => $module->id])
+        $module = Module::factory()
+            ->hasAttached($permissions)
+            ->create([
+                'name' => 'User',
+            ]);
+        $role = Role::factory()
+            ->hasAttached($permissions->whereIn('code', ['READ', 'CREATE']), ['module_id' => $module->id])
             ->active()
             ->create();
 
-        $permissionsFromRoleOfficer = Permission::factory(2)->create();
-        $roleOfficer = Role::factory()
-            ->hasAttached($permissionsFromRoleOfficer, ['module_id' => $module->id])
+        $roleOther = Role::factory()
+            ->hasAttached($permissions->whereIn('code', ['READ', 'CREATE']), ['module_id' => $other->id])
             ->active()
             ->create();
-
-        $moduleUser = Module::factory()->create([
-            'name' => 'Role',
-        ]);
-        $permissions = Permission::factory(2)->create();
 
         $form = $user->toArray();
         $form['password'] = 'password';
         $form['password_confirmation'] = 'password';
         $form['status'] = StaffStatusEnum::ACTIVE->value;
-        $form['role_ids'] = [$roleManager->id, $roleOfficer->id];
-        $form['permission_ids'] = [$moduleUser->id => $permissions->pluck('id')->toArray()];
+        $form['role_ids'] = [$role->id, $roleOther->id];
+        $form['permission_ids'] = [
+            $module->id => $permissions->whereIn('code', ['READ', 'CREATE', 'UPDATE', 'DELETE'])
+                ->pluck('id')
+                ->toArray(),
+            $other->id => $permissions->whereIn('code', ['READ', 'CREATE', 'DELETE'])->pluck('id')->toArray(),
+        ];
 
         $this->post(route('staff.store'), $form)
             ->assertRedirect(route('staff.index'))
@@ -107,10 +107,10 @@ describe('create staff', function () {
 
         expect($staff)->not()->toBeNull()
             ->and($staff->roles->pluck('id')->toArray())->toEqual($form['role_ids'])
-            ->and($staff->permissions->pluck('id')->toArray())->toBe([
-                ...$roleManager->permissions->pluck('id'),
-                ...$roleOfficer->permissions->pluck('id'),
-                ...$permissions->pluck('id'),
+            ->and($staff->permissions->pluck('id')->toArray())
+            ->toBe([
+                ...$permissions->whereIn('code', ['UPDATE', 'DELETE'])->pluck('id')->toArray(),
+                ...$permissions->whereIn('code', ['DELETE'])->pluck('id')->toArray(),
             ]);
     });
 });
@@ -155,24 +155,23 @@ describe('edit staff', function () {
         $role = Role::factory()->givePermissions($module)->create(['code' => 'user']);
         $staff = Staff::factory()->create();
         $staff->assignRole([$role->id]);
-        $staff->givePermissionTo($module->id, $role->permissions);
-        $staff->givePermissionTo(Module::factory()->create()->id, Permission::factory(2)->create(
-            new Sequence(
-                ['code' => 'VIEW'],
-                ['code' => 'CREATE']
-            )
-        ));
-
-        $moduleRole = Module::factory()->create(['name' => 'Role']);
-        $roleUpdated = Role::factory()->hasAttached($permissions->take(2), ['module_id' => $moduleRole->id])
-            ->create(['code' => 'admin']);
-        $permissions = Permission::factory(2)
+        $staff->givePermissionTo(Module::factory()->create()->id, Permission::factory(2)
             ->create(
                 new Sequence(
-                    ['code' => 'READ'],
-                    ['code' => 'UPDATE']
+                    ['code' => 'VIEW'],
+                    ['code' => 'CREATE']
                 )
-            );
+            ));
+
+        $moduleRole = Module::factory()->create(['name' => 'Role']);
+        $roleUpdated = Role::factory()
+            ->hasAttached($permissions->take(2), ['module_id' => $moduleRole->id])
+            ->create(['code' => 'admin']);
+        $permissions = Permission::factory(2)
+            ->create(new Sequence(
+                ['code' => 'READ'],
+                ['code' => 'UPDATE']
+            ));
         $data = [
             'name' => $staff->name,
             'username' => $staff->username,
@@ -192,8 +191,7 @@ describe('edit staff', function () {
 
         expect($perms->toArray())->toEqual([
             $module->id => $permissions->pluck('id')->toArray(),
-            $moduleRole->id => $roleUpdated->permissions->pluck('id')->toArray(),
-        ]);
+        ])->and($updated->roles->pluck('id')->toArray())->toEqual([$roleUpdated->id]);
     });
 });
 
@@ -207,5 +205,5 @@ test('delete staff', function () {
     ])->assertRedirect(route('staff.index'))
         ->assertSessionHas('success', __('lang.deleted_success', ['attribute' => __('lang.staff')]));
 
-    assertModelMissing($staff);
+    assertSoftDeleted($staff);
 });

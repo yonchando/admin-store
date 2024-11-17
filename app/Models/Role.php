@@ -6,15 +6,16 @@ use App\Enums\Role\RoleStatusEnum;
 use App\Models\Concerns\Role\HasAttributes;
 use App\Models\Concerns\Role\HasRelationships;
 use App\Models\Concerns\Role\HasScopes;
+use App\Traits\HasPermission;
 use App\Traits\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 class Role extends Model
 {
     use HasAttributes;
     use HasFactory;
+    use HasPermission;
     use HasRelationships;
     use HasScopes;
     use HasTimestamps;
@@ -27,7 +28,7 @@ class Role extends Model
 
     protected $appends = [
         'status_text',
-        'permission_ids',
+        'permission_id_by_module_keys',
     ];
 
     protected function casts(): array
@@ -35,20 +36,5 @@ class Role extends Model
         return [
             'status' => RoleStatusEnum::class,
         ];
-    }
-
-    public function givePermissionTo(int|string $key, mixed $permission): void
-    {
-        $this->permissions()->attach($permission, ['module_id' => $key]);
-    }
-
-    /**
-     * Get permission ids with module id as key
-     *
-     * @return Collection<numeric>
-     */
-    public function getPermissionIds(): Collection
-    {
-        return $this->permissions->groupBy('module.module_id')->map(fn ($item) => $item->pluck('id')->values());
     }
 }

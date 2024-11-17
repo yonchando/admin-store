@@ -12,6 +12,7 @@ class ModuleFactory extends Factory
     public function definition(): array
     {
         return [
+            'code' => $this->faker->word,
             'name' => $this->faker->word,
             'status' => 'active',
         ];

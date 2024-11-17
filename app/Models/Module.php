@@ -9,12 +9,16 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Module extends Model
+class Module extends Model implements Sortable
 {
     use HasFactory;
+    use SortableTrait;
 
     protected $fillable = [
+        'code',
         'name',
         'status',
     ];

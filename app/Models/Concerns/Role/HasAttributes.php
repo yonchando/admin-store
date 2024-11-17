@@ -11,17 +11,12 @@ trait HasAttributes
     {
         return Attribute::make(
             get: fn ($value) => $value,
-            set: fn ($value) => Str::upper(Str::snake($value))
+            set: fn ($value) => Str::upper(Str::snake(strtolower($value)))
         );
     }
 
     public function statusText(): Attribute
     {
         return Attribute::get(fn () => __("lang.{$this->status->value}"));
-    }
-
-    public function permissionIds(): Attribute
-    {
-        return Attribute::get(fn () => $this->getPermissionIds());
     }
 }

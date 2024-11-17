@@ -17,6 +17,7 @@ const props = defineProps<{
 }>();
 
 const form = useForm({
+    code: props.module?.code ?? "",
     name: props.module?.name ?? "",
     permissions: [] as Array<any>,
     status: props.module?.status ?? "active",
@@ -60,7 +61,11 @@ onMounted(() => {
         <form @submit.prevent="submit">
             <div class="flex flex-col gap-4">
                 <div>
-                    <TextInput autofocus label="Name" tabindex="1" v-model="form.name" />
+                    <TextInput autofocus label="Code" tabindex="1" v-model="form.code" />
+                    <InputError :message="form.errors.code" />
+                </div>
+                <div>
+                    <TextInput autofocus label="Name" tabindex="2" v-model="form.name" />
                     <InputError :message="form.errors.name" />
                 </div>
                 <div>

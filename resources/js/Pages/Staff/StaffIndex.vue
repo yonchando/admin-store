@@ -7,27 +7,41 @@ import staffService from "@/services/staff.service";
 import { Column } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
 defineProps<{
     staffs: Paginate<Staff>;
 }>();
 
-const selectRows = ref();
+const selectRows = ref([]);
 const columns: Column<Staff>[] = staffService.columns;
 
-const { add, refresh, remove } = useAction();
+const actions = computed(() => {
+    const { add, refresh, remove } = useAction();
 
-add.props.onClick = () => router.get(route("staff.create"));
+    add.props.onClick = () => router.get(route("staff.create"));
 
-const actions = [add, refresh, remove];
+    remove.props.disabled = selectRows.value.length === 0;
+
+    return [add, refresh, remove];
+});
+
+function show(staff: Staff) {
+    router.get(route("staff.show", staff.id));
+}
 </script>
 
 <template>
     <AppLayout :actions="actions" title="Staff Lists">
         <template #header> Staff Lists </template>
-        <DataTable :values="staffs.data" v-model:checked="selectRows" :paginate="staffs" :columns="columns" checkbox>
+        <DataTable
+            :values="staffs.data"
+            v-model:checked="selectRows"
+            :paginate="staffs"
+            @rowDbclick="show"
+            :columns="columns"
+            checkbox>
             <template #actions="{ item }">
                 <ButtonGroup>
                     <Button size="xs" :href="route('staff.show', item.id)" severity="info">View</Button>

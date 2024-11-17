@@ -2,14 +2,13 @@
 
 return [
     'permissions' => [
-        'c' => 'create',
         'r' => 'read',
+        'c' => 'create',
         'u' => 'update',
         'd' => 'delete',
     ],
 
     'modules' => [
-        'dashboard' => ['c', 'r', 'u', 'd'],
         'category' => ['c', 'r', 'u', 'd'],
         'product' => ['c', 'r', 'u', 'd'],
         'customer' => ['c', 'r', 'u', 'd'],

@@ -3,7 +3,7 @@ import { computed } from "vue";
 
 const props = withDefaults(
     defineProps<{
-        size?: "xs" | "sm" | "default" | "md" | "lg" | "xl";
+        size?: "sm" | "default" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         type: "outline" | "fill";
     }>(),
@@ -16,12 +16,11 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        xs: "text-xxs",
-        sm: "text-xs",
-        default: "text-sm",
-        md: "text-base",
-        lg: "text-lg",
-        xl: "text-xl",
+        sm: "text-xs px-2 py-1.5",
+        default: "text-sm px-2.5 py-1.5",
+        md: "text-base px-3 py-1.5",
+        lg: "text-xl px-3.5 py-1.5",
+        xl: "text-2xl px-4 py-1.5",
     }[props.size];
 });
 
@@ -38,7 +37,7 @@ const className = computed(() => {
 </script>
 
 <template>
-    <span :class="[sizeClass, className]" class="rounded px-1.5 py-1">
+    <span :class="[sizeClass, className]" class="rounded">
         <slot />
     </span>
 </template>

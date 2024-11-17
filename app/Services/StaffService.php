@@ -2,20 +2,23 @@
 
 namespace App\Services;
 
-use App\Enums\Staff\StaffStatusEnum;
 use App\Http\Requests\User\StaffRequest;
-use App\Models\Role;
+use App\Models\RoleHasPermission;
 use App\Models\Staff;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Hash;
 
 class StaffService
 {
     public function get(Request $request): Collection
     {
         return Staff::isNotAdmin()->filters($request->all())->get();
+    }
+
+    public function find($id): ?Staff
+    {
+        return Staff::findOrFail($id);
     }
 
     public function paginate(Request $request): LengthAwarePaginator
@@ -33,22 +36,21 @@ class StaffService
         $staff->fill($request->safe()->except(['roles', 'permissions', 'profile']));
         $staff->save();
 
-        if ($request->get('role_ids')) {
-            $staff->assignRole($request->get('role_ids'));
+        $staff->assignRole($request->get('role_ids'));
 
-            $staff->roles->each(function (Role $role) use ($staff) {
-                $permissions = $role->permissions->groupBy('module.module_id');
+        $roleHasPermissions = RoleHasPermission::whereIn('role_id', $staff->roles->pluck('id'))->get();
 
-                foreach ($permissions as $key => $permission) {
-                    $staff->givePermissionTo($key, $permission);
-                }
+        $permissions = collect($request->get('permission_ids', []))
+            ->map(function ($permission_ids, $module_id) use ($roleHasPermissions) {
+                $item = $roleHasPermissions->groupBy('module_id')->map(function ($item) {
+                    return $item->pluck('permission_id')->toArray();
+                });
+
+                return array_diff($permission_ids, $item->get($module_id));
             });
-        }
 
-        if ($request->get('permission_ids')) {
-            foreach ($request->get('permission_ids') as $moduleId => $permission) {
-                $staff->givePermissionTo($moduleId, $permission);
-            }
+        foreach ($permissions as $moduleId => $permission) {
+            $staff->givePermissionTo($moduleId, $permission);
         }
 
         return $staff;
@@ -66,34 +68,7 @@ class StaffService
 
         $staff->load('roles.permissions');
 
-        $rolePermissions = $staff->roles->flatMap(fn ($item) => $item->permissions->pluck('id'));
-
-        if ($request->get('role_ids')) {
-            foreach ($staff->roles as $role) {
-                $staff->revokePermissionTo($role->permissions);
-            }
-
-            $staff->syncRole($request->get('role_ids'));
-
-            $staff->refresh();
-
-            $staff->roles->each(function (Role $role) use ($staff) {
-                $permissions = $role->permissions->groupBy('module.module_id');
-
-                foreach ($permissions as $key => $permission) {
-                    $staff->givePermissionTo($key, $permission);
-                }
-            });
-        }
-
-        if ($request->get('permission_ids')) {
-            $permissionIds = $staff->permissions()->whereNotIn('id', $rolePermissions->toArray())->get();
-            $staff->revokePermissionTo($permissionIds);
-
-            foreach ($request->get('permission_ids') as $moduleId => $permission) {
-                $staff->givePermissionTo($moduleId, $permission);
-            }
-        }
+        $this->updateRolePermission($staff, $request);
 
         return $staff;
     }
@@ -103,23 +78,27 @@ class StaffService
         return Staff::destroy($ids);
     }
 
-    public function updatePassword(Request $request, Staff $user): Staff
+    public function updateRolePermission(Staff $staff, Request $request): void
     {
-        $user->password = Hash::make($request->get('password'));
-        $user->save();
+        $staff->syncRole($request->get('role_ids'));
 
-        return $user;
-    }
+        $staff->refresh();
 
-    public function updateStatus(Staff $user): bool
-    {
-        $user->status = $user->status === StaffStatusEnum::ACTIVE ? StaffStatusEnum::INACTIVE : StaffStatusEnum::ACTIVE;
+        $staff->revokePermissionTo($staff->permissions);
 
-        return $user->save();
-    }
+        $roleHasPermissions = RoleHasPermission::whereIn('role_id', $staff->roles->pluck('id'))->get();
 
-    public function find($id): ?Staff
-    {
-        return Staff::findOrFail($id);
+        $permissions = collect($request->get('permission_ids', []))
+            ->map(function ($permission_ids, $module_id) use ($roleHasPermissions) {
+                $item = $roleHasPermissions->groupBy('module_id')->map(function ($item) {
+                    return $item->pluck('permission_id')->toArray();
+                });
+
+                return array_diff($permission_ids, $item->get($module_id) ?? []);
+            });
+
+        foreach ($permissions as $moduleId => $permission) {
+            $staff->givePermissionTo($moduleId, $permission);
+        }
     }
 }

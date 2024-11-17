@@ -44,14 +44,14 @@ class RoleController extends Controller
 
         return Inertia::render('Role/RoleShow', [
             'role' => $role,
-            'permissions' => $role->getPermissionIds(),
+            'permissions' => $role->getPermissionIdGroupByModule(),
         ]);
     }
 
     public function edit($id)
     {
         $role = $this->roleService->find($id);
-        $permissions = $role->getPermissionIds()->toArray();
+        $permissions = $role->getPermissionIdGroupByModule()->toArray();
 
         return Inertia::render('Role/RoleForm', [
             'statuses' => RoleStatusEnum::toArray(),

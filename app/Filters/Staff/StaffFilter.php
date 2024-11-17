@@ -25,4 +25,9 @@ class StaffFilter extends FilterBuilder
     {
         $this->builder->where('gender', $value);
     }
+
+    public function status($value): void
+    {
+        $this->builder->where('status', $value);
+    }
 }
