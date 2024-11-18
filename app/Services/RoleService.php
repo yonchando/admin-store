@@ -80,4 +80,9 @@ class RoleService
 
         return $role;
     }
+
+    public function destroy(mixed $ids): void
+    {
+        Role::destroy($ids);
+    }
 }

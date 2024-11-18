@@ -35,7 +35,7 @@ class RoleController extends Controller
     {
         $this->roleService->store($request);
 
-        return to_route('role.index')->with('success', __('lang.created_success', ['attribute' => 'role']));
+        return to_route('role.index')->with('success', __('lang.created_success', ['attribute' => __('lang.role')]));
     }
 
     public function show($id)
@@ -65,7 +65,7 @@ class RoleController extends Controller
     {
         $this->roleService->update($request, $id);
 
-        return to_route('role.show', $id)->with('success', __('lang.updated_success', ['attribute' => 'role']));
+        return to_route('role.show', $id)->with('success', __('lang.updated_success', ['attribute' => __('lang.role')]));
     }
 
     public function patchPermissions(Request $request, $id)
@@ -79,5 +79,16 @@ class RoleController extends Controller
         return back()->with('success', __('lang.updated_success', ['attribute' => 'Permissions']));
     }
 
-    public function destroy($id) {}
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => 'exists:roles,id',
+        ]);
+
+        $this->roleService->destroy($request->get('ids'));
+
+        return to_route('role.index')
+            ->with('success', __('lang.deleted_success', ['attribute' => __('lang.role')]));
+    }
 }

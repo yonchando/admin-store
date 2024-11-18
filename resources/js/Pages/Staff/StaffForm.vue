@@ -165,7 +165,7 @@ onMounted(() => {
                 </div>
 
                 <Permission
-                    :values="staff.permission_id_by_module_keys"
+                    :values="staff?.permission_id_by_module_keys"
                     :disabled="disabled"
                     v-model="form.permission_ids" />
             </div>

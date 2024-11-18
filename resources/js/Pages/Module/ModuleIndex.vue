@@ -4,13 +4,33 @@ import { Column } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import useAction from "@/services/action.service";
 import Alert from "@/Components/Alert/Alert.vue";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
 import moduleService from "@/services/module.service";
 import { Module } from "@/types/models/module";
 import ModuleForm from "@/Pages/Module/ModuleForm.vue";
+import { useAlertStore } from "@/services/helper.service";
 
-const props = defineProps<{
+const alert = useAlertStore();
+alert.confirm = () => {
+    const ids = selectRows.value;
+
+    if (module.value && !ids.includes(module.value?.id)) {
+        ids.push(module.value?.id);
+    }
+
+    useForm({
+        ids,
+    }).delete(route("module.destroy"), {
+        onFinish: () => {
+            alert.$reset();
+            module.value = null;
+            selectRows.value = [];
+        },
+    });
+};
+
+defineProps<{
     data: Module[];
     sort: any;
     statuses: Array<string>;
@@ -37,9 +57,9 @@ const actions = computed(() => {
 
     refresh.props.onClick = getData;
 
-    remove.props.disabled = module.value == null && selectRows.value.length === 0;
+    remove.props.disabled = selectRows.value.length === 0;
     remove.props.onClick = () => {
-        confirmed.value = true;
+        alert.open();
     };
 
     return [add, refresh, remove];
@@ -66,28 +86,9 @@ function edit(item: Module) {
     module.value = item;
 }
 
-function remove(item: Module) {
-    confirmed.value = true;
+function destroy(item: Module) {
+    alert.open();
     module.value = item;
-}
-
-function destroy() {
-    const ids = selectRows.value;
-
-    if (module.value && !ids.includes(module.value?.id)) {
-        ids.push(module.value?.id);
-    }
-
-    router.delete(route("module.destroy"), {
-        data: {
-            ids,
-        },
-        onSuccess: () => {
-            confirmed.value = false;
-            module.value = null;
-            selectRows.value = [];
-        },
-    });
 }
 </script>
 
@@ -113,7 +114,7 @@ function destroy() {
                     <Button size="xs" @click="edit(item)" severity="warning">
                         <i class="fa fa-pencil"></i>
                     </Button>
-                    <Button size="xs" @click="remove(item)" severity="error">
+                    <Button size="xs" @click="destroy(item)" severity="error">
                         <i class="fa fa-trash"></i>
                     </Button>
                 </ButtonGroup>
@@ -126,14 +127,6 @@ function destroy() {
             :permissions="permissions"
             :statuses="statuses"
             :module="module" />
-
-        <Alert
-            @confirmed="destroy()"
-            type="warning"
-            title="Are you sure?"
-            text="Do you want to delete this?"
-            v-model:show="confirmed"
-            confirm-button-type="error" />
     </AppLayout>
 </template>
 

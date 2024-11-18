@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        sm: "text-xs px-2 py-1.5",
+        sm: "text-xs px-2 py-1",
         default: "text-sm px-2.5 py-1.5",
         md: "text-base px-3 py-1.5",
         lg: "text-xl px-3.5 py-1.5",

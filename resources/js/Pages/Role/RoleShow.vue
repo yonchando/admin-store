@@ -26,7 +26,9 @@ const { role } = defineProps<{
 const confirmed = ref(false);
 
 const actions = computed(() => {
-    const { edit, remove } = useAction();
+    const { save, edit, remove } = useAction();
+
+    save.props.onClick = updatePermission;
 
     edit.props.onClick = () => {
         router.get(route("role.edit", role.id));
@@ -36,7 +38,7 @@ const actions = computed(() => {
         confirmed.value = true;
     };
 
-    return [edit, remove];
+    return [save, edit, remove];
 });
 
 const columns: Column<Role>[] = roleService.columns;
@@ -79,7 +81,6 @@ function destroy() {
 
             <div class="mt-6 flex items-center justify-between">
                 <h3 class="text-xl">Permissions</h3>
-                <Button @click="updatePermission" severity="primary">Save</Button>
             </div>
 
             <div>

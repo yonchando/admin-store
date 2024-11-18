@@ -4,6 +4,7 @@ import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import { Action } from "@/types/button";
 import { onMounted, watch } from "vue";
 import StartToastifyInstance from "toastify-js";
+import Alert from "@/Components/Alert/Alert.vue";
 
 defineProps<{
     title?: string;
@@ -82,4 +83,6 @@ onMounted(() => {
             </div>
         </div>
     </div>
+
+    <Alert />
 </template>

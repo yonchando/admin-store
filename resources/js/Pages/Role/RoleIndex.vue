@@ -6,23 +6,42 @@ import { Staff } from "@/types/models/staff";
 import { Column } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
-import { onMounted, ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { computed, onMounted, ref } from "vue";
+import { router, useForm } from "@inertiajs/vue3";
 import roleService from "@/services/role.service";
 import { Role } from "@/types/models/role";
+import { useAlertStore } from "@/services/helper.service";
 
-const props = defineProps<{
+defineProps<{
     roles: Paginate<Staff>;
 }>();
 
-const selectRows = ref();
+const selectRows = ref([]);
 const columns: Column<Role>[] = roleService.columns;
 
-const { add, refresh, remove } = useAction();
+const actions = computed(() => {
+    const { add, refresh, remove } = useAction();
 
-add.props.onClick = () => router.get(route("role.create"));
+    add.props.onClick = () => router.get(route("role.create"));
 
-const actions = [add, refresh, remove];
+    remove.props.disabled = selectRows.value.length === 0;
+    remove.props.onClick = () => {
+        const alert = useAlertStore();
+        alert.open();
+
+        alert.confirm = () => {
+            useForm({
+                ids: selectRows.value,
+            }).delete(route("role.destroy"), {
+                onFinish: () => {
+                    alert.$reset();
+                    selectRows.value = [];
+                },
+            });
+        };
+    };
+    return [add, refresh, remove];
+});
 
 onMounted(() => {});
 </script>

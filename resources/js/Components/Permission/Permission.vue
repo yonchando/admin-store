@@ -25,7 +25,6 @@ function isCheckedAll(module: Module) {
         props.disabled[module.id] &&
         module.permissions?.length === _.uniq([...props.disabled[module.id], ...permissions.value[module.id]]).length
     ) {
-        console.log(props.disabled[module.id], module.name);
         return true;
     }
 
