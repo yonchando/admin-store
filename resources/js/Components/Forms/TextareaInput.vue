@@ -9,7 +9,7 @@ defineOptions({
 const props = withDefaults(
     defineProps<{
         label?: string;
-        direction: "horizontal" | "vertical";
+        direction?: "horizontal" | "vertical";
         root?: any;
     }>(),
     {

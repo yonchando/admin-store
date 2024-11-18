@@ -61,7 +61,6 @@ export const columns: Column<Product>[] = [
         label: "Updated date",
         field: "updated_at",
         sortable: "updated_at",
-        notOnTable: true,
         props: {
             class: "w-48",
         },

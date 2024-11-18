@@ -19,8 +19,8 @@ const props = withDefaults(
         url?: string;
         showSearch?: boolean;
         paginate?: Paginate<any>;
-        labelInline: boolean;
-        tabindex: number | string;
+        labelInline?: boolean;
+        tabindex?: number | string;
         multiple?: boolean;
         maxSelected?: number;
         maxShow?: number;

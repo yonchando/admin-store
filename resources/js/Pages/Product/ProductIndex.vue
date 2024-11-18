@@ -8,14 +8,13 @@ import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
 import Alert from "@/Components/Alert/Alert.vue";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
-import { useDatatable } from "@/services/datatable.service";
 
 const props = defineProps<{
     products: Products;
     requests: any;
 }>();
 
-const columns: Column<Product>[] = useDatatable(productService.columns);
+const columns: Column<Product>[] = productService.columns;
 
 const selectRows = ref<Array<number>>([]);
 

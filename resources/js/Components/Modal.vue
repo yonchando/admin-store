@@ -11,7 +11,7 @@ const props = withDefaults(
         maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
         closeable?: boolean;
         title?: string;
-        position: "center" | "top" | "bottom" | "left-top" | "left-bottom" | "right-top" | "right-bottom";
+        position?: "center" | "top" | "bottom" | "left-top" | "left-bottom" | "right-top" | "right-bottom";
         actions?: Array<Action>;
     }>(),
     {

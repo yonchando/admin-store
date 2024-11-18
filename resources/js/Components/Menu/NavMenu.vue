@@ -7,7 +7,7 @@ import { ref } from "vue";
 const props = withDefaults(
     defineProps<{
         menus: Menu[];
-        padding: number;
+        padding?: number;
         active?: string;
     }>(),
     {

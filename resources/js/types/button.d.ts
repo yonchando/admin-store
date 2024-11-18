@@ -25,6 +25,6 @@ export interface Action {
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         href?: string;
         tabindex?: string;
-        class: string[] | string;
+        class?: string[] | string;
     };
 }

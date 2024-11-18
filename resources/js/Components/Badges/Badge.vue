@@ -5,7 +5,7 @@ const props = withDefaults(
     defineProps<{
         size?: "sm" | "default" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
-        type: "outline" | "fill";
+        type?: "outline" | "fill";
     }>(),
     {
         size: "sm",

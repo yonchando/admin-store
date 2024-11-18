@@ -11,6 +11,7 @@ declare global {
         axios: AxiosInstance;
         get: get;
         Cropper: Cropper;
+        __: __;
     }
 
     let __: __;
