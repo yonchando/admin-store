@@ -11,6 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function () {
+            Route::middleware('web')
+                ->prefix('ajax')
+                ->name('ajax.')
+                ->group(base_path('routes/ajax.php'));
+        }
     )
     ->withMiddleware(function (Middleware $middleware) {
         //

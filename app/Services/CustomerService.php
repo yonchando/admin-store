@@ -3,11 +3,10 @@
 namespace App\Services;
 
 use App\Models\Customer;
-use App\Services\Contracts\CustomerRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class CustomerRepository implements CustomerRepositoryInterface
+class CustomerService
 {
     public function paginate(Request $request): LengthAwarePaginator
     {

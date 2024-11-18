@@ -56,11 +56,6 @@ export default function useMenu() {
             isActive: isActive("product.index", "product.create", "product.show", "product.edit"),
         }),
         add({
-            title: "Purchase Orders",
-            url: route("product.index"),
-            icon: faCircleDollarToSlot,
-        }),
-        add({
             title: "Customers",
             url: route("product.index"),
             icon: faUserTie,

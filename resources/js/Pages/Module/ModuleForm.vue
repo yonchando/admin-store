@@ -65,7 +65,7 @@ onMounted(() => {
                     <InputError :message="form.errors.code" />
                 </div>
                 <div>
-                    <TextInput autofocus label="Name" tabindex="2" v-model="form.name" />
+                    <TextInput label="Name" tabindex="2" v-model="form.name" />
                     <InputError :message="form.errors.name" />
                 </div>
                 <div>

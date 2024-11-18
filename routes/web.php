@@ -7,7 +7,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
@@ -52,18 +51,6 @@ Route::middleware('auth')->group(function () {
             Route::put('update-status/{id}', 'updateStatus')->name('update.status');
 
             Route::delete('destroy', 'destroy')->name('destroy');
-        });
-
-    Route::prefix('purchase-order')
-        ->name('purchase.order.')
-        ->group(function () {
-            Route::get('/', [PurchaseOrderController::class, 'index'])->name('index');
-            Route::get('detail/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
-
-            Route::put(
-                'update-status/{purchaseOrder}',
-                [PurchaseOrderController::class, 'updateStatus']
-            )->name('update.status');
         });
 
     Route::prefix('customer')

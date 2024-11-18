@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Services\Contracts\CustomerRepositoryInterface;
+use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
     public function __construct(
-        private readonly CustomerRepositoryInterface $customerRepository,
+        private readonly CustomerService $customerService,
     ) {}
 
     public function index(Request $request)
     {
-        $customers = $this->customerRepository->paginate($request);
+        $customers = $this->customerService->paginate($request);
 
         return Inertia::render('Customer/Index', [
             'customers' => $customers,
@@ -24,7 +24,7 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        $customer = $this->customerRepository->find($customer->id);
+        $customer = $this->customerService->find($customer->id);
 
         return Inertia::render('Customer/Show', [
             'customer' => $customer,

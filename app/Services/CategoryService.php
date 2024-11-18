@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-readonly class CategoryService
+class CategoryService
 {
     public function __construct(
-        private Request $request,
+        private readonly Request $request,
     ) {}
 
     public function get(): Collection

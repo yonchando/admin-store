@@ -6,19 +6,13 @@ use App\Http\Requests\CardRequest;
 use App\Models\Card;
 use Illuminate\Database\Eloquent\Collection;
 
-class CardRepository implements Contracts\CardRepositoryInterface
+class CardService
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getAll(): Collection
     {
         return Card::get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAllByUserId(int $id): Collection
     {
         return Card::get();
