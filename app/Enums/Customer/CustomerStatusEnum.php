@@ -9,5 +9,5 @@ enum CustomerStatusEnum: string
     use HasEnumProperty;
 
     case ACTIVE = 'active';
-    case DISABLE = 'disable';
+    case INACTIVE = 'inactive';
 }

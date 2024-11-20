@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
+use App\Facades\Helper;
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerService
 {
@@ -12,21 +16,48 @@ class CustomerService
     {
         $query = Customer::query();
 
-        $query->withCount(['purchaseOrders']);
-
-        return $query->paginate($request->get('perPage', 25));
+        return $query->paginate($request->get('perPage', 20));
     }
 
     public function find(int $id): Customer
     {
-        $query = Customer::query();
+        return Customer::query()->find($id);
+    }
 
-        $query->with([
-            'purchaseOrders' => fn ($query) => $query->withCount(['purchaseDetails']),
-        ]);
+    public function store(CustomerRequest $request): Customer
+    {
+        $customer = new Customer($request->safe()->except('image'));
 
-        $query->withCount(['purchaseOrders']);
+        if ($request->hasFile('image')) {
+            $this->uploadImage($customer, $request->file('image'));
+        }
 
-        return $query->find($id);
+        $customer->save();
+
+        return $customer;
+    }
+
+    public function update(CustomerRequest $request, Customer $customer): Customer
+    {
+        $customer->fill($request->safe()->except('image', 'password', 'password_confirmation'));
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $this->uploadImage($customer, $file);
+        }
+
+        if ($request->get('password')) {
+            $customer->password = $request->get('password');
+        }
+
+        $customer->save();
+
+        return $customer;
+    }
+
+    private function uploadImage(Customer $customer, UploadedFile $file): void
+    {
+        Storage::putFileAs($customer->image->path, $file, $file->hashName());
+        $customer->image = Helper::imageInit($file, config('paths.customer_profile'));
     }
 }

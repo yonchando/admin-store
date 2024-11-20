@@ -2,13 +2,12 @@
 
 namespace App\Helpers;
 
-use App\Models\Setting;
-use App\Services\Contracts\SettingRepositoryInterface;
+use App\Casts\Images\ImageCast;
+use Illuminate\Http\UploadedFile;
 
-readonly class HelperService
+class HelperService
 {
     public function __construct(
-        private SettingRepositoryInterface $settingRepository,
     ) {}
 
     public function generateCardNumber($length = 16): string
@@ -27,8 +26,16 @@ readonly class HelperService
         return $cardNumber;
     }
 
-    public function setting(): ?Setting
+    public function imageInit(UploadedFile $file, string $path): ImageCast
     {
-        return $this->settingRepository->first();
+        $image = new ImageCast;
+
+        $image->filename = $file->hashName();
+        $image->path = $path;
+        $image->extension = $file->getClientOriginalExtension();
+        $image->originalName = $file->getClientOriginalName();
+        $image->url = \Storage::url($image->path.'/'.$image->filename);
+
+        return $image;
     }
 }

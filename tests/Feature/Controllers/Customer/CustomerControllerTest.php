@@ -1,45 +1,86 @@
 <?php
 
-
-use App\Enums\GenderEnum;
 use App\Models\Customer;
-use App\Models\PurchaseOrder;
-use App\Models\PurchaseOrderDetail;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\assertDatabaseHas;
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\postJson;
+use function Pest\Laravel\putJson;
+
+beforeEach(function () {
+    asUser();
+});
+
 test('customer listing', function () {
-    $first = Customer::factory()->has(PurchaseOrder::factory(3))->create([
-        'first_name' => 'Customer',
-        'last_name' => 'Test',
-        'phone' => '+85512312312',
-        'gender' => GenderEnum::MALE->value,
-    ]);
 
     $customers = Customer::factory(3)->create();
 
-    $this->get(route('customer.index'))
+    getJson(route('customer.index'))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Customer/Index')
-                ->has('customers.data', $customers->add($first)->count())
-                ->has(
-                    'customers.data.0', fn(AssertableInertia $page) => $page->where('purchase_orders_count', 3)
-                    ->where('name', 'Customer Test')
-                    ->where('phone', '+85512312312')
-                    ->where('gender_text', __('lang.'.GenderEnum::MALE->value))
-                    ->etc()
-                )
+            fn (AssertableInertia $page) => $page->component('Customer/CustomerIndex')
+                ->has('customers.data', $customers->count())
         );
 });
 
-test('show customer detail', function () {
-    $customer = Customer::factory()->has(PurchaseOrder::factory(2)->has(PurchaseOrderDetail::factory(3),'purchaseDetails'))->create();
+test('customer create form', function () {
+    getJson(route('customer.create'))
+        ->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Customer/CustomerForm')
+        );
+});
 
-    $this->get(route('customer.show', $customer))
+test('customer store', function () {
+    $customer = Customer::factory()->make();
+
+    $data = $customer->toArray();
+
+    $data['password'] = 'password';
+    $data['password_confirmation'] = 'password';
+
+    postJson(route('customer.store'), $data)
+        ->assertRedirectToRoute('customer.index');
+
+    assertDatabaseHas(Customer::class, [
+        'phone_number' => $customer->phone_number,
+    ]);
+});
+
+test('edit customer form', function () {
+    $customer = Customer::factory()->create();
+
+    $this->get(route('customer.edit', $customer->id))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Customer/Show')
-                ->where('customer.purchase_orders_count', 2)
-                ->where('customer.purchase_orders.0.purchase_details_count', 3)
+            fn (AssertableInertia $page) => $page->component('Customer/CustomerForm')
+                ->where('customer.id', $customer->id)
+                ->where('customer.phone_number', $customer->phone_number)
+        );
+});
+
+test('customer update', function () {
+    $customer = Customer::factory()->create();
+
+    $data = $customer->toArray();
+
+    $data['nickname'] = fake()->name;
+    $data['password'] = 'update-password';
+    $data['password_confirmation'] = 'update-password';
+
+    putJson(route('customer.update', $customer->id), $data)
+        ->assertRedirectToRoute('customer.index');
+
+});
+
+test('show customer detail', function () {
+    $customer = Customer::factory()->create();
+
+    $this->get(route('customer.show', $customer->id))
+        ->assertOk()
+        ->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Customer/CustomerShow')
+                ->where('customer.id', $customer->id)
+                ->where('customer.phone_number', $customer->phone_number)
         );
 });

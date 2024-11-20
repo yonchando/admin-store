@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\Customer\CustomerStatusEnum;
 use App\Enums\GenderEnum;
 use App\Models\Customer;
-use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,16 +20,15 @@ class CustomerFactory extends Factory
      */
     public function definition(): array
     {
-        $countryCode = '+855';
-        $phone = $this->faker->unique()->e164PhoneNumber;
+        $phone = $this->faker->unique()->phoneNumber;
 
         return [
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'phone' => $countryCode.substr($phone, $this->faker->numberBetween(4, 5)),
+            'nickname' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone_number' => $phone,
             'password' => Hash::make('password'),
-            'email' => $this->faker->unique()->safeEmail,
-            'gender' => $this->faker->randomElement(GenderEnum::cases()),
+            'gender' => $this->faker->randomElement([GenderEnum::MALE, GenderEnum::FEMALE]),
+            'status' => $this->faker->randomElement([CustomerStatusEnum::ACTIVE, CustomerStatusEnum::INACTIVE]),
         ];
     }
 }
