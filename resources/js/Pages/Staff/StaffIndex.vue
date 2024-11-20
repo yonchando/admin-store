@@ -8,7 +8,8 @@ import { Column } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
 import { computed, ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
+import { useAlertStore } from "@/services/helper.service";
 
 defineProps<{
     staffs: Paginate<Staff>;
@@ -23,6 +24,22 @@ const actions = computed(() => {
     add.props.onClick = () => router.get(route("staff.create"));
 
     remove.props.disabled = selectRows.value.length === 0;
+
+    remove.props.onClick = () => {
+        const alert = useAlertStore();
+        alert.open();
+
+        alert.confirm = () => {
+            useForm({
+                ids: selectRows.value,
+            }).delete(route("staff.destroy"), {
+                onFinish: () => {
+                    alert.$reset();
+                    selectRows.value = [];
+                },
+            });
+        };
+    };
 
     return [add, refresh, remove];
 });

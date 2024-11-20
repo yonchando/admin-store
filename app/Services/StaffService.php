@@ -46,7 +46,7 @@ class StaffService
                     return $item->pluck('permission_id')->toArray();
                 });
 
-                return array_diff($permission_ids, $item->get($module_id));
+                return array_diff($permission_ids, $item->get($module_id) ?? []);
             });
 
         foreach ($permissions as $moduleId => $permission) {
