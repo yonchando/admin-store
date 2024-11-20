@@ -12,7 +12,11 @@ class ModuleService
      */
     public function get(array $filters = []): Collection
     {
-        return Module::with('permissions')->filters($filters)->get();
+        return Module::with([
+            'permissions' => function ($query) {
+                return $query->ordered();
+            },
+        ])->filters($filters)->get();
     }
 
     public function save(array $data): Module
