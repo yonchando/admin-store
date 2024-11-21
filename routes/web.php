@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::put('update/{id}', 'update')->name('update');
 
-            Route::delete('destroy/{id}', 'destroy')->name('destroy');
+            Route::delete('destroy', 'destroy')->name('destroy');
         });
 
     Route::prefix('card')

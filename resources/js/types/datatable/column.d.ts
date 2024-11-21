@@ -9,4 +9,5 @@ export interface Column<Type> {
     props?: any;
     sortable?: keyof Type | ((t: Type) => any);
     component?: Component<Type>;
+    hideFromIndex?: boolean;
 }

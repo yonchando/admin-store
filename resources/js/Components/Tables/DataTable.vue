@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Column } from "@/types/datatable/column.d";
-import { computed, ref } from "vue";
+import { computed, ref, useSlots } from "vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { Action } from "@/types/button";
@@ -13,18 +13,23 @@ import DataValue from "@/Components/DataValue.vue";
 import Select from "@/Components/Forms/Select.vue";
 import Pagination from "@/Components/Tables/Pagination.vue";
 
-const props = defineProps<{
-    values: Array<any>;
-    columns: Column<any>[];
-    checkbox?: boolean;
-    rowProps?: any;
-    paginate?: Paginate<any> | undefined;
-    actions?: Action[];
-    root?: {
-        actionClass?: string[] | string;
-        checkBoxClass?: string[] | string;
-    };
-}>();
+const props = withDefaults(
+    defineProps<{
+        values: Array<any>;
+        columns: Column<any>[];
+        checkbox?: boolean;
+        rowProps?: any;
+        paginate?: Paginate<any> | undefined;
+        actions?: Action[];
+        root?: {
+            actionClass?: string[] | string;
+            checkBoxClass?: string[] | string;
+        };
+    }>(),
+    {
+        checkbox: true,
+    },
+);
 
 const emit = defineEmits<{
     showPage: [page: number];
@@ -84,6 +89,13 @@ function sort(item: Column<any>) {
 const inputSearch = _.debounce(function (e: Event) {
     emit("search", (e.target as HTMLInputElement).value);
 }, 500);
+
+const slots = useSlots();
+const columnLength = computed(() => {
+    return (
+        props.columns.filter((item) => !item.hideFromIndex).length + (props.checkbox ? 1 : 0) + (slots.actions ? 1 : 0)
+    );
+});
 </script>
 
 <template>
@@ -129,6 +141,7 @@ const inputSearch = _.debounce(function (e: Event) {
                         :class="[column.sortable ? 'cursor-pointer' : '']"
                         @click="sort(column)"
                         class="border border-gray-300 bg-gray-200 py-3 pl-2 text-left align-middle font-semibold dark:border-gray-600 dark:bg-gray-700"
+                        v-if="!column.hideFromIndex"
                         v-bind="column.props">
                         <div class="flex items-center">
                             <span>
@@ -167,6 +180,7 @@ const inputSearch = _.debounce(function (e: Event) {
                     </td>
                     <template v-for="column in columns">
                         <td
+                            v-if="!column.hideFromIndex"
                             v-bind="rowProps"
                             @dblclick="$emit('rowDbclick', item)"
                             @click="selectRow = selectRow?.id == item.id ? null : item"
@@ -184,7 +198,7 @@ const inputSearch = _.debounce(function (e: Event) {
             <!-- Paginate -->
             <template v-if="values.length === 0">
                 <tr>
-                    <td class="column !py-4" :colspan="columns.length + ($slots.actions ? 2 : 1)">Empty Data</td>
+                    <td class="column !py-4" :colspan="columnLength">Empty Data</td>
                 </tr>
             </template>
         </tbody>

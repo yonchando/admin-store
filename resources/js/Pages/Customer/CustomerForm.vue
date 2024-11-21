@@ -12,28 +12,25 @@ import Permission from "@/Components/Permission/Permission.vue";
 import { Paginate } from "@/types/paginate";
 import { Role } from "@/types/models/role";
 import _ from "lodash";
+import { Customer } from "@/types/models/customer";
+import { Gender } from "@/types";
 
 const props = defineProps<{
-    staff: Staff;
+    customer: Customer;
     statuses: [];
-    gender: [];
-    roles: Paginate<Role>;
+    gender: Gender[];
 }>();
 
 const form: any = useForm({
-    name: "",
-    username: "",
+    nickname: "",
+    email: "",
+    phone_number: "",
     password: "",
     password_confirmation: "",
-    gender: "",
-    position: "",
     profile: "",
+    gender: "",
     status: "active",
-    permission_ids: {} as { [key: number]: number[] },
-    role_ids: [] as number[],
 });
-
-const disabled = ref<{ [key: number]: number[] }>({});
 
 const actions = computed(() => {
     const { save, cancel } = useAction();
@@ -47,7 +44,7 @@ const actions = computed(() => {
 
     cancel.props = {
         onClick() {
-            router.get(route("staff.index"));
+            router.get(route("customer.index"));
         },
         ...cancel.props,
     };
@@ -55,39 +52,25 @@ const actions = computed(() => {
 });
 
 function submit() {
-    if (props.staff) {
-        form.put(route("staff.update", props.staff.id));
+    if (props.customer) {
+        form.transform((value: any) => {
+            return {
+                ...value,
+                _method: "PUT",
+            };
+        }).post(route("customer.update", props.customer.id));
     } else {
-        form.post(route("staff.store"));
-    }
-}
-
-function selectRole() {
-    let roles = props.roles.data.filter((item) => form.role_ids.includes(item.id));
-
-    disabled.value = {};
-    for (const role of roles) {
-        for (const module_id in role.permission_id_by_module_keys) {
-            let value: Array<number> = [];
-            if (typeof disabled.value[module_id] !== "undefined") {
-                value = disabled.value[module_id];
-            }
-
-            disabled.value[module_id] = _.uniq([...value, ...role.permission_id_by_module_keys[module_id]]);
-        }
+        form.post(route("customer.store"));
     }
 }
 
 onMounted(() => {
-    if (props.staff) {
-        for (let key in props.staff) {
+    if (props.customer) {
+        for (let key in props.customer) {
             if (key in form) {
-                form[key] = props.staff[key as keyof Staff];
+                if (key !== "profile") form[key] = props.customer[key as keyof Customer];
             }
         }
-
-        form.role_ids = props.staff.roles?.map((item) => item.id);
-        selectRole();
     }
 });
 </script>
@@ -101,16 +84,16 @@ onMounted(() => {
                     <div class="grid w-full grid-cols-2 gap-4">
                         <div class="flex flex-col gap-4">
                             <div class="">
-                                <TextInput required label="Name" v-model="form.name" tabindex="1" />
-                                <InputError :message="form.errors.name" />
+                                <TextInput required label="Nickname" v-model="form.nickname" tabindex="1" />
+                                <InputError :message="form.errors.nickname" />
                             </div>
                             <div class="">
-                                <TextInput label="Position" v-model="form.position" tabindex="2" />
-                                <InputError :message="form.errors.status" />
+                                <TextInput label="Email" v-model="form.email" tabindex="3" type="email" />
+                                <InputError :message="form.errors.email" />
                             </div>
                             <div class="">
                                 <Select label="Gender" v-model="form.gender" :options="gender" :show-search="false" />
-                                <InputError :message="form.errors.status" />
+                                <InputError :message="form.errors.gender" />
                             </div>
                             <div class="">
                                 <Select label="Status" v-model="form.status" :options="statuses" :show-search="false" />
@@ -120,26 +103,8 @@ onMounted(() => {
 
                         <div class="flex flex-col gap-4">
                             <div class="">
-                                <TextInput required label="Username" v-model="form.username" tabindex="3" />
-                                <InputError :message="form.errors.username" />
-                            </div>
-                            <div class="">
-                                <TextInput
-                                    required
-                                    label="Password"
-                                    type="password"
-                                    v-model="form.password"
-                                    tabindex="4" />
-                                <InputError :message="form.errors.password" />
-                            </div>
-                            <div class="">
-                                <TextInput
-                                    tabindex="5"
-                                    required
-                                    type="password"
-                                    label="Password confirmation"
-                                    v-model="form.password_confirmation" />
-                                <InputError :message="form.errors.password_confirmation" />
+                                <TextInput required label="Phone number" v-model="form.phone_number" tabindex="2" />
+                                <InputError :message="form.errors.phone_number" />
                             </div>
                             <div class="w-full">
                                 <FileUpload label="Feature image" class="mt-auto" v-model="form.profile" />
@@ -148,26 +113,6 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div class="mt-6">
-                    <h2 class="text-xl">Role</h2>
-                    <Select
-                        multiple
-                        v-model="form.role_ids"
-                        @change="selectRole"
-                        :options="roles.data"
-                        :paginate="roles"
-                        option-label="code"
-                        option-value="id" />
-                </div>
-
-                <div class="mt-6">
-                    <h2 class="text-xl">Permission</h2>
-                </div>
-
-                <Permission
-                    :values="staff?.permission_id_by_module_keys"
-                    :disabled="disabled"
-                    v-model="form.permission_ids" />
             </div>
         </form>
     </AppLayout>

@@ -57,8 +57,9 @@ export default function useMenu() {
         }),
         add({
             title: "Customers",
-            url: route("product.index"),
+            url: route("customer.index"),
             icon: faUserTie,
+            isActive: isActive("customer.index", "customer.create", "customer.show", "customer.edit"),
         }),
         add({
             title: "Cards",

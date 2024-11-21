@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('socialize_token')->nullable();
             $table->enum('gender', [GenderEnum::MALE->value, GenderEnum::FEMALE->value])->nullable();
             $table->date('birthday')->nullable();
-            $table->json('image')->nullable();
+            $table->json('profile')->nullable();
             $table->string('status')->default(CustomerStatusEnum::ACTIVE->value);
             $table->timestamps();
             $table->softDeletes();

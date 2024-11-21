@@ -16,6 +16,10 @@ class CustomerService
     {
         $query = Customer::query();
 
+        $query->filters($request->all());
+
+        $query->latest();
+
         return $query->paginate($request->get('perPage', 20));
     }
 
@@ -26,10 +30,10 @@ class CustomerService
 
     public function store(CustomerRequest $request): Customer
     {
-        $customer = new Customer($request->safe()->except('image'));
+        $customer = new Customer($request->validated());
 
-        if ($request->hasFile('image')) {
-            $this->uploadImage($customer, $request->file('image'));
+        if ($request->hasFile('profile')) {
+            $this->uploadImage($customer, $request->file('profile'));
         }
 
         $customer->save();
@@ -39,11 +43,10 @@ class CustomerService
 
     public function update(CustomerRequest $request, Customer $customer): Customer
     {
-        $customer->fill($request->safe()->except('image', 'password', 'password_confirmation'));
+        $customer->fill($request->safe()->except('profile', 'password', 'password_confirmation'));
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $this->uploadImage($customer, $file);
+        if ($request->hasFile('profile')) {
+            $this->uploadImage($customer, $request->file('profile'));
         }
 
         if ($request->get('password')) {
@@ -57,7 +60,13 @@ class CustomerService
 
     private function uploadImage(Customer $customer, UploadedFile $file): void
     {
-        Storage::putFileAs($customer->image->path, $file, $file->hashName());
-        $customer->image = Helper::imageInit($file, config('paths.customer_profile'));
+        $path = config('paths.customer_profile');
+        Storage::putFileAs($path, $file, $file->hashName());
+        $customer->profile = Helper::imageInit($file, $path);
+    }
+
+    public function destroy(mixed $ids): int
+    {
+        return Customer::destroy($ids);
     }
 }

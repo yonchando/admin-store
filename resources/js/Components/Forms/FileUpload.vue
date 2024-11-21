@@ -93,18 +93,17 @@ function getFiles(e: Event) {
 <template>
     <div class="flex flex-col gap-2">
         <InputLabel v-if="label" :value="label" />
-        <div class="relative w-full rounded-md text-right dark:bg-gray-900">
-            <Button class="ml-auto" size="md" severity="success"> Browser file</Button>
+        <div class="relative flex w-full items-center justify-between rounded-md text-right dark:bg-gray-900">
+            <div class="pl-4" v-for="file in files">
+                {{ file.name }}
+            </div>
+            <Button class="ml-auto" size="md" severity="success">Browser file</Button>
             <input
                 v-bind="$attrs"
                 @change="getFiles"
                 type="file"
                 :multiple="multiple"
                 class="absolute inset-0 cursor-pointer rounded-md bg-gray-700 opacity-0" />
-        </div>
-
-        <div v-for="file in files">
-            <img class="size-24" :src="file.url" alt="File" />
         </div>
     </div>
 

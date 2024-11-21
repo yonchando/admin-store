@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Customer\CustomerStatusEnum;
+use App\Enums\GenderEnum;
 use App\Http\Requests\CustomerRequest;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
@@ -24,7 +26,10 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return Inertia::render('Customer/CustomerForm');
+        return Inertia::render('Customer/CustomerForm', [
+            'statuses' => CustomerStatusEnum::toArray(),
+            'gender' => GenderEnum::toArray(),
+        ]);
     }
 
     public function store(CustomerRequest $request)
@@ -49,6 +54,8 @@ class CustomerController extends Controller
 
         return Inertia::render('Customer/CustomerForm', [
             'customer' => $customer,
+            'statuses' => CustomerStatusEnum::toArray(),
+            'gender' => GenderEnum::toArray(),
         ]);
     }
 
@@ -59,5 +66,18 @@ class CustomerController extends Controller
         $this->customerService->update($request, $customer);
 
         return to_route('customer.index')->with('success', __('lang.updated_success', ['attribute' => __('lang.customer')]));
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+        ]);
+
+        $ids = $request->get('ids', []);
+
+        $this->customerService->destroy($ids);
+
+        return to_route('customer.index')->with('success', __('lang.deleted_success', ['attribute' => __('lang.customer')]));
     }
 }

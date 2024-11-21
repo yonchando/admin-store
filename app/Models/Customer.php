@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Casts\Images\ImageCast;
 use App\Enums\Customer\CustomerStatusEnum;
 use App\Enums\GenderEnum;
 use App\Models\Concerns\Customer\HasAttributes;
 use App\Models\Concerns\Customer\HasRelationships;
+use App\Models\Concerns\Customer\HasScopes;
 use App\Traits\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +18,7 @@ class Customer extends Model
     use HasAttributes;
     use HasFactory;
     use HasRelationships;
+    use HasScopes;
     use HasTimestamps;
     use SoftDeletes;
 
@@ -26,16 +29,13 @@ class Customer extends Model
         'password',
         'socialize_token',
         'gender',
-        'image',
+        'profile',
         'status',
-    ];
-
-    protected $appends = [
-        'gender_text',
     ];
 
     protected $hidden = [
         'password',
+        'socialize_token',
     ];
 
     public function casts(): array
@@ -44,6 +44,7 @@ class Customer extends Model
             'password' => 'hashed',
             'gender' => GenderEnum::class,
             'status' => CustomerStatusEnum::class,
+            'profile' => ImageCast::class,
         ];
     }
 }

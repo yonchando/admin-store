@@ -11,23 +11,24 @@ class CustomerRequest extends FormRequest
 {
     public function rules(): array
     {
+
         return [
-            'nickname' => ['nullable', 'string', 'max:100'],
-            'phone_number' => ['required', Rule::unique(Customer::class, 'phone_number')->ignore($this->get('id'))],
+            'nickname' => ['required', 'string', 'max:100'],
+            'phone_number' => ['required', Rule::unique(Customer::class, 'phone_number')->ignore($this->id)],
             'email' => [
                 'nullable',
                 'email',
                 'max:100',
-                Rule::unique(Customer::class, 'email')->ignore($this->get('id')),
+                Rule::unique(Customer::class, 'email')->ignore($this->id),
             ],
             'password' => [
-                'required',
+                'nullable',
                 'min:6',
             ],
             'password_confirmation' => ['same:password'],
             'socialize_token' => ['nullable'],
             'gender' => ['nullable', Rule::in(['male', 'female'])],
-            'image' => ['nullable', Rule::imageFile()->max('10mb')],
+            'profile' => ['nullable', Rule::file()->max('10mb')],
             'status' => ['required', Rule::in(array_values(CustomerStatusEnum::toJson()))],
         ];
     }

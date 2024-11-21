@@ -2,26 +2,26 @@
 import DataTable from "@/Components/Tables/DataTable.vue";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Staff } from "@/types/models/staff";
-import staffService from "@/services/staff.service";
 import { Column } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
 import { computed, ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { useAlertStore } from "@/services/helper.service";
+import { Customer } from "@/types/models/customer";
+import customerService from "@/services/customer.service";
 
 defineProps<{
-    staffs: Paginate<Staff>;
+    customers: Paginate<Customer>;
 }>();
 
 const selectRows = ref([]);
-const columns: Column<Staff>[] = staffService.columns;
+const columns: Column<Customer>[] = customerService.columns;
 
 const actions = computed(() => {
     const { add, refresh, remove } = useAction();
 
-    add.props.onClick = () => router.get(route("staff.create"));
+    add.props.onClick = () => router.get(route("customer.create"));
 
     remove.props.disabled = selectRows.value.length === 0;
 
@@ -32,7 +32,7 @@ const actions = computed(() => {
         alert.confirm = () => {
             useForm({
                 ids: selectRows.value,
-            }).delete(route("staff.destroy"), {
+            }).delete(route("customer.destroy"), {
                 onFinish: () => {
                     alert.$reset();
                     selectRows.value = [];
@@ -44,25 +44,24 @@ const actions = computed(() => {
     return [add, refresh, remove];
 });
 
-function show(staff: Staff) {
-    router.get(route("staff.show", staff.id));
+function show(staff: Customer) {
+    router.get(route("customer.show", staff.id));
 }
 </script>
 
 <template>
-    <AppLayout :actions="actions" title="Staff Lists">
-        <template #header> Staff Lists </template>
+    <AppLayout :actions="actions" title="Customer Lists">
+        <template #header> Customer Lists </template>
         <DataTable
-            :values="staffs.data"
+            :values="customers.data"
             v-model:checked="selectRows"
-            :paginate="staffs"
+            :paginate="customers"
             @rowDbclick="show"
-            :columns="columns"
-            checkbox>
+            :columns="columns">
             <template #actions="{ item }">
                 <ButtonGroup>
-                    <Button size="xs" :href="route('staff.show', item.id)" severity="info">View</Button>
-                    <Button size="xs" :href="route('staff.edit', item.id)" severity="warning">Edit</Button>
+                    <Button size="xs" :href="route('customer.show', item.id)" severity="info">View</Button>
+                    <Button size="xs" :href="route('customer.edit', item.id)" severity="warning">Edit</Button>
                 </ButtonGroup>
             </template>
         </DataTable>

@@ -4,7 +4,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
-    lang: Object<string, string>;
+    lang: { [key: string]: string };
     flash: { success: string | object; info: string | object; warning: string | object; error: string | object };
 };
 
@@ -21,4 +21,9 @@ export interface UploadFile {
     type: string;
     size: string;
     url: string;
+}
+
+export interface Gender {
+    id: string;
+    name: string;
 }
