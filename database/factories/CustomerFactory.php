@@ -20,15 +20,23 @@ class CustomerFactory extends Factory
      */
     public function definition(): array
     {
-        $phone = $this->faker->unique()->phoneNumber;
+        $phone = $this->faker->unique()->randomNumber(9, true);
 
         return [
             'nickname' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'country_code' => '+855',
             'phone_number' => $phone,
             'password' => Hash::make('password'),
             'gender' => $this->faker->randomElement([GenderEnum::MALE, GenderEnum::FEMALE]),
             'status' => $this->faker->randomElement([CustomerStatusEnum::ACTIVE, CustomerStatusEnum::INACTIVE]),
         ];
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn () => [
+            'status' => CustomerStatusEnum::ACTIVE,
+        ]);
     }
 }

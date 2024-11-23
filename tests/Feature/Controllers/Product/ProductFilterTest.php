@@ -9,7 +9,7 @@ use Inertia\Testing\AssertableInertia;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 describe('product filters', function () {

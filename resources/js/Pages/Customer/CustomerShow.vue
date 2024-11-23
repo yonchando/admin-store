@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Column } from "@/types/datatable/column";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted } from "vue";
 import useAction from "@/services/action.service";
 import { router, useForm } from "@inertiajs/vue3";
-import Alert from "@/Components/Alert/Alert.vue";
 import DataValue from "@/Components/DataValue.vue";
 import { Role } from "@/types/models/role";
-import Permission from "@/Components/Permission/Permission.vue";
-import { Staff } from "@/types/models/staff";
-import staffService from "@/services/staff.service";
-import _ from "lodash";
 import { Paginate } from "@/types/paginate";
-import Select from "@/Components/Forms/Select.vue";
 import { Customer } from "@/types/models/customer";
 import { useAlertStore } from "@/services/helper.service";
 import customerService from "@/services/customer.service";
@@ -54,8 +48,8 @@ onMounted(() => {});
 </script>
 
 <template>
-    <AppLayout :title="`Role ${customer.nickname}`" :actions="actions">
-        <template #header> Role Detail</template>
+    <AppLayout :title="`Customer ${customer.nickname}`" :actions="actions">
+        <template #header>Customer Detail</template>
 
         <div class="p-4">
             <h3 class="mb-4 text-xl font-semibold">Information</h3>

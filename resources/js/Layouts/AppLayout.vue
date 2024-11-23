@@ -2,9 +2,10 @@
 import { Head, usePage } from "@inertiajs/vue3";
 import Sidebar from "@/Layouts/Partials/Sidebar.vue";
 import { Action } from "@/types/button";
-import { onMounted, watch } from "vue";
+import { h, onMounted, watch } from "vue";
 import StartToastifyInstance from "toastify-js";
 import Alert from "@/Components/Alert/Alert.vue";
+import { Flash, FlashKey } from "@/types/flash";
 
 defineProps<{
     title?: string;
@@ -13,11 +14,12 @@ defineProps<{
 
 const page = usePage();
 
-const severities: any = {
-    success: "bg-none shadow bg-teal-600 text-gray-300",
-    info: "bg-none shadow bg-sky-600 text-gray-300",
-    warning: "bg-none shadow bg-amber-600 text-gray-300",
-    error: "bg-none shadow bg-rose-600 text-white",
+const severities: Flash = {
+    primary: "bg-none shadow bg-primary text-white",
+    success: "bg-none shadow bg-success text-white",
+    info: "bg-none shadow bg-info text-white",
+    warning: "bg-none shadow bg-warning text-white",
+    error: "bg-none shadow bg-error text-white",
 };
 
 watch(
@@ -27,18 +29,20 @@ watch(
     },
 );
 
-function alertMessage(messages: any) {
-    for (const flash in messages) {
-        if (messages[flash]) {
+function alertMessage(messages: Flash) {
+    for (const flash of Object.keys(messages)) {
+        const key = flash as FlashKey;
+        if (messages[key]) {
             StartToastifyInstance({
-                text: messages[flash],
+                text: messages[key],
                 duration: 3000,
                 newWindow: true,
                 close: false,
                 gravity: "top",
                 position: "center",
-                className: severities[flash],
+                className: severities[key],
             }).showToast();
+            messages[key] = "";
         }
     }
 }
@@ -49,9 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head :title="title">
-        <link rel="icon" type="image/x-icon" href="@assets/images/logos/logo.png" />
-    </Head>
+    <Head :title="title" />
 
     <div class="bg-white dark:bg-gray-900">
         <div class="flex">
@@ -75,7 +77,7 @@ onMounted(() => {
                 </header>
 
                 <!-- Page Content -->
-                <main class="p-2">
+                <main class="px-2">
                     <div class="rounded-md bg-white p-1 text-gray-900 dark:bg-gray-800 dark:text-gray-200">
                         <slot />
                     </div>

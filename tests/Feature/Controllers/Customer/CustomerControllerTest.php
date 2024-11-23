@@ -12,7 +12,7 @@ use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 test('customer listing', function () {

@@ -1,11 +1,12 @@
 import { User } from "@/types/models/user";
+import { Flash } from "@/types/flash";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
     };
     lang: { [key: string]: string };
-    flash: { success: string | object; info: string | object; warning: string | object; error: string | object };
+    flash: Flash;
 };
 
 export interface Menu {
@@ -14,6 +15,7 @@ export interface Menu {
     icon?: any;
     children?: Menu[];
     isActive?: boolean;
+    disabled?: boolean;
 }
 
 export interface UploadFile {

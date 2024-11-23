@@ -94,12 +94,13 @@ Route::middleware('auth')->group(function () {
             Route::delete('profile', 'destroy')->name('destroy');
         });
 
-    Route::prefix('staff')
-        ->name('staff.')
-        ->controller(StaffController::class)
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/show/{id}', 'show')->name('show');
+    Route::group([], function () {
+        Route::prefix('staff')
+            ->name('staff.')
+            ->controller(StaffController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/show/{id}', 'show')->name('show');
 
             Route::get('/create', 'create')->name('create');
             Route::post('/store', 'store')->name('store');
@@ -139,13 +140,14 @@ Route::middleware('auth')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
-    Route::prefix('setting')
-        ->name('setting.')
-        ->controller(SettingController::class)
-        ->group(function () {
-            Route::get('/', 'show')->name('show');
-            Route::put('update', 'update')->name('update');
-        });
+        Route::prefix('setting')
+            ->name('setting.')
+            ->controller(SettingController::class)
+            ->group(function () {
+                Route::get('/', 'show')->name('show');
+                Route::put('update', 'update')->name('update');
+            });
+    });
 });
 
 require __DIR__.'/auth.php';

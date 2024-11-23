@@ -1,6 +1,9 @@
 export interface Flash {
-    success: string | object;
-    info: string | object;
-    warning: string | object;
-    error: string | object;
+    primary: string;
+    success: string;
+    info: string;
+    warning: string;
+    error: string;
 }
+
+export type FlashKey = keyof Flash;

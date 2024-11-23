@@ -7,7 +7,7 @@ import useAction from "@/services/action.service";
 import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
 import Alert from "@/Components/Alert/Alert.vue";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
+import Action from "@/Components/Tables/Action.vue";
 
 const props = defineProps<{
     products: Products;
@@ -106,10 +106,9 @@ function show(item: Product) {
             v-model:sortBy="filters.sortBy"
             checkbox>
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" :href="route('product.show', item.id)" severity="info">View</Button>
-                    <Button size="xs" :href="route('product.edit', item.id)" severity="warning">Edit</Button>
-                </ButtonGroup>
+                <Action
+                    :view="() => router.get(route('product.show', item.id))"
+                    :edit="() => router.get(route('product.edit', item.id))" />
             </template>
         </DataTable>
 

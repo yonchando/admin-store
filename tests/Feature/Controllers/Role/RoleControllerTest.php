@@ -11,7 +11,7 @@ use function Pest\Laravel\post;
 use function Pest\Laravel\putJson;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 test('index page can get list of roles', function () {

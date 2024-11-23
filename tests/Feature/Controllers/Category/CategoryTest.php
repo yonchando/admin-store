@@ -7,7 +7,7 @@ use function Pest\Laravel\from;
 use function Pest\Laravel\putJson;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 test('index method', function () {

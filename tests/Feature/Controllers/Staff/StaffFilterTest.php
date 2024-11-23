@@ -5,7 +5,7 @@ use App\Models\Staff;
 use Inertia\Testing\AssertableInertia;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 it('can search by username or name', function () {

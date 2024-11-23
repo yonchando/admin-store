@@ -6,7 +6,7 @@ import { Link } from "@inertiajs/vue3";
 
 const props = withDefaults(
     defineProps<{
-        size?: "xs" | "sm" | "base" | "md" | "lg" | "xl";
+        size?: "xs" | "sm" | "default" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         icon?: IconDefinition;
         href?: string;
@@ -21,9 +21,9 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        xs: "px-2 py-1 text-xxs",
-        sm: "px-4 py-2 text-xs",
-        base: "px-4 py-2.5 text-sm",
+        xs: "px-2.5 py-1.5 text-xxs",
+        sm: "px-3 py-2 text-xs",
+        default: "px-4 py-2.5 text-sm",
         md: "px-5 py-3 text-md",
         lg: "px-6 py-4 text-lg",
         xl: "px-7 py-5 text-xl",
@@ -72,48 +72,48 @@ const severityClass = computed(() => {
             "dark:focus:ring-gray-500",
         ],
         info: [
-            "bg-sky-600",
-            "disabled:bg-sky-600",
+            "bg-info",
+            "disabled:bg-info/85",
             "border-transparent",
             "text-white",
-            "hover:bg-sky-700",
-            "focus:bg-sky-700",
+            "hover:bg-info/85",
+            "focus:bg-info/85",
             "focus:ring-2",
             "focus:ring-sky-600",
-            "active:bg-sky-700",
+            "active:bg-info/85",
         ],
         warning: [
-            "bg-amber-600",
-            "disabled:bg-amber-600",
+            "bg-warning",
+            "disabled:bg-warning/85",
             "border-transparent",
             "text-white",
-            "hover:bg-amber-700",
-            "focus:bg-amber-700",
+            "hover:bg-warning/85",
+            "focus:bg-warning/85",
             "focus:ring-2",
             "focus:ring-amber-600",
-            "active:bg-amber-700",
+            "active:bg-warning/85",
         ],
         error: [
+            "bg-error",
             "border-transparent",
-            "bg-rose-600",
-            "disabled:bg-rose-600",
+            "disabled:bg-error/85",
             "text-white",
-            "hover:bg-rose-700",
-            "focus:bg-rose-700",
+            "hover:bg-error/85",
+            "focus:bg-error/85",
             "focus:ring-2",
-            "focus:ring-rose-600",
-            "active:bg-rose-700",
+            "focus:ring-error",
+            "active:bg-error/85",
         ],
         success: [
-            "bg-teal-600",
-            "disabled:bg-teal-600",
+            "bg-success",
+            "disabled:bg-success/85",
             "border-transparent",
             "text-gray-300",
-            "hover:bg-teal-700",
-            "focus:bg-teal-700",
+            "hover:bg-success/85",
+            "focus:bg-success/85",
             "focus:ring-2",
-            "focus:ring-teal-600",
-            "active:bg-teal-700",
+            "focus:ring-success",
+            "active:bg-success/85",
         ],
     }[props.severity];
 });
@@ -124,9 +124,9 @@ const severityClass = computed(() => {
         :tabindex="tabindex"
         :class="[sizeClass, ...severityClass]"
         :disabled="disabled"
-        class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="inline-block rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
-            <fa-icon :icon="icon" :size="size as any" />
+            <fa-icon class="pr-1.5" :icon="icon" :size="size as any" />
         </template>
         <slot />
     </button>
@@ -136,9 +136,9 @@ const severityClass = computed(() => {
         :class="[sizeClass, ...severityClass]"
         :tabindex="tabindex"
         :disabled="disabled"
-        class="inline-flex items-center gap-1.5 rounded-md border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="inline-block rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
-            <fa-icon :icon="icon" :size="size as any" />
+            <fa-icon class="pr-1.5" :icon="icon" :size="size as any" />
         </template>
         <slot />
     </Link>

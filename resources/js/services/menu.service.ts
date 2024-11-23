@@ -21,6 +21,7 @@ function add(item: Menu): Menu {
         icon: item.icon ?? null,
         children: item.children ?? undefined,
         isActive: item.isActive ?? false,
+        disabled: item.disabled ?? false,
     };
 }
 
@@ -65,6 +66,7 @@ export default function useMenu() {
             title: "Cards",
             url: route("card.index"),
             icon: faCreditCard,
+            disabled: true,
         }),
         add({
             title: "Staff Management",

@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        sm: "text-xs px-2 py-1",
+        sm: "text-sm px-2 py-1",
         default: "text-sm px-2.5 py-1.5",
         md: "text-base px-3 py-1.5",
         lg: "text-xl px-3.5 py-1.5",
@@ -27,17 +27,17 @@ const sizeClass = computed(() => {
 const className = computed(() => {
     return {
         primary: props.type == "fill" ? "bg-primary text-white" : "border border-primary",
-        secondary: props.type == "fill" ? "bg-secondary" : "border border-secondary",
+        secondary: props.type == "fill" ? "bg-dark text-white" : "border border-secondary",
         info: props.type == "fill" ? "bg-info text-white" : "border border-info",
         warning: props.type == "fill" ? "bg-warning text-white" : "border border-warning",
         error: props.type == "fill" ? "bg-error text-white" : "border border-error",
-        success: props.type == "fill" ? "bg-success" : "border border-success",
+        success: props.type == "fill" ? "bg-success text-white" : "border border-success",
     }[props.severity];
 });
 </script>
 
 <template>
-    <span :class="[sizeClass, className]" class="rounded">
+    <span :class="[sizeClass, className]" class="inline-block rounded">
         <slot />
     </span>
 </template>

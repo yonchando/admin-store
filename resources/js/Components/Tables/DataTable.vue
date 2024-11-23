@@ -99,7 +99,7 @@ const columnLength = computed(() => {
 </script>
 
 <template>
-    <div class="flex items-center px-2 py-4">
+    <div class="flex items-center px-2 py-2">
         <div class="flex">
             <div>
                 <TextInput
@@ -164,7 +164,12 @@ const columnLength = computed(() => {
                     </th>
                 </template>
 
-                <th :class="root?.actionClass" class="column head w-40" v-if="$slots.actions">Actions</th>
+                <th
+                    :class="root?.actionClass"
+                    class="w-40 border border-gray-300 bg-gray-200 py-3 pl-2 text-left align-middle font-semibold dark:border-gray-600 dark:bg-gray-700"
+                    v-if="$slots.actions">
+                    Actions
+                </th>
             </tr>
         </thead>
 
@@ -175,7 +180,7 @@ const columnLength = computed(() => {
                     <td
                         v-if="checkbox"
                         :class="[selectRow?.id == item.id ? 'active' : '']"
-                        class="border border-gray-300 bg-gray-200 text-center align-middle dark:border-gray-600 dark:bg-gray-800 group-hover:dark:bg-gray-700">
+                        class="column !pl-0 !text-center">
                         <Checkbox :value="item.id" v-model:checked="checked" />
                     </td>
                     <template v-for="column in columns">
@@ -183,7 +188,7 @@ const columnLength = computed(() => {
                             v-if="!column.hideFromIndex"
                             v-bind="rowProps"
                             @dblclick="$emit('rowDbclick', item)"
-                            @click="selectRow = selectRow?.id == item.id ? null : item"
+                            @click="selectRow = selectRow?.id === item.id ? null : item"
                             :class="[selectRow?.id == item.id ? 'active' : '']"
                             class="column">
                             <DataValue :item="item" :column="column" />

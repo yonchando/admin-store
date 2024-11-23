@@ -28,8 +28,18 @@ if (! function_exists('_date')) {
 }
 
 if (! function_exists('log_info')) {
-    function log_info($message, $context = []): void
+    function log_info(string $message, array $context = [], array $stacktrace = []): void
     {
-        \Illuminate\Support\Facades\Log::info("$message\nData:\n".json_encode($context, JSON_PRETTY_PRINT));
+        $messages = "$message\n";
+
+        if (! empty($context)) {
+            $messages .= json_encode($context, JSON_PRETTY_PRINT);
+        }
+
+        if (! empty($stacktrace)) {
+            $messages .= "\n[stacktrace]\n".json_encode($stacktrace, JSON_PRETTY_PRINT);
+        }
+
+        Log::channel('daily_info')->info($messages);
     }
 }

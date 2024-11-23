@@ -23,10 +23,13 @@ export default {
                 xxs: "0.65rem",
             },
             colors: {
+                primary: "#0d6efd",
+                secondary: "#212529bf",
                 success: colors.teal["600"],
                 info: colors.sky["600"],
                 warning: colors.amber["600"],
                 error: colors.rose["600"],
+                dark: colors.zinc["600"],
             },
             maxWidth: {
                 xxs: "12rem",

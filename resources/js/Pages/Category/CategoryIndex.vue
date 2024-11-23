@@ -9,6 +9,8 @@ import CategoryForm from "@/Pages/Category/CategoryForm.vue";
 import Alert from "@/Components/Alert/Alert.vue";
 import { router } from "@inertiajs/vue3";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
+import { useAlertStore } from "@/services/helper.service";
+import Action from "@/Components/Tables/Action.vue";
 
 const props = defineProps<{
     categories: Categories;
@@ -25,8 +27,6 @@ const selectRows = ref<Array<number>>([]);
 
 const showForm = ref<boolean>(false);
 
-const confirmed = ref(false);
-
 const actions = computed(() => {
     const { add, remove, refresh } = useAction();
 
@@ -39,7 +39,22 @@ const actions = computed(() => {
 
     remove.props.disabled = category.value == null && selectRows.value.length === 0;
     remove.props.onClick = () => {
-        confirmed.value = true;
+        const alert = useAlertStore();
+        alert.open();
+        alert.confirm = () => {
+            router.delete(route("category.destroy"), {
+                data: {
+                    ids: selectRows.value,
+                },
+                onSuccess() {
+                    category.value = null;
+                    selectRows.value = [];
+                },
+                onFinish() {
+                    alert.close();
+                },
+            });
+        };
     };
 
     return [add, refresh, remove];
@@ -66,33 +81,14 @@ function edit(item: Category) {
     category.value = item;
 }
 
-function destroy() {
-    const ids = selectRows.value;
-
-    if (category.value && !ids.includes(category.value?.id)) {
-        ids.push(category.value?.id);
-    }
-
-    router.delete(route("category.destroy"), {
-        data: {
-            ids,
-        },
-        onSuccess: () => {
-            confirmed.value = false;
-            category.value = null;
-            selectRows.value = [];
-        },
-    });
-}
-
 function changePage(p: number) {
     router.reload({ data: { perPage: p, page: 1 } });
 }
 </script>
 
 <template>
-    <AppLayout title="Category Lists" :actions="actions">
-        <template #header> Category Lists</template>
+    <AppLayout title="Categories List" :actions="actions">
+        <template #header>Categories List</template>
 
         <DataTable
             :root="{
@@ -109,21 +105,11 @@ function changePage(p: number) {
             v-model:sort-by="filters.sortBy"
             checkbox>
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" @click="edit(item)" severity="warning">Edit</Button>
-                </ButtonGroup>
+                <Action :edit="() => edit(item)" />
             </template>
         </DataTable>
 
         <CategoryForm v-if="showForm" v-model:show="showForm" :category="category" />
-
-        <Alert
-            @confirmed="destroy()"
-            type="warning"
-            title="Are you sure?"
-            text="Do you want to delete this?"
-            v-model:show="confirmed"
-            confirm-button-type="error" />
     </AppLayout>
 </template>
 

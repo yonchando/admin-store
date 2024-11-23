@@ -57,7 +57,7 @@ function initPermissions()
 
 function refresh(): void {}
 
-function asUser()
+function asAdmin()
 {
     $user = Staff::factory()->active()->admin()->create();
 

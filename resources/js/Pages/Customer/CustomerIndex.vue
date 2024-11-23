@@ -10,6 +10,7 @@ import { router, useForm } from "@inertiajs/vue3";
 import { useAlertStore } from "@/services/helper.service";
 import { Customer } from "@/types/models/customer";
 import customerService from "@/services/customer.service";
+import Action from "@/Components/Tables/Action.vue";
 
 defineProps<{
     customers: Paginate<Customer>;
@@ -51,7 +52,7 @@ function show(staff: Customer) {
 
 <template>
     <AppLayout :actions="actions" title="Customer Lists">
-        <template #header> Customer Lists </template>
+        <template #header> Customer Lists</template>
         <DataTable
             :values="customers.data"
             v-model:checked="selectRows"
@@ -59,10 +60,9 @@ function show(staff: Customer) {
             @rowDbclick="show"
             :columns="columns">
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" :href="route('customer.show', item.id)" severity="info">View</Button>
-                    <Button size="xs" :href="route('customer.edit', item.id)" severity="warning">Edit</Button>
-                </ButtonGroup>
+                <Action
+                    :view="() => router.get(route('customer.show', item.id))"
+                    :edit="() => router.get(route('customer.edit', item.id))" />
             </template>
         </DataTable>
     </AppLayout>

@@ -3,13 +3,12 @@ import DataTable from "@/Components/Tables/DataTable.vue";
 import { Column } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import useAction from "@/services/action.service";
-import Alert from "@/Components/Alert/Alert.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
 import moduleService from "@/services/module.service";
 import { Module } from "@/types/models/module";
 import ModuleForm from "@/Pages/Module/ModuleForm.vue";
 import { useAlertStore } from "@/services/helper.service";
+import Action from "@/Components/Tables/Action.vue";
 
 const alert = useAlertStore();
 alert.confirm = () => {
@@ -110,14 +109,7 @@ function destroy(item: Module) {
             v-model:sort-by="filters.sortBy"
             checkbox>
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" @click="edit(item)" severity="warning">
-                        <i class="fa fa-pencil"></i>
-                    </Button>
-                    <Button size="xs" @click="destroy(item)" severity="error">
-                        <i class="fa fa-trash"></i>
-                    </Button>
-                </ButtonGroup>
+                <Action :edit="() => edit(item)" :destroy="() => destroy(item)" />
             </template>
         </DataTable>
 

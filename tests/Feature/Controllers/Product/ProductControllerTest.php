@@ -12,7 +12,7 @@ use function Pest\Laravel\get;
 use function Pest\Laravel\putJson;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 test('index methods', function () {

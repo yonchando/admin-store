@@ -28,7 +28,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             'price' => $this->faker->numberBetween(1, 100),
             'stock_qty' => $this->faker->numberBetween(1, 1000),
-            'category_id' => Category::inRandomOrder()->first()?->id,
+            'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(),
             'json' => [],
             'status' => ProductStatusEnum::ACTIVE->value,
             'created_at' => $this->faker->dateTimeBetween('-2 months')->format('Y-m-d H:i:s'),

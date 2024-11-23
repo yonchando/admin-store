@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Staff } from "@/types/models/staff";
 import { Column } from "@/types/datatable/column";
@@ -11,6 +10,7 @@ import { router, useForm } from "@inertiajs/vue3";
 import roleService from "@/services/role.service";
 import { Role } from "@/types/models/role";
 import { useAlertStore } from "@/services/helper.service";
+import Action from "@/Components/Tables/Action.vue";
 
 defineProps<{
     roles: Paginate<Staff>;
@@ -57,14 +57,9 @@ onMounted(() => {});
             :columns="columns"
             checkbox>
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" :href="route('role.show', item.id)" severity="info">
-                        <i class="fa fa-eye"></i>
-                    </Button>
-                    <Button size="xs" :href="route('role.edit', item.id)" severity="warning">
-                        <i class="fa fa-pen"></i>
-                    </Button>
-                </ButtonGroup>
+                <Action
+                    :view="() => router.get(route('role.show', item.id))"
+                    :edit="() => router.get(route('role.edit', item.id))" />
             </template>
         </DataTable>
     </AppLayout>

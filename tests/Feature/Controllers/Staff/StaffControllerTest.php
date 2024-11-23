@@ -13,7 +13,7 @@ use function Pest\Laravel\get;
 use function Pest\Laravel\put;
 
 beforeEach(function () {
-    asUser();
+    asAdmin();
 });
 
 describe('user lists', function () {

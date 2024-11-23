@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Staff } from "@/types/models/staff";
 import staffService from "@/services/staff.service";
@@ -10,6 +9,7 @@ import useAction from "@/services/action.service";
 import { computed, ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { useAlertStore } from "@/services/helper.service";
+import Action from "@/Components/Tables/Action.vue";
 
 defineProps<{
     staffs: Paginate<Staff>;
@@ -60,10 +60,9 @@ function show(staff: Staff) {
             :columns="columns"
             checkbox>
             <template #actions="{ item }">
-                <ButtonGroup>
-                    <Button size="xs" :href="route('staff.show', item.id)" severity="info">View</Button>
-                    <Button size="xs" :href="route('staff.edit', item.id)" severity="warning">Edit</Button>
-                </ButtonGroup>
+                <Action
+                    :view="() => router.get(route('staff.show', item.id))"
+                    :edit="() => router.get(route('staff.edit', item.id))" />
             </template>
         </DataTable>
     </AppLayout>
