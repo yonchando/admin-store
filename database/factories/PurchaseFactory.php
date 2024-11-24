@@ -26,6 +26,7 @@ class PurchaseFactory extends Factory
             'status' => $this->faker->randomElement(array_values(PurchaseStatusEnum::toJson())),
             'customer_id' => Customer::inRandomOrder()->first()?->id ?? Customer::factory(),
             'created_at' => $this->faker->dateTimeBetween('-3 months'),
+            'purchased_at' => now()->toDateTimeString(),
         ];
     }
 

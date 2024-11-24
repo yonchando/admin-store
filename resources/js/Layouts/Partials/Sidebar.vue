@@ -84,7 +84,7 @@ function clearMenuSearch() {
                 <template #content>
                     <ul>
                         <li class="border-b dark:border-b-gray-800">
-                            <nav-link :href="route('profile.edit')">Profile</nav-link>
+                            <nav-link :href="route('user.profile.edit')">Profile</nav-link>
                         </li>
                         <li>
                             <nav-link method="post" :href="route('logout')">Logout</nav-link>

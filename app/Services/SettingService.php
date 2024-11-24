@@ -2,23 +2,25 @@
 
 namespace App\Services;
 
+use App\Enums\Setting\SettingKeyEnum;
 use App\Models\Setting;
 
 class SettingService
 {
-    public function siteTitle(): Setting
+    public function save(array $data): void
     {
-        if (Setting::first() === null) {
-            return Setting::with('currency')->create();
+        $keys = SettingKeyEnum::toJson();
+
+        foreach ($keys as $key) {
+            if (Setting::where('key', $key)->exists()) {
+                Setting::where('key', $key)->update(['value' => ___($data, $key)]);
+            } else {
+                Setting::create([
+                    'key' => $key,
+                    'value' => ___($data, $key),
+                ]);
+            }
+
         }
-
-        return Setting::with('currency')->first();
-    }
-
-    public function save(): Setting
-    {
-        $setting = new Setting;
-
-        return $setting;
     }
 }

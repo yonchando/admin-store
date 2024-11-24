@@ -1,13 +1,17 @@
 <?php
 
+use App\Enums\GenderEnum;
 use App\Models\Staff;
+
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\assertSoftDeleted;
 
 test('profile page is displayed', function () {
     $user = Staff::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->get('/profile');
+    $response = actingAs($user)
+        ->getJson(route('user.profile.edit'));
 
     $response->assertOk();
 });
@@ -15,53 +19,47 @@ test('profile page is displayed', function () {
 test('profile information can be updated', function () {
     $user = Staff::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->patch(route('profile.update'), [
+    $response = actingAs($user)
+        ->putJson(route('user.profile.update'), [
             'name' => 'Test User',
-            'username' => 'username_test',
+            'gender' => GenderEnum::MALE->value,
         ]);
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
+        ->assertRedirect(route('user.profile.edit'));
 
     $user->refresh();
 
     $this->assertSame('Test User', $user->name);
-    $this->assertSame('username_test', $user->username);
+    $this->assertSame(GenderEnum::MALE, $user->gender);
 });
 
 test('user can delete their account', function () {
     $user = Staff::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->delete('/profile', [
+    actingAs($user)
+        ->delete(route('user.profile.destroy'), [
             'password' => 'password',
-        ]);
+        ])->assertSessionHasNoErrors()
+        ->assertRedirect(route('login'));
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/');
-
-    $this->assertGuest();
-    $this->assertNull($user->fresh());
+    assertGuest();
+    assertSoftDeleted($user);
 });
 
 test('correct password must be provided to delete account', function () {
     $user = Staff::factory()->create();
 
-    $response = $this
-        ->actingAs($user)
-        ->from('/profile')
-        ->delete('/profile', [
+    $response = actingAs($user)
+        ->fromRoute('user.profile.edit')
+        ->delete(route('user.profile.destroy'), [
             'password' => 'wrong-password',
         ]);
 
     $response
         ->assertSessionHasErrors('password')
-        ->assertRedirect('/profile');
+        ->assertRedirect(route('user.profile.edit'));
 
     $this->assertNotNull($user->fresh());
 });

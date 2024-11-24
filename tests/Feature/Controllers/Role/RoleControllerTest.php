@@ -46,7 +46,7 @@ test('store role', function () {
     post(route('role.store'), $data)
         ->assertRedirectToRoute('role.index')
         ->assertSessionHas([
-            'success' => __('lang.created_success', ['attribute' => 'role']),
+            'success' => __('lang.created_success', ['attribute' => __('lang.role')]),
         ]);
 
     $role = Role::where('code', 'SALE')->first();
@@ -80,7 +80,7 @@ test('update role', function () {
     putJson(route('role.update', $role->id), $data)
         ->assertRedirectToRoute('role.show', $role->id)
         ->assertSessionHas([
-            'success' => __('lang.updated_success', ['attribute' => 'role']),
+            'success' => __('lang.updated_success', ['attribute' => __('lang.role')]),
         ]);
 
     $role->refresh();

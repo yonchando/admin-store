@@ -47,6 +47,7 @@ class Customer extends Model
             'gender' => GenderEnum::class,
             'status' => CustomerStatusEnum::class,
             'profile' => ImageCast::class,
+            'phone_number' => 'string',
         ];
     }
 }

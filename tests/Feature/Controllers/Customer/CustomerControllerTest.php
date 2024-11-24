@@ -7,6 +7,7 @@ use Inertia\Testing\AssertableInertia;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\deleteJson;
+use function Pest\Laravel\get;
 use function Pest\Laravel\getJson;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
@@ -18,7 +19,7 @@ beforeEach(function () {
 test('customer listing', function () {
     $customers = Customer::factory(3)->create();
 
-    getJson(route('customer.index'))
+    get(route('customer.index'))
         ->assertOk()
         ->assertInertia(
             fn (AssertableInertia $page) => $page->component('Customer/CustomerIndex')

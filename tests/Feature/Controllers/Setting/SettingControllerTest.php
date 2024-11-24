@@ -1,39 +1,47 @@
 <?php
 
+use App\Enums\Setting\SettingKeyEnum;
 use App\Models\Currency;
 use App\Models\Setting;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 
-uses(RefreshDatabase::class);
+use function Pest\Laravel\getJson;
+use function Pest\Laravel\putJson;
+use function PHPUnit\Framework\assertEquals;
+
+beforeEach(function () {
+    asAdmin();
+});
 
 test('create setting if not exists', function () {
     $currencies = Currency::factory(3)->create();
 
-    $this->get(route('setting.show'))
+    getJson(route('setting.show'))
         ->assertOk()
         ->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Setting/Show')
+            fn (AssertableInertia $page) => $page->component('Setting/SettingShow')
                 ->has('currencies', $currencies->count())
                 ->has('setting')
         );
 
-    $this->assertDatabaseCount('settings', 1);
 });
 
 test('user can update currency', function () {
-
-    $setting = Setting::factory()->create();
-
     $currency = Currency::factory()->create();
 
-    $res = $this->put(route('setting.update'), [
-        'currency_id' => $currency->id,
+    $setting = Setting::factory()->create([
+        'key' => SettingKeyEnum::CURRENCY->value,
+        'value' => null,
     ]);
 
-    $res->assertRedirect(route('setting.show'));
+    $siteTitle = fake()->name;
+    putJson(route('setting.update'), [
+        SettingKeyEnum::CURRENCY->value => $currency->id,
+        SettingKeyEnum::SITE_TITLE->value => $siteTitle,
+    ])->assertRedirect(route('setting.show'));
 
     $setting->refresh();
 
-    $this->assertEquals($currency->id, $setting->properties->currency_id);
+    assertEquals($currency->id, $setting->value);
+    assertEquals($siteTitle, Setting::firstWhere('key', SettingKeyEnum::SITE_TITLE->value)->value);
 });

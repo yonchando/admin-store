@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Staff;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,14 +16,8 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(Staff::class)->ignore($this->user()->id),
-            ],
+            'gender' => ['nullable', Rule::in(['male', 'female'])],
+            'profile' => ['nullable', Rule::file()->size('10mb')],
         ];
     }
 }

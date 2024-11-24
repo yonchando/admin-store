@@ -105,7 +105,7 @@ Route::middleware('auth')->group(function () {
         });
 
     Route::prefix('profile')
-        ->name('profile.')
+        ->name('user.profile.')
         ->controller(ProfileController::class)
         ->group(function () {
             Route::get('profile', 'edit')->name('edit');
