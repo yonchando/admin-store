@@ -17,7 +17,11 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        $customers = $this->customerService->paginate($request);
+        $customers = $this->customerService->paginate($request->all());
+
+        if ($request->wantsJson()) {
+            return response()->json($customers);
+        }
 
         return Inertia::render('Customer/CustomerIndex', [
             'customers' => $customers,

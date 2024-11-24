@@ -37,7 +37,7 @@ const actions = computed(() => {
 <template>
     <ButtonGroup>
         <template v-for="action in actions">
-            <component :is="action.component" size="xs" v-bind="action.props">
+            <component type="button" :is="action.component" size="xs" v-bind="action.props">
                 <fa-icon v-if="action.icon" :icon="action.icon" />
                 <span v-else>{{ action.label }}</span>
             </component>

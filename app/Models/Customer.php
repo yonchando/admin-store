@@ -23,7 +23,7 @@ class Customer extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'nickname',
+        'name',
         'phone_number',
         'email',
         'password',
@@ -37,6 +37,8 @@ class Customer extends Model
         'password',
         'socialize_token',
     ];
+
+    protected $appends = ['phone'];
 
     public function casts(): array
     {

@@ -1,13 +1,16 @@
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Module } from "@/types/models/module";
 import Badge from "@/Components/Badges/Badge.vue";
 import { globalFilter } from "@/services/helper.service";
 import { Customer } from "@/types/models/customer";
+import axios from "axios";
+import { defineStore } from "pinia";
+import { Paginate } from "@/types/paginate";
 
-export const columns: Column<Customer>[] = [
+export const columns: ColumnType<Customer>[] = [
     {
-        label: "Nickname",
-        field: "nickname",
+        label: "Name",
+        field: "name",
     },
     {
         label: "Email",
@@ -15,7 +18,7 @@ export const columns: Column<Customer>[] = [
     },
     {
         label: "Phone number",
-        field: "phone_number",
+        field: "phone",
     },
     {
         label: "Gender",
@@ -43,7 +46,7 @@ export const columns: Column<Customer>[] = [
         label: "Created date",
         field: "created_at",
         props: {
-            class: "w-40",
+            class: "w-48",
         },
     },
     {
@@ -56,11 +59,60 @@ export const columns: Column<Customer>[] = [
     },
 ];
 
-export const filters = {
-    ...globalFilter,
-};
-
 export default {
     columns,
-    filters,
 };
+
+export const useCustomerStore = defineStore("customer", {
+    state: () => {
+        return {
+            data: [] as Customer[],
+            paginate: {} as Paginate<Customer>,
+            filters: {
+                ...globalFilter,
+            },
+            loading: false,
+            debounce: null as any,
+        };
+    },
+    actions: {
+        getData(more: boolean = false) {
+            if (this.data.length > 0 && !more) {
+                return;
+            }
+            this.loading = true;
+            axios
+                .get(route("customer.index", this.filters))
+                .then((res) => {
+                    this.paginate = res.data;
+
+                    if (more) {
+                        this.data = [...this.data, ...res.data.data];
+                    } else {
+                        this.data = res.data.data;
+                    }
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        search(value: string) {
+            this.filters.search = value;
+
+            if (this.debounce) {
+                clearTimeout(this.debounce);
+            }
+
+            this.debounce = setTimeout(() => {
+                this.getData();
+            }, 500);
+        },
+        more() {
+            this.filters.page = this.paginate.current_page + 1;
+            this.getData(true);
+        },
+        isLastPage() {
+            return this.paginate.next_page_url != null;
+        },
+    },
+});

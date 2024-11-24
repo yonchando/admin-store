@@ -1,9 +1,12 @@
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import Badge from "@/Components/Badges/Badge.vue";
 import { Product } from "@/types/models/product";
 import { globalFilter } from "@/services/helper.service";
+import { defineStore } from "pinia";
+import { Paginate } from "@/types/paginate";
+import axios from "axios";
 
-export const columns: Column<Product>[] = [
+export const columns: ColumnType<Product>[] = [
     {
         label: "Name",
         field: "product_name",
@@ -36,7 +39,7 @@ export const columns: Column<Product>[] = [
     },
     {
         label: "Status",
-        field: "status_text",
+        field: "status",
         props: {
             class: "w-28",
         },
@@ -83,3 +86,22 @@ export default {
     columns,
     filters,
 };
+
+export const useProductStore = defineStore("product", {
+    state: () => {
+        return {
+            data: [] as Product[],
+            paginate: {} as Paginate<Product>,
+        };
+    },
+    actions: {
+        getData(filters: any = {}) {
+            axios.get(route("product.index", filters)).then((res) => {
+                this.data = res.data.data;
+            });
+        },
+        search(filters: any = {}) {
+            this.getData(filters);
+        },
+    },
+});

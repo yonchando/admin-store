@@ -3,7 +3,7 @@ import DataTable from "@/Components/Tables/DataTable.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Staff } from "@/types/models/staff";
 import staffService from "@/services/staff.service";
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
 import { computed, ref } from "vue";
@@ -16,7 +16,7 @@ defineProps<{
 }>();
 
 const selectRows = ref([]);
-const columns: Column<Staff>[] = staffService.columns;
+const columns: ColumnType<Staff>[] = staffService.columns;
 
 const actions = computed(() => {
     const { add, refresh, remove } = useAction();

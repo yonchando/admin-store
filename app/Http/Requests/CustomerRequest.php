@@ -13,7 +13,7 @@ class CustomerRequest extends FormRequest
     {
 
         return [
-            'nickname' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100'],
             'phone_number' => ['required', Rule::unique(Customer::class, 'phone_number')->ignore($this->id)],
             'email' => [
                 'nullable',

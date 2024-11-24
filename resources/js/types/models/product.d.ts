@@ -10,9 +10,8 @@ export interface Product {
     category?: Category;
     category_id?: number;
     status: string;
-    status_text: string;
     slug: string;
-    json: ProductJson;
+    json?: ProductJson;
     created_at: string;
     updated_at: string;
 }

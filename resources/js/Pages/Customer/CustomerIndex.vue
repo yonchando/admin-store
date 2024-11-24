@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
 import { computed, ref } from "vue";
@@ -17,7 +16,7 @@ defineProps<{
 }>();
 
 const selectRows = ref([]);
-const columns: Column<Customer>[] = customerService.columns;
+const columns: ColumnType<Customer>[] = customerService.columns;
 
 const actions = computed(() => {
     const { add, refresh, remove } = useAction();

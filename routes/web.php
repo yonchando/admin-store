@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
@@ -69,6 +70,24 @@ Route::middleware('auth')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
+    Route::group([], function () {
+        Route::prefix('purchase')
+            ->name('purchase.')
+            ->controller(PurchaseController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('show/{id}', 'show')->name('show');
+
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+
+                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::put('update/{id}', 'update')->name('update');
+
+                Route::delete('destroy', 'destroy')->name('destroy');
+            });
+    });
+
     Route::prefix('card')
         ->name('card.')
         ->controller(CardController::class)
@@ -102,43 +121,43 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/show/{id}', 'show')->name('show');
 
-            Route::get('/create', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
 
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::put('update/{id}', 'update')->name('update');
-            Route::patch('update-role-permission/{id}', 'updateRolePermission')->name('patch.role.permission');
+                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::put('update/{id}', 'update')->name('update');
+                Route::patch('update-role-permission/{id}', 'updateRolePermission')->name('patch.role.permission');
 
-            Route::delete('destroy', 'destroy')->name('destroy');
-        });
+                Route::delete('destroy', 'destroy')->name('destroy');
+            });
 
-    Route::prefix('module')
-        ->name('module.')
-        ->controller(ModuleController::class)
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::post('/save', 'store')->name('store');
-            Route::put('update/{id}', 'update')->name('update');
-            Route::delete('destroy', 'destroy')->name('destroy');
-        });
+        Route::prefix('module')
+            ->name('module.')
+            ->controller(ModuleController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/save', 'store')->name('store');
+                Route::put('update/{id}', 'update')->name('update');
+                Route::delete('destroy', 'destroy')->name('destroy');
+            });
 
-    Route::prefix('role')
-        ->name('role.')
-        ->controller(RoleController::class)
-        ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/show/{id}', 'show')->name('show');
+        Route::prefix('role')
+            ->name('role.')
+            ->controller(RoleController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/show/{id}', 'show')->name('show');
 
-            Route::get('/create', 'create')->name('create');
-            Route::post('/save', 'store')->name('store');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/save', 'store')->name('store');
 
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::put('update/{id}', 'update')->name('update');
+                Route::get('/edit/{id}', 'edit')->name('edit');
+                Route::put('update/{id}', 'update')->name('update');
 
-            Route::patch('update-permissions/{id}', 'patchPermissions')->name('patch.permissions');
+                Route::patch('update-permissions/{id}', 'patchPermissions')->name('patch.permissions');
 
-            Route::delete('destroy', 'destroy')->name('destroy');
-        });
+                Route::delete('destroy', 'destroy')->name('destroy');
+            });
 
         Route::prefix('setting')
             ->name('setting.')

@@ -14,9 +14,9 @@ class CustomerFilter extends FilterBuilder
     public function search($value): void
     {
         $this->builder->where(function (Builder $query) use ($value) {
-            $query->whereRaw('lower(nickname) like ?', ["%{$value}%"])
-                ->orWhereRaw('lower(email) like ?', ["%{$value}%"])
-                ->orWhereRaw('lower(phone) like ?', ["%{$value}%"]);
+            $query->whereRaw('lower(name) like lower(?)', ["%{$value}%"])
+                ->orWhereRaw('lower(email) like lower(?)', ["%{$value}%"])
+                ->orWhereRaw('lower(phone_number) like lower(?)', ["%{$value}%"]);
         });
     }
 }

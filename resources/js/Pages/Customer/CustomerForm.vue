@@ -22,7 +22,7 @@ const props = defineProps<{
 }>();
 
 const form: any = useForm({
-    nickname: "",
+    name: "",
     email: "",
     phone_number: "",
     password: "",
@@ -84,8 +84,8 @@ onMounted(() => {
                     <div class="grid w-full grid-cols-2 gap-4">
                         <div class="flex flex-col gap-4">
                             <div class="">
-                                <TextInput required label="Nickname" v-model="form.nickname" tabindex="1" />
-                                <InputError :message="form.errors.nickname" />
+                                <TextInput required label="Name" v-model="form.name" tabindex="1" />
+                                <InputError :message="form.errors.name" />
                             </div>
                             <div class="">
                                 <TextInput label="Email" v-model="form.email" tabindex="3" type="email" />

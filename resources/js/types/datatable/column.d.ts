@@ -3,7 +3,7 @@ export interface Component<Type> {
     props?: any | ((t: Type) => any);
 }
 
-export interface Column<Type> {
+export interface ColumnType<Type> {
     label: string | ((t: Type) => string);
     field?: keyof Type | ((t: Type) => any);
     props?: any;

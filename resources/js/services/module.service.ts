@@ -1,9 +1,9 @@
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Module } from "@/types/models/module";
 import Badge from "@/Components/Badges/Badge.vue";
 import { globalFilter } from "@/services/helper.service";
 
-export const columns: Column<Module>[] = [
+export const columns: ColumnType<Module>[] = [
     {
         label: "Name",
         field: "name",

@@ -11,6 +11,7 @@ export function dataGet(item: any, key: string | ((t: any) => string)) {
 
 export const globalFilter = {
     page: 1,
+    last_page: null,
     sortBy: {
         field: "created_at",
         direction: "desc",

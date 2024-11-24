@@ -2,7 +2,7 @@
 import DataTable from "@/Components/Tables/DataTable.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Staff } from "@/types/models/staff";
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Paginate } from "@/types/paginate";
 import useAction from "@/services/action.service";
 import { computed, onMounted, ref } from "vue";
@@ -17,7 +17,7 @@ defineProps<{
 }>();
 
 const selectRows = ref([]);
-const columns: Column<Role>[] = roleService.columns;
+const columns: ColumnType<Role>[] = roleService.columns;
 
 const actions = computed(() => {
     const { add, refresh, remove } = useAction();

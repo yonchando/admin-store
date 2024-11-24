@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Product } from "@/types/models/product";
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import productService from "@/services/product.service";
 import { computed, nextTick, ref, watch } from "vue";
 import useAction from "@/services/action.service";
@@ -41,7 +41,7 @@ const actions = computed(() => {
     return [save, edit, remove];
 });
 
-const columns: Column<Role>[] = roleService.columns;
+const columns: ColumnType<Role>[] = roleService.columns;
 
 const form = useForm({
     permissions: {} as { [key: number]: number[] },

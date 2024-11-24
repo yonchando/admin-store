@@ -1,10 +1,10 @@
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import Badge from "@/Components/Badges/Badge.vue";
 import { Product } from "@/types/models/product";
 import { globalFilter } from "@/services/helper.service";
 import { Role } from "@/types/models/role";
 
-export const columns: Column<Role>[] = [
+export const columns: ColumnType<Role>[] = [
     {
         label: "Code",
         field: "code",

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Concerns\PurchaseOrder;
+namespace App\Models\Concerns\Purchase;
 
 use App\Models\Customer;
-use App\Models\PurchaseOrderDetail;
+use App\Models\PurchaseDetail;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,6 +16,6 @@ trait HasRelationships
 
     public function purchaseDetails(): HasMany
     {
-        return $this->hasMany(PurchaseOrderDetail::class, 'purchase_order_id');
+        return $this->hasMany(PurchaseDetail::class);
     }
 }

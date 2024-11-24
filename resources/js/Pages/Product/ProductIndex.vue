@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
-import { Column } from "@/types/datatable/column.d";
+import { ColumnType } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
@@ -14,7 +14,7 @@ const props = defineProps<{
     requests: any;
 }>();
 
-const columns: Column<Product>[] = productService.columns;
+const columns: ColumnType<Product>[] = productService.columns;
 
 const selectRows = ref<Array<number>>([]);
 

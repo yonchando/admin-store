@@ -1,5 +1,5 @@
 import "toastify-js/src/toastify.css";
-import "../css/app.css";
+import "../css/app.scss";
 import "./bootstrap.ts";
 import "./cropper";
 

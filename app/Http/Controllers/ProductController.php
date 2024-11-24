@@ -25,6 +25,10 @@ class ProductController extends Controller
 
         $statuses = ProductStatusEnum::toArray();
 
+        if ($request->wantsJson()) {
+            return response()->json($products);
+        }
+
         return Inertia::render('Product/ProductIndex', [
             'products' => $products,
             'statuses' => fn () => $statuses,

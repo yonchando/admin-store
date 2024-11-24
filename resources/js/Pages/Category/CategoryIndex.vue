@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Categories, Category } from "@/types/models/category";
 import DataTable from "@/Components/Tables/DataTable.vue";
-import { Column } from "@/types/datatable/column.d";
+import { ColumnType } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import categoryService from "@/services/category.service";
 import useAction from "@/services/action.service";
@@ -17,7 +17,7 @@ const props = defineProps<{
     sort: any;
 }>();
 
-const columns: Column<Category>[] = categoryService.columns;
+const columns: ColumnType<Category>[] = categoryService.columns;
 
 const filters = reactive(categoryService.filters);
 

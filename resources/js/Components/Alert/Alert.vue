@@ -70,8 +70,8 @@ const iconClass = computed(() => {
                             <p class="mt-2 text-gray-400">{{ alertStore.text }}</p>
 
                             <div class="mt-6 flex gap-4">
-                                <Button @click="alertStore.confirm()" :severity="alertStore.confirmType"> Yes </Button>
-                                <Button @click="alertStore.close()" :severity="alertStore.cancelBtn"> Close </Button>
+                                <Button @click="alertStore.confirm()" :severity="alertStore.confirmType">Yes</Button>
+                                <Button @click="alertStore.close()" :severity="alertStore.cancelBtn">Close</Button>
                             </div>
                         </div>
                     </div>

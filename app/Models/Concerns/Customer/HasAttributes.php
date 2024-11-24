@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasAttributes
 {
-    public function genderText(): Attribute
+    public function phone(): Attribute
     {
-        return Attribute::make(
-            get: fn () => $this->gender ? __("lang.{$this->gender->value}") : null,
-        );
+        return Attribute::get(fn () => "($this->country_code) $this->phone_number");
     }
 }

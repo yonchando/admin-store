@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
-import { Column } from "@/types/datatable/column.d";
+import { ColumnType } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import useAction from "@/services/action.service";
 import { router, useForm } from "@inertiajs/vue3";
@@ -36,7 +36,7 @@ defineProps<{
     permissions: any;
 }>();
 
-const columns: Column<Module>[] = moduleService.columns;
+const columns: ColumnType<Module>[] = moduleService.columns;
 
 const filters = reactive(moduleService.filters);
 

@@ -1,8 +1,8 @@
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { Category } from "@/types/models/category";
 import { globalFilter } from "@/services/helper.service";
 
-export const columns: Column<Category>[] = [
+export const columns: ColumnType<Category>[] = [
     {
         label: "Name",
         field: "category_name",

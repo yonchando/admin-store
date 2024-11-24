@@ -4,7 +4,7 @@ namespace App\Enums\Order;
 
 use App\Traits\HasEnumProperty;
 
-enum OrderStatusEnum: string
+enum PurchaseStatusEnum: string
 {
     use HasEnumProperty;
 
@@ -12,4 +12,5 @@ enum OrderStatusEnum: string
     case ACCEPTED = 'accepted';
     case REJECTED = 'rejected';
     case COMPLETED = 'completed';
+    case CANCEL = 'cancel';
 }

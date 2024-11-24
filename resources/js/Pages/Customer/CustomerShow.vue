@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { Column } from "@/types/datatable/column";
+import { ColumnType } from "@/types/datatable/column";
 import { computed, onMounted } from "vue";
 import useAction from "@/services/action.service";
 import { router, useForm } from "@inertiajs/vue3";
@@ -42,7 +42,7 @@ const actions = computed(() => {
     return [edit, remove];
 });
 
-const columns: Column<Customer>[] = customerService.columns;
+const columns: ColumnType<Customer>[] = customerService.columns;
 
 onMounted(() => {});
 </script>

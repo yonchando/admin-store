@@ -73,7 +73,7 @@ test('customer update', function () {
     $file = UploadedFile::fake()->image('image.png');
 
     $data = $customer->toArray();
-    $data['nickname'] = fake()->name;
+    $data['name'] = fake()->name;
     $data['password'] = 'update-password';
     $data['password_confirmation'] = 'update-password';
     $data['profile'] = $file;

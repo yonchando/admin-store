@@ -1,4 +1,5 @@
 import {
+    faCartShopping,
     faCircleDollarToSlot,
     faCreditCard,
     faDolly,
@@ -55,6 +56,12 @@ export default function useMenu() {
             url: route("product.index"),
             icon: faDolly,
             isActive: isActive("product.index", "product.create", "product.show", "product.edit"),
+        }),
+        add({
+            title: "Purchase Transactions",
+            url: route("purchase.index"),
+            icon: faCartShopping,
+            isActive: isActive("purchase.index", "purchase.create", "purchase.show", "purchase.edit"),
         }),
         add({
             title: "Customers",

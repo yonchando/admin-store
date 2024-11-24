@@ -23,7 +23,7 @@ class CustomerFactory extends Factory
         $phone = $this->faker->unique()->randomNumber(9, true);
 
         return [
-            'nickname' => $this->faker->name(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'country_code' => '+855',
             'phone_number' => $phone,

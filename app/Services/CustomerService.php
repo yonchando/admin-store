@@ -5,22 +5,21 @@ namespace App\Services;
 use App\Facades\Helper;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerService
 {
-    public function paginate(Request $request): LengthAwarePaginator
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
         $query = Customer::query();
 
-        $query->filters($request->all());
+        $query->filters($filters);
 
         $query->latest();
 
-        return $query->paginate($request->get('perPage', 20));
+        return $query->paginate(___($filters, 'perPage', 20), ['*'], ___($filters, 'pageName', 'page'));
     }
 
     public function find(int $id): Customer
@@ -30,7 +29,7 @@ class CustomerService
 
     public function store(CustomerRequest $request): Customer
     {
-        $customer = new Customer($request->validated());
+        $customer = new Customer($request->safe()->except('profile'));
 
         if ($request->hasFile('profile')) {
             $this->uploadImage($customer, $request->file('profile'));
