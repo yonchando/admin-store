@@ -118,7 +118,7 @@ const positionClass = computed(() => {
                                     </h3>
                                 </slot>
 
-                                <div class="ml-auto space-x-2">
+                                <div class="ml-auto flex gap-2">
                                     <template v-if="actions && actions.length">
                                         <template v-for="action in actions">
                                             <component :is="action.component" v-bind="action.props">
@@ -126,6 +126,7 @@ const positionClass = computed(() => {
                                             </component>
                                         </template>
                                     </template>
+                                    <slot name="actions" />
                                     <Button @click="show = false" severity="secondary">Close</Button>
                                 </div>
                             </div>

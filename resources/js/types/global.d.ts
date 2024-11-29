@@ -14,15 +14,15 @@ declare global {
         __: __;
     }
 
-    let __: __;
-
     /* eslint-disable no-var */
     let route: typeof ziggyRoute;
+    let __: __;
 }
 
 declare module "vue" {
     interface ComponentCustomProperties {
         route: typeof ziggyRoute;
+        __: __;
     }
 }
 

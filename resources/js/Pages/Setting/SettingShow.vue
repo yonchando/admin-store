@@ -47,7 +47,11 @@ onMounted(() => {
                         <InputError :message="form.errors.site_title" />
                     </div>
                     <div class="">
-                        <Select :options="currencies" v-model="form.currency" option-value="code" />
+                        <Select
+                            :options="currencies"
+                            v-model="form.currency"
+                            :show-search="false"
+                            option-label="code" />
                         <InputError :message="form.errors.site_title" />
                     </div>
                 </div>

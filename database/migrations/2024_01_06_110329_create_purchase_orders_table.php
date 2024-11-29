@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->string('ref_no')->unique();
-            $table->double('total');
+            $table->decimal('total', 11);
             $table->string('status', 50)->default(PurchaseStatusEnum::PENDING->value);
             $table->timestamp('purchased_at');
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->json('json')->nullable();
             $table->timestamps();
         });
 

@@ -107,4 +107,6 @@ return [
     'role' => 'Role',
     'module' => 'Module',
     'completed' => 'Completed',
+    'cancel_transaction' => 'Update status: Cancel',
+    'rejected_transaction' => 'Update status: Reject',
 ];

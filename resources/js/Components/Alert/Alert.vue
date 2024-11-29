@@ -23,7 +23,7 @@ const iconClass = computed(() => {
         info: "text-info border-info",
         warning: "text-warning border-warning",
         error: "text-error border-error",
-        question: "text-gray-700 border-gray-700",
+        question: "text-warning border-warning",
     }[alertStore.type];
 });
 </script>
@@ -59,19 +59,26 @@ const iconClass = computed(() => {
                     leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                     <div
                         v-show="alertStore.show"
-                        class="w-full max-w-sm transform overflow-hidden rounded-lg bg-white p-4 shadow-xl transition-all dark:bg-gray-800">
-                        <div class="flex flex-col items-center text-white">
+                        class="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-8 shadow-xl transition-all dark:bg-gray-800">
+                        <div class="flex flex-col items-center gap-6 text-white">
                             <span
                                 :class="[iconClass]"
                                 class="inline-flex size-20 items-center justify-center rounded-full border-4">
-                                <FaIcon :icon="icon" size="4x"></FaIcon>
+                                <FaIcon :icon="icon" size="3x"></FaIcon>
                             </span>
-                            <h1 class="mt-4 text-2xl">{{ alertStore.title }}</h1>
-                            <p class="mt-2 text-gray-400">{{ alertStore.text }}</p>
-
-                            <div class="mt-6 flex gap-4">
-                                <Button @click="alertStore.confirm()" :severity="alertStore.confirmType">Yes</Button>
-                                <Button @click="alertStore.close()" :severity="alertStore.cancelBtn">Close</Button>
+                            <div class="flex flex-col gap-2 text-center">
+                                <h1 class="text-3xl font-semibold">{{ alertStore.title }}</h1>
+                                <p class="text-base font-medium text-gray-400">{{ alertStore.text }}</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <Button @click="alertStore.confirm()" :severity="alertStore.confirmType">
+                                    <i class="fa fa-check mr-2"></i>
+                                    {{ alertStore.confirmButtonText }}
+                                </Button>
+                                <Button @click="alertStore.close()" :severity="alertStore.cancelBtn">
+                                    <i class="fa fa-times mr-2"></i>
+                                    {{ alertStore.cancelButtonText }}
+                                </Button>
                             </div>
                         </div>
                     </div>

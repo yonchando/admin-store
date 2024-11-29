@@ -5,6 +5,7 @@ import { globalFilter } from "@/services/helper.service";
 import { defineStore } from "pinia";
 import { Paginate } from "@/types/paginate";
 import axios from "axios";
+import { currency } from "@/number_format";
 
 export const columns: ColumnType<Product>[] = [
     {
@@ -23,10 +24,10 @@ export const columns: ColumnType<Product>[] = [
     },
     {
         label: "Price",
-        field: "price",
+        field: (p) => currency(p.price, true),
         sortable: "price",
         props: {
-            class: "w-28",
+            class: "w-32",
         },
     },
     {
@@ -39,7 +40,7 @@ export const columns: ColumnType<Product>[] = [
     },
     {
         label: "Status",
-        field: "status",
+        field: (p) => __(p.status),
         props: {
             class: "w-28",
         },

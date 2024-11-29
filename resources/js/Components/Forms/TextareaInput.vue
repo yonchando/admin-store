@@ -11,9 +11,11 @@ const props = withDefaults(
         label?: string;
         direction?: "horizontal" | "vertical";
         root?: any;
+        required?: boolean;
     }>(),
     {
         direction: "vertical",
+        required: false,
     },
 );
 const model = defineModel<any>({ required: true });
@@ -39,7 +41,7 @@ defineExpose({ focus: () => input.value?.focus() });
 <template>
     <div :class="[directionClass]" v-bind="root">
         <slot name="label" v-if="$slots.label || label">
-            <InputLabel :value="label" :for="input?.getAttribute('id')" />
+            <InputLabel :required="required" :value="label" :for="input?.getAttribute('id')" />
         </slot>
         <textarea
             class="w-full rounded-md border-gray-300 text-sm placeholder-gray-100 shadow-sm focus:border-gray-300 focus:ring-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-gray-700 dark:focus:ring-gray-700"

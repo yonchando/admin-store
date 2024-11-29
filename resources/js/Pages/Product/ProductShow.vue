@@ -14,78 +14,45 @@ import FileUpload from "@/Components/Forms/FileUpload.vue";
 import { Action } from "@/types/button";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { UploadFile } from "@/types";
+import { useAlertStore } from "@/services/helper.service";
 
 const { product } = defineProps<{
     product: Product;
 }>();
 
-const confirmed = ref(false);
-
-const showUpload = ref(false);
+const columns: ColumnType<Product>[] = productService.columns;
 
 const actions = computed(() => {
-    const { upload, edit, remove } = useAction();
-
-    upload.props.onClick = () => (showUpload.value = true);
+    const { edit, remove } = useAction();
 
     edit.props.onClick = () => {
         router.get(route("product.edit", product.id));
     };
 
     remove.props.onClick = () => {
-        confirmed.value = true;
-    };
+        const alert = useAlertStore();
 
-    return [upload, edit, remove];
-});
+        alert.show = true;
 
-const columns: ColumnType<Product>[] = productService.columns;
-
-const cropper = useCropper();
-const image = ref();
-const files = ref<UploadFile[]>([]);
-
-const form = useForm<any>({
-    image: "",
-});
-
-const formActionUpload = computed(() => {
-    const { upload } = useAction();
-    upload.props.onClick = () => {
-        cropper.getBlob().then((blob) => {
-            form.image = blob;
-
-            form.post(route("product.upload.image", product.id), {
+        alert.confirm = () => {
+            useForm({
+                ids: [product.id],
+            }).delete(route("product.destroy"), {
                 onFinish: () => {
-                    showUpload.value = false;
-                    cropper.$reset();
-                    form.reset();
-                    router.reload({
-                        only: ["product"],
-                    });
+                    alert.show = false;
+                    alert.confirm = () => {};
                 },
             });
-        });
+        };
     };
-    return [upload];
+
+    return [edit, remove];
 });
-
-function changeFile(f: UploadFile) {
-    nextTick(() => {
-        cropper.createCropper(image.value);
-    });
-}
-
-function destroy() {
-    useForm({
-        ids: [product.id],
-    }).delete(route("product.destroy"));
-}
 </script>
 
 <template>
     <AppLayout :title="product.product_name" :actions="actions">
-        <template #header> Product Detail</template>
+        <template #header>Product Detail</template>
 
         <div class="p-4">
             <div class="flex gap-3">
@@ -114,32 +81,6 @@ function destroy() {
                 </div>
             </div>
         </div>
-        <Modal v-model:show="showUpload" :actions="formActionUpload" title="Feature image upload">
-            <div class="inline-block">
-                <div v-if="form.errors.file">
-                    <span>{{ form.errors.file }}</span>
-                </div>
-                <div class="relative">
-                    <FileUpload v-model="form.image" @change="changeFile" v-model:files="files" />
-                </div>
-            </div>
-            <div class="mt-4 h-auto rounded-md border border-gray-100 bg-gray-100" v-if="form.image">
-                <img
-                    ref="image"
-                    class="block w-full max-w-full"
-                    id="cropper-content"
-                    :src="files[0].url"
-                    alt="Image cropper" />
-            </div>
-        </Modal>
-
-        <Alert
-            @confirmed="destroy()"
-            type="warning"
-            title="Are you sure?"
-            text="Do you want to delete this?"
-            v-model:show="confirmed"
-            confirm-button-type="error" />
     </AppLayout>
 </template>
 

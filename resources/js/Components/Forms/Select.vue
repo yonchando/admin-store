@@ -84,7 +84,7 @@ const selected = computed(() => {
     }
 
     let item = data.value.find((item) => {
-        return get(item, "optionValue") === model.value;
+        return get(item, "optionValue") == model.value;
     });
 
     return get(item, "optionLabel");

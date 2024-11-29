@@ -2,7 +2,10 @@
 
 namespace App\Services\Purchase;
 
-use App\Http\Requests\PurchaseRequest;
+use App\Casts\Purchase\PurchaseJson;
+use App\Enums\Order\PurchaseStatusEnum;
+use App\Http\Requests\Purchase\PurchaseRequest;
+use App\Http\Requests\PurchaseStatusRequest;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,7 +14,7 @@ use Illuminate\Support\Str;
 class PurchaseService
 {
     public function __construct(
-        private PurchaseDetailService $purchaseDetailService,
+        private readonly PurchaseDetailService $purchaseDetailService,
     ) {}
 
     /**
@@ -35,7 +38,7 @@ class PurchaseService
     {
         \DB::beginTransaction();
 
-        $details = $this->purchaseDetailService->create($request);
+        $details = $this->purchaseDetailService->createOrEdit($request);
 
         $purchase = new Purchase;
 
@@ -43,7 +46,52 @@ class PurchaseService
             'customer_id' => $request->get('customer_id'),
             'status' => $request->get('status'),
             'ref_no' => Str::random(),
-            'total' => $details->sum('sub_total'),
+            'total' => Collect($details)->sum('sub_total'),
+            'purchased_at' => $request->get('purchase_date'),
+        ]);
+
+        $purchase->save();
+
+        $purchase->purchaseDetails()->saveMany($details);
+
+        \DB::commit();
+
+        return $purchase;
+    }
+
+    public function findById($id): Purchase
+    {
+        return Purchase::with(['customer', 'purchaseDetails'])
+            ->withCount(['purchaseDetails'])
+            ->findOrFail($id);
+    }
+
+    public function updateStatus(PurchaseStatusRequest $request, Purchase $purchase): Purchase
+    {
+        $data = $request->validateStatus($purchase);
+
+        $status = PurchaseStatusEnum::tryFrom(___($data, 'status'));
+
+        $json = new PurchaseJson;
+        $json->reason = $data['reason'];
+
+        $purchase->status = $status;
+        $purchase->json = $json;
+        $purchase->save();
+
+        return $purchase;
+    }
+
+    public function update(PurchaseRequest $request, Purchase $purchase): Purchase
+    {
+        \DB::beginTransaction();
+
+        $details = $this->purchaseDetailService->createOrEdit($request);
+
+        $purchase->fill([
+            'customer_id' => $request->get('customer_id'),
+            'status' => $request->get('status'),
+            'total' => collect($details)->sum('sub_total'),
             'purchased_at' => $request->get('purchase_date'),
         ]);
 

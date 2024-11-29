@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Order\PurchaseStatusEnum;
-use App\Http\Requests\PurchaseRequest;
+use App\Http\Requests\Purchase\PurchaseRequest;
+use App\Http\Requests\PurchaseStatusRequest;
 use App\Services\CustomerService;
 use App\Services\ProductService;
 use App\Services\Purchase\PurchaseService;
@@ -39,14 +40,46 @@ class PurchaseController extends Controller
     {
         $this->purchaseService->store($request);
 
-        return to_route('purchase.index')->with('success', __('lang.created_success', ['attribute' => __('lang.purchase')]));
+        return to_route('purchase.index')->with('success',
+            __('lang.created_success', ['attribute' => __('lang.purchase')]));
     }
 
-    public function show($id) {}
+    public function show($id)
+    {
+        $purchase = $this->purchaseService->findById($id);
 
-    public function edit($id) {}
+        return Inertia::render('Purchase/PurchaseShow', [
+            'purchase' => $purchase,
+            'statuses' => PurchaseStatusEnum::toJson(),
+        ]);
+    }
 
-    public function update(Request $request, $id) {}
+    public function edit($id)
+    {
+        return Inertia::render('Purchase/PurchaseForm', [
+            'purchase' => $this->purchaseService->findById($id),
+            'statuses' => PurchaseStatusEnum::toArray(),
+            'products' => Inertia::lazy(fn () => $this->productService->paginate()),
+            'customers' => Inertia::lazy(fn () => $this->customerService->paginate(['pageName' => 'customer-page'])),
+        ]);
+    }
+
+    public function update(PurchaseRequest $request, $id)
+    {
+        $this->purchaseService->update($request, $this->purchaseService->findById($id));
+
+        return to_route('purchase.index')
+            ->with('success', __('lang.updated_success', ['attribute' => __('lang.purchase')]));
+    }
+
+    public function updateStatus(PurchaseStatusRequest $request, $id)
+    {
+        $purchase = $this->purchaseService->findById($id);
+
+        $this->purchaseService->updateStatus($request, $purchase);
+
+        return back()->with('success', "Purchase {$request->string('status')} successfully!.");
+    }
 
     public function destroy($id) {}
 }

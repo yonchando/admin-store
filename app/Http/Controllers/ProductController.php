@@ -115,6 +115,8 @@ class ProductController extends Controller
 
         $this->productService->destroy($ids);
 
-        return redirect()->route('product.index', request()->toArray());
+        return redirect()
+            ->route('product.index')
+            ->with('success', __('lang.deleted_success', ['attribute' => __('lang.product')]));
     }
 }

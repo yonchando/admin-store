@@ -5,7 +5,7 @@ export interface Component<Type> {
 
 export interface ColumnType<Type> {
     label: string | ((t: Type) => string);
-    field?: keyof Type | ((t: Type) => any);
+    field?: keyof Type | ((t: Type) => any) | string;
     props?: any;
     sortable?: keyof Type | ((t: Type) => any);
     component?: Component<Type>;

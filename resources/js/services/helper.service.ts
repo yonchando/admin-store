@@ -27,7 +27,9 @@ export const useAlertStore = defineStore("alerts", {
             text: "Do you want to delete this?",
             type: "error" as "success" | "info" | "warning" | "error" | "question",
             confirmBtn: "error" as "primary" | "secondary" | "info" | "warning" | "error" | "success",
+            confirmButtonText: "Yes",
             cancelBtn: "secondary" as "primary" | "secondary" | "info" | "warning" | "error" | "success",
+            cancelButtonText: "Cancel",
         };
     },
     getters: {

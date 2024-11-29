@@ -26,6 +26,7 @@ const props = withDefaults(
         root?: {
             actionClass?: string[] | string;
             checkBoxClass?: string[] | string;
+            rowClass?: string[] | string;
         };
     }>(),
     {
@@ -197,7 +198,7 @@ function rowSelected(item: any) {
                                 v-bind="rowProps"
                                 @dblclick="$emit('rowDbclick', item)"
                                 @click="rowSelected(item)"
-                                :class="[selectRow?.id === item.id ? 'active' : '']">
+                                :class="[selectRow?.id === item.id ? 'active' : '', ...(root?.rowClass ?? '')]">
                                 <DataValue :item="item" :column="column" :index="index" />
                             </Column>
                         </template>

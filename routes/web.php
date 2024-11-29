@@ -70,23 +70,22 @@ Route::middleware('auth')->group(function () {
             Route::delete('destroy', 'destroy')->name('destroy');
         });
 
-    Route::group([], function () {
-        Route::prefix('purchase')
-            ->name('purchase.')
-            ->controller(PurchaseController::class)
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('show/{id}', 'show')->name('show');
+    Route::prefix('purchase')
+        ->name('purchase.')
+        ->controller(PurchaseController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('show/{id}', 'show')->name('show');
 
-                Route::get('create', 'create')->name('create');
-                Route::post('store', 'store')->name('store');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
 
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::put('update/{id}', 'update')->name('update');
+            Route::get('edit/{id}', 'edit')->name('edit');
+            Route::put('update/{id}', 'update')->name('update');
+            Route::patch('update-status/{id}', 'updateStatus')->name('update.status');
 
-                Route::delete('destroy', 'destroy')->name('destroy');
-            });
-    });
+            Route::delete('destroy', 'destroy')->name('destroy');
+        });
 
     Route::prefix('card')
         ->name('card.')

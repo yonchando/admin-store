@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import Select from "@/Components/Forms/Select.vue";
-import { Purchase, PurchaseItem } from "@/types/models/purchase";
+import { Purchase, PurchaseDetail, PurchaseItem } from "@/types/models/purchase";
 import Button from "@/Components/Button.vue";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useCustomerStore } from "@/services/customer.service";
 import DataTable from "@/Components/Tables/DataTable.vue";
-import purchaseService from "@/services/purchase.service";
 import { useProductStore } from "@/services/product.service";
 import Column from "@/Components/Tables/Column.vue";
 import Action from "@/Components/Tables/Action.vue";
+import { currency } from "@/number_format";
 
 const props = defineProps<{
     statuses: Array<string>;
@@ -42,7 +42,7 @@ const actions = computed(() => {
 });
 
 const form = useForm({
-    customer_id: "",
+    customer_id: "" as string | number,
     status: "pending",
     purchase_date: "",
     products: [] as PurchaseItem[],
@@ -50,6 +50,7 @@ const form = useForm({
 
 function addItem() {
     form.products.push({
+        id: null,
         product_id: null,
         qty: 1,
         sub_total: 0,
@@ -60,10 +61,16 @@ function removeItem(index: number) {
     form.products.splice(index, 1);
 }
 
+function price(item: PurchaseItem) {
+    const product = productStore.data.find((value) => item.product_id === value.id);
+
+    return currency(product?.price ?? 0);
+}
+
 function subTotal(item: PurchaseItem) {
     const product = productStore.data.find((value) => item.product_id === value.id);
 
-    return (product?.price ?? 0) * item.qty;
+    return currency((product?.price ?? 0) * item.qty);
 }
 
 function submit() {
@@ -73,6 +80,25 @@ function submit() {
         form.post(route("purchase.store"));
     }
 }
+
+onMounted(() => {
+    if (props.purchase) {
+        productStore.getData();
+
+        form.customer_id = props.purchase.customer_id;
+        form.purchase_date = props.purchase.purchased_at;
+        form.status = props.purchase.status;
+
+        form.products = props.purchase.purchase_details.map((item: PurchaseDetail) => {
+            return {
+                id: item.id,
+                product_id: item.product_id,
+                qty: item.qty,
+                sub_total: item.sub_total,
+            };
+        });
+    }
+});
 </script>
 
 <template>
@@ -119,6 +145,7 @@ function submit() {
                             <Column class="head w-8 px-0 py-3 text-center">#</Column>
                             <Column class="head py-3">Product</Column>
                             <Column class="head py-3">Qty</Column>
+                            <Column class="head py-3">Price</Column>
                             <Column class="head w-32 py-3">Sub Total</Column>
                             <Column class="head w-32 py-3">Action</Column>
                         </tr>
@@ -126,20 +153,23 @@ function submit() {
 
                     <template #tbody>
                         <template v-if="form.products.length">
-                            <tr v-for="(product, index) in form.products">
+                            <tr v-for="(item, index) in form.products">
                                 <Column class="px-0 py-3 text-center">{{ index + 1 }}</Column>
                                 <Column class="py-3">
                                     <Select
                                         @open="productStore.getData()"
                                         @search="(search) => productStore.search({ search })"
-                                        v-model="product.product_id"
+                                        v-model="item.product_id"
                                         :options="productStore.data"
                                         option-label="product_name" />
                                 </Column>
                                 <Column class="py-3">
-                                    <TextInput v-model="product.qty" type="number" />
+                                    <TextInput v-model="item.qty" type="number" />
                                 </Column>
-                                <Column class="py-3">{{ subTotal(product) }}</Column>
+                                <Column class="py-3">
+                                    {{ price(item) }}
+                                </Column>
+                                <Column class="py-3">{{ subTotal(item) }}</Column>
                                 <Column class="py-3">
                                     <Action :destroy="() => removeItem(index)" />
                                 </Column>
@@ -147,7 +177,7 @@ function submit() {
                         </template>
                         <template v-else>
                             <tr>
-                                <Column colspan="5" class="py-3">Empty data</Column>
+                                <Column colspan="6" class="py-3">Empty data</Column>
                             </tr>
                         </template>
                     </template>

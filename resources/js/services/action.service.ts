@@ -58,7 +58,7 @@ export default function useAction() {
             icon: faRefresh,
             component: Button,
             props: {
-                severity: "secondary",
+                severity: "dark",
             },
         },
         edit: {

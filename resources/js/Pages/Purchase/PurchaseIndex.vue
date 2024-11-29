@@ -53,7 +53,7 @@ function pageChange(p: number) {
 }
 
 function show(item: Product) {
-    router.get(route("product.show", item.id));
+    router.get(route("purchase.show", item.id));
 }
 </script>
 

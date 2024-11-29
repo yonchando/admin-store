@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Setting\SettingKeyEnum;
+use App\Models\Currency;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +49,13 @@ class HandleInertiaRequests extends Middleware
             ],
             'setting' => fn () => Session::get('setting'),
             'routeName' => Route::currentRouteName(),
+            'currency' => function () {
+                return Session::remember('currency', function () {
+                    $currencyId = Setting::keyBy(SettingKeyEnum::CURRENCY->value)->first()?->value;
+
+                    return Currency::find($currencyId);
+                });
+            },
         ];
     }
 }

@@ -6,7 +6,7 @@ import { computed } from "vue";
 const props = defineProps<{
     column: ColumnType<any>;
     item: any;
-    index: any;
+    index?: any;
 }>();
 
 const binding = computed(() => {

@@ -6,8 +6,8 @@ import { Link } from "@inertiajs/vue3";
 
 const props = withDefaults(
     defineProps<{
-        size?: "xs" | "sm" | "default" | "md" | "lg" | "xl";
-        severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
+        size?: "xs" | "sm" | "md" | "lg" | "xl";
+        severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success" | "dark";
         icon?: IconDefinition;
         href?: string;
         disabled?: boolean;
@@ -21,12 +21,11 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        xs: "px-2.5 py-1.5 text-xxs",
-        sm: "px-3 py-2 text-xs",
-        default: "px-4 py-2.5 text-sm",
-        md: "px-5 py-3 text-md",
-        lg: "px-6 py-4 text-lg",
-        xl: "px-7 py-5 text-xl",
+        xs: "px-2.5 py-1 text-xs",
+        sm: "px-3 py-2 text-sm",
+        md: "px-4 py-2 text-base",
+        lg: "px-6 py-2.5 text-lg",
+        xl: "px-7 py-4 text-xl",
     }[props.size];
 });
 
@@ -115,6 +114,17 @@ const severityClass = computed(() => {
             "focus:ring-success",
             "active:bg-success/85",
         ],
+        dark: [
+            "bg-dark",
+            "disabled:bg-dark/85",
+            "border-transparent",
+            "text-gray-300",
+            "hover:bg-success/85",
+            "focus:bg-success/85",
+            "focus:ring-2",
+            "focus:ring-success",
+            "active:bg-success/85",
+        ],
     }[props.severity];
 });
 </script>
@@ -124,9 +134,9 @@ const severityClass = computed(() => {
         :tabindex="tabindex"
         :class="[sizeClass, ...severityClass]"
         :disabled="disabled"
-        class="inline-block rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
-            <fa-icon class="pr-1.5" :icon="icon" :size="size as any" />
+            <fa-icon class="pr-2" :icon="icon" />
         </template>
         <slot />
     </button>
@@ -136,9 +146,9 @@ const severityClass = computed(() => {
         :class="[sizeClass, ...severityClass]"
         :tabindex="tabindex"
         :disabled="disabled"
-        class="inline-block rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
         <template v-if="icon">
-            <fa-icon class="pr-1.5" :icon="icon" :size="size as any" />
+            <fa-icon class="pr-1.5" :icon="icon" />
         </template>
         <slot />
     </Link>

@@ -22,7 +22,7 @@ export interface Action {
         onClick?: (e: Event, ...arg) => void;
         disabled?: boolean;
         size?: "sm" | "md" | "lg" | "xl";
-        severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
+        severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success" | "dark";
         href?: string;
         tabindex?: string;
         class?: string[] | string;

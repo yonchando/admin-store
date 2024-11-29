@@ -24,6 +24,8 @@ class PurchaseDetail extends Model
     {
         return [
             'json' => 'json',
+            'price' => 'decimal:2',
+            'sub_total' => 'decimal:2',
         ];
     }
 }

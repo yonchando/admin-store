@@ -18,11 +18,11 @@ class PurchaseDetailFactory extends Factory
      */
     public function definition(): array
     {
-        $product = Product::inRandomOrder()->first();
+        $product = Product::factory()->create();
         $qty = $this->faker->numberBetween(1, 10);
 
         return [
-            'ref_product_id' => $product->id,
+            'product_id' => $product->id,
             'product_name' => $product->product_name,
             'category_name' => $product->category?->category_name,
             'price' => $product->price,

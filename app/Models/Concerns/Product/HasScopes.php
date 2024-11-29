@@ -10,7 +10,7 @@ trait HasScopes
 {
     public function scopeApplyFilter(Builder $query, array $filters): Builder
     {
-        return (new ProductFilter($query, $filters))->apply();
+        return new ProductFilter($query, $filters)->apply();
     }
 
     public function scopeActive(Builder $query): Builder

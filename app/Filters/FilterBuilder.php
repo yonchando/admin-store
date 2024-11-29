@@ -16,6 +16,11 @@ abstract class FilterBuilder
         $this->builder->with($withs);
     }
 
+    public function includeCount($withCounts): void
+    {
+        $this->builder->withCount($withCounts);
+    }
+
     public function apply(): Builder
     {
         foreach ($this->filters as $name => $filter) {

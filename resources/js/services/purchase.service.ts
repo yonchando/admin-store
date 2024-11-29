@@ -1,7 +1,8 @@
 import { ColumnType } from "@/types/datatable/column";
 import { globalFilter } from "@/services/helper.service";
-import { Purchase } from "@/types/models/purchase";
+import { Purchase, PurchaseDetail } from "@/types/models/purchase";
 import Badge from "@/Components/Badges/Badge.vue";
+import { currency } from "@/number_format";
 
 export const columns: ColumnType<Purchase>[] = [
     {
@@ -14,14 +15,15 @@ export const columns: ColumnType<Purchase>[] = [
     },
     {
         label: "Total",
-        field: "total",
+        field: (item) => currency(item.total),
     },
     {
-        label: "Items",
+        label: "Purchase count",
         field: "purchase_details_count",
-        props: {
-            class: "w-24",
-        },
+    },
+    {
+        label: "Purchase date",
+        field: "purchased_at",
     },
     {
         label: "Status",
@@ -30,14 +32,43 @@ export const columns: ColumnType<Purchase>[] = [
             el: Badge,
             props: (item: Purchase) => {
                 return {
-                    severity: status[item.status],
+                    severity: statusSeverity[item.status],
                 };
             },
         },
     },
     {
-        label: "Purchase date",
+        label: "Created date",
         field: "created_at",
+        hideFromIndex: true,
+    },
+    {
+        label: "Updated date",
+        field: "updated_at",
+        hideFromIndex: true,
+    },
+];
+
+export const productColumns: ColumnType<PurchaseDetail>[] = [
+    {
+        label: "Product",
+        field: "product_name",
+    },
+    {
+        label: "Category",
+        field: "category_name",
+    },
+    {
+        label: "qty",
+        field: "qty",
+    },
+    {
+        label: "Unit price",
+        field: (item) => currency(item.price),
+    },
+    {
+        label: "Sub total",
+        field: (item) => currency(item.sub_total),
     },
 ];
 
@@ -48,6 +79,14 @@ export const filters = {
 };
 
 export const status = {
+    pending: "pending",
+    accepted: "accepted",
+    rejected: "rejected",
+    completed: "completed",
+    cancel: "cancel",
+};
+
+export const statusSeverity = {
     pending: "warning",
     accepted: "primary",
     rejected: "error",
@@ -57,5 +96,7 @@ export const status = {
 
 export default {
     columns,
+    productColumns,
     filters,
+    status,
 };

@@ -1,5 +1,6 @@
 import { User } from "@/types/models/user";
 import { Flash } from "@/types/flash";
+import { Currency } from "@/types/currency";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
@@ -7,6 +8,8 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     };
     lang: { [key: string]: string };
     flash: Flash;
+    currency: Currency;
+    __: __;
 };
 
 export interface Menu {
