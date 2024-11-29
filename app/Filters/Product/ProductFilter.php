@@ -22,14 +22,15 @@ class ProductFilter extends FilterBuilder
     public function sortBy($sorts): void
     {
         $direction = ___($sorts, 'direction');
-        if ($direction) {
-            $column = ___($sorts, 'field');
+        $column = ___($sorts, 'field');
+        if ($direction && $column) {
             if ($column == 'category') {
+                $query = Category::select('category_name')
+                    ->whereColumn('id', 'products.category_id')
+                    ->orderBy('category_name')
+                    ->take(1);
                 $this->builder->orderBy(
-                    Category::select('category_name')
-                        ->whereColumn('id', 'products.category_id')
-                        ->orderBy('category_name')
-                        ->take(1),
+                    $query,
                     $direction);
             } else {
                 $this->builder->orderBy($column, $direction);

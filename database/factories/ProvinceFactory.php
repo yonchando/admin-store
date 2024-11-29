@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\City;
 use App\Models\Province;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProvinceFactory extends Factory
 {
@@ -22,7 +21,7 @@ class ProvinceFactory extends Factory
 
     public function city($id = null): ProvinceFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'city_id' => $id ?? City::factory()->create(),
         ]);
     }

@@ -6,7 +6,6 @@ use App\Models\ProductHasOption;
 use App\Models\ProductHasOptionGroup;
 use App\Models\ProductOption;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductHasOptionFactory extends Factory
 {
@@ -23,14 +22,14 @@ class ProductHasOptionFactory extends Factory
 
     public function hasGroupId($id = null): ProductHasOptionFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'product_has_option_group_id' => $id ?? ProductHasOptionGroup::factory(),
         ]);
     }
 
     public function option($id = null): ProductHasOptionFactory
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'product_option_id' => $id ?? ProductOption::factory(),
         ]);
     }

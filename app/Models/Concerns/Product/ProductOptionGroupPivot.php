@@ -2,8 +2,8 @@
 
 namespace App\Models\Concerns\Product;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\Concerns\ProductHasOptionGroup\HasRelationships;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ProductOptionGroupPivot extends Pivot
 {

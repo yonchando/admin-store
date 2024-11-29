@@ -3,7 +3,7 @@ import { computed } from "vue";
 
 const props = withDefaults(
     defineProps<{
-        size?: "sm" | "default" | "md" | "lg" | "xl";
+        size?: "sm" | "md" | "lg" | "xl";
         severity?: "primary" | "secondary" | "info" | "warning" | "error" | "success";
         type?: "outline" | "fill";
     }>(),
@@ -16,8 +16,7 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        sm: "text-sm px-2 py-1",
-        default: "text-sm px-2.5 py-1.5",
+        sm: "text-sm px-3 py-1",
         md: "text-base px-3 py-1.5",
         lg: "text-xl px-3.5 py-1.5",
         xl: "text-2xl px-4 py-1.5",
@@ -37,9 +36,9 @@ const className = computed(() => {
 </script>
 
 <template>
-    <span :class="[sizeClass, className]" class="inline-block rounded">
+    <div :class="[sizeClass, className]" class="inline-flex items-center justify-center rounded">
         <slot />
-    </span>
+    </div>
 </template>
 
 <style scoped></style>

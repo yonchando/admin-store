@@ -73,7 +73,7 @@ class PurchaseService
         $status = PurchaseStatusEnum::tryFrom(___($data, 'status'));
 
         $json = new PurchaseJson;
-        $json->reason = $data['reason'];
+        $json->reason = ___($data, 'reason');
 
         $purchase->status = $status;
         $purchase->json = $json;

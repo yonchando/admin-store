@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\Module\ModuleStatusEnum;
 use App\Filters\Module\ModuleFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -38,7 +37,7 @@ class Module extends Model implements Sortable
 
     public function scopeFilters(Builder $builder, array $filters): Builder
     {
-        return (new ModuleFilter($builder, $filters))->apply();
+        return new ModuleFilter($builder, $filters)->apply();
     }
 
     public function givePermissionTo(mixed $permissions): void
@@ -49,11 +48,6 @@ class Module extends Model implements Sortable
     public function syncPermission(mixed $permissions): void
     {
         $this->permissions()->sync($permissions);
-    }
-
-    public function statusText(): Attribute
-    {
-        return Attribute::get(fn () => \Lang::get('lang.'.$this->status->value));
     }
 
     public function permissions(): BelongsToMany

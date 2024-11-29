@@ -86,7 +86,7 @@ onMounted(() => {
         productStore.getData();
 
         form.customer_id = props.purchase.customer_id;
-        form.purchase_date = props.purchase.purchased_at;
+        form.purchase_date = props.purchase.purchased_at.replace(" | ", " ");
         form.status = props.purchase.status;
 
         form.products = props.purchase.purchase_details.map((item: PurchaseDetail) => {

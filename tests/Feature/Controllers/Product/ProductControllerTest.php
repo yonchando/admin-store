@@ -188,7 +188,7 @@ describe('delete function', function () {
 
         delete(route('product.destroy'), [
             'ids' => [$product->id],
-        ])->assertRedirect(route('product.index', request()->all()));
+        ])->assertRedirect(route('product.index'));
 
         $this->assertSoftDeleted($product);
     });

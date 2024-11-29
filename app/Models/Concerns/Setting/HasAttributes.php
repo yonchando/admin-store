@@ -9,7 +9,7 @@ trait HasAttributes
     public function currencyId(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->properties->getCurrencyId()
+            get: fn () => $this->properties->getCurrencyId()
         );
     }
 }
