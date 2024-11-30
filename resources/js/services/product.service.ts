@@ -37,6 +37,12 @@ export const columns: ColumnType<Product>[] = [
         props: {
             class: "w-40",
         },
+        component: {
+            el: Badge,
+            props: {
+                severity: "info",
+            },
+        },
     },
     {
         label: "Status",
@@ -68,6 +74,7 @@ export const columns: ColumnType<Product>[] = [
         props: {
             class: "w-48",
         },
+        hideFromIndex: true,
     },
 ];
 

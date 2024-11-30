@@ -9,6 +9,8 @@ export function dataGet(item: any, key: string | ((t: any) => string)) {
     }
 }
 
+export function debounce() {}
+
 export const globalFilter = {
     page: 1,
     last_page: null,

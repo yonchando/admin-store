@@ -8,6 +8,13 @@ defineProps<{
     values: Array<string>;
     paginate?: Paginate<any>;
 }>();
+
+const emit = defineEmits(["page"]);
+
+function changePage(url: string) {
+    router.get(url);
+    emit("page");
+}
 </script>
 
 <template>
@@ -35,10 +42,10 @@ defineProps<{
                     <template v-for="(link, index) in paginate.links">
                         <template v-if="index == 0">
                             <Button
-                                @click="router.get(link.url ?? '')"
+                                @click="changePage(link.url ?? '')"
                                 :disabled="!link.url"
                                 class="rounded-s-full border-r-0 !px-3">
-                                <fa-icon :icon="faAngleDoubleLeft"></fa-icon>
+                                <fa-icon class="mr-2" :icon="faAngleDoubleLeft"></fa-icon>
                                 Previous
                             </Button>
                         </template>
@@ -46,7 +53,7 @@ defineProps<{
                             <Button
                                 v-if="link.url"
                                 :severity="link.active ? 'info' : 'secondary'"
-                                @click="router.get(link.url)"
+                                @click="changePage(link.url ?? '')"
                                 class="rounded-none border-l-0">
                                 {{ link.label }}
                             </Button>
@@ -56,11 +63,11 @@ defineProps<{
                         </template>
                         <template v-if="index == paginate?.links?.length - 1">
                             <Button
-                                @click="router.get(link.url ?? '')"
+                                @click="changePage(link.url ?? '')"
                                 :disabled="!link.url"
                                 class="rounded-e-full border-l-0 !px-3">
                                 Next
-                                <fa-icon :icon="faAngleDoubleRight"></fa-icon>
+                                <fa-icon :icon="faAngleDoubleRight" class="ml-2"></fa-icon>
                             </Button>
                         </template>
                     </template>

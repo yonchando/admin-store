@@ -19,11 +19,9 @@ const props = defineProps<{
 
 const columns: ColumnType<Category>[] = categoryService.columns;
 
-const filters = reactive(categoryService.filters);
-
-filters.page = props.categories.current_page ?? 1;
-
 const selectRows = ref<Array<number>>([]);
+
+const category = ref<Category | null>(null);
 
 const showForm = ref<boolean>(false);
 
@@ -60,29 +58,15 @@ const actions = computed(() => {
     return [add, refresh, remove];
 });
 
-const category = ref<Category | null>(null);
-
-watch(filters, () => {
-    getData();
-});
-
-function search(e: string) {
-    filters.search = e;
-}
-
 function getData() {
     router.reload({
-        data: filters,
+        onFinish() {},
     });
 }
 
 function edit(item: Category) {
     showForm.value = true;
     category.value = item;
-}
-
-function changePage(p: number) {
-    router.reload({ data: { perPage: p, page: 1 } });
 }
 </script>
 
@@ -97,12 +81,8 @@ function changePage(p: number) {
             :values="categories.data"
             :paginate="categories"
             :columns="columns"
-            @search="search"
-            @showPage="changePage"
             @row-dbclick="edit"
             v-model:checked="selectRows"
-            v-model:selectRow="category"
-            v-model:sort-by="filters.sortBy"
             checkbox>
             <template #actions="{ item }">
                 <Action :edit="() => edit(item)" />

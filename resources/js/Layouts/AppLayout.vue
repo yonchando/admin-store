@@ -6,6 +6,7 @@ import { h, onMounted, watch } from "vue";
 import StartToastifyInstance from "toastify-js";
 import Alert from "@/Components/Alert/Alert.vue";
 import { Flash, FlashKey } from "@/types/flash";
+import Card from "@/Components/Card/Card.vue";
 
 defineProps<{
     title?: string;
@@ -55,7 +56,7 @@ onMounted(() => {
 <template>
     <Head :title="title" />
 
-    <div class="bg-white dark:bg-gray-900">
+    <div class="bg-slate-50 dark:bg-gray-900">
         <div class="flex">
             <Sidebar />
 
@@ -78,10 +79,9 @@ onMounted(() => {
 
                 <!-- Page Content -->
                 <main class="px-2">
-                    <div class="rounded-md bg-white p-1 text-gray-900 dark:bg-gray-800 dark:text-gray-200">
+                    <Card>
                         <slot />
-                    </div>
-
+                    </Card>
                     <slot name="additional_info" />
                 </main>
             </div>

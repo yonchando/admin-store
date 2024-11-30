@@ -19,23 +19,28 @@ class ProductFilter extends FilterBuilder
         }
     }
 
-    public function sortBy($sorts): void
+    public function sortBy($sorts)
     {
         $direction = ___($sorts, 'direction');
         $column = ___($sorts, 'field');
-        if ($direction && $column) {
-            if ($column == 'category') {
-                $query = Category::select('category_name')
-                    ->whereColumn('id', 'products.category_id')
-                    ->orderBy('category_name')
-                    ->take(1);
-                $this->builder->orderBy(
-                    $query,
-                    $direction);
-            } else {
-                $this->builder->orderBy($column, $direction);
-            }
+
+        if ($direction === '-1') {
+            return $this->builder;
         }
+
+        if ($column == 'category') {
+            $query = Category::select('category_name')
+                ->whereColumn('id', 'products.category_id')
+                ->orderBy('category_name')
+                ->take(1);
+            $this->builder->orderBy(
+                $query,
+                $direction);
+        } else {
+            $this->builder->orderBy($column, $direction);
+        }
+
+        return $this->builder;
     }
 
     public function price(array $price = []): void

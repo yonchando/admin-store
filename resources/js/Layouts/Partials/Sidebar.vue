@@ -55,7 +55,7 @@ function clearMenuSearch() {
 
 <template>
     <div
-        class="relative flex min-w-16 max-w-72 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-gray-100 py-4 lg:min-w-72 dark:border-gray-700 dark:bg-gray-800">
+        class="relative flex min-w-16 max-w-72 flex-col overflow-auto overflow-y-auto scroll-auto border-r border-gray-300 bg-white py-4 lg:min-w-72 dark:border-gray-700 dark:bg-gray-800">
         <div class="mb-4 self-center overflow-hidden rounded-full">
             <img class="size-12 lg:size-48" src="@assets/images/logos/logo.png" alt="Logo" />
         </div>

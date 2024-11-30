@@ -4,6 +4,10 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
 import { Link } from "@inertiajs/vue3";
 
+defineOptions({
+    inheritAttrs: false,
+});
+
 const props = withDefaults(
     defineProps<{
         size?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -21,9 +25,9 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        xs: "px-2.5 py-1 text-xs",
-        sm: "px-3 py-2 text-sm",
-        md: "px-4 py-2 text-base",
+        xs: "px-1.5 py-1.5 text-xs",
+        sm: "px-4 py-2 text-sm",
+        md: "px-5 py-2 text-base",
         lg: "px-6 py-2.5 text-lg",
         xl: "px-7 py-4 text-xl",
     }[props.size];
@@ -77,8 +81,7 @@ const severityClass = computed(() => {
             "text-white",
             "hover:bg-info/85",
             "focus:bg-info/85",
-            "focus:ring-2",
-            "focus:ring-sky-600",
+            "focus-visible:outline-0",
             "active:bg-info/85",
         ],
         warning: [
@@ -88,9 +91,8 @@ const severityClass = computed(() => {
             "text-white",
             "hover:bg-warning/85",
             "focus:bg-warning/85",
-            "focus:ring-2",
-            "focus:ring-amber-600",
             "active:bg-warning/85",
+            "focus-visible:outline-0",
         ],
         error: [
             "bg-error",
@@ -99,9 +101,8 @@ const severityClass = computed(() => {
             "text-white",
             "hover:bg-error/85",
             "focus:bg-error/85",
-            "focus:ring-2",
-            "focus:ring-error",
             "active:bg-error/85",
+            "focus-visible:outline-0",
         ],
         success: [
             "bg-success",
@@ -110,31 +111,30 @@ const severityClass = computed(() => {
             "text-gray-300",
             "hover:bg-success/85",
             "focus:bg-success/85",
-            "focus:ring-2",
-            "focus:ring-success",
             "active:bg-success/85",
+            "focus-visible:outline-0",
         ],
         dark: [
             "bg-dark",
             "disabled:bg-dark/85",
             "border-transparent",
             "text-gray-300",
-            "hover:bg-success/85",
-            "focus:bg-success/85",
-            "focus:ring-2",
-            "focus:ring-success",
-            "active:bg-success/85",
+            "hover:bg-dark/85",
+            "focus:bg-dark/85",
+            "active:bg-dark/85",
+            "focus-visible:outline-0",
         ],
     }[props.severity];
 });
 </script>
 <template>
     <button
+        v-bind="$attrs"
         v-if="!href"
         :tabindex="tabindex"
         :class="[sizeClass, ...severityClass]"
         :disabled="disabled"
-        class="inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="btn">
         <template v-if="icon">
             <fa-icon class="pr-2" :icon="icon" />
         </template>
@@ -142,11 +142,12 @@ const severityClass = computed(() => {
     </button>
     <Link
         v-else
+        v-bind="$attrs"
         :href="href"
         :class="[sizeClass, ...severityClass]"
         :tabindex="tabindex"
         :disabled="disabled"
-        class="inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25">
+        class="btn">
         <template v-if="icon">
             <fa-icon class="pr-1.5" :icon="icon" />
         </template>
