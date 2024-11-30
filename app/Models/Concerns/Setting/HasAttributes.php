@@ -12,4 +12,11 @@ trait HasAttributes
             get: fn () => $this->properties->getCurrencyId()
         );
     }
+
+    public function logoUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => \Storage::url(config('paths.logo')."/{$this->value}"),
+        );
+    }
 }

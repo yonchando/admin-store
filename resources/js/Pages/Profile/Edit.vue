@@ -4,6 +4,7 @@ import DeleteUserForm from "./Partials/DeleteUserForm.vue";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm.vue";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm.vue";
 import { Head } from "@inertiajs/vue3";
+import Card from "@/Components/Card/Card.vue";
 
 defineProps<{
     status?: string;
@@ -17,14 +18,14 @@ defineProps<{
         </template>
 
         <template #additional_info>
-            <div class="space-y-6 sm:px-6 lg:px-8">
-                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
+            <div class="space-y-6">
+                <Card class="p-4">
                     <UpdateProfileInformationForm :status="status" class="max-w-xl" />
-                </div>
+                </Card>
 
-                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800">
+                <Card class="p-4">
                     <UpdatePasswordForm class="max-w-xl" />
-                </div>
+                </Card>
             </div>
         </template>
     </AppLayout>

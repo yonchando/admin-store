@@ -162,7 +162,7 @@ Route::middleware('auth')->group(function () {
             ->controller(SettingController::class)
             ->group(function () {
                 Route::get('/', 'show')->name('show');
-                Route::put('update', 'update')->name('update');
+                Route::post('update', 'update')->name('update');
             });
     });
 });

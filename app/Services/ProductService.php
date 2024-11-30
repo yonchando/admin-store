@@ -37,7 +37,7 @@ class ProductService
 
     public function find(int $id, array $filters = []): ?Product
     {
-        return Product::query()->applyFilter($filters)->findOrFail($id);
+        return Product::query()->filters($filters)->findOrFail($id);
     }
 
     public function store(ProductRequest $request): Product

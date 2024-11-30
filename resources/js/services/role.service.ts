@@ -3,6 +3,7 @@ import Badge from "@/Components/Badges/Badge.vue";
 import { Product } from "@/types/models/product";
 import { globalFilter } from "@/services/helper.service";
 import { Role } from "@/types/models/role";
+import Select from "@/Components/Forms/Select.vue";
 
 export const columns: ColumnType<Role>[] = [
     {
@@ -22,7 +23,7 @@ export const columns: ColumnType<Role>[] = [
         label: "Status",
         field: (item) => __(item.status),
         props: {
-            class: "w-28",
+            class: "w-48",
         },
         component: {
             el: Badge,
@@ -30,6 +31,16 @@ export const columns: ColumnType<Role>[] = [
                 return {
                     severity: item.status == "active" ? "info" : "error",
                 };
+            },
+        },
+        filters: {
+            field: "status",
+            component: {
+                el: Select,
+                props: {
+                    options: ["active", "inactive"],
+                    optionLabel: (op: string) => __(op),
+                },
             },
         },
     },
@@ -48,6 +59,7 @@ export const columns: ColumnType<Role>[] = [
         props: {
             class: "w-48",
         },
+        hideFromIndex: true,
     },
 ];
 

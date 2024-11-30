@@ -24,6 +24,10 @@ const actions = computed(() => {
     return [save];
 });
 
+const getTitle = computed(() => {
+    return props.category ? `Update` : "Create";
+});
+
 function submit() {
     if (props.category) {
         form.put(route("category.update", props.category?.id), {
@@ -44,7 +48,7 @@ function submit() {
 </script>
 
 <template>
-    <Modal :actions="actions" v-model:show="show" @close="show = false" title="Add new" max-width="xl" class="!top-8">
+    <Modal :actions="actions" v-model:show="show" @close="show = false" :title="getTitle" max-width="xl" class="!top-8">
         <form @submit.prevent="submit">
             <div>
                 <TextInput autofocus label="Name" v-model="form.category_name" />

@@ -92,8 +92,8 @@ onMounted(() => {
 </script>
 
 <template>
-    <AppLayout :title="`Role ${staff.name}`" :actions="actions">
-        <template #header> Role Detail</template>
+    <AppLayout :title="`Staff ${staff.name}`" :actions="actions">
+        <template #header>Staff Detail</template>
 
         <div class="p-4">
             <h3 class="mb-4 text-xl font-semibold">Information</h3>
@@ -103,7 +103,7 @@ onMounted(() => {
                         <template v-for="column in columns">
                             <div class="flex">
                                 <span class="w-1/3">{{ column.label }}:</span>
-                                <span class="font-semibold" v-bind="column.props">
+                                <span class="font-semibold">
                                     <DataValue :column="column" :item="staff" />
                                 </span>
                             </div>

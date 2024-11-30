@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Setting\SettingKeyEnum;
 use App\Http\Requests\Setting\SettingRequest;
 use App\Models\Setting;
 use App\Services\CurrencyService;
@@ -22,13 +23,16 @@ class SettingController extends Controller
         return Inertia::render('Setting/SettingShow', [
             'settings' => $settings,
             'currencies' => $this->currencyService->get(),
+            'formData' => $settings->flatMap(fn ($setting) => [$setting->key => $setting->value]),
+            'settingKeys' => SettingKeyEnum::toArray(),
+            'logo' => Setting::findByKey('logo')->append('logo_url'),
         ]);
     }
 
     public function update(SettingRequest $request)
     {
-        $this->settingService->save($request->validated());
+        $this->settingService->save($request);
 
-        return redirect()->route('setting.show')->with('success', __('lang.updated_success', ['attribute' => __('lang.setting')]));
+        return back()->with('success', __('lang.updated_success', ['attribute' => __('lang.setting')]));
     }
 }

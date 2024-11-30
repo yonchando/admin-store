@@ -85,7 +85,7 @@ onMounted(() => getCategories());
                             <InputError :message="form.errors.product_name" />
                         </div>
                         <div class="">
-                            <TextInput label="Price" type="number" v-model="form.price" />
+                            <TextInput required label="Price" type="number" v-model="form.price" />
                             <InputError :message="form.errors.price" />
                         </div>
                         <div class="">
@@ -106,27 +106,27 @@ onMounted(() => getCategories());
                             <InputError :message="form.errors.status" />
                         </div>
                         <div class="">
-                            <div class="w-full">
-                                <FileUpload
-                                    label="Feature image"
-                                    class="mt-auto"
-                                    v-model="form.image"
-                                    v-model:files="files"
-                                    is-cropper
-                                    :previewContent="imagePreview"
-                                    :values="product?.json?.image?.url ? [product?.json?.image?.url] : null" />
-                            </div>
+                            <FileUpload
+                                label="Feature image"
+                                class="mt-auto"
+                                v-model="form.image"
+                                v-model:files="files"
+                                is-cropper
+                                :previewContent="imagePreview"
+                                :values="product?.json?.image?.url ? [product?.json?.image?.url] : null" />
                         </div>
                     </div>
-                    <div class="flex w-1/4 flex-col" v-if="form.image || product?.json?.image?.url">
-                        <InputLabel value="Preview image" />
-                        <div class="mt-2 w-full rounded-md dark:bg-gray-900">
-                            <img
-                                ref="imagePreview"
-                                class="rounded-md"
-                                :src="files[0]?.url ?? product?.json?.image?.url"
-                                alt="Product image" />
-                        </div>
+                    <div class="flex w-1/4 flex-col">
+                        <template v-if="form.image || product?.json?.image?.url">
+                            <InputLabel value="Preview image" />
+                            <div class="mt-2 w-full rounded-md dark:bg-gray-900">
+                                <img
+                                    ref="imagePreview"
+                                    class="rounded-md"
+                                    :src="files[0]?.url ?? product?.json?.image?.url"
+                                    alt="Product image" />
+                            </div>
+                        </template>
                     </div>
                 </div>
 

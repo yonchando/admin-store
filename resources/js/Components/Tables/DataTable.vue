@@ -211,7 +211,7 @@ function clearFilter(callback: any, field: string) {
                                 <span class="ml-auto" v-if="column.filters">
                                     <Dropdown content-width="250" :position="{ left: -230, top: 18 }">
                                         <template #trigger>
-                                            <span class="relative text-base">
+                                            <span class="relative cursor-pointer text-base">
                                                 <i
                                                     v-if="!filters[column.filters.field]"
                                                     class="fa fa-filter text-base"></i>

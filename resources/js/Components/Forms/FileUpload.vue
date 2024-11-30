@@ -92,19 +92,14 @@ function getFiles(e: Event) {
 
 <template>
     <div class="flex flex-col gap-2">
-        <InputLabel v-if="label" :value="label" />
-        <div class="relative flex w-full items-center justify-between rounded-md text-right dark:bg-gray-900">
-            <div class="pl-4" v-for="file in files">
-                {{ file.name }}
-            </div>
-            <Button class="ml-auto" size="md" severity="success">Browser file</Button>
-            <input
-                v-bind="$attrs"
-                @change="getFiles"
-                type="file"
-                :multiple="multiple"
-                class="absolute inset-0 cursor-pointer rounded-md bg-gray-700 opacity-0" />
-        </div>
+        <InputLabel v-if="label" :value="label" for="file" />
+        <input
+            v-bind="$attrs"
+            @change="getFiles"
+            :multiple="multiple"
+            class="mb-5 block w-full cursor-pointer rounded border border-gray-300 bg-gray-50 text-xs text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
+            id="file"
+            type="file" />
     </div>
 
     <Modal v-model:show="showCropper" :actions="[cropper.actions()]" @close="cropper.remove" title="Upload file">

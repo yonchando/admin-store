@@ -109,4 +109,6 @@ return [
     'completed' => 'Completed',
     'cancel_transaction' => 'Update status: Cancel',
     'rejected_transaction' => 'Update status: Reject',
+    'site_title' => 'Site Title',
+    'logo' => 'Logo',
 ];
