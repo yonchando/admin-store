@@ -1,5 +1,9 @@
 @use "custom";
 @use "@fortawesome/fontawesome-free/css/all.css";
+@use "nav";
+@use "form";
+@use "button";
+@use "datatable";
 
 @tailwind base;
 @tailwind components;
@@ -39,33 +43,5 @@
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
-}
-
-@layer components {
-    @import "nav";
-    @import "form";
-
-    .btn {
-        @apply inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25;
-    }
-    
-    .column {
-        @apply border border-gray-300 px-2 text-left align-middle
-        group-hover:bg-gray-200
-        dark:border-gray-600
-        dark:bg-gray-800
-        group-hover:dark:bg-gray-700;
-        padding-top: 0.375rem;
-        padding-bottom: 0.375rem;
-
-        &.head {
-            @apply dark:border-gray-600 dark:bg-gray-700;
-        }
-
-        &.active {
-            @apply bg-gray-200 dark:bg-gray-700;
-        }
-    }
-    
 }
 
