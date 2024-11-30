@@ -7,21 +7,23 @@ import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import NavLink from "@/Components/Navs/NavLink.vue";
 import { Menu } from "@/types";
 import NavMenu from "@/Components/Menu/NavMenu.vue";
+import { useSidebarStore } from "@/services/sidebar.service";
+import { storeToRefs } from "pinia";
+
+const page = usePage();
+
+const sidebarStore = useSidebarStore();
 
 const menus = computed(() => {
-    if (search.value) {
+    if (sidebarStore.search_text) {
         return useMenu().filter((item: Menu) => {
-            return item.title.toLowerCase().startsWith(search.value?.toLowerCase() ?? "");
+            return item.title.toLowerCase().startsWith(sidebarStore.search_text.toLowerCase() ?? "");
         });
     }
     return useMenu();
 });
 
-const page = usePage();
-
 const user = computed(() => page.props.auth.user);
-
-const search = ref(sessionStorage.getItem("menu-search"));
 
 const theme = ref(
     localStorage.getItem("theme") ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
@@ -41,15 +43,6 @@ function changeThemeMode() {
     }
 
     localStorage.setItem("theme", theme.value);
-}
-
-function inputChange() {
-    sessionStorage.setItem("menu-search", search.value ?? "");
-}
-
-function clearMenuSearch() {
-    sessionStorage.removeItem("menu-search");
-    search.value = null;
 }
 </script>
 
@@ -96,10 +89,10 @@ function clearMenuSearch() {
 
         <!-- Search -->
         <div class="relative hidden px-2 lg:block">
-            <TextInput @input="inputChange" v-model="search" placeholder="Search..." />
+            <TextInput v-model="sidebarStore.search_text" placeholder="Search..." />
             <div
-                v-if="search"
-                @click="clearMenuSearch"
+                v-if="sidebarStore.search_text"
+                @click="sidebarStore.clearSearch()"
                 class="absolute right-6 top-1/2 -translate-y-1/2 transform cursor-pointer">
                 <i class="fa fa-times"></i>
             </div>
