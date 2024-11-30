@@ -15,10 +15,12 @@ class SettingService
         foreach ($keys as $key) {
             $value = ___($request->safe()->except('logo'), $key);
             if ($key === SettingKeyEnum::LOGO->value) {
-                $file = $request->file('logo');
-                $value = $file->hashName();
+                if ($request->hasFile('logo')) {
+                    $file = $request->file('logo');
+                    $value = $file->hashName();
 
-                \Storage::putFileAs(config('paths.logo'), $file, $value);
+                    \Storage::putFileAs(config('paths.logo'), $file, $value);
+                }
             }
 
             if (Setting::where('key', $key)->exists()) {

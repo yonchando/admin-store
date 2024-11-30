@@ -25,7 +25,7 @@ class SettingController extends Controller
             'currencies' => $this->currencyService->get(),
             'formData' => $settings->flatMap(fn ($setting) => [$setting->key => $setting->value]),
             'settingKeys' => SettingKeyEnum::toArray(),
-            'logo' => Setting::findByKey('logo')->append('logo_url'),
+            'logo' => Setting::findByKey('logo')?->append('logo_url'),
         ]);
     }
 

@@ -20,7 +20,7 @@ class Setting extends Model
         'value',
     ];
 
-    public static function findByKey(string $key): static
+    public static function findByKey(string $key): ?Setting
     {
         return Setting::where('key', $key)->first();
     }

@@ -5,15 +5,16 @@ use App\Models\Currency;
 use App\Models\Setting;
 use Inertia\Testing\AssertableInertia;
 
+use function Pest\Laravel\from;
 use function Pest\Laravel\getJson;
-use function Pest\Laravel\putJson;
+use function Pest\Laravel\postJson;
 use function PHPUnit\Framework\assertEquals;
 
 beforeEach(function () {
     asAdmin();
 });
 
-test('create setting if not exists', function () {
+test('show setting page working fine', function () {
     $currencies = Currency::factory(3)->create();
 
     getJson(route('setting.show'))
@@ -35,10 +36,12 @@ test('user can update currency', function () {
     ]);
 
     $siteTitle = fake()->name;
-    putJson(route('setting.update'), [
+    from(route('setting.show'));
+    postJson(route('setting.update'), [
         SettingKeyEnum::CURRENCY->value => $currency->id,
         SettingKeyEnum::SITE_TITLE->value => $siteTitle,
-    ])->assertRedirect(route('setting.show'));
+    ])->assertRedirect(route('setting.show'))
+        ->assertSessionHas('success', __('lang.updated_success', ['attribute' => __('lang.setting')]));
 
     $setting->refresh();
 

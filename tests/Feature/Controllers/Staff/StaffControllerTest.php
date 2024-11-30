@@ -29,7 +29,7 @@ describe('user lists', function () {
                         ->has('staffs.data', $staff->take(20)->count())
                         ->has('gender', 2)
                         ->has('statuses', 2)
-                        ->has('filters');
+                        ->has('requests');
                 }
             );
     });
