@@ -16,7 +16,7 @@ class CategoryFilter extends FilterBuilder
         $field = ___($filters, 'field');
         $direction = ___($filters, 'direction');
 
-        if ($direction) {
+        if ($direction != '-1') {
             $this->builder->orderBy($field, $direction);
         }
     }

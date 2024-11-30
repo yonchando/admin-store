@@ -11,13 +11,22 @@ import { router } from "@inertiajs/vue3";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
 import { useAlertStore } from "@/services/helper.service";
 import Action from "@/Components/Tables/Action.vue";
+import purchaseService from "@/services/purchase.service";
+import { Filters } from "@/types/datatable/datatable";
 
 const props = defineProps<{
     categories: Categories;
-    sort: any;
+    requests: any;
 }>();
 
 const columns: ColumnType<Category>[] = categoryService.columns;
+
+const loading = ref(false);
+
+const filters: any = reactive({
+    ...purchaseService.filters,
+    ...props.requests,
+});
 
 const selectRows = ref<Array<number>>([]);
 
@@ -60,8 +69,25 @@ const actions = computed(() => {
 
 function getData() {
     router.reload({
-        onFinish() {},
+        data: filters,
+        onFinish() {
+            loading.value = false;
+        },
     });
+}
+
+function changeFilter(filter: Filters) {
+    for (const key in filter) {
+        if (typeof filters[key] !== "undefined") {
+            filters[key] = filter[key as keyof Filters];
+        }
+    }
+    getData();
+}
+
+function search(s: string) {
+    filters.search = s;
+    getData();
 }
 
 function edit(item: Category) {
@@ -82,7 +108,10 @@ function edit(item: Category) {
             :paginate="categories"
             :columns="columns"
             @row-dbclick="edit"
+            @filters="changeFilter"
+            @search="search"
             v-model:checked="selectRows"
+            v-model:loading="loading"
             checkbox>
             <template #actions="{ item }">
                 <Action :edit="() => edit(item)" />
