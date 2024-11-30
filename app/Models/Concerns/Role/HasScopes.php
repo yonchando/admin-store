@@ -15,6 +15,6 @@ trait HasScopes
 
     public function scopeFilters(Builder $builder, array $filters = []): Builder
     {
-        return (new RoleFilter($builder, $filters))->apply();
+        return new RoleFilter($builder, $filters)->apply();
     }
 }

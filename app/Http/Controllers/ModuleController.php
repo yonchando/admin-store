@@ -30,6 +30,7 @@ class ModuleController extends Controller
             'data' => $data,
             'statuses' => ModuleStatusEnum::toArray(),
             'permissions' => Permission::get(),
+            'requests' => $request->all(),
         ]);
     }
 

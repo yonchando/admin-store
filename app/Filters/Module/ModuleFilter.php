@@ -14,4 +14,14 @@ class ModuleFilter extends FilterBuilder
     {
         $this->builder->whereRaw('lower(name) like lower(?)', "%$value%");
     }
+
+    public function sortBy($values): void
+    {
+        $field = ___($values, 'field');
+        $direction = ___($values, 'direction');
+
+        if ($direction !== '-1') {
+            $this->builder->orderBy($field, $direction);
+        }
+    }
 }

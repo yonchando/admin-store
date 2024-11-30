@@ -173,7 +173,10 @@ function changeRows() {
             <!-- Headers -->
             <thead>
                 <tr v-if="!$slots.thead">
-                    <Column v-if="checkbox" :class="root?.checkBoxClass ?? 'w-10'" class="head px-0 py-2.5 text-center">
+                    <Column
+                        v-if="checkbox"
+                        :class="root?.checkBoxClass ?? 'w-10'"
+                        class="head max-w-10 px-0 py-2.5 text-center">
                         <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
                     </Column>
                     <template v-for="column in columns">
@@ -195,7 +198,7 @@ function changeRows() {
                             </div>
                         </Column>
                     </template>
-                    <Column :class="root?.actionClass" class="head w-40" v-if="$slots.actions">Actions</Column>
+                    <Column :class="root?.actionClass" class="head w-32" v-if="$slots.actions">Actions</Column>
                 </tr>
 
                 <slot name="thead" />

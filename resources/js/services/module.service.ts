@@ -7,13 +7,22 @@ export const columns: ColumnType<Module>[] = [
     {
         label: "Name",
         field: "name",
+        sortable: "name",
         props: {
             class: "w-48",
         },
     },
     {
+        label: "Order No.",
+        field: "order_column",
+        sortable: "order_column",
+        props: {
+            class: "w-24",
+        },
+    },
+    {
         label: "Status",
-        field: "status_text",
+        field: (item) => __(item.status),
         component: {
             el: Badge,
             props: (item: Module) => {
@@ -30,14 +39,14 @@ export const columns: ColumnType<Module>[] = [
         label: "Created date",
         field: "created_at",
         props: {
-            class: "w-12",
+            class: "w-24",
         },
     },
     {
         label: "Updated date",
         field: "updated_at",
         props: {
-            class: "w-12",
+            class: "w-24",
         },
     },
 ];

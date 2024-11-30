@@ -10,23 +10,19 @@ import purchaseService from "@/services/purchase.service";
 import { Purchase } from "@/types/models/purchase";
 import { Paginate } from "@/types/paginate";
 import Action from "@/Components/Tables/Action.vue";
+import { useFilters } from "@/services/datatable.service";
+import { updateFilter } from "@/services/helper.service";
 
-const props = defineProps<{
+defineProps<{
     purchases: Paginate<Purchase>;
-    requests: any;
 }>();
 
 const columns: ColumnType<Purchase>[] = purchaseService.columns;
 
 const selectRows = ref<Array<number>>([]);
 
-const filters = reactive(purchaseService.filters);
-
-filters.search = props.requests?.search;
-
-watch(filters, () => {
-    getData();
-});
+const loading = ref(false);
+const filters = useFilters(purchaseService.filters);
 
 const actions = computed(() => {
     const { add, refresh } = useAction();
@@ -38,22 +34,13 @@ const actions = computed(() => {
 });
 
 function getData() {
+    loading.value = true;
     router.reload({
         data: filters,
+        onFinish() {
+            loading.value = false;
+        },
     });
-}
-
-function search(e: string) {
-    filters.search = e;
-    filters.page = 1;
-}
-
-function pageChange(p: number) {
-    router.reload({ data: { perPage: p } });
-}
-
-function show(item: Product) {
-    router.get(route("purchase.show", item.id));
 }
 </script>
 
@@ -66,12 +53,11 @@ function show(item: Product) {
             :paginate="purchases"
             :columns="columns"
             :search="filters.search"
-            @search="search"
-            @showPage="pageChange"
-            @row-dbclick="show"
+            @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
+            @filters="updateFilter(filters, $event, getData)"
+            @row-dbclick="router.get(route('purchase.show', $event.id))"
             v-model:checked="selectRows"
-            v-model:sortBy="filters.sortBy"
-            checkbox>
+            v-model:loading="loading">
             <template #actions="{ item }">
                 <Action
                     :view="() => router.get(route('purchase.show', item.id))"

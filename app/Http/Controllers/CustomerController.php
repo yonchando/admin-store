@@ -25,6 +25,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customer/CustomerIndex', [
             'customers' => $customers,
+            'requests' => $request->all(),
         ]);
     }
 

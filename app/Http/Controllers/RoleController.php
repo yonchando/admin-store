@@ -20,6 +20,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Role/RoleIndex', [
             'roles' => $this->roleService->paginate($request->all()),
+            'requests' => $request->all(),
         ]);
     }
 

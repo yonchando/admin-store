@@ -9,24 +9,21 @@ import CategoryForm from "@/Pages/Category/CategoryForm.vue";
 import Alert from "@/Components/Alert/Alert.vue";
 import { router } from "@inertiajs/vue3";
 import ButtonGroup from "@/Components/ButtonGroup.vue";
-import { useAlertStore } from "@/services/helper.service";
+import { updateFilter, useAlertStore } from "@/services/helper.service";
 import Action from "@/Components/Tables/Action.vue";
 import purchaseService from "@/services/purchase.service";
 import { Filters } from "@/types/datatable/datatable";
+import { useFilters } from "@/services/datatable.service";
 
-const props = defineProps<{
+defineProps<{
     categories: Categories;
-    requests: any;
 }>();
 
 const columns: ColumnType<Category>[] = categoryService.columns;
 
 const loading = ref(false);
 
-const filters: any = reactive({
-    ...purchaseService.filters,
-    ...props.requests,
-});
+const filters: any = useFilters(categoryService.filters);
 
 const selectRows = ref<Array<number>>([]);
 
@@ -68,26 +65,13 @@ const actions = computed(() => {
 });
 
 function getData() {
+    loading.value = true;
     router.reload({
         data: filters,
         onFinish() {
             loading.value = false;
         },
     });
-}
-
-function changeFilter(filter: Filters) {
-    for (const key in filter) {
-        if (typeof filters[key] !== "undefined") {
-            filters[key] = filter[key as keyof Filters];
-        }
-    }
-    getData();
-}
-
-function search(s: string) {
-    filters.search = s;
-    getData();
 }
 
 function edit(item: Category) {
@@ -107,9 +91,10 @@ function edit(item: Category) {
             :values="categories.data"
             :paginate="categories"
             :columns="columns"
+            :search="filters.search"
+            @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
+            @filters="updateFilter(filters, $event, getData)"
             @row-dbclick="edit"
-            @filters="changeFilter"
-            @search="search"
             v-model:checked="selectRows"
             v-model:loading="loading"
             checkbox>

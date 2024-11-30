@@ -23,7 +23,7 @@ class PurchaseController extends Controller
     {
         return Inertia::render('Purchase/PurchaseIndex', [
             'purchases' => $this->purchaseService->paginate($request),
-            'request' => $request->all(),
+            'requests' => $request->all(),
         ]);
     }
 

@@ -14,6 +14,6 @@ trait HasScopes
 
     public function scopeFilters(Builder $query, ?array $filters = []): Builder
     {
-        return (new StaffFilter($query, $filters))->apply();
+        return new StaffFilter($query, $filters)->apply();
     }
 }

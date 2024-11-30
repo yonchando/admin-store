@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
 import { ColumnType } from "@/types/datatable/column.d";
-import { computed, reactive, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
-import Alert from "@/Components/Alert/Alert.vue";
 import Action from "@/Components/Tables/Action.vue";
-import { debounce, useAlertStore } from "@/services/helper.service";
+import { updateFilter, useAlertStore } from "@/services/helper.service";
 import { Filters } from "@/types/datatable/datatable";
+import { useFilters } from "@/services/datatable.service";
+import purchaseService from "@/services/purchase.service";
 
-const props = defineProps<{
+defineProps<{
     products: Products;
     requests: any;
 }>();
@@ -22,11 +23,7 @@ const selectRows = ref<Array<number>>([]);
 
 const loading = ref(false);
 
-const filters: any = reactive({
-    ...productService.filters,
-    perPage: props.products.per_page,
-    ...props.requests,
-});
+const filters: any = useFilters(purchaseService.filters);
 
 const actions = computed(() => {
     const { add, remove, refresh } = useAction();
@@ -58,32 +55,13 @@ const actions = computed(() => {
 });
 
 function getData() {
-    filters.loading = true;
+    loading.value = true;
     router.reload({
         data: filters,
         onFinish() {
-            filters.loading = false;
+            loading.value = false;
         },
     });
-}
-
-function search(s: string) {
-    filters.search = s;
-    selectRows.value = [];
-    getData();
-}
-
-function show(item: Product) {
-    router.get(route("product.show", item.id));
-}
-
-function changeFilters(filter: Filters) {
-    for (const key in filter) {
-        if (typeof filters[key] !== "undefined") {
-            filters[key] = filter[key as keyof Filters];
-        }
-    }
-    getData();
 }
 </script>
 
@@ -95,10 +73,10 @@ function changeFilters(filter: Filters) {
             :values="products.data"
             :paginate="products"
             :columns="columns"
-            @row-dbclick="show"
             :search="filters.search"
-            @search="search"
-            @filters="changeFilters"
+            @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
+            @filters="updateFilter(filters, $event, getData)"
+            @row-dbclick="router.get(route('product.show', $event.id))"
             v-model:loading="loading"
             v-model:checked="selectRows">
             <template #actions="{ item }">

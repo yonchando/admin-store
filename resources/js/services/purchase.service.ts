@@ -3,6 +3,7 @@ import { globalFilter } from "@/services/helper.service";
 import { Purchase, PurchaseDetail } from "@/types/models/purchase";
 import Badge from "@/Components/Badges/Badge.vue";
 import { currency } from "@/number_format";
+import Button from "@/Components/Button.vue";
 
 export const columns: ColumnType<Purchase>[] = [
     {
@@ -12,10 +13,20 @@ export const columns: ColumnType<Purchase>[] = [
     {
         label: "Customer",
         field: (item) => item.customer?.name,
+        sortable: "customer",
+        component: {
+            el: Button,
+            props: (c: Purchase) => {
+                return {
+                    href: route("customer.show", c.customer_id),
+                };
+            },
+        },
     },
     {
         label: "Total",
         field: (item) => currency(item.total),
+        sortable: "total",
     },
     {
         label: "Purchase count",
@@ -24,6 +35,7 @@ export const columns: ColumnType<Purchase>[] = [
     {
         label: "Purchase date",
         field: "purchased_at",
+        sortable: "purchased_at",
     },
     {
         label: "Status",

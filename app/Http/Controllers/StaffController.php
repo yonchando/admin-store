@@ -25,7 +25,7 @@ class StaffController extends Controller
             'staffs' => $staffs,
             'gender' => GenderEnum::toArray(),
             'statuses' => StaffStatusEnum::toArray(),
-            'filters' => $request->toArray(),
+            'requests' => $request->all(),
         ]);
     }
 

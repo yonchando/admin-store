@@ -6,19 +6,23 @@ import { Customer } from "@/types/models/customer";
 import axios from "axios";
 import { defineStore } from "pinia";
 import { Paginate } from "@/types/paginate";
+import { phoneNumber } from "@/number_format";
 
 export const columns: ColumnType<Customer>[] = [
     {
         label: "Name",
         field: "name",
+        sortable: "name",
     },
     {
         label: "Email",
         field: "email",
+        sortable: "email",
     },
     {
         label: "Phone number",
-        field: "phone",
+        field: (c) => phoneNumber(c.phone_number, c.country_code),
+        sortable: "phone_number",
     },
     {
         label: "Gender",
@@ -59,8 +63,13 @@ export const columns: ColumnType<Customer>[] = [
     },
 ];
 
+export const filters = {
+    ...globalFilter,
+};
+
 export default {
     columns,
+    filters,
 };
 
 export const useCustomerStore = defineStore("customer", {

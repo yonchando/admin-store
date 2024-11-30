@@ -22,9 +22,7 @@ class Module extends Model implements Sortable
         'status',
     ];
 
-    protected $appends = [
-        'status_text',
-    ];
+    protected $appends = [];
 
     protected function casts(): array
     {

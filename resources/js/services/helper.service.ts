@@ -9,10 +9,21 @@ export function dataGet(item: any, key: string | ((t: any) => string)) {
     }
 }
 
-export function debounce() {}
+export function updateFilter(filters: any, values: any, callback: any = null) {
+    for (const key in values) {
+        if (typeof filters[key] !== "undefined") {
+            filters[key] = values[key];
+        }
+    }
+
+    if (callback != null) {
+        callback();
+    }
+}
 
 export const globalFilter = {
     page: 1,
+    perPage: 20,
     last_page: null,
     sortBy: {
         field: "created_at",

@@ -2,6 +2,7 @@ export interface Customer {
     id: number;
     name: string;
     phone_number: string;
+    country_code: string;
     phone: string;
     email: string;
     status: string;

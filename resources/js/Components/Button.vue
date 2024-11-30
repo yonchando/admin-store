@@ -144,10 +144,9 @@ const severityClass = computed(() => {
         v-else
         v-bind="$attrs"
         :href="href"
-        :class="[sizeClass, ...severityClass]"
         :tabindex="tabindex"
         :disabled="disabled"
-        class="btn">
+        class="btn border-0 text-blue-400">
         <template v-if="icon">
             <fa-icon class="pr-1.5" :icon="icon" />
         </template>

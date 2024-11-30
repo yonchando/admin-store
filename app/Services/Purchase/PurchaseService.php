@@ -24,8 +24,6 @@ class PurchaseService
     {
         $query = Purchase::query();
 
-        $query->latest();
-
         $query->filters($request->all());
 
         $query->with(['customer']);

@@ -8,6 +8,7 @@ export const columns: ColumnType<Role>[] = [
     {
         label: "Code",
         field: "code",
+        sortable: "code",
         props: {
             class: "w-1/4",
         },
@@ -15,10 +16,11 @@ export const columns: ColumnType<Role>[] = [
     {
         label: "Name",
         field: "name",
+        sortable: "name",
     },
     {
         label: "Status",
-        field: "status_text",
+        field: (item) => __(item.status),
         props: {
             class: "w-28",
         },

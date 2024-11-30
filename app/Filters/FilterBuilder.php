@@ -16,6 +16,16 @@ abstract class FilterBuilder
         $this->builder->with($withs);
     }
 
+    public function sortBy($values): void
+    {
+        $field = ___($values, 'field');
+        $direction = ___($values, 'direction');
+
+        if ($direction !== '-1') {
+            $this->builder->orderBy($field, $direction);
+        }
+    }
+
     public function apply(): Builder
     {
         foreach ($this->filters as $name => $filter) {

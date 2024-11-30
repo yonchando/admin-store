@@ -1,39 +1,40 @@
 import { ColumnType } from "@/types/datatable/column";
 import { Staff } from "@/types/models/staff";
 import Badge from "@/Components/Badges/Badge.vue";
+import { globalFilter } from "@/services/helper.service";
 
 export const columns: ColumnType<Staff>[] = [
     {
         label: "Name",
         field: "name",
         props: {
-            class: "w-48",
+            class: "w-40",
         },
     },
     {
         label: "Username",
         field: "username",
         props: {
-            class: "w-48",
+            class: "w-40",
         },
     },
     {
         label: "Gender",
-        field: "gender",
+        field: (s) => __(s.gender),
         props: {
-            class: "w-48 capitalize",
+            class: "w-32",
         },
     },
     {
         label: "Position",
         field: "position",
         props: {
-            class: "w-48",
+            class: "w-32",
         },
     },
     {
         label: "Status",
-        field: "status_text",
+        field: (s) => __(s.status),
         component: {
             el: Badge,
             props: (item: Staff) => {
@@ -43,10 +44,15 @@ export const columns: ColumnType<Staff>[] = [
             },
         },
         props: {
-            class: "w-48",
+            class: "w-32",
         },
     },
 ];
+
+export const filters = {
+    ...globalFilter,
+};
 export default {
     columns,
+    filters,
 };

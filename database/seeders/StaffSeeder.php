@@ -18,5 +18,7 @@ class StaffSeeder extends Seeder
                 'is_admin' => true,
             ]);
         }
+
+        Staff::factory(40)->create();
     }
 }

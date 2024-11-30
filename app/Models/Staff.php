@@ -51,7 +51,7 @@ class Staff extends Authenticatable
         'status' => StaffStatusEnum::class,
     ];
 
-    protected $appends = ['status_text', 'permission_id_by_module_keys'];
+    protected $appends = ['permission_id_by_module_keys'];
 
     public function assignRole(mixed $roles): void
     {

@@ -16,7 +16,7 @@ class ModuleService
             'permissions' => function ($query) {
                 return $query->ordered();
             },
-        ])->filters($filters)->get();
+        ])->filters($filters)->ordered()->get();
     }
 
     public function save(array $data): Module

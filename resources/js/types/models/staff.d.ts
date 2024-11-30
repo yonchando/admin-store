@@ -10,7 +10,6 @@ export interface Staff {
     profile: string;
     position: string;
     status: string;
-    status_text: string;
     permission_id_by_module_keys: any;
     roles: Role[];
     permissions: Permission[];

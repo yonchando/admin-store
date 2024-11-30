@@ -15,6 +15,7 @@ export interface Module {
     id: number;
     code: string;
     name: string;
+    order_column: number;
     status: string;
     status_text: string;
     created_at: string;
