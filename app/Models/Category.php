@@ -25,8 +25,8 @@ class Category extends Model
         'json' => 'object',
     ];
 
-    public function scopeApplyFilter(Builder $query, array $data): Builder
+    public function scopeFilters(Builder $query, array $data): Builder
     {
-        return (new CategoryFilter($query, $data))->apply();
+        return new CategoryFilter($query, $data)->apply();
     }
 }

@@ -52,7 +52,10 @@ export const columns: ColumnType<Module>[] = [
 ];
 
 export const filters = {
-    ...globalFilter,
+    sortBy: {
+        field: "order_column",
+        direction: "asc",
+    },
 };
 
 export default {

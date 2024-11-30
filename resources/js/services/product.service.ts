@@ -6,13 +6,14 @@ import { defineStore } from "pinia";
 import { Paginate } from "@/types/paginate";
 import axios from "axios";
 import { currency } from "@/number_format";
+import Select from "@/Components/Forms/Select.vue";
+import { ref } from "vue";
 
 export const columns: ColumnType<Product>[] = [
     {
         label: "Name",
         field: "product_name",
         sortable: "product_name",
-        props: {},
     },
     {
         label: "Category",
@@ -20,7 +21,19 @@ export const columns: ColumnType<Product>[] = [
             return p.category?.category_name;
         },
         sortable: "category",
-        props: {},
+        filters: {
+            field: "category",
+            component: {
+                el: Select,
+                props: (props: any) => {
+                    return {
+                        options: props.filtersData?.categories.data,
+                        optionValue: "id",
+                        optionLabel: "category_name",
+                    };
+                },
+            },
+        },
     },
     {
         label: "Price",
@@ -40,7 +53,7 @@ export const columns: ColumnType<Product>[] = [
         component: {
             el: Badge,
             props: {
-                severity: "info",
+                severity: "warning",
             },
         },
     },
@@ -49,6 +62,17 @@ export const columns: ColumnType<Product>[] = [
         field: (p) => __(p.status),
         props: {
             class: "w-28",
+        },
+        filters: {
+            field: "status",
+            component: {
+                el: Select,
+                props: (props: any) => {
+                    return {
+                        options: props.filtersData?.statuses ?? [],
+                    };
+                },
+            },
         },
         component: {
             el: Badge,

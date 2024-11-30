@@ -88,6 +88,7 @@ export const filters = {
     ...globalFilter,
     total: null,
     status: null,
+    category: null,
 };
 
 export const status = {

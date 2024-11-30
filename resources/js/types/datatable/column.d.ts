@@ -8,6 +8,10 @@ export interface ColumnType<Type> {
     field?: keyof Type | ((t: Type) => any) | string;
     props?: any;
     sortable?: keyof Type | ((t: Type) => any);
+    filters?: {
+        field: string;
+        component: Component<any>;
+    };
     component?: Component<Type>;
     hideFromIndex?: boolean;
 }

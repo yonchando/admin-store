@@ -30,7 +30,7 @@ class ProductService
     public function paginate(array $filters = []): LengthAwarePaginator
     {
         return Product::query()
-            ->applyFilter($filters)
+            ->filters($filters)
             ->latest()
             ->paginate(request('perPage') ?? 20);
     }

@@ -11,6 +11,19 @@ abstract class FilterBuilder
         protected readonly array $filters = [],
     ) {}
 
+    public function apply(): Builder
+    {
+        foreach ($this->filters as $name => $filter) {
+            if ($filter) {
+                if (method_exists($this, $name)) {
+                    call_user_func([$this, $name], $filter);
+                }
+            }
+        }
+
+        return $this->builder;
+    }
+
     public function includes($withs): void
     {
         $this->builder->with($withs);
@@ -26,16 +39,13 @@ abstract class FilterBuilder
         }
     }
 
-    public function apply(): Builder
+    public function gender($value): void
     {
-        foreach ($this->filters as $name => $filter) {
-            if ($filter) {
-                if (method_exists($this, $name)) {
-                    call_user_func([$this, $name], $filter);
-                }
-            }
-        }
+        $this->builder->where('gender', $value);
+    }
 
-        return $this->builder;
+    public function status($value): void
+    {
+        $this->builder->where('status', $value);
     }
 }

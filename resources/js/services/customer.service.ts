@@ -7,6 +7,7 @@ import axios from "axios";
 import { defineStore } from "pinia";
 import { Paginate } from "@/types/paginate";
 import { phoneNumber } from "@/number_format";
+import Select from "@/Components/Forms/Select.vue";
 
 export const columns: ColumnType<Customer>[] = [
     {
@@ -30,6 +31,18 @@ export const columns: ColumnType<Customer>[] = [
         props: {
             class: "w-32",
         },
+        filters: {
+            field: "gender",
+            component: {
+                el: Select,
+                props: {
+                    options: [
+                        { id: "male", name: "Male" },
+                        { id: "female", name: "Female" },
+                    ],
+                },
+            },
+        },
     },
     {
         label: "Status",
@@ -40,6 +53,18 @@ export const columns: ColumnType<Customer>[] = [
                 return {
                     severity: item.status === "active" ? "info" : "warning",
                 };
+            },
+        },
+        filters: {
+            field: "status",
+            component: {
+                el: Select,
+                props: {
+                    options: ["active", "inactive"],
+                    optionLabel: function (option: string) {
+                        return __(option);
+                    },
+                },
             },
         },
         props: {
@@ -63,8 +88,11 @@ export const columns: ColumnType<Customer>[] = [
     },
 ];
 
-export const filters = {
-    ...globalFilter,
+export const filters = {};
+
+export const statuses = {
+    active: "active",
+    inactive: "inactive",
 };
 
 export default {

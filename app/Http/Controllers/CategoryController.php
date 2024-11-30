@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = $this->categoryService->paginate();
+        $categories = $this->categoryService->paginate($request->all());
 
         if ($request->wantsJson()) {
             return CategoryResource::collection($categories);

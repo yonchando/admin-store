@@ -20,12 +20,12 @@ class CategoryService
         return Category::latest()->get();
     }
 
-    public function paginate(): LengthAwarePaginator
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
         $query = Category::query()
             ->latest();
 
-        $query->applyFilter(request()->all());
+        $query->filters($filters);
 
         return $query->paginate($this->request->get('perPage', 20));
     }

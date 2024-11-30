@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const sizeClass = computed(() => {
     return {
-        sm: "text-sm px-3 py-1",
+        sm: "text-sm px-4 py-1",
         md: "text-base px-3 py-1.5",
         lg: "text-xl px-3.5 py-1.5",
         xl: "text-2xl px-4 py-1.5",

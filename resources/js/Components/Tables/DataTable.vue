@@ -5,15 +5,15 @@ import Checkbox from "@/Components/Forms/Checkbox.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { Action } from "@/types/button";
 import { Paginate } from "@/types/paginate";
-import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import ArrowUpDown from "@/Components/Icon/ArrowUpDown.vue";
 import _ from "lodash";
 import DataValue from "@/Components/DataValue.vue";
 import Select from "@/Components/Forms/Select.vue";
 import Pagination from "@/Components/Tables/Pagination.vue";
 import Column from "@/Components/Tables/Column.vue";
-import { Filters } from "@/types/datatable/datatable";
+import { FilterData, Filters } from "@/types/datatable/datatable";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
+import Button from "@/Components/Button.vue";
+import { callable, dataGet } from "@/services/helper.service";
 
 const props = withDefaults(
     defineProps<{
@@ -24,6 +24,8 @@ const props = withDefaults(
         paginate?: Paginate<any> | undefined;
         actions?: Action[];
         showSearch?: boolean;
+        filtersData?: FilterData;
+        filters?: object;
         root?: {
             actionClass?: string[] | string;
             checkBoxClass?: string[] | string;
@@ -66,6 +68,7 @@ const filters: Filters = reactive({
         field: "",
         direction: "-1",
     },
+    ...props.filters,
 });
 
 const inputSearch = _.debounce(function (e: Event) {
@@ -122,6 +125,17 @@ function sort(item: ColumnType<any>) {
 
 function changeRows() {
     emit("filters", filters);
+}
+
+function applyFilters(callback: any) {
+    emit("filters", filters);
+    callback();
+}
+
+function clearFilter(callback: any, field: string) {
+    filters[field] = "";
+    emit("filters", filters);
+    callback();
 }
 </script>
 
@@ -180,20 +194,55 @@ function changeRows() {
                         <Checkbox @change="changeCheckedAll" :value="true" v-model:checked="checkedAll" />
                     </Column>
                     <template v-for="column in columns">
-                        <Column
-                            :class="[column.sortable ? 'cursor-pointer' : '']"
-                            @click="sort(column)"
-                            class="head py-2.5"
-                            v-if="!column.hideFromIndex"
-                            v-bind="column.props">
+                        <Column class="head" v-if="!column.hideFromIndex" v-bind="column.props">
                             <div class="flex items-center">
                                 <span>
                                     {{ column.label }}
                                 </span>
-                                <span class="ml-3 inline-flex" v-if="column.sortable">
-                                    <ArrowUpDown v-if="directionIs(column.sortable, null)" class="size-3.5" />
-                                    <fa-icon v-if="directionIs(column.sortable, 'desc')" :icon="faArrowDown" />
-                                    <fa-icon v-if="directionIs(column.sortable, 'asc')" :icon="faArrowUp" />
+                                <span
+                                    :class="[column.sortable ? 'cursor-pointer' : '']"
+                                    @click="sort(column)"
+                                    class="ml-3 inline-flex"
+                                    v-if="column.sortable">
+                                    <i v-if="directionIs(column.sortable, null)" class="fa fa-sort"></i>
+                                    <i v-if="directionIs(column.sortable, 'asc')" class="fa fa-sort-up"></i>
+                                    <i v-if="directionIs(column.sortable, 'desc')" class="fa fa-sort-down"></i>
+                                </span>
+                                <span class="ml-auto" v-if="column.filters">
+                                    <Dropdown content-width="250" :position="{ left: -230, top: 18 }">
+                                        <template #trigger>
+                                            <span class="relative text-base">
+                                                <i
+                                                    v-if="!filters[column.filters.field]"
+                                                    class="fa fa-filter text-base"></i>
+                                                <i
+                                                    v-if="filters[column.filters.field]"
+                                                    class="fa fa-filter-circle-xmark"></i>
+                                            </span>
+                                        </template>
+
+                                        <template #content="{ close }">
+                                            <div class="flex flex-col gap-4 px-4 py-2">
+                                                <div>
+                                                    <component
+                                                        :is="column.filters.component.el"
+                                                        v-model="filters[column.filters.field]"
+                                                        v-bind="callable(column.filters.component.props, props)" />
+                                                </div>
+                                                <div class="ml-auto flex gap-3">
+                                                    <Button @click="applyFilters(close)" severity="info" size="sm">
+                                                        Apply
+                                                    </Button>
+                                                    <Button
+                                                        @click="clearFilter(close, column.filters.field)"
+                                                        severity="secondary"
+                                                        size="sm">
+                                                        Clear
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </Dropdown>
                                 </span>
                             </div>
                         </Column>

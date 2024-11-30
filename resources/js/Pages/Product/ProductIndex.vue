@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import DataTable from "@/Components/Tables/DataTable.vue";
 import { ColumnType } from "@/types/datatable/column.d";
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
 import { Product, Products } from "@/types/models/product";
 import productService from "@/services/product.service";
 import Action from "@/Components/Tables/Action.vue";
 import { updateFilter, useAlertStore } from "@/services/helper.service";
-import { Filters } from "@/types/datatable/datatable";
 import { useFilters } from "@/services/datatable.service";
 import purchaseService from "@/services/purchase.service";
+import { Paginate } from "@/types/paginate";
+import { Category } from "@/types/models/category";
 
-defineProps<{
+const props = defineProps<{
     products: Products;
+    statuses: object;
+    categories: Paginate<Category>;
     requests: any;
 }>();
 
@@ -54,6 +57,11 @@ const actions = computed(() => {
     return [add, refresh, remove];
 });
 
+const filtersData = reactive({
+    categories: props.categories,
+    statuses: props.statuses,
+});
+
 function getData() {
     loading.value = true;
     router.reload({
@@ -74,6 +82,8 @@ function getData() {
             :paginate="products"
             :columns="columns"
             :search="filters.search"
+            :filters-data="filtersData"
+            :filters="filters"
             @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
             @filters="updateFilter(filters, $event, getData)"
             @row-dbclick="router.get(route('product.show', $event.id))"

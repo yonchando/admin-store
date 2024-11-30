@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Product\ProductStatusEnum;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
+use App\Services\CategoryService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,6 +14,7 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductService $productService,
+        private readonly CategoryService $categoryService,
     ) {}
 
     public function index(Request $request)
@@ -33,6 +35,7 @@ class ProductController extends Controller
             'products' => $products,
             'statuses' => fn () => $statuses,
             'requests' => $request->except('includes'),
+            'categories' => $this->categoryService->paginate(),
         ]);
     }
 

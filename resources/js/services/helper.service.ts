@@ -1,6 +1,14 @@
 import _ from "lodash";
 import { defineStore } from "pinia";
 
+export function callable(key: object | string | ((t: string) => string), values: any = {}) {
+    if (typeof key === "function") {
+        return key(values);
+    } else {
+        return key;
+    }
+}
+
 export function dataGet(item: any, key: string | ((t: any) => string)) {
     if (typeof key === "string") {
         return _.get(item, key);
@@ -11,9 +19,7 @@ export function dataGet(item: any, key: string | ((t: any) => string)) {
 
 export function updateFilter(filters: any, values: any, callback: any = null) {
     for (const key in values) {
-        if (typeof filters[key] !== "undefined") {
-            filters[key] = values[key];
-        }
+        filters[key] = values[key];
     }
 
     if (callback != null) {

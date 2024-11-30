@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextareaInput from "@/Components/Forms/TextareaInput.vue";
@@ -11,6 +11,9 @@ import { Product } from "@/types/models/product";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import FileUpload from "@/Components/Forms/FileUpload.vue";
 import { UploadFile } from "@/types";
+import { Paginate } from "@/types/paginate";
+import { Category } from "@/types/models/category";
+import axios from "axios";
 
 const props = defineProps<{
     statuses: Array<string>;
@@ -27,7 +30,7 @@ const form = useForm({
     price: product?.price ?? "",
     stock_qty: product?.stock_qty ?? "",
     category_id: product?.category_id ?? "",
-    status: product?.status ?? "",
+    status: product?.status ?? "active",
     description: product?.description ?? "",
     image: "",
 });
@@ -44,6 +47,14 @@ const actions = computed(() => {
     return [save, cancel];
 });
 
+const categories = ref<Paginate<Category>>();
+
+function getCategories() {
+    axios.get(route("category.index")).then((res) => {
+        categories.value = res.data;
+    });
+}
+
 function submit() {
     if (product) {
         form.transform((data: any) => {
@@ -57,6 +68,8 @@ function submit() {
         form.post(route("product.store"));
     }
 }
+
+onMounted(() => getCategories());
 </script>
 
 <template>
@@ -83,9 +96,8 @@ function submit() {
                             <Select
                                 label="Category"
                                 v-model="form.category_id"
-                                :url="route('category.index', { sortBy: { field: 'category_name', direction: 'ASC' } })"
-                                :options="[]"
-                                :paginate="{ data: [] }"
+                                :options="categories?.data"
+                                :paginate="categories"
                                 option-label="category_name" />
                             <InputError :message="form.errors.category_id" />
                         </div>

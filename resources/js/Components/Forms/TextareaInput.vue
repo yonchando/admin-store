@@ -43,10 +43,6 @@ defineExpose({ focus: () => input.value?.focus() });
         <slot name="label" v-if="$slots.label || label">
             <InputLabel :required="required" :value="label" :for="input?.getAttribute('id')" />
         </slot>
-        <textarea
-            class="w-full rounded-md border-gray-300 text-sm placeholder-gray-100 shadow-sm focus:border-gray-300 focus:ring-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-gray-700 dark:focus:ring-gray-700"
-            v-model="model"
-            v-bind="$attrs"
-            ref="input"></textarea>
+        <textarea class="form-input" v-model="model" v-bind="$attrs" ref="input"></textarea>
     </div>
 </template>

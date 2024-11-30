@@ -3,56 +3,80 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const props = withDefaults(
     defineProps<{
-        align?: "left" | "right" | "bottom";
-        width?: "48" | "full";
+        contentWidth?: number | undefined | string;
         contentClasses?: string;
+        position?: {
+            top?: number;
+            left?: number;
+        };
     }>(),
     {
-        align: "right",
-        width: "48",
         contentClasses: "py-1 bg-white dark:bg-gray-700",
     },
 );
 
+function close() {
+    return (show.value = false);
+}
+
 const closeOnEscape = (e: KeyboardEvent) => {
-    if (open.value && e.key === "Escape") {
-        open.value = false;
+    if (show.value && e.key === "Escape") {
+        close();
     }
 };
 
+const show = ref<boolean>(false);
+
+const content = ref<HTMLElement>();
+const minWidth = computed(() => {
+    return props.contentWidth ?? content.value?.clientWidth;
+});
+const position = computed(() => {
+    const bound = content.value?.getBoundingClientRect();
+
+    let top = bound?.top ?? 0;
+
+    if (bound?.height) {
+        top += bound.height;
+    }
+
+    if (props.position?.top) {
+        top += props.position.top;
+    } else {
+        top += 6;
+    }
+
+    let left = bound?.left ?? 0;
+    if (props.position?.left) {
+        left += props.position.left;
+    }
+
+    return {
+        top: top,
+        left: left,
+    };
+});
+
+const contentStyle = computed(() => {
+    return {
+        "min-width": `${minWidth.value}px`,
+        "max-width": `${minWidth.value}px`,
+        top: `${position.value.top}px`,
+        left: `${position.value.left}px`,
+    };
+});
 onMounted(() => document.addEventListener("keydown", closeOnEscape));
 onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
-
-const widthClass = computed(() => {
-    return {
-        48: "w-48",
-        full: "full",
-    }[props.width.toString()];
-});
-
-const alignmentClasses = computed(() => {
-    if (props.align === "left") {
-        return "ltr:origin-top-left rtl:origin-top-right start-0";
-    } else if (props.align === "right") {
-        return "ltr:origin-top-right rtl:origin-top-left end-0";
-    } else if (props.align === "bottom") {
-        return "ltr:origin-top-right rtl:origin-top-left start-0 end-0";
-    } else {
-        return "origin-top";
-    }
-});
-
-const open = ref(false);
 </script>
 
 <template>
     <div class="relative">
-        <div @click="open = !open">
-            <slot name="trigger" :active="open" />
+        <div class="" @click="show = !show" ref="content">
+            <slot name="trigger" :active="show" />
         </div>
 
         <!-- Full Screen Dropdown Overlay -->
-        <div v-show="open" class="fixed inset-0 z-40" @click="open = false"></div>
+        <div v-show="show" class="fixed inset-0 z-40" @click="show = false"></div>
 
         <Transition
             enter-active-class="transition ease-out duration-200"
@@ -62,14 +86,11 @@ const open = ref(false);
             leave-from-class="opacity-100 scale-100"
             leave-to-class="opacity-0 scale-95">
             <div
-                v-show="open"
-                class="absolute z-50 mt-2 rounded-md shadow-lg"
-                :class="[widthClass, alignmentClasses]"
-                style="display: none"
-                @click="open = false">
-                <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
-                    <slot name="content" />
-                </div>
+                v-show="show"
+                class="fixed z-50 rounded-md bg-slate-50 shadow-lg"
+                :class="[contentClasses]"
+                :style="contentStyle">
+                <slot name="content" :active="show" :close="close" />
             </div>
         </Transition>
     </div>

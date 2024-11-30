@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait HasScopes
 {
-    public function scopeApplyFilter(Builder $query, array $filters): Builder
+    public function scopeFilters(Builder $query, array $filters): Builder
     {
         return new ProductFilter($query, $filters)->apply();
     }

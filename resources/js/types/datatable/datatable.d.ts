@@ -5,4 +5,9 @@ export interface Filters {
         field: any;
         direction: "asc" | "desc" | "-1";
     };
+    [key: string]: any;
+}
+
+export interface FilterData {
+    [key: string]: any;
 }

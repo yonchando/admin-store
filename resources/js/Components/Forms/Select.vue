@@ -51,22 +51,6 @@ const model = defineModel();
 
 const loading = defineModel("loading");
 
-const inputClass = [
-    "flex justify-between items-center",
-    "w-full",
-    "px-4 py-2",
-    "cursor-pointer",
-    "rounded-md",
-    "border",
-    "border-gray-200",
-    "focus:border-gray-300 focus:ring-gray-300",
-    "text-sm",
-    "dark:border-gray-700",
-    "dark:bg-gray-900",
-    "dark:text-gray-300",
-    "dark:focus:border-gray-700 dark:focus:ring-gray-700",
-];
-
 const dropdown = ref();
 
 const open = ref(false);
@@ -83,11 +67,17 @@ const selected = computed(() => {
             });
     }
 
-    let item = data.value.find((item) => {
-        return get(item, "optionValue") == model.value;
-    });
+    if (_.isArray(data.value)) {
+        let item = data.value.find((item) => {
+            return get(item, "optionValue") == model.value;
+        });
 
-    return get(item, "optionLabel");
+        return get(item, "optionLabel");
+    }
+
+    if (_.isObject(data.value)) {
+        return get(data.value, "optionLabel");
+    }
 });
 
 const search = ref<string>("");
@@ -111,11 +101,10 @@ watch(open, (value: boolean) => {
 });
 
 function get(option: any, type: "optionValue" | "optionLabel") {
-    if (!_.isObject(option)) {
-        return option;
-    }
-
     if (typeof props[type] === "string") {
+        if (!_.isObject(option)) {
+            return option;
+        }
         return _.get(option, props[type]);
     } else {
         return props[type](option);
@@ -184,8 +173,8 @@ function isSelected(option: any) {
             :tabindex="tabindex"
             ref="dropdown">
             <div class="relative w-full">
-                <div :class="[inputClass]" @click="openToggle">
-                    <span v-if="selected === undefined || selected.length === 0" class="text-gray-400">
+                <div class="form-select" @click="openToggle">
+                    <span v-if="selected === undefined || selected.length === 0" class="placeholder">
                         Select option
                     </span>
                     <span v-else class="flex items-center gap-2">
@@ -201,9 +190,6 @@ function isSelected(option: any) {
                             {{ selected }}
                         </template>
                     </span>
-                </div>
-                <div class="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer">
-                    <fa-icon @click="openToggle" :icon="faChevronDown" />
                 </div>
             </div>
 

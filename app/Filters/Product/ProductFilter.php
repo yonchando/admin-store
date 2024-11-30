@@ -60,9 +60,4 @@ class ProductFilter extends FilterBuilder
     {
         $this->builder->where('category_id', $categoryId);
     }
-
-    public function status($status): void
-    {
-        $this->builder->where('status', $status);
-    }
 }

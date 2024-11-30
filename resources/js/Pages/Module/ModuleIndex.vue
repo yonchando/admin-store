@@ -10,6 +10,7 @@ import ModuleForm from "@/Pages/Module/ModuleForm.vue";
 import { updateFilter, useAlertStore } from "@/services/helper.service";
 import Action from "@/Components/Tables/Action.vue";
 import { Filters } from "@/types/datatable/datatable";
+import { useFilters } from "@/services/datatable.service";
 
 const props = defineProps<{
     data: Module[];
@@ -21,10 +22,7 @@ const props = defineProps<{
 
 const columns: ColumnType<Module>[] = moduleService.columns;
 
-const filters = reactive({
-    ...moduleService.filters,
-    ...props.requests,
-});
+const filters = useFilters(moduleService.filters);
 
 const loading = ref(false);
 
@@ -65,11 +63,6 @@ const actions = computed(() => {
 
 const module = ref<Module | null>(null);
 
-function search(e: string) {
-    filters.search = e;
-    getData();
-}
-
 function getData() {
     loading.value = true;
     router.reload({
@@ -78,11 +71,6 @@ function getData() {
             loading.value = false;
         },
     });
-}
-
-function changeFilter(f: Filters) {
-    updateFilter(filters, f);
-    getData();
 }
 
 function edit(item: Module) {
@@ -102,6 +90,7 @@ function edit(item: Module) {
             }"
             :values="data"
             :columns="columns"
+            :filters="filters"
             :search="filters.search"
             @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
             @filters="updateFilter(filters, $event, getData)"
