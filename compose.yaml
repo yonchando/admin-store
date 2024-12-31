@@ -2,15 +2,14 @@ services:
     app:
         container_name: app
         image: admin-store
-        environment:
-            HOST_URL: http://localhost
+        entrypoint: php artisan octane:frankenphp --workers=1 --max-requests=1
         ports:
-            - "8000:80"
+            - "8000:8000"
         depends_on:
             db:
                 condition: service_healthy
         volumes:
-            - storage:/var/www/html/storage/logs
+            - storage:/app/storage/app
 
     db:
         image: postgres
@@ -33,3 +32,4 @@ services:
 volumes:
     db-data:
     storage:
+    app:

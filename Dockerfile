@@ -7,46 +7,24 @@ COPY . .
 RUN --mount=type=bind,source=composer.json,target=composer.json \
     --mount=type=bind,source=composer.lock,target=composer.lock \
     --mount=type=cache,target=/tmp/cache \
-    composer install --no-dev --no-interaction 
+    composer install --no-dev --no-interaction
 
-################################################################################
-FROM php:8.3-apache AS final
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+FROM dunglas/frankenphp
 
-COPY .docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+WORKDIR /app
+ 
+RUN install-php-extensions \
+    pcntl \
+    zip \
+    pdo \
+    pgsql \
+    pdo_pgsql 
+ 
+COPY . /app
 
-RUN a2enmod rewrite
-RUN service apache2 restart
+COPY --from=deps /app/vendor /app/vendor
 
-# Add core PHP extensions, see
-# https://github.com/docker-library/docs/tree/master/php#php-core-extensions
-# This example adds the apt packages for the 'gd' extension's dependencies and then
-# installs the 'gd' extension. For additional tips on running apt-get, see
-# https://docs.docker.com/go/dockerfile-aptget-best-practices/
-RUN apt-get update && apt-get install -y \
-      git \
-      vim \
-      libfreetype-dev \
-      libjpeg62-turbo-dev \
-      libpng-dev \
-      libpq-dev \
-      && rm -rf /var/lib/apt/lists/* \
-      && docker-php-ext-configure gd --with-freetype --with-jpeg \
-      && docker-php-ext-install gd pdo pdo_pgsql pgsql
+RUN php artisan storage:link
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-COPY --from=deps app/vendor /var/www/html/vendor
-
-# Copy the app files from the app directory.
-COPY . /var/www/html
-
-COPY .env.production /var/www/html/.env
-
-RUN php artisan storage:link && php artisan optimize:clear
-
-RUN chown -R www-data:www-data /var/www/html
+ENTRYPOINT ["php", "artisan", "octane:frankenphp"]
