@@ -17,7 +17,7 @@ abstract class FilterBuilder
     {
         foreach ($this->filters as $method => $value) {
             if ($value && method_exists($this, $method)) {
-                call_user_func([$this, $method], is_array($value) ? compact('value') : $value);
+                call_user_func([$this, $method], $value);
             }
         }
 
@@ -39,14 +39,14 @@ abstract class FilterBuilder
         }
     }
 
-    public function withCount($withCounts): void
+    public function includeCount($withCounts): void
     {
-        $this->builder->withCount(___($withCounts, 'value', []));
+        $this->builder->withCount($withCounts);
     }
 
     public function includes($withs): void
     {
-        $this->builder->with(___($withs, 'value', []));
+        $this->builder->with($withs);
     }
 
     public function sortBy($values): void

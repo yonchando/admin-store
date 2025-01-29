@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\Category;
+use Database\Seeders\CategorySeeder;
 use Inertia\Testing\AssertableInertia;
 
 use function Pest\Laravel\from;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
+use function Pest\Laravel\seed;
 
 beforeEach(function () {
     asAdmin();
@@ -116,4 +118,13 @@ test('destroy methods', function () {
     $this->assertDatabaseMissing($category->getTable(), [
         'category_name' => $category->category_name,
     ]);
+});
+
+test('dummy data category', function () {
+    seed(CategorySeeder::class);
+
+    $category = Category::first();
+
+    expect($category->children)->not()->toEqual(0)
+        ->and($category->children->first()->children)->not()->toEqual(0);
 });

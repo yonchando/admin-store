@@ -55,7 +55,6 @@ defineExpose({ focus: () => input.value?.focus() });
         <slot name="label" v-if="$slots.label || label">
             <InputLabel :required="required" :value="label" :for="input?.getAttribute('id')" />
         </slot>
-        <span v-else></span>
         <input class="form-input mt-auto" v-model="model" v-bind="$attrs" ref="input" :type="type" />
     </div>
 </template>

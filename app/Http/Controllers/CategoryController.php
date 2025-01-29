@@ -16,10 +16,10 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $filters = [
-            ...$request->all(),
+        $request->merge([
             'onlyParent' => true,
-        ];
+        ]);
+        $filters = $request->all();
 
         if ($request->wantsJson()) {
             $filters['onlyParent'] = false;

@@ -11,6 +11,8 @@ class CategoryResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $this->loadCount('children');
+
         return [
             'id' => $this->id,
             'parent_id' => $this->parent_id,

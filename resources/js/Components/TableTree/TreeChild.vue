@@ -22,10 +22,13 @@ const emit = defineEmits<{
             <template v-for="(column, j) in columns">
                 <template v-if="j === 0">
                     <Column class="py-3" :style="{ 'padding-left': paddingLeft + 'px' }">
-                        <span class="mr-2 cursor-pointer" @click="emit('expand-child', item)">
-                            <i v-if="!item.open" class="fa fa-chevron-right"></i>
-                            <i v-if="item.open" class="fa fa-chevron-down"></i>
-                        </span>
+                        <template v-if="item.children_count">
+                            <span class="mr-2 cursor-pointer" @click="emit('expand-child', item)">
+                                <i v-if="!item.open" class="fa fa-chevron-right"></i>
+                                <i v-if="item.open" class="fa fa-chevron-down"></i>
+                            </span>
+                        </template>
+
                         <DataValue :item="item" :column="column" :index="i" />
                     </Column>
                 </template>
