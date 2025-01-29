@@ -17,10 +17,10 @@ class ProductService
     /**
      * @return Collection<Product>
      */
-    public function get(): Collection
+    public function get(array $filters = []): Collection
     {
         return Product::query()
-            ->applyFilter(request()->all())
+            ->filters($filters)
             ->get();
     }
 
@@ -32,7 +32,7 @@ class ProductService
         return Product::query()
             ->filters($filters)
             ->latest()
-            ->paginate(pageName: request('pageName', 'page'));
+            ->paginate(perPage: request('perPage'), pageName: request('pageName', 'page'));
     }
 
     public function find(int $id, array $filters = []): ?Product

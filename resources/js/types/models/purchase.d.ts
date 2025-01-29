@@ -25,6 +25,7 @@ export interface PurchaseDetail {
     price: number;
     sub_total: number;
     json?: object;
+    product?: Product;
 }
 
 export interface PurchaseItem {

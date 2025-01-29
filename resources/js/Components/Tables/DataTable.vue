@@ -296,7 +296,10 @@ function clearFilter(callback: any, field: string) {
             </tbody>
         </table>
     </div>
-    <Pagination :values="values" :paginate="meta" @page="loading = true" />
+
+    <template v-if="meta">
+        <Pagination :paginate="meta" @page="loading = true" />
+    </template>
 </template>
 
 <style scoped></style>

@@ -2,10 +2,10 @@ export interface Paginate<Type> {
     data: Type[];
     meta: PaginateMeta;
     links: {
-        first: string;
-        last: string;
-        next: string;
-        prev: string;
+        first: string | null;
+        last: string | null;
+        next: string | null;
+        prev: string | null;
     };
 }
 
@@ -16,12 +16,12 @@ export interface PaginateLink {
 }
 
 export interface PaginateMeta {
-    current_page: number | null;
-    from: number | null;
-    last_page: number | null;
-    links: PaginateLink[] | null;
-    path: string | null;
-    per_page: number | null;
-    to: number | null;
-    total: number | null;
+    current_page: number;
+    from: number;
+    last_page: number;
+    links: PaginateLink[];
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
 }

@@ -3,17 +3,10 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { Product } from "@/types/models/product";
 import { ColumnType } from "@/types/datatable/column";
 import productService from "@/services/product.service";
-import { computed, nextTick, ref, watch } from "vue";
+import { computed } from "vue";
 import useAction from "@/services/action.service";
 import { router, useForm } from "@inertiajs/vue3";
-import Alert from "@/Components/Alert/Alert.vue";
 import DataValue from "@/Components/DataValue.vue";
-import Button from "@/Components/Button.vue";
-import { useCropper } from "@/services/cropper.service";
-import FileUpload from "@/Components/Forms/FileUpload.vue";
-import { Action } from "@/types/button";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { UploadFile } from "@/types";
 import { useAlertStore } from "@/services/helper.service";
 
 const { product } = defineProps<{
@@ -77,7 +70,7 @@ const actions = computed(() => {
                         v-if="product.json?.image?.url"
                         :src="product.image_url"
                         :alt="product.product_name" />
-                    <img class="w-full" v-else src="@assets/images/placeholders/placeholder.jpg" alt="" />
+                    <img class="w-full" v-else src="@assets/images/placeholders/placeholder.png" alt="" />
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import _ from "lodash";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import axios from "axios";
 import Badge from "@/Components/Badges/Badge.vue";
+import { PaginateMeta } from "@/types/paginate";
 
 const props = withDefaults(
     defineProps<{
@@ -21,7 +22,7 @@ const props = withDefaults(
         maxShow?: number;
         dropdownClass?: string;
         loading?: boolean;
-        nextPageUrl?: string | undefined | null;
+        meta?: PaginateMeta;
     }>(),
     {
         optionValue: "id",
@@ -33,7 +34,6 @@ const props = withDefaults(
         maxShow: undefined,
         options: [] as any,
         dropdownClass: "fixed",
-        hasNextPage: false,
     },
 );
 
@@ -41,6 +41,7 @@ const emit = defineEmits<{
     (e: "change", option: any): void;
     (e: "open"): void;
     (e: "search", search: string): void;
+    (e: "loadMore", page: number): void;
 }>();
 
 const storeOptions = ref(props.options);
@@ -97,7 +98,6 @@ const selected = computed(() => {
     }
 });
 
-const nextPageUrl = ref(props.nextPageUrl);
 const search = ref<string>("");
 
 const inputSearch = ref<HTMLInputElement | null>(null);
@@ -179,33 +179,6 @@ function isSelected(option: any) {
     } else {
         return get(option, "optionValue") == model.value;
     }
-}
-
-function showMore() {
-    getData();
-}
-
-function getData() {
-    loading.value = true;
-    return new Promise((resovle) => {
-        if (nextPageUrl.value) {
-            axios
-                .get(nextPageUrl.value, {
-                    params: {
-                        perPage: 10,
-                    },
-                })
-                .then((res) => {
-                    storeOptions.value = [...res.data.data, ...storeOptions.value];
-                    nextPageUrl.value = res.data.next_page_url;
-                    resovle(res);
-                })
-                .catch()
-                .finally(() => {
-                    loading.value = false;
-                });
-        }
-    });
 }
 </script>
 
@@ -304,14 +277,17 @@ function getData() {
                             </div>
                         </div>
                     </div>
-                    <div v-if="nextPageUrl && data.length > 0" class="mt-2 flex px-2">
-                        <button
-                            @click="showMore"
-                            type="button"
-                            class="inline-flex w-full items-center justify-center rounded bg-gray-800 py-3 text-center hover:bg-gray-800/85">
-                            View more
-                        </button>
-                    </div>
+
+                    <template v-if="meta">
+                        <div v-if="meta.current_page < meta?.last_page" class="mt-2 flex px-2">
+                            <button
+                                @click="emit('loadMore', meta.current_page + 1)"
+                                type="button"
+                                class="inline-flex w-full items-center justify-center rounded bg-gray-800 py-3 text-center hover:bg-gray-800/85">
+                                View more
+                            </button>
+                        </div>
+                    </template>
                 </div>
             </Transition>
         </div>

@@ -5,8 +5,7 @@ import Button from "@/Components/Button.vue";
 import { PaginateMeta } from "@/types/paginate";
 
 defineProps<{
-    values: Array<string>;
-    paginate?: PaginateMeta;
+    paginate: PaginateMeta;
 }>();
 
 const emit = defineEmits(["page"]);
@@ -24,7 +23,7 @@ function changePage(url: string) {
                 <p class="">
                     Total:
                     <span class="font-semibold">
-                        {{ paginate ? paginate.total : values.length }}
+                        {{ paginate.total }}
                     </span>
                 </p>
                 <p>

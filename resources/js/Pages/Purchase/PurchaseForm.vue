@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
@@ -11,20 +11,20 @@ import Button from "@/Components/Button.vue";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "@/Components/Tables/DataTable.vue";
 import Column from "@/Components/Tables/Column.vue";
-import Action from "@/Components/Tables/Action.vue";
 import { Paginate } from "@/types/paginate";
 import { Customer } from "@/types/models/customer";
 import axios from "axios";
 import { usePaginate } from "@/services/helper.service";
-import { Product } from "@/types/models/product";
+import ProductList from "@/Pages/Purchase/Partials/ProductList.vue";
 
 const props = defineProps<{
     statuses: Array<string>;
     purchase: Purchase;
 }>();
 
-const customers = ref<Paginate<Customer> | null>(usePaginate());
-const products = ref<Paginate<Product> | null>(usePaginate());
+const showProductList = ref(false);
+
+const customers = ref<Paginate<Customer>>(usePaginate());
 
 const actions = computed(() => {
     const { save, cancel, refresh } = useAction();
@@ -50,32 +50,12 @@ const form = useForm({
     products: [] as PurchaseItem[],
 });
 
-const processing = reactive({
-    products: false,
-});
-
-function addItem() {
-    form.products.push({
-        id: null,
-        product_id: null,
-        qty: 1,
-        sub_total: 0,
-        unit_Price: 0,
-    });
-}
-
-function removeItem(index: number) {
-    form.products.splice(index, 1);
-}
-
 function submit() {
     form.transform((item: any) => {
-        let values = {
+        return {
             ...item,
             purchase_date: `${purchase_date.value} ${purchase_time.value}`,
         };
-
-        return values;
     });
 
     if (props.purchase) {
@@ -85,21 +65,22 @@ function submit() {
     }
 }
 
-function getCustomers() {
-    axios.get(route("customer.index")).then((res) => {
-        customers.value = res.data;
-    });
-}
-
-function getProducts() {
-    axios.get(route("product.index")).then((res) => {
-        products.value = res.data;
-    });
+function getCustomers(page: number = 1) {
+    axios
+        .get(route("customer.index"), {
+            params: {
+                page,
+            },
+        })
+        .then((res) => {
+            customers.value.data = [...customers.value.data, ...res.data.data];
+            customers.value.meta = res.data.meta;
+            customers.value.links = res.data.links;
+        });
 }
 
 onMounted(() => {
     getCustomers();
-    getProducts();
 
     if (props.purchase) {
         form.customer_id = props.purchase.customer_id;
@@ -113,6 +94,7 @@ onMounted(() => {
                 qty: item.qty,
                 sub_total: item.sub_total,
                 unit_Price: item.price,
+                product: item.product,
             };
         });
     }
@@ -132,8 +114,9 @@ onMounted(() => {
                                 label="Customer"
                                 required
                                 v-model="form.customer_id"
-                                :nextPageUrl="customers?.next_page_url"
-                                :options="customers?.data"
+                                :options="customers.data"
+                                :meta="customers.meta"
+                                @loadMore="getCustomers($event)"
                                 option-label="name" />
                             <InputError :message="form.errors.customer_id" />
                         </div>
@@ -167,7 +150,9 @@ onMounted(() => {
 
                 <div class="mt-6 flex items-center justify-between">
                     <h2 class="text-xl">Purchase Items</h2>
-                    <Button type="button" @click="addItem" severity="primary" :icon="faPlus">Add</Button>
+                    <Button type="button" @click="showProductList = true" severity="primary" :icon="faPlus"
+                        >Select Products
+                    </Button>
                 </div>
 
                 <DataTable :filter="false" :checkbox="false" :show-search="false">
@@ -187,25 +172,16 @@ onMounted(() => {
                             <tr v-for="(item, index) in form.products">
                                 <Column class="px-0 py-3 text-center">{{ index + 1 }}</Column>
                                 <Column class="py-3">
-                                    <Select
-                                        v-model="item.product_id"
-                                        :options="products?.data"
-                                        :id="`select-option-${index}`"
-                                        :loading="processing.products"
-                                        :next-page-url="products?.next_page_url"
-                                        dropdown-class="absolute"
-                                        option-label="product_name" />
+                                    {{ item.product?.product_name }}
                                 </Column>
                                 <Column class="py-3">
-                                    <TextInput v-model="item.qty" type="number" />
+                                    {{ item.qty }}
                                 </Column>
                                 <Column class="py-3">
                                     {{ item.unit_Price }}
                                 </Column>
                                 <Column class="py-3">{{ item.sub_total }}</Column>
-                                <Column class="py-3">
-                                    <Action :destroy="() => removeItem(index)" />
-                                </Column>
+                                <Column class="py-3"> </Column>
                             </tr>
                         </template>
                         <template v-else>
@@ -217,6 +193,8 @@ onMounted(() => {
                 </DataTable>
             </div>
         </form>
+
+        <ProductList v-model:show="showProductList" />
     </AppLayout>
 </template>
 

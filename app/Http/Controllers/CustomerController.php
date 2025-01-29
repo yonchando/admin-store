@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Customer\CustomerStatusEnum;
 use App\Enums\GenderEnum;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CustomerResource;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,11 +21,11 @@ class CustomerController extends Controller
         $customers = $this->customerService->paginate($request->all());
 
         if ($request->wantsJson()) {
-            return response()->json($customers);
+            return CustomerResource::collection($customers);
         }
 
         return Inertia::render('Customer/CustomerIndex', [
-            'customers' => $customers,
+            'customers' => CustomerResource::collection($customers),
             'requests' => $request->all(),
         ]);
     }

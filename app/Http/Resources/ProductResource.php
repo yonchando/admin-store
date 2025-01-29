@@ -24,10 +24,8 @@ class ProductResource extends JsonResource
             'image_url' => $this->image_url,
             'is_active' => $this->is_active,
             'json' => $this->json,
-
             'category_id' => $this->category_id,
-
-            'category' => new CategoryResource($this->whenLoaded('category')),
+            'category' => new CategoryResource($this->whenLoaded('category', default: null)),
         ];
     }
 }

@@ -40,7 +40,6 @@ class Product extends Model
 
     protected $casts = [
         'json' => ProductJson::class,
-        'price' => 'decimal:2',
         'status' => ProductStatusEnum::class,
     ];
 

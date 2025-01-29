@@ -24,9 +24,15 @@ class ProductController extends Controller
             'includes' => 'category',
         ]);
 
-        $products = $this->productService->paginate($request->all());
+        if ($request->wantsJson()) {
+            $products = $request->get('perPage') ? $this->productService->paginate($request->all()) : $this->productService->get($request->all());
+
+            return ProductResource::collection($products);
+        }
 
         $statuses = ProductStatusEnum::toArray();
+
+        $products = $this->productService->paginate($request->all());
 
         return Inertia::render('Product/ProductIndex', [
             'products' => ProductResource::collection($products),

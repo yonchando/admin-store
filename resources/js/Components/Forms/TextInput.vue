@@ -12,7 +12,7 @@ const props = withDefaults(
         direction?: "horizontal" | "vertical";
         root?: any;
         required?: boolean;
-        type?: string;
+        type?: "text" | "password" | "number" | "email" | "time";
     }>(),
     {
         direction: "vertical",
