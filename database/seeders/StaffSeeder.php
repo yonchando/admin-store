@@ -19,6 +19,6 @@ class StaffSeeder extends Seeder
             ]);
         }
 
-        Staff::factory(40)->create();
+        //        Staff::factory(40)->create();
     }
 }

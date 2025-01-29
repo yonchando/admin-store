@@ -15,9 +15,11 @@ class CategoryService
         private readonly Request $request,
     ) {}
 
-    public function get(): Collection
+    public function get(array $filters = []): Collection
     {
-        return Category::latest()->get();
+        return Category::query()
+            ->filters($filters)
+            ->latest()->get();
     }
 
     public function paginate(array $filters = []): LengthAwarePaginator
@@ -42,7 +44,6 @@ class CategoryService
 
     public function update(CategoryRequest $request, Category $category): Category
     {
-
         $category->fill($request->validated());
         $category->slug = Str::slug($request->get('category_name'));
         $category->updated_at = now();
@@ -54,5 +55,10 @@ class CategoryService
     public function destroy(int|array $ids): void
     {
         Category::destroy($ids);
+    }
+
+    public function find($id): Category
+    {
+        return Category::findOrFail($id);
     }
 }

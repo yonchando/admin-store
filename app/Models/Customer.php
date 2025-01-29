@@ -9,6 +9,7 @@ use App\Models\Concerns\Customer\HasAttributes;
 use App\Models\Concerns\Customer\HasRelationships;
 use App\Models\Concerns\Customer\HasScopes;
 use App\Traits\HasTimestamps;
+use App\Traits\Paginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,6 +21,7 @@ class Customer extends Model
     use HasRelationships;
     use HasScopes;
     use HasTimestamps;
+    use Paginator;
     use SoftDeletes;
 
     protected $fillable = [

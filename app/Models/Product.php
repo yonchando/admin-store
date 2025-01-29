@@ -8,6 +8,7 @@ use App\Models\Concerns\Product\HasAttributes;
 use App\Models\Concerns\Product\HasRelationships;
 use App\Models\Concerns\Product\HasScopes;
 use App\Traits\HasTimestamps;
+use App\Traits\Paginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,6 +23,7 @@ class Product extends Model
     use HasRelationships;
     use HasScopes;
     use HasTimestamps;
+    use Paginator;
     use SoftDeletes;
 
     protected $fillable = [

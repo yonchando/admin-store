@@ -33,7 +33,7 @@ test('index methods', function () {
             fn (AssertableInertia $page) => $page->component('Product/ProductIndex')
                 ->has('products.data', $perPage)
                 ->where('statuses', ProductStatusEnum::toArray())
-                ->where('products.total', $products->add($first)->count())
+                ->where('products.meta.total', $products->add($first)->count())
                 ->where('products.data.0.id', $first->id)
         );
 });

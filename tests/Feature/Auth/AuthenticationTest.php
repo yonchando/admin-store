@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Staff;
-use App\Providers\RouteServiceProvider;
 
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
@@ -18,7 +17,7 @@ test('users admin can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(RouteServiceProvider::HOME);
+    $response->assertRedirect(route('dashboard'));
 
 });
 
@@ -43,7 +42,7 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(RouteServiceProvider::HOME);
+    $response->assertRedirect(route('dashboard'));
 });
 
 test('users can not authenticate with invalid password', function () {

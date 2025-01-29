@@ -25,4 +25,11 @@ class CategoryFactory extends Factory
             'slug' => Str::slug($name),
         ];
     }
+
+    public function parent($id): static
+    {
+        return $this->state(fn () => [
+            'parent_id' => $id,
+        ]);
+    }
 }

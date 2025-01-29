@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import InputError from "@/Components/Forms/InputError.vue";
@@ -9,20 +9,22 @@ import Select from "@/Components/Forms/Select.vue";
 import { Purchase, PurchaseDetail, PurchaseItem } from "@/types/models/purchase";
 import Button from "@/Components/Button.vue";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useCustomerStore } from "@/services/customer.service";
 import DataTable from "@/Components/Tables/DataTable.vue";
-import { useProductStore } from "@/services/product.service";
 import Column from "@/Components/Tables/Column.vue";
 import Action from "@/Components/Tables/Action.vue";
-import { currency } from "@/number_format";
+import { Paginate } from "@/types/paginate";
+import { Customer } from "@/types/models/customer";
+import axios from "axios";
+import { usePaginate } from "@/services/helper.service";
+import { Product } from "@/types/models/product";
 
 const props = defineProps<{
     statuses: Array<string>;
     purchase: Purchase;
 }>();
 
-const customerStore = useCustomerStore();
-const productStore = useProductStore();
+const customers = ref<Paginate<Customer> | null>(usePaginate());
+const products = ref<Paginate<Product> | null>(usePaginate());
 
 const actions = computed(() => {
     const { save, cancel, refresh } = useAction();
@@ -33,13 +35,13 @@ const actions = computed(() => {
         router.get(route("purchase.index"));
     };
 
-    refresh.props.onClick = () => {
-        customerStore.getData();
-        productStore.getData();
-    };
+    refresh.props.onClick = () => {};
 
     return [save, cancel, refresh];
 });
+
+const purchase_date = ref(null);
+const purchase_time = ref(null);
 
 const form = useForm({
     customer_id: "" as string | number,
@@ -48,12 +50,17 @@ const form = useForm({
     products: [] as PurchaseItem[],
 });
 
+const processing = reactive({
+    products: false,
+});
+
 function addItem() {
     form.products.push({
         id: null,
         product_id: null,
         qty: 1,
         sub_total: 0,
+        unit_Price: 0,
     });
 }
 
@@ -61,19 +68,16 @@ function removeItem(index: number) {
     form.products.splice(index, 1);
 }
 
-function price(item: PurchaseItem) {
-    const product = productStore.data.find((value) => item.product_id === value.id);
-
-    return currency(product?.price ?? 0);
-}
-
-function subTotal(item: PurchaseItem) {
-    const product = productStore.data.find((value) => item.product_id === value.id);
-
-    return currency((product?.price ?? 0) * item.qty);
-}
-
 function submit() {
+    form.transform((item: any) => {
+        let values = {
+            ...item,
+            purchase_date: `${purchase_date.value} ${purchase_time.value}`,
+        };
+
+        return values;
+    });
+
     if (props.purchase) {
         form.put(route("purchase.update", props.purchase.id));
     } else {
@@ -81,12 +85,25 @@ function submit() {
     }
 }
 
-onMounted(() => {
-    if (props.purchase) {
-        productStore.getData();
+function getCustomers() {
+    axios.get(route("customer.index")).then((res) => {
+        customers.value = res.data;
+    });
+}
 
+function getProducts() {
+    axios.get(route("product.index")).then((res) => {
+        products.value = res.data;
+    });
+}
+
+onMounted(() => {
+    getCustomers();
+    getProducts();
+
+    if (props.purchase) {
         form.customer_id = props.purchase.customer_id;
-        form.purchase_date = props.purchase.purchased_at.replace(" | ", " ");
+        form.purchase_date = props.purchase.purchased_at;
         form.status = props.purchase.status;
 
         form.products = props.purchase.purchase_details.map((item: PurchaseDetail) => {
@@ -95,6 +112,7 @@ onMounted(() => {
                 product_id: item.product_id,
                 qty: item.qty,
                 sub_total: item.sub_total,
+                unit_Price: item.price,
             };
         });
     }
@@ -112,19 +130,32 @@ onMounted(() => {
                         <div class="">
                             <Select
                                 label="Customer"
-                                @open="customerStore.getData()"
-                                @search="customerStore.search"
-                                @more="customerStore.more"
                                 required
                                 v-model="form.customer_id"
-                                v-model:loading="customerStore.loading"
-                                :has-more-page="customerStore.isLastPage()"
-                                :options="customerStore.data"
+                                :nextPageUrl="customers?.next_page_url"
+                                :options="customers?.data"
                                 option-label="name" />
                             <InputError :message="form.errors.customer_id" />
                         </div>
                         <div class="">
-                            <TextInput label="Purchase Date" v-model="form.purchase_date" required />
+                            <div class="flex gap-4">
+                                <TextInput
+                                    v-model="purchase_date"
+                                    label="Purchase Date"
+                                    required
+                                    datepicker-autohide
+                                    datepicker-format="yyyy-mm-dd"
+                                    datepicker-buttons
+                                    datepicker-autoselect-today
+                                    datepicker />
+                                <TextInput
+                                    type="time"
+                                    label=""
+                                    v-model="purchase_time"
+                                    required
+                                    :data-date="purchase_time"
+                                    timepicker />
+                            </div>
                             <InputError :message="form.errors.purchase_date" />
                         </div>
                         <div class="">
@@ -139,7 +170,7 @@ onMounted(() => {
                     <Button type="button" @click="addItem" severity="primary" :icon="faPlus">Add</Button>
                 </div>
 
-                <DataTable :filter="false" :checkbox="false">
+                <DataTable :filter="false" :checkbox="false" :show-search="false">
                     <template #thead>
                         <tr>
                             <Column class="head w-8 px-0 py-3 text-center">#</Column>
@@ -157,19 +188,21 @@ onMounted(() => {
                                 <Column class="px-0 py-3 text-center">{{ index + 1 }}</Column>
                                 <Column class="py-3">
                                     <Select
-                                        @open="productStore.getData()"
-                                        @search="(search) => productStore.search({ search })"
                                         v-model="item.product_id"
-                                        :options="productStore.data"
+                                        :options="products?.data"
+                                        :id="`select-option-${index}`"
+                                        :loading="processing.products"
+                                        :next-page-url="products?.next_page_url"
+                                        dropdown-class="absolute"
                                         option-label="product_name" />
                                 </Column>
                                 <Column class="py-3">
                                     <TextInput v-model="item.qty" type="number" />
                                 </Column>
                                 <Column class="py-3">
-                                    {{ price(item) }}
+                                    {{ item.unit_Price }}
                                 </Column>
-                                <Column class="py-3">{{ subTotal(item) }}</Column>
+                                <Column class="py-3">{{ item.sub_total }}</Column>
                                 <Column class="py-3">
                                     <Action :destroy="() => removeItem(index)" />
                                 </Column>

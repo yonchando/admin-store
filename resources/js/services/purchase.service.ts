@@ -4,62 +4,7 @@ import { Purchase, PurchaseDetail } from "@/types/models/purchase";
 import Badge from "@/Components/Badges/Badge.vue";
 import { currency } from "@/number_format";
 import Button from "@/Components/Button.vue";
-
-export const columns: ColumnType<Purchase>[] = [
-    {
-        label: "Ref no",
-        field: "ref_no",
-    },
-    {
-        label: "Customer",
-        field: (item) => item.customer?.name,
-        sortable: "customer",
-        component: {
-            el: Button,
-            props: (c: Purchase) => {
-                return {
-                    href: route("customer.show", c.customer_id),
-                };
-            },
-        },
-    },
-    {
-        label: "Total",
-        field: (item) => currency(item.total),
-        sortable: "total",
-    },
-    {
-        label: "Purchase count",
-        field: "purchase_details_count",
-    },
-    {
-        label: "Purchase date",
-        field: "purchased_at",
-        sortable: "purchased_at",
-    },
-    {
-        label: "Status",
-        field: (item) => __(item.status),
-        component: {
-            el: Badge,
-            props: (item: Purchase) => {
-                return {
-                    severity: statusSeverity[item.status],
-                };
-            },
-        },
-    },
-    {
-        label: "Created date",
-        field: "created_at",
-        hideFromIndex: true,
-    },
-    {
-        label: "Updated date",
-        field: "updated_at",
-        hideFromIndex: true,
-    },
-];
+import Select from "@/Components/Forms/Select.vue";
 
 export const productColumns: ColumnType<PurchaseDetail>[] = [
     {
@@ -107,6 +52,73 @@ export const statusSeverity = {
     cancel: "secondary",
 };
 
+export const columns: ColumnType<Purchase>[] = [
+    {
+        label: "Ref no",
+        field: "ref_no",
+    },
+    {
+        label: "Customer",
+        field: (item) => item.customer?.name,
+        sortable: "customer",
+        component: {
+            el: Button,
+            props: (c: Purchase) => {
+                return {
+                    href: route("customer.show", c.customer_id),
+                };
+            },
+        },
+    },
+    {
+        label: "Total",
+        field: (item) => currency(item.total),
+        sortable: "total",
+    },
+    {
+        label: "Purchase count",
+        field: "purchase_details_count",
+    },
+    {
+        label: "Purchase date",
+        field: "purchased_at",
+        sortable: "purchased_at",
+    },
+    {
+        label: "Status",
+        field: (item) => __(item.status),
+        component: {
+            el: Badge,
+            props: (item: Purchase) => {
+                return {
+                    severity: statusSeverity[item.status],
+                };
+            },
+        },
+        filters: {
+            field: "status",
+            component: {
+                el: Select,
+                props: {
+                    options: Object.keys(status),
+                    optionLabel(value: string) {
+                        return __(value);
+                    },
+                },
+            },
+        },
+    },
+    {
+        label: "Created date",
+        field: "created_at",
+        hideFromIndex: true,
+    },
+    {
+        label: "Updated date",
+        field: "updated_at",
+        hideFromIndex: true,
+    },
+];
 export default {
     columns,
     productColumns,

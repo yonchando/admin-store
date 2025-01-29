@@ -6,18 +6,20 @@ use App\Filters\FilterBuilder;
 
 class CategoryFilter extends FilterBuilder
 {
-    public function search($search): void
+    public function search($value): void
     {
-        $this->builder->whereRaw('lower(category_name) like lower(?)', ["%{$search}%"]);
+        $this->builder->whereRaw('lower(category_name) like lower(?)', ["%{$value}%"]);
     }
 
-    public function sortBy($filters): void
+    public function onlyParent($value): void
     {
-        $field = ___($filters, 'field');
-        $direction = ___($filters, 'direction');
-
-        if ($direction != '-1') {
-            $this->builder->orderBy($field, $direction);
+        if ($value) {
+            $this->builder->whereNull('parent_id');
         }
+    }
+
+    public function parent($value): void
+    {
+        $this->builder->where('parent_id', $value);
     }
 }

@@ -22,15 +22,16 @@ export interface PurchaseDetail {
     product_name: string;
     category_name?: string;
     qty: number;
-    price: string;
+    price: number;
     sub_total: number;
     json?: object;
 }
 
 export interface PurchaseItem {
-    id: number | null;
+    id?: number | null;
     product_id: number | null;
     qty: number;
     sub_total: number;
+    unit_Price: number;
     product?: Product;
 }

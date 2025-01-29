@@ -2,6 +2,7 @@ import "toastify-js/src/toastify.css";
 import "../css/app.scss";
 import "./bootstrap.ts";
 import "./cropper";
+import "flowbite/dist/flowbite.min";
 
 import { createInertiaApp } from "@inertiajs/vue3";
 import { createApp, DefineComponent, h } from "vue";
@@ -15,8 +16,11 @@ import Badge from "@/Components/Badges/Badge.vue";
 import Modal from "@/Components/Modal.vue";
 import { __ } from "@/locale";
 import { createPinia } from "pinia";
+import axios from "axios";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+
+axios.defaults.headers['Accept'] = "application/json"
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

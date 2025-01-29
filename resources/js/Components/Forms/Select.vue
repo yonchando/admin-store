@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
-import { FontAwesomeIcon as FaIcon } from "@fortawesome/vue-fontawesome";
-import { faChevronDown, faTimes } from "@fortawesome/free-solid-svg-icons";
-import _, { drop } from "lodash";
+import _ from "lodash";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import axios from "axios";
-import { Paginate } from "@/types/paginate";
 import Badge from "@/Components/Badges/Badge.vue";
 
 const props = withDefaults(
@@ -22,7 +19,9 @@ const props = withDefaults(
         multiple?: boolean;
         maxSelected?: number;
         maxShow?: number;
-        hasMorePage?: boolean;
+        dropdownClass?: string;
+        loading?: boolean;
+        nextPageUrl?: string | undefined | null;
     }>(),
     {
         optionValue: "id",
@@ -33,23 +32,41 @@ const props = withDefaults(
         multiple: false,
         maxShow: undefined,
         options: [] as any,
+        dropdownClass: "fixed",
+        hasNextPage: false,
     },
 );
 
 const emit = defineEmits<{
     (e: "change", option: any): void;
     (e: "open"): void;
-    (e: "more", more: boolean): void;
     (e: "search", search: string): void;
 }>();
 
+const storeOptions = ref(props.options);
+
+watch(
+    () => props.options,
+    (value) => {
+        storeOptions.value = value;
+    },
+);
+
 let data = computed(() => {
-    return props.options;
+    let searchString = search.value.toLowerCase();
+    if (searchString) {
+        return storeOptions.value.filter(function (item) {
+            const label = get(item, "optionLabel").toLowerCase();
+            return label.startsWith(searchString) || label.endsWith(searchString);
+        });
+    }
+
+    return storeOptions.value;
 });
 
 const model = defineModel();
 
-const loading = defineModel("loading");
+const loading = ref(props.loading);
 
 const dropdown = ref();
 
@@ -80,6 +97,7 @@ const selected = computed(() => {
     }
 });
 
+const nextPageUrl = ref(props.nextPageUrl);
 const search = ref<string>("");
 
 const inputSearch = ref<HTMLInputElement | null>(null);
@@ -162,11 +180,39 @@ function isSelected(option: any) {
         return get(option, "optionValue") == model.value;
     }
 }
+
+function showMore() {
+    getData();
+}
+
+function getData() {
+    loading.value = true;
+    return new Promise((resovle) => {
+        if (nextPageUrl.value) {
+            axios
+                .get(nextPageUrl.value, {
+                    params: {
+                        perPage: 10,
+                    },
+                })
+                .then((res) => {
+                    storeOptions.value = [...res.data.data, ...storeOptions.value];
+                    nextPageUrl.value = res.data.next_page_url;
+                    resovle(res);
+                })
+                .catch()
+                .finally(() => {
+                    loading.value = false;
+                });
+        }
+    });
+}
 </script>
 
 <template>
     <div :class="[labelInline ? 'flex items-center' : 'flex flex-col']" class="w-full flex-1 gap-2">
         <InputLabel v-if="label" :value="label" />
+        <span v-else></span>
 
         <div
             class="relative w-full focus-visible:outline-gray-800 focus-visible:ring-transparent"
@@ -203,29 +249,38 @@ function isSelected(option: any) {
                 <div
                     v-show="open"
                     :style="[minWidth ? `min-width: ${minWidth}px` : '']"
-                    class="fixed z-40 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
+                    :class="dropdownClass"
+                    class="z-40 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
                     <div class="mb-2 px-2" v-if="showSearch">
-                        <TextInput @input="$emit('search', search)" v-model="search" ref="inputSearch" />
+                        <TextInput v-model="search" ref="inputSearch" />
                     </div>
                     <div class="max-h-80 overflow-auto" ref="selectContent">
-                        <div v-if="loading" class="absolute inset-x-0 bottom-12 top-12 bg-black/25">
-                            <div role="status" class="absolute left-1/2 top-2/4 -translate-x-1/2 -translate-y-1/2">
-                                <svg
-                                    aria-hidden="true"
-                                    class="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
-                                    viewBox="0 0 100 101"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                                        fill="currentColor" />
-                                    <path
-                                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                                        fill="currentFill" />
-                                </svg>
-                                <span class="sr-only">Loading...</span>
+                        <template v-if="loading">
+                            <div class="absolute inset-0 bg-black/25">
+                                <div role="status" class="absolute left-1/2 top-2/4 -translate-x-1/2 -translate-y-1/2">
+                                    <svg
+                                        aria-hidden="true"
+                                        class="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+                                        viewBox="0 0 100 101"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                            fill="currentColor" />
+                                        <path
+                                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                            fill="currentFill" />
+                                    </svg>
+                                </div>
                             </div>
-                        </div>
+
+                            <div
+                                class="flex cursor-pointer items-center py-4 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
+                                <div class="min-w-5"></div>
+                                <span class="text-capitalize"> Loading...</span>
+                            </div>
+                        </template>
+
                         <div class="flex flex-shrink-0 flex-grow-0 flex-col">
                             <template v-if="data.length > 0">
                                 <template v-for="option in data">
@@ -241,15 +296,17 @@ function isSelected(option: any) {
                                     </div>
                                 </template>
                             </template>
-                            <div class="py-3.5 pl-4" v-else>
-                                <i class="inline-block min-w-5"></i>
-                                No option
+                            <div
+                                v-if="data.length === 0 && !loading"
+                                class="flex cursor-pointer items-center py-3.5 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
+                                <div class="min-w-5"></div>
+                                <span class="text-capitalize"> No option </span>
                             </div>
                         </div>
                     </div>
-                    <div v-if="hasMorePage && data.length > 0" class="mt-2 flex px-2">
+                    <div v-if="nextPageUrl && data.length > 0" class="mt-2 flex px-2">
                         <button
-                            @click="$emit('more', true)"
+                            @click="showMore"
                             type="button"
                             class="inline-flex w-full items-center justify-center rounded bg-gray-800 py-3 text-center hover:bg-gray-800/85">
                             View more

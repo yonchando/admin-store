@@ -4,6 +4,7 @@ use App\Models\Category;
 use Inertia\Testing\AssertableInertia;
 
 use function Pest\Laravel\from;
+use function Pest\Laravel\postJson;
 use function Pest\Laravel\putJson;
 
 beforeEach(function () {
@@ -11,7 +12,6 @@ beforeEach(function () {
 });
 
 test('index method', function () {
-
     $category = Category::factory(3)->create();
 
     $perPage = 1;
@@ -22,7 +22,7 @@ test('index method', function () {
     $res->assertInertia(
         fn (AssertableInertia $page) => $page->component('Category/CategoryIndex')
             ->has('categories.data', $perPage)
-            ->where('categories.total', $category->count())
+            ->where('categories.meta.total', $category->count())
     );
 });
 
@@ -52,11 +52,12 @@ it('validate data before store', function () {
 
     $category = Category::factory()->create();
     $this->from(route('category.index'))
-        ->post(route('category.store'), $category->toArray())
+        ->post(route('category.store'), [
+            'category_name' => $category->category_name,
+        ])
         ->assertInvalid([
             'category_name' => __('validation.unique', ['attribute' => 'category name']),
         ])->assertRedirect(route('category.index'));
-
 });
 
 test('store method', function () {
@@ -70,6 +71,22 @@ test('store method', function () {
         'category_name' => $category->category_name,
         'slug' => Str::slug($category->category_name),
     ]);
+});
+
+test('store sub category', function () {
+    $parent = Category::factory()->create();
+    $category = Category::factory()->make();
+
+    $data = $category->toArray();
+    $data['parent_id'] = $parent->id;
+
+    postJson(route('category.store'), $data)
+        ->assertRedirectToRoute('category.index')
+        ->assertSessionHas('success', __('lang.created_success', ['attribute' => __('lang.category')]));
+
+    $category = Category::where('category_name', $category->category_name)->first();
+
+    expect($category->parent_id)->toBe($parent->id);
 });
 
 test('update method', function () {

@@ -32,10 +32,6 @@ class AppServiceProvider extends ServiceProvider
 
         app()->bind(LengthAwarePaginator::class, function ($values, $data) {
 
-            if ((int) $data['perPage'] == 15) {
-                $data['perPage'] = 20;
-            }
-
             $paginate = new LengthAwarePaginator(...$data);
 
             return $paginate->onEachSide(1)->withQueryString();

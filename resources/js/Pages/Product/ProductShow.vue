@@ -75,7 +75,7 @@ const actions = computed(() => {
                     <img
                         class="rounded-md"
                         v-if="product.json?.image?.url"
-                        :src="product.json?.image?.url"
+                        :src="product.image_url"
                         :alt="product.product_name" />
                     <img class="w-full" v-else src="@assets/images/placeholders/placeholder.jpg" alt="" />
                 </div>

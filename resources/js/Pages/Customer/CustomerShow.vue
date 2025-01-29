@@ -48,7 +48,7 @@ onMounted(() => {});
 </script>
 
 <template>
-    <AppLayout :title="`Customer ${customer.nickname}`" :actions="actions">
+    <AppLayout :title="`Customer ${customer.name}`" :actions="actions">
         <template #header>Customer Detail</template>
 
         <div class="p-4">

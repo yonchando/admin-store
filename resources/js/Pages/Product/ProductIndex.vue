@@ -79,7 +79,7 @@ function getData() {
 
         <DataTable
             :values="products.data"
-            :paginate="products"
+            :meta="products.meta"
             :columns="columns"
             :search="filters.search"
             :filters-data="filtersData"

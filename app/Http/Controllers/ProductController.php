@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Product\ProductStatusEnum;
 use App\Http\Requests\Product\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\CategoryService;
 use App\Services\ProductService;
@@ -27,12 +28,8 @@ class ProductController extends Controller
 
         $statuses = ProductStatusEnum::toArray();
 
-        if ($request->wantsJson()) {
-            return response()->json($products);
-        }
-
         return Inertia::render('Product/ProductIndex', [
-            'products' => $products,
+            'products' => ProductResource::collection($products),
             'statuses' => fn () => $statuses,
             'requests' => $request->except('includes'),
             'categories' => $this->categoryService->paginate(),

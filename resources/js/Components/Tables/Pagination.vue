@@ -2,11 +2,11 @@
 import { router } from "@inertiajs/vue3";
 import { faAngleDoubleLeft, faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/Components/Button.vue";
-import { Paginate } from "@/types/paginate";
+import { PaginateMeta } from "@/types/paginate";
 
 defineProps<{
     values: Array<string>;
-    paginate?: Paginate<any>;
+    paginate?: PaginateMeta;
 }>();
 
 const emit = defineEmits(["page"]);
@@ -19,7 +19,7 @@ function changePage(url: string) {
 
 <template>
     <div class="flex items-center px-2 py-4">
-        <template v-if="paginate?.data.length">
+        <template v-if="paginate?.total">
             <div class="flex gap-4">
                 <p class="">
                     Total:

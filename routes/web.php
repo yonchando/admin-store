@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
             Route::post('store', [CategoryController::class, 'store'])->name('store');
-            Route::put('update/{category}', [CategoryController::class, 'update'])->name('update');
+            Route::put('update/{id}', [CategoryController::class, 'update'])->name('update');
             Route::delete('delete', [CategoryController::class, 'destroy'])->name('destroy');
         });
 

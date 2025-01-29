@@ -13,13 +13,15 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(5)->create(new Sequence(
-            ['category_name' => 'Furniture'],
-            ['category_name' => 'Dining Room Furniture'],
-            ['category_name' => 'Bedroom Furniture'],
-            ['category_name' => 'Outdoor Furniture'],
-            ['category_name' => 'Office Furniture'],
-            ['category_name' => 'Living Room Furniture'],
-        ));
+        //        Category::factory(5)->create(new Sequence(
+        //            ['category_name' => 'Furniture'],
+        //            ['category_name' => 'Dining Room Furniture'],
+        //            ['category_name' => 'Bedroom Furniture'],
+        //            ['category_name' => 'Outdoor Furniture'],
+        //            ['category_name' => 'Office Furniture'],
+        //            ['category_name' => 'Living Room Furniture'],
+        //        ));
+
+        Category::factory(2)->parent(11)->create();
     }
 }

@@ -41,18 +41,19 @@ class ProductFilter extends FilterBuilder
 
     public function price(array $price = []): void
     {
-        if (count($price) !== 2) {
+        $prices = ___($price, 'value');
+        if (count($prices) !== 2) {
             throw ValidationException::withMessages([
                 'price' => 'Price range must be only has 2 values',
             ]);
         }
 
-        if ($price[0] == null) {
-            $this->builder->where('price', '<=', $price[1]);
-        } elseif ($price[1] == null) {
-            $this->builder->where('price', '>=', $price[0]);
+        if ($prices[0] == null) {
+            $this->builder->where('price', '<=', $prices[1]);
+        } elseif ($prices[1] == null) {
+            $this->builder->where('price', '>=', $prices[0]);
         } else {
-            $this->builder->whereBetween('price', $price);
+            $this->builder->whereBetween('price', $prices);
         }
     }
 

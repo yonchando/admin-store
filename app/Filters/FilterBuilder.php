@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class FilterBuilder
 {
+    protected $searchable = [];
+
     public function __construct(
         protected readonly Builder $builder,
         protected readonly array $filters = [],
@@ -13,28 +15,46 @@ abstract class FilterBuilder
 
     public function apply(): Builder
     {
-        foreach ($this->filters as $name => $filter) {
-            if ($filter) {
-                if (method_exists($this, $name)) {
-                    call_user_func([$this, $name], $filter);
-                }
+        foreach ($this->filters as $method => $value) {
+            if ($value && method_exists($this, $method)) {
+                call_user_func([$this, $method], is_array($value) ? compact('value') : $value);
             }
         }
 
         return $this->builder;
     }
 
+    protected function search($value): void
+    {
+        if (! empty($this->searchable) && $value) {
+            $this->builder->where(function () use ($value) {
+                foreach ($this->searchable as $key => $field) {
+                    if ($key === 0) {
+                        $this->builder->whereRaw("lower($field) like lower(?)", "%$value%");
+                    } else {
+                        $this->builder->orWhereRaw("lower($field) like lower(?)", "%$value%");
+                    }
+                }
+            });
+        }
+    }
+
+    public function withCount($withCounts): void
+    {
+        $this->builder->withCount(___($withCounts, 'value', []));
+    }
+
     public function includes($withs): void
     {
-        $this->builder->with($withs);
+        $this->builder->with(___($withs, 'value', []));
     }
 
     public function sortBy($values): void
     {
         $field = ___($values, 'field');
-        $direction = ___($values, 'direction');
+        $direction = ___($values, 'direction', 'desc');
 
-        if ($direction !== '-1') {
+        if ($field !== null && $direction !== '-1') {
             $this->builder->orderBy($field, $direction);
         }
     }
@@ -47,5 +67,15 @@ abstract class FilterBuilder
     public function status($value): void
     {
         $this->builder->where('status', $value);
+    }
+
+    public function includeIds($ids): void
+    {
+        $this->builder->orWhereIn('id', $ids);
+    }
+
+    public function excludeIds($ids): void
+    {
+        $this->builder->whereNotIn('id', $ids);
     }
 }

@@ -19,7 +19,7 @@ class CustomerService
 
         $query->latest();
 
-        return $query->paginate(___($filters, 'perPage', 20), ['*'], ___($filters, 'pageName', 'page'));
+        return $query->paginate(pageName: request('pageName', 'page'));
     }
 
     public function find(int $id): Customer

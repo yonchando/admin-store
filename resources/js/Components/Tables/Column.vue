@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+    field?: string;
+}>();
+</script>
 
 <template>
     <td class="column">
-        <slot />
+        <slot>{{ field }}</slot>
     </td>
 </template>

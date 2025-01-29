@@ -27,7 +27,9 @@ class StaffService
 
         $query->filters($request->all());
 
-        return $query->isNotAdmin()->latest()->paginate($request->get('perPage', 20));
+        return $query->isNotAdmin()
+            ->latest()
+            ->paginate($request->get('perPage', 20));
     }
 
     public function store(StaffRequest $request): Staff

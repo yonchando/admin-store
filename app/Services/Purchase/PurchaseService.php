@@ -28,6 +28,7 @@ class PurchaseService
 
         $query->with(['customer']);
         $query->withCount(['purchaseDetails']);
+        $query->latest();
 
         return $query->paginate($request->get('perPage', 20));
     }

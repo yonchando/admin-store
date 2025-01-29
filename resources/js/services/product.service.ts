@@ -1,13 +1,10 @@
 import { ColumnType } from "@/types/datatable/column";
 import Badge from "@/Components/Badges/Badge.vue";
-import { Product } from "@/types/models/product";
+import { Product, ProductFilter } from "@/types/models/product";
 import { globalFilter } from "@/services/helper.service";
-import { defineStore } from "pinia";
-import { Paginate } from "@/types/paginate";
-import axios from "axios";
 import { currency } from "@/number_format";
 import Select from "@/Components/Forms/Select.vue";
-import { ref } from "vue";
+import axios from "axios";
 
 export const columns: ColumnType<Product>[] = [
     {
@@ -119,21 +116,8 @@ export default {
     filters,
 };
 
-export const useProductStore = defineStore("product", {
-    state: () => {
-        return {
-            data: [] as Product[],
-            paginate: {} as Paginate<Product>,
-        };
-    },
-    actions: {
-        getData(filters: any = {}) {
-            axios.get(route("product.index", filters)).then((res) => {
-                this.data = res.data.data;
-            });
-        },
-        search(filters: any = {}) {
-            this.getData(filters);
-        },
-    },
-});
+export class ProductService {
+    static getData(filters: ProductFilter) {
+        return;
+    }
+}

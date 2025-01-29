@@ -4,7 +4,7 @@ import { computed, reactive, useSlots } from "vue";
 import Checkbox from "@/Components/Forms/Checkbox.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { Action } from "@/types/button";
-import { Paginate } from "@/types/paginate";
+import { Paginate, PaginateMeta } from "@/types/paginate";
 import _ from "lodash";
 import DataValue from "@/Components/DataValue.vue";
 import Select from "@/Components/Forms/Select.vue";
@@ -13,7 +13,7 @@ import Column from "@/Components/Tables/Column.vue";
 import { FilterData, Filters } from "@/types/datatable/datatable";
 import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import Button from "@/Components/Button.vue";
-import { callable, dataGet } from "@/services/helper.service";
+import { callable } from "@/services/helper.service";
 
 const props = withDefaults(
     defineProps<{
@@ -21,7 +21,7 @@ const props = withDefaults(
         columns?: ColumnType<any>[];
         checkbox?: boolean;
         rowProps?: any;
-        paginate?: Paginate<any> | undefined;
+        meta?: PaginateMeta | undefined;
         actions?: Action[];
         showSearch?: boolean;
         filtersData?: FilterData;
@@ -62,7 +62,7 @@ const checkedAll = computed<boolean>(() => {
 });
 
 const filters: Filters = reactive({
-    perPage: props.paginate?.per_page ?? 20,
+    perPage: props.meta?.per_page ?? 20,
     page: 1,
     sortBy: {
         field: "",
@@ -152,7 +152,7 @@ function clearFilter(callback: any, field: string) {
             </div>
         </div>
 
-        <div class="ml-auto w-full max-w-xxs" v-if="paginate">
+        <div class="ml-auto w-full max-w-xxs" v-if="meta">
             <Select
                 :show-search="false"
                 label-inline
@@ -258,23 +258,32 @@ function clearFilter(callback: any, field: string) {
                 <slot name="tbody" />
                 <template v-if="!$slots.tbody">
                     <template v-if="values.length">
-                        <tr v-for="(item, index) in values" class="group">
-                            <Column v-if="checkbox" class="px-0 text-center">
-                                <Checkbox :value="item.id" v-model:checked="checked" />
-                            </Column>
-                            <template v-for="column in columns">
-                                <Column
-                                    v-if="!column.hideFromIndex"
-                                    v-bind="rowProps"
-                                    @dblclick="$emit('rowDbclick', item)"
-                                    :class="[...(root?.rowClass ?? '')]">
-                                    <DataValue :item="item" :column="column" :index="index" />
+                        <template v-for="(item, index) in values">
+                            <tr class="group">
+                                <Column v-if="checkbox" class="px-0 text-center">
+                                    <Checkbox :value="item.id" v-model:checked="checked" />
                                 </Column>
-                            </template>
-                            <Column v-if="$slots.actions">
-                                <slot name="actions" :item="item"></slot>
-                            </Column>
-                        </tr>
+                                <template v-for="column in columns">
+                                    <template v-if="$slots.column">
+                                        <slot name="column" :item="item" :index="index" :column="column" />
+                                    </template>
+                                    <template v-else>
+                                        <Column
+                                            v-if="!column.hideFromIndex"
+                                            v-bind="rowProps"
+                                            @dblclick="$emit('rowDbclick', item)"
+                                            :class="[...(root?.rowClass ?? '')]">
+                                            <DataValue :item="item" :column="column" :index="index" />
+                                        </Column>
+                                    </template>
+                                </template>
+                                <Column v-if="$slots.actions">
+                                    <slot name="actions" :item="item"></slot>
+                                </Column>
+                            </tr>
+
+                            <slot name="columns" :item="item" :index="index" :columns="columns" />
+                        </template>
                     </template>
 
                     <!-- Paginate -->
@@ -287,7 +296,7 @@ function clearFilter(callback: any, field: string) {
             </tbody>
         </table>
     </div>
-    <Pagination :values="values" :paginate="paginate" @page="loading = true" />
+    <Pagination :values="values" :paginate="meta" @page="loading = true" />
 </template>
 
 <style scoped></style>

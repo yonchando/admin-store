@@ -32,7 +32,7 @@ class ProductService
         return Product::query()
             ->filters($filters)
             ->latest()
-            ->paginate(request('perPage') ?? 20);
+            ->paginate(pageName: request('pageName', 'page'));
     }
 
     public function find(int $id, array $filters = []): ?Product

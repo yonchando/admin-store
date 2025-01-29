@@ -67,6 +67,13 @@ class StaffFactory extends Factory
         ]);
     }
 
+    public function inactive(): Factory|StaffFactory
+    {
+        return $this->state(fn () => [
+            'status' => StaffStatusEnum::INACTIVE,
+        ]);
+    }
+
     public function status($status): Factory|StaffFactory
     {
         return $this->state(fn () => [

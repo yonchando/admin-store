@@ -31,8 +31,6 @@ class PurchaseController extends Controller
     {
         return Inertia::render('Purchase/PurchaseForm', [
             'statuses' => PurchaseStatusEnum::toArray(),
-            'products' => Inertia::lazy(fn () => $this->productService->paginate()),
-            'customers' => Inertia::lazy(fn () => $this->customerService->paginate(['pageName' => 'customer-page'])),
         ]);
     }
 

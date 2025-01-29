@@ -4,6 +4,13 @@ import vue from "@vitejs/plugin-vue";
 import * as path from "node:path";
 
 export default defineConfig({
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: "modern-compiler", // or "modern"
+            },
+        },
+    },
     plugins: [
         laravel({
             input: "resources/js/app.ts",

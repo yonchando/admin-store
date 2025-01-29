@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,14 +16,24 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $categories = $this->categoryService->paginate($request->all());
+        $filters = [
+            ...$request->all(),
+            'onlyParent' => true,
+        ];
 
         if ($request->wantsJson()) {
-            return CategoryResource::collection($categories);
+            $filters['onlyParent'] = false;
+            if ($request->has('perPage')) {
+                return CategoryResource::collection($this->categoryService->paginate($filters));
+            } else {
+                return CategoryResource::collection($this->categoryService->get($filters));
+            }
         }
 
+        $categories = $this->categoryService->paginate($filters);
+
         return Inertia::render('Category/CategoryIndex', [
-            'categories' => $categories,
+            'categories' => CategoryResource::collection($categories),
             'requests' => $request->all(),
         ]);
     }
@@ -37,8 +46,9 @@ class CategoryController extends Controller
             ->with('success', __('lang.created_success', ['attribute' => __('lang.category')]));
     }
 
-    public function update(CategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, $id)
     {
+        $category = $this->categoryService->find($id);
         $this->categoryService->update($request, $category);
 
         return redirect()->route('category.index')->with('success', __('lang.updated_success', ['attribute' => __('lang.category')]));
