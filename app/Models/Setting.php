@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Setting\SettingKeyEnum;
 use App\Models\Concerns\Setting\HasAttributes;
 use App\Models\Concerns\Setting\HasRelationships;
 use App\Models\Concerns\Setting\HasScopes;
@@ -20,7 +21,12 @@ class Setting extends Model
         'value',
     ];
 
-    public static function findByKey(string $key): ?Setting
+    protected $casts = [
+        'key' => SettingKeyEnum::class,
+        'other' => 'json',
+    ];
+
+    public static function findByKey(string|SettingKeyEnum $key): ?Setting
     {
         return Setting::where('key', $key)->first();
     }

@@ -40,6 +40,6 @@ if (! function_exists('log_info')) {
             $messages .= "\n[stacktrace]\n".json_encode($stacktrace, JSON_PRETTY_PRINT);
         }
 
-        Log::channel('daily_info')->info($messages);
+        Log::info($messages);
     }
 }

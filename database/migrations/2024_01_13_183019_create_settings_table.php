@@ -10,11 +10,13 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
+            $table->string('key');
             $table->string('value')->nullable();
+            $table->json('other')->nullable();
             $table->timestamps();
 
             $table->primary('key');
+            $table->unique(['key', 'value']);
             $table->index('key');
         });
     }

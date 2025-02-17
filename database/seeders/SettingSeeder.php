@@ -14,12 +14,13 @@ class SettingSeeder extends Seeder
         $code = Currency::where('code', 'USD')->first();
 
         Setting::create([
-            'key' => SettingKeyEnum::CURRENCY->value,
+            'key' => SettingKeyEnum::CURRENCY,
             'value' => $code->id,
+            'other' => $code->toArray(),
         ]);
 
         Setting::create([
-            'key' => SettingKeyEnum::SITE_TITLE->value,
+            'key' => SettingKeyEnum::SITE_TITLE,
             'value' => 'YON Chando',
         ]);
     }
