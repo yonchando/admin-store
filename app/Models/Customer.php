@@ -40,8 +40,6 @@ class Customer extends Model
         'socialize_token',
     ];
 
-    protected $appends = ['phone'];
-
     public function casts(): array
     {
         return [
@@ -49,7 +47,6 @@ class Customer extends Model
             'gender' => GenderEnum::class,
             'status' => CustomerStatusEnum::class,
             'profile' => ImageCast::class,
-            'phone_number' => 'string',
         ];
     }
 }

@@ -20,6 +20,7 @@ const emit = defineEmits<{
         <template #tbody>
             <TreeChild
                 :padding-left="12"
+                :padding-child="10"
                 :columns="columns"
                 :values="values"
                 @expand-child="emit('expand-child', $event)" />

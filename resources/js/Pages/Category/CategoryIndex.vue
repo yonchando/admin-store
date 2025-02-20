@@ -10,7 +10,7 @@ import TreeTable from "@/Components/TableTree/TreeTable.vue";
 import { Paginate } from "@/types/paginate";
 import axios from "axios";
 
-const props = defineProps<{
+defineProps<{
     categories: Paginate<Category>;
     parents: Categories;
 }>();

@@ -36,6 +36,7 @@ class PurchaseController extends Controller
 
     public function store(PurchaseRequest $request)
     {
+
         $this->purchaseService->store($request);
 
         return to_route('purchase.index')->with('success',

@@ -11,7 +11,7 @@ class CategoryFilter extends FilterBuilder
         $this->builder->whereRaw('lower(category_name) like lower(?)', ["%{$value}%"]);
     }
 
-    public function onlyParent($value): void
+    public function parentIdNull($value): void
     {
         if ($value) {
             $this->builder->whereNull('parent_id');

@@ -4,8 +4,6 @@ import { ColumnType } from "@/types/datatable/column.d";
 import { computed, reactive, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import useAction from "@/services/action.service";
-import { Product } from "@/types/models/product";
-import ButtonGroup from "@/Components/ButtonGroup.vue";
 import purchaseService from "@/services/purchase.service";
 import { Purchase } from "@/types/models/purchase";
 import { Paginate } from "@/types/paginate";
@@ -48,19 +46,13 @@ function getData() {
     <AppLayout title="Purchase Transactions List" :actions="actions">
         <template #header>Purchase Transactions List</template>
 
-        <DataTable
-            :values="purchases.data"
-            :paginate="purchases"
-            :columns="columns"
-            :search="filters.search"
+        <DataTable :values="purchases.data" :paginate="purchases" :columns="columns" :search="filters.search"
             @search="updateFilter(filters, { search: $event, page: 1 }, getData)"
             @filters="updateFilter(filters, $event, getData)"
-            @row-dbclick="router.get(route('purchase.show', $event.id))"
-            v-model:checked="selectRows"
+            @row-dbclick="router.get(route('purchase.show', $event.id))" v-model:checked="selectRows"
             v-model:loading="loading">
             <template #actions="{ item }">
-                <Action
-                    :view="() => router.get(route('purchase.show', item.id))"
+                <Action :view="() => router.get(route('purchase.show', item.id))"
                     :edit="() => router.get(route('purchase.edit', item.id))" />
             </template>
         </DataTable>

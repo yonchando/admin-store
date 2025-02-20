@@ -81,7 +81,7 @@ onMounted(() => {
                     <Select
                         v-model="form.parent_id"
                         :options="options.data"
-                        :url="options.next_page_url"
+                        :url="options.links.next"
                         option-label="category_name" />
                     <InputError :message="form.errors.category_name" />
                 </div>

@@ -255,7 +255,7 @@ function clearFilter(callback: any, field: string) {
 
             <!-- Rows -->
             <tbody>
-                <slot name="tbody" />
+                <slot name="tbody" :data="values" />
                 <template v-if="!$slots.tbody">
                     <template v-if="values.length">
                         <template v-for="(item, index) in values">

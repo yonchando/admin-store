@@ -16,21 +16,20 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $request->merge([
-            'onlyParent' => true,
-        ]);
-        $filters = $request->all();
-
         if ($request->wantsJson()) {
-            $filters['onlyParent'] = false;
             if ($request->has('perPage')) {
-                return CategoryResource::collection($this->categoryService->paginate($filters));
+                return CategoryResource::collection($this->categoryService->paginate($request->all()));
             } else {
-                return CategoryResource::collection($this->categoryService->get($filters));
+                return CategoryResource::collection($this->categoryService->get($request->all()));
             }
         }
 
-        $categories = $this->categoryService->paginate($filters);
+        $request->merge([
+            'parentIdNull' => true,
+            'parent' => $request->get('parent')
+        ]);
+
+        $categories = $this->categoryService->paginate($request->all());
 
         return Inertia::render('Category/CategoryIndex', [
             'categories' => CategoryResource::collection($categories),
@@ -51,7 +50,8 @@ class CategoryController extends Controller
         $category = $this->categoryService->find($id);
         $this->categoryService->update($request, $category);
 
-        return redirect()->route('category.index')->with('success', __('lang.updated_success', ['attribute' => __('lang.category')]));
+        return redirect()->route('category.index')->with('success',
+            __('lang.updated_success', ['attribute' => __('lang.category')]));
     }
 
     public function destroy(Request $request)
