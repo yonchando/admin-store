@@ -2,20 +2,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: dotfile-config
-    namespace: staging
 data:
     APP_NAME: "Admin Store"
     APP_ENV: 'production'
     APP_DEBUG: 'true'
     DEBUGBAR_ENABLED: 'false'
-    APP_URL: 'webapp-service'
+    APP_URL: '127.0.0.1'
     
     LOG_CHANNEL: 'stderr'
     LOG_DEPRECATIONS_CHANNEL: 'null'
     LOG_LEVEL: 'debug'
 
     DB_CONNECTION: 'pgsql'
-    DB_HOST: "postgres-service"
+    DB_HOST: "db-service"
     DB_USERNAME: "postgres"
     DB_PORT: "5432"
     DB_DATABASE: "e_store"

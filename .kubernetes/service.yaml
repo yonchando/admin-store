@@ -1,39 +1,41 @@
-apiVersion: v1
-kind: Service
-metadata:
-    name: postgres-service
-    namespace: staging
-spec:
-    selector:
-        app: postgres
-    ports:
-        -   protocol: TCP
-            port: 5432
-            targetPort: 5432
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
     name: webapp-service
-    namespace: staging
 spec:
     type: LoadBalancer
     selector:
         app: admin-store
     ports:
-        -   port: 8100
+        -   port: 8000
             targetPort: 8000
+            protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: db-service
+spec:
+    type: ClusterIP
+    selector:
+        app: backend
+    ports:
+        -   port: 5432
+            targetPort: 5432
+            protocol: TCP
+            name: postgres-db
 ---
 apiVersion: v1
 kind: Service
 metadata:
     name: adminer-service
-    namespace: staging
 spec:
     type: LoadBalancer
     selector:
-        app: adminer
+        app: backend
     ports:
-        -   port: 8180
+        -   port: 8181
             targetPort: 8080
+            protocol: TCP
+            name: adminer

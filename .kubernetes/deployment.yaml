@@ -3,23 +3,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: postgres-deployment
-    namespace: staging
     labels:
-        app: postgres
+        app: backend
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: postgres
+            app: backend
     template:
         metadata:
             labels:
-                app: postgres
+                app: backend
         spec:
             containers:
                 -   name: postgres
                     image: postgres:latest
-                    imagePullPolicy: IfNotPresent
+                    imagePullPolicy: Always
                     ports:
                         -   containerPort: 5432
                     env:
@@ -38,12 +37,23 @@ spec:
                                 configMapKeyRef:
                                     name: dotfile-config
                                     key: DB_USERNAME
+                    volumeMounts:
+                        -   mountPath: /var/lib/postgresql/data
+                            name: db-storage
+                -   name: adminer
+                    image: adminer
+                    imagePullPolicy: Always
+                    ports:
+                        -   containerPort: 8080
+            volumes:
+                -   name: db-storage
+                    persistentVolumeClaim:
+                        claimName: db-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: admin-store-deployment
-    namespace: staging
     labels:
         app: admin-store
 spec:
@@ -59,7 +69,7 @@ spec:
             containers:
                 -   name: admin-store
                     image: admin-store:latest
-                    imagePullPolicy: IfNotPresent
+                    imagePullPolicy: Never
                     ports:
                         -   containerPort: 8000
                     envFrom:
@@ -67,27 +77,3 @@ spec:
                                 name: dotfile-config
                         -   secretRef:
                                 name: dotfile-secret
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-    name: adminer-deployment
-    namespace: staging
-    labels:
-        app: adminer
-spec:
-    replicas: 1
-    selector:
-        matchLabels:
-            app: adminer
-    template:
-        metadata:
-            labels:
-                app: adminer
-        spec:
-            containers:
-                -   name: adminer
-                    image: adminer:latest
-                    ports:
-                        -   containerPort: 8080

@@ -33,7 +33,6 @@
 **/vendor
 **/.kubernetes
 
-
 **/bootstrap/cache/**
 **/public/storage
 **/public/hot
@@ -46,4 +45,4 @@
 **/storage/debugbar
 **/storage/logs/**
 LICENSE
-README.md
+README**.md
