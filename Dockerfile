@@ -1,4 +1,4 @@
-FROM composer AS deps
+FROM composer:latest AS deps
 
 WORKDIR /app
 
@@ -9,22 +9,30 @@ RUN --mount=type=bind,source=composer.json,target=composer.json \
     --mount=type=cache,target=/tmp/cache \
     composer install --no-dev --no-interaction
 
+FROM php:8.4-fpm
 
-FROM dunglas/frankenphp
+# PHP Extension
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-WORKDIR /app
+WORKDIR /var/www/html
+
+RUN apt-get update && apt-get install -y vim less grep nginx supervisor && \
+    mkdir -p /var/log/supervisor && \
+    echo "alias ll='ls -la'" >> ~/.bashrc && echo "alias c='clear'" >> ~/.bashrc && \
+    install-php-extensions gd zip pcntl oci8 pdo_oci pgsql pdo_pgsql && \
+    mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+COPY ./.docker/supervisor.conf /etc/supervisor/supervisor.conf
+COPY .docker/supervisor /etc/supervisor/conf.d
  
-RUN install-php-extensions \
-    pcntl \
-    zip \
-    pdo \
-    pgsql \
-    pdo_pgsql 
- 
-COPY . /app
+COPY .docker/php-config.ini "$PHP_INI_DIR/conf.d"
 
-COPY --from=deps /app/vendor /app/vendor
+COPY .docker/nginx.conf /etc/nginx/sites-available/default
 
-RUN php artisan storage:link
+COPY --from=deps /app /var/www/html
 
-ENTRYPOINT ["php", "artisan", "octane:frankenphp"]
+RUN php artisan storage:link && chown -R www-data:www-data /var/www
+
+EXPOSE 8000
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]

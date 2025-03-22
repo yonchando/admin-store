@@ -6,7 +6,6 @@
 
 **/.classpath
 **/.dockerignore
-**/*.env
 **/.git
 **/.gitignore
 **/.project
@@ -32,6 +31,7 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 **/vendor
+**/.kubernetes
 
 
 **/bootstrap/cache/**

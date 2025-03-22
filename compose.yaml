@@ -7,14 +7,8 @@ services:
         image: admin-store
         ports:
             - "8000:8000"
-            - "2019:2019"
-        volumes:
-            - storage:/app/storage/app
-            - ./:/app
         network_mode:
             docker_default
-        environment:
-            SUPERVISOR_PHP_COMMAND: "/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --host=localhost --port=8000 --admin-port=2019 --https"
     
     db:
         image: postgres
