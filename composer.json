@@ -10,8 +10,8 @@
     "require": {
         "php": "^8.4",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "2.0",
-        "laravel/framework": "^11.00",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laravel/framework": "^12.00",
         "laravel/octane": "^2.6",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
