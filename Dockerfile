@@ -1,14 +1,3 @@
-FROM composer:latest AS deps
-
-WORKDIR /app
-
-COPY . .
-
-RUN --mount=type=bind,source=composer.json,target=composer.json \
-    --mount=type=bind,source=composer.lock,target=composer.lock \
-    --mount=type=cache,target=/tmp/cache \
-    composer install --no-dev --no-interaction
-
 FROM php:8.4-fpm
 
 ARG USER="web"
@@ -22,12 +11,19 @@ RUN apt-get update && apt-get install -y vim less grep nginx supervisor && \
     mkdir -p /var/log/supervisor && \
     install-php-extensions gd zip pcntl oci8 pdo_oci pgsql pdo_pgsql 
 
-# COPY config
+# COPY
+COPY . .
 COPY ./.docker/supervisor.conf /etc/supervisor/supervisord.conf
 COPY .docker/supervisor /etc/supervisor/conf.d
 COPY .docker/php-config.ini "$PHP_INI_DIR/conf.d"
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
-COPY --from=deps /app /var/www/html
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+RUN --mount=type=bind,source=composer.json,target=composer.json \
+    --mount=type=bind,source=composer.lock,target=composer.lock \
+    --mount=type=cache,target=/tmp/cache \
+    composer install --no-dev --no-interaction
 
 # Create user
 RUN groupadd -r $USER && useradd -ms /usr/bin/bash --no-log-init -r -g $USER $USER && \
