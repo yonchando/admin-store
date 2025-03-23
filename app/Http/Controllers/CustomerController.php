@@ -59,7 +59,7 @@ class CustomerController extends Controller
         $customer = $this->customerService->find($id);
 
         return Inertia::render('Customer/CustomerForm', [
-            'customer' => $customer,
+            'customer' => new CustomerResource($customer),
             'statuses' => CustomerStatusEnum::toArray(),
             'gender' => GenderEnum::toArray(),
         ]);

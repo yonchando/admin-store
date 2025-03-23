@@ -15,9 +15,15 @@ class PurchaseDetailService
     {
         $details = [];
 
-        $products = Product::whereIn('id', collect($request->get('products'))->pluck('product_id')->toArray())->get();
+        $productIds = collect($request->get('products'))
+            ->pluck('product_id')
+            ->toArray();
 
-        $purchaseDetails = PurchaseDetail::whereIn('id', collect($request->get('products'))->pluck('id')->filter())->get();
+        $products = Product::whereIn('id', $productIds)->get();
+
+        $filter = collect($request->get('products'))->pluck('id')->filter();
+
+        $purchaseDetails = PurchaseDetail::whereIn('id', $filter)->get();
 
         foreach ($request->get('products') as $item) {
             $qty = ___($item, 'qty');

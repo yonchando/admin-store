@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, ref, watchEffect } from "vue";
 import InputLabel from "@/Components/Forms/InputLabel.vue";
 import _ from "lodash";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import axios from "axios";
 import Badge from "@/Components/Badges/Badge.vue";
 import { PaginateMeta } from "@/types/paginate";
 
@@ -44,30 +43,13 @@ const emit = defineEmits<{
     (e: "loadMore", page: number): void;
 }>();
 
-const storeOptions = ref(props.options);
-
-watch(
-    () => props.options,
-    (value) => {
-        storeOptions.value = value;
-    },
-);
-
 let data = computed(() => {
-    let searchString = search.value.toLowerCase();
-    if (searchString) {
-        return storeOptions.value.filter(function (item) {
-            const label = get(item, "optionLabel").toLowerCase();
-            return label.startsWith(searchString) || label.endsWith(searchString);
-        });
-    }
-
     return storeOptions.value;
 });
 
 const model = defineModel();
 
-const loading = ref(props.loading);
+const loading = defineModel("loading");
 
 const dropdown = ref();
 
@@ -104,8 +86,12 @@ const inputSearch = ref<HTMLInputElement | null>(null);
 
 const minWidth = ref<number>(0);
 
-watch(open, (value: boolean) => {
-    if (value) {
+const storeOptions = ref(props.options);
+
+watchEffect(() => {
+    storeOptions.value = props.options;
+
+    if (open) {
         emit("open");
 
         minWidth.value = dropdown.value?.clientWidth ?? 0;
@@ -180,6 +166,17 @@ function isSelected(option: any) {
         return get(option, "optionValue") == model.value;
     }
 }
+
+const timeoutId = ref<NodeJS.Timeout>();
+function searching() {
+    if (timeoutId.value) {
+        clearTimeout(timeoutId.value);
+    }
+
+    timeoutId.value = setTimeout(() => {
+        emit("search", search.value);
+    }, 1000);
+}
 </script>
 
 <template>
@@ -225,7 +222,7 @@ function isSelected(option: any) {
                     :class="dropdownClass"
                     class="z-40 mt-2 rounded-md bg-gray-50 py-2 shadow-lg dark:bg-gray-700">
                     <div class="mb-2 px-2" v-if="showSearch">
-                        <TextInput v-model="search" ref="inputSearch" />
+                        <TextInput @input="searching" v-model="search" ref="inputSearch" />
                     </div>
                     <div class="max-h-80 overflow-auto" ref="selectContent">
                         <template v-if="loading">
@@ -245,12 +242,6 @@ function isSelected(option: any) {
                                             fill="currentFill" />
                                     </svg>
                                 </div>
-                            </div>
-
-                            <div
-                                class="flex cursor-pointer items-center py-4 pl-4 text-left hover:bg-gray-200 dark:hover:bg-gray-900">
-                                <div class="min-w-5"></div>
-                                <span class="text-capitalize"> Loading...</span>
                             </div>
                         </template>
 

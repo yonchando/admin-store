@@ -9,6 +9,7 @@ use App\Http\Requests\PurchaseStatusRequest;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PurchaseService
@@ -35,7 +36,7 @@ class PurchaseService
 
     public function store(PurchaseRequest $request): Purchase
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         $details = $this->purchaseDetailService->createOrEdit($request);
 

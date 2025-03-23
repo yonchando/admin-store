@@ -61,9 +61,13 @@ test('edit customer form', function () {
     $this->get(route('customer.edit', $customer->id))
         ->assertOk()
         ->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Customer/CustomerForm')
-                ->where('customer.id', $customer->id)
-                ->where('customer.phone_number', $customer->phone_number)
+            function (AssertableInertia $page) use ($customer) {
+                dd($page);
+
+                return $page->component('Customer/CustomerForm')
+                    ->where('customer.id', $customer->id)
+                    ->where('customer.phone_number', $customer->phone_number);
+            }
         );
 });
 

@@ -5,10 +5,11 @@ namespace App\Filters\Product;
 use App\Filters\FilterBuilder;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @property Product $builder
+ * @property Product|Builder $builder
  */
 class ProductFilter extends FilterBuilder
 {
@@ -32,16 +33,22 @@ class ProductFilter extends FilterBuilder
                     ->take(1);
                 $this->builder->orderBy(
                     $query,
-                    $direction);
+                    $direction
+                );
             } else {
                 $this->builder->orderBy($column, $direction);
             }
         }
     }
 
-    public function price(array $price = []): void
+    public function price(string|array $price = []): Builder
     {
-        $prices = ___($price, 'value');
+        $prices = is_array($price) ? $price : explode(',', $price);
+
+        if (empty($prices)) {
+            return $this->builder;
+        }
+
         if (count($prices) !== 2) {
             throw ValidationException::withMessages([
                 'price' => 'Price range must be only has 2 values',
@@ -55,6 +62,8 @@ class ProductFilter extends FilterBuilder
         } else {
             $this->builder->whereBetween('price', $prices);
         }
+
+        return $this->builder;
     }
 
     public function category($categoryId): void

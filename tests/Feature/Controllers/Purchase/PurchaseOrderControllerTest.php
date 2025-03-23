@@ -92,6 +92,7 @@ test('update purchase status', function () {
     ];
 
     from(route('purchase.show', $purchase->id), []);
+
     $res = patchJson(route('purchase.update.status', $purchase->id), $data);
 
     $res->assertRedirectToRoute('purchase.show', $purchase->id)

@@ -21,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $request->merge([
-            'includes' => 'category',
+            'includes' => ['category'],
         ]);
 
         if ($request->wantsJson()) {

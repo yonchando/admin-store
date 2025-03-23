@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import useAction from "@/services/action.service";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextareaInput from "@/Components/Forms/TextareaInput.vue";
@@ -13,7 +13,9 @@ import FileUpload from "@/Components/Forms/FileUpload.vue";
 import { UploadFile } from "@/types";
 import { Paginate } from "@/types/paginate";
 import { Category } from "@/types/models/category";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { usePaginate } from "@/services/helper.service";
+import categoryService, { CategoryFilter } from "@/services/category.service";
 
 const props = defineProps<{
     statuses: Array<string>;
@@ -36,7 +38,7 @@ const form = useForm({
 });
 
 const actions = computed(() => {
-    const { save, cancel } = useAction();
+    const { save, refresh, cancel } = useAction();
 
     save.props.onClick = submit;
 
@@ -44,15 +46,35 @@ const actions = computed(() => {
         router.get(route("product.index"));
     };
 
-    return [save, cancel];
+    refresh.props.onClick = () => {
+        getCategories();
+    };
+
+    return [save, cancel, refresh];
 });
 
-const categories = ref<Paginate<Category>>();
+const loading = reactive({
+    category: true,
+});
+const categories = ref<Paginate<Category>>(usePaginate());
 
-function getCategories() {
-    axios.get(route("category.index")).then((res) => {
-        categories.value = res.data;
-    });
+function getCategories(options: CategoryFilter = {}) {
+    loading.category = true;
+
+    categoryService
+        .getCategories(options)
+        .then((res) => {
+            if (options.page) {
+                categories.value.data = [...(categories.value.data ?? []), ...res.data.data] as Category[];
+                categories.value.meta = res.data.meta;
+                categories.value.links = res.data.links;
+            } else {
+                categories.value = res.data;
+            }
+        })
+        .finally(() => {
+            loading.category = false;
+        });
 }
 
 function submit() {
@@ -69,7 +91,11 @@ function submit() {
     }
 }
 
-onMounted(() => getCategories());
+onMounted(() => {
+    getCategories({
+        page: 1,
+    });
+});
 </script>
 
 <template>
@@ -96,8 +122,11 @@ onMounted(() => getCategories());
                             <Select
                                 label="Category"
                                 v-model="form.category_id"
+                                v-model:loading="loading.category"
                                 :options="categories?.data"
-                                :paginate="categories"
+                                :meta="categories?.meta"
+                                @load-more="(page) => getCategories({ page })"
+                                @search="(search) => getCategories({ search })"
                                 option-label="category_name" />
                             <InputError :message="form.errors.category_id" />
                         </div>

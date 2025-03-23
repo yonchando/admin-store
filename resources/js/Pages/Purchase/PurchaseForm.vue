@@ -16,6 +16,8 @@ import { Customer } from "@/types/models/customer";
 import axios from "axios";
 import { usePaginate } from "@/services/helper.service";
 import ProductList from "@/Pages/Purchase/Partials/ProductList.vue";
+import Datepicker from "@/Components/Forms/Datepicker.vue";
+import dayjs from "@/dayjs";
 
 const props = defineProps<{
     statuses: Array<string>;
@@ -35,18 +37,20 @@ const actions = computed(() => {
         router.get(route("purchase.index"));
     };
 
-    refresh.props.onClick = () => {};
+    refresh.props.onClick = () => {
+        getCustomers();
+    };
 
     return [save, cancel, refresh];
 });
 
-const purchase_date = ref(null);
-const purchase_time = ref(null);
+const purchase_date = ref(dayjs().format("YYYY-MM-DD"));
+const purchase_time = ref(dayjs().format("h:mm A"));
 
 const form = useForm({
     customer_id: "" as string | number,
     status: "pending",
-    purchase_date: "",
+    purchase_date: `${purchase_date.value} ${purchase_time.value}`,
     products: [] as PurchaseItem[],
 });
 
@@ -116,28 +120,13 @@ onMounted(() => {
                                 v-model="form.customer_id"
                                 :options="customers.data"
                                 :meta="customers.meta"
-                                @loadMore="getCustomers($event)"
+                                @loadMore="(page) => getCustomers(page)"
                                 option-label="name" />
                             <InputError :message="form.errors.customer_id" />
                         </div>
                         <div class="">
                             <div class="flex gap-4">
-                                <TextInput
-                                    v-model="purchase_date"
-                                    label="Purchase Date"
-                                    required
-                                    datepicker-autohide
-                                    datepicker-format="yyyy-mm-dd"
-                                    datepicker-buttons
-                                    datepicker-autoselect-today
-                                    datepicker />
-                                <TextInput
-                                    type="time"
-                                    label=""
-                                    v-model="purchase_time"
-                                    required
-                                    :data-date="purchase_time"
-                                    timepicker />
+                                <Datepicker label="Purchase date" v-model="purchase_date" />
                             </div>
                             <InputError :message="form.errors.purchase_date" />
                         </div>
