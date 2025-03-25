@@ -12,7 +12,20 @@ RUN apt-get update && apt-get install -y vim less grep nginx supervisor && \
     install-php-extensions gd zip pcntl oci8 pdo_oci pgsql pdo_pgsql 
 
 # COPY
-COPY . .
+COPY app app
+COPY bootstrap bootstrap
+COPY config config
+COPY database database
+COPY lang lang
+COPY public public
+COPY resources resources
+COPY routes routes
+COPY storage storage
+COPY artisan artisan
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+COPY .env .env
+
 COPY ./.docker/supervisor.conf /etc/supervisor/supervisord.conf
 COPY .docker/supervisor /etc/supervisor/conf.d
 COPY .docker/php-config.ini "$PHP_INI_DIR/conf.d"
@@ -35,7 +48,9 @@ RUN groupadd -r $USER && useradd -ms /usr/bin/bash --no-log-init -r -g $USER $US
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
     mkdir -p /var/run/supervisor && \
     mkdir -p /run/nginx && \
-    chown -R $USER:$USER /var/www \
+    chown -R $USER:$USER \
+    /var/www/html/storage \
+    /var/www/html/bootstrap \
     /var/log/supervisor \
     /var/run/supervisor \
     /run/nginx \
