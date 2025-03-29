@@ -51,7 +51,7 @@ const columnLength = computed(() => {
 
 const loading = defineModel("loading");
 
-const shows = [10, 20, 50, 100];
+const shows = [15, 30, 50, 100];
 
 const search = defineModel("search");
 
@@ -183,7 +183,9 @@ function clearFilter(callback: any, field: string) {
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <table class="w-full min-w-7xl table-fixed border-collapse rounded-md">
+        <table class="w-full min-w-7xl table-fixed border-collapse rounded-md"
+               v-bind="$attrs"
+        >
             <!-- Headers -->
             <thead>
                 <tr v-if="!$slots.thead">
@@ -285,6 +287,8 @@ function clearFilter(callback: any, field: string) {
                             <slot name="columns" :item="item" :index="index" :columns="columns" />
                         </template>
                     </template>
+                    
+                    <slot name="additional" />
 
                     <!-- Paginate -->
                     <template v-if="values.length === 0">

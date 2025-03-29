@@ -30,7 +30,7 @@ export function updateFilter(filters: any, values: any, callback: any = null) {
 
 export const globalFilter = {
     page: 1,
-    perPage: 20,
+    perPage: 15,
     last_page: null,
     sortBy: {
         field: "created_at",

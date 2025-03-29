@@ -25,7 +25,11 @@ class ProductController extends Controller
         ]);
 
         if ($request->wantsJson()) {
-            $products = $request->get('perPage') ? $this->productService->paginate($request->all()) : $this->productService->get($request->all());
+            if ($request->get('perPage')) {
+                $products = $this->productService->paginate($request->all());
+            } else {
+                $products = $this->productService->get($request->all());
+            }
 
             return ProductResource::collection($products);
         }

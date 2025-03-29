@@ -1,6 +1,6 @@
 import { usePage } from "@inertiajs/vue3";
 
-export function currency(number: string | number, isSign: boolean = true): string | number {
+export function currencyFormat(number: string | number, isSign: boolean = true): string | number {
     const page = usePage();
 
     if (isSign) {

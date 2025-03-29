@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { ColumnType } from "@/types/datatable/column";
 import { computed, ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 import DataValue from "@/Components/DataValue.vue";
 import Button from "@/Components/Button.vue";
 import { Action } from "@/types/button";
-import { Purchase, PurchaseDetail } from "@/types/models/purchase";
+import { Purchase } from "@/types/models/purchase";
 import purchaseService from "@/services/purchase.service";
 import Card from "@/Components/Card/Card.vue";
 import DataTable from "@/Components/Tables/DataTable.vue";
-import { currency } from "@/number_format";
 import { faCheck, faClipboardCheck, faFloppyDisk, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useAlertStore } from "@/services/helper.service";
 import TextareaInput from "@/Components/Forms/TextareaInput.vue";
 import Modal from "@/Components/Modal.vue";
 import InputError from "@/Components/Forms/InputError.vue";
 import useAction from "@/services/action.service";
+import Column from "@/Components/Tables/Column.vue";
+import { currencyFormat } from "../../number_format";
 
 const props = defineProps<{
     purchase: Purchase;
@@ -159,20 +159,28 @@ function rejectOrCancel() {
             </div>
         </div>
 
-        <template #additional_info>
-            <Card class="mt-4">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold">Purchase Products</h3>
+        <Card class="mt-4">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold">Purchase Products</h3>
 
-                    <DataTable
-                        :root="{ rowClass: ['py-3'] }"
-                        :columns="productColumns"
-                        :values="purchase.purchase_details"
-                        :filter="false"
-                        :checkbox="false" />
-                </div>
-            </Card>
-        </template>
+                <DataTable
+                    :root="{ rowClass: ['py-3'] }"
+                    :columns="productColumns"
+                    :values="purchase.purchase_details"
+                    :filter="false"
+                    :show-search="false"
+                    :checkbox="false">
+                    <template #additional>
+                        <tr>
+                            <Column colspan="4" class="py-4 pr-6 text-right">Total:</Column>
+                            <Column class="">
+                                {{ currencyFormat(purchase.total) }}
+                            </Column>
+                        </tr>
+                    </template>
+                </DataTable>
+            </div>
+        </Card>
 
         <Modal v-model:show="confirmed" :title="__(form.status + '_transaction')">
             <template #actions>

@@ -54,14 +54,14 @@ class PurchaseService
 
         $purchase->purchaseDetails()->saveMany($details);
 
-        \DB::commit();
+        DB::commit();
 
         return $purchase;
     }
 
     public function findById($id): Purchase
     {
-        return Purchase::with(['customer', 'purchaseDetails'])
+        return Purchase::with(['customer', 'purchaseDetails.product'])
             ->withCount(['purchaseDetails'])
             ->findOrFail($id);
     }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TextInput from "@/Components/Forms/TextInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 import useAction from "@/services/action.service";
@@ -18,6 +17,10 @@ import { usePaginate } from "@/services/helper.service";
 import ProductList from "@/Pages/Purchase/Partials/ProductList.vue";
 import Datepicker from "@/Components/Forms/Datepicker.vue";
 import dayjs from "@/dayjs";
+import { Product } from "@/types/models/product";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import _ from "lodash";
+import { currencyFormat } from "@/number_format";
 
 const props = defineProps<{
     statuses: Array<string>;
@@ -54,6 +57,10 @@ const form = useForm({
     products: [] as PurchaseItem[],
 });
 
+const total = computed(() => {
+    return currencyFormat(_.sumBy(form.products, (item: PurchaseItem) => item.sub_total));
+});
+
 function submit() {
     form.transform((item: any) => {
         return {
@@ -81,6 +88,33 @@ function getCustomers(page: number = 1) {
             customers.value.meta = res.data.meta;
             customers.value.links = res.data.links;
         });
+}
+
+function addProduct(product: Product) {
+    form.products.push({
+        product_id: product.id,
+        qty: 1,
+        unit_Price: Number(product.price),
+        sub_total: Number(product.price),
+        product: product,
+    });
+}
+
+function changeQty(index: number, type: "plus" | "minus") {
+    if (type === "plus") {
+        form.products[index].qty++;
+    } else {
+        if (form.products[index].qty === 1) {
+            return;
+        }
+        form.products[index].qty--;
+    }
+}
+
+function getSubtotal(index: number, item: PurchaseItem) {
+    item.sub_total = form.products[index].qty * item.unit_Price;
+
+    return currencyFormat(item.sub_total);
 }
 
 onMounted(() => {
@@ -139,51 +173,82 @@ onMounted(() => {
 
                 <div class="mt-6 flex items-center justify-between">
                     <h2 class="text-xl">Purchase Items</h2>
-                    <Button type="button" @click="showProductList = true" severity="primary" :icon="faPlus"
-                        >Select Products
+                    <Button type="button" @click="showProductList = true" severity="primary" :icon="faPlus">
+                        Select Products
                     </Button>
                 </div>
 
-                <DataTable :filter="false" :checkbox="false" :show-search="false">
-                    <template #thead>
-                        <tr>
-                            <Column class="head w-8 px-0 py-3 text-center">#</Column>
-                            <Column class="head py-3">Product</Column>
-                            <Column class="head py-3">Qty</Column>
-                            <Column class="head py-3">Price</Column>
-                            <Column class="head w-32 py-3">Sub Total</Column>
-                            <Column class="head w-32 py-3">Action</Column>
-                        </tr>
-                    </template>
+                <div class="overflow-hidden">
+                    <DataTable :filter="false" :checkbox="false" :show-search="false">
+                        <template #thead>
+                            <tr class="group">
+                                <Column class="head w-8 px-0 py-6 text-center">#</Column>
+                                <Column class="head py-6">Product</Column>
+                                <Column class="head w-96 py-6">Qty</Column>
+                                <Column class="head w-60 py-6">Price</Column>
+                                <Column class="head w-60 py-6">Sub Total</Column>
+                                <Column class="head w-60 py-6">Action</Column>
+                            </tr>
+                        </template>
 
-                    <template #tbody>
-                        <template v-if="form.products.length">
-                            <tr v-for="(item, index) in form.products">
-                                <Column class="px-0 py-3 text-center">{{ index + 1 }}</Column>
-                                <Column class="py-3">
-                                    {{ item.product?.product_name }}
-                                </Column>
-                                <Column class="py-3">
-                                    {{ item.qty }}
-                                </Column>
-                                <Column class="py-3">
-                                    {{ item.unit_Price }}
-                                </Column>
-                                <Column class="py-3">{{ item.sub_total }}</Column>
-                                <Column class="py-3"> </Column>
-                            </tr>
+                        <template #tbody>
+                            <template v-if="form.products.length">
+                                <tr v-for="(item, index) in form.products" class="group">
+                                    <Column class="px-0 py-3 text-center">{{ index + 1 }}</Column>
+                                    <Column class="py-3">
+                                        {{ item.product?.product_name }}
+                                    </Column>
+                                    <Column class="py-3">
+                                        <div class="flex gap-4">
+                                            <TextInput type="number" v-model="form.products[index].qty" />
+                                            <Button
+                                                type="button"
+                                                severity="dark"
+                                                @click="changeQty(index, 'plus')"
+                                                class="!p-3">
+                                                <i class="fa fa-plus"></i>
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                severity="dark"
+                                                @click="changeQty(index, 'minus')"
+                                                class="!p-3">
+                                                <i class="fa fa-minus"></i>
+                                            </Button>
+                                        </div>
+                                    </Column>
+                                    <Column class="py-3">
+                                        {{ currencyFormat(item.unit_Price) }}
+                                    </Column>
+                                    <Column class="py-3">{{ getSubtotal(index, item) }}</Column>
+                                    <Column class="py-3 text-center">
+                                        <Button
+                                            type="button"
+                                            severity="error"
+                                            @click="form.products.splice(index, 1)"
+                                            class="!p-3">
+                                            <i class="fa fa-trash"></i>
+                                        </Button>
+                                    </Column>
+                                </tr>
+
+                                <tr>
+                                    <Column colspan="4" class="py-4 pr-6 text-right">Total:</Column>
+                                    <Column colspan="2" class="">{{ total }}</Column>
+                                </tr>
+                            </template>
+                            <template v-else>
+                                <tr>
+                                    <Column colspan="6" class="py-3">Empty data</Column>
+                                </tr>
+                            </template>
                         </template>
-                        <template v-else>
-                            <tr>
-                                <Column colspan="6" class="py-3">Empty data</Column>
-                            </tr>
-                        </template>
-                    </template>
-                </DataTable>
+                    </DataTable>
+                </div>
             </div>
         </form>
 
-        <ProductList v-model:show="showProductList" />
+        <ProductList v-model:show="showProductList" @add-product="addProduct" :products="form.products" />
     </AppLayout>
 </template>
 

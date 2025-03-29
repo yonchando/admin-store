@@ -191,7 +191,9 @@ function searching() {
             <div class="relative w-full">
                 <div class="form-select" @click="openToggle">
                     <span v-if="selected === undefined || selected.length === 0" class="placeholder">
-                        Select option
+                        <span class="text-gray-800/45 dark:text-gray-200/45">
+                            Select option
+                        </span>
                     </span>
                     <span v-else class="flex items-center gap-2 text-gray-700">
                         <template v-if="props.multiple">
@@ -203,8 +205,13 @@ function searching() {
                             </Badge>
                         </template>
                         <template v-if="!props.multiple">
-                            {{ selected }}
+                            <span class="text-gray-800 dark:text-gray-200">
+                                {{ selected }}
+                            </span>
                         </template>
+                    </span>
+                    <span>
+                        <i class="text-gray-400 fa fa-chevron-down dark:text-gray-700"></i>
                     </span>
                 </div>
             </div>
@@ -271,12 +278,12 @@ function searching() {
 
                     <template v-if="meta">
                         <div v-if="meta.current_page < meta?.last_page" class="mt-2 flex px-2">
-                            <button
+                            <Button
                                 @click="emit('loadMore', meta.current_page + 1)"
                                 type="button"
                                 class="inline-flex w-full items-center justify-center rounded bg-gray-800 py-3 text-center hover:bg-gray-800/85">
                                 View more
-                            </button>
+                            </Button>
                         </div>
                     </template>
                 </div>

@@ -79,7 +79,7 @@ onMounted(() => {
 
                 <!-- Page Content -->
                 <main class="px-2">
-                    <Card>
+                    <Card class="min-h-[calc(100dvh-4rem)]">
                         <slot />
                     </Card>
                     <slot name="additional_info" />

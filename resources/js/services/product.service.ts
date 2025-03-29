@@ -2,7 +2,7 @@ import { ColumnType } from "@/types/datatable/column";
 import Badge from "@/Components/Badges/Badge.vue";
 import { Product, ProductFilter } from "@/types/models/product";
 import { globalFilter } from "@/services/helper.service";
-import { currency } from "@/number_format";
+import { currencyFormat } from "@/number_format";
 import Select from "@/Components/Forms/Select.vue";
 import axios from "axios";
 import { h } from "vue";
@@ -41,9 +41,7 @@ export const columns: ColumnType<Product>[] = [
     },
     {
         label: "Price",
-        field: (p) => {
-            return currency(p.price);
-        },
+        field: (p) => currencyFormat(p.price, true),
         sortable: "price",
         props: {
             class: "w-3xs",
@@ -121,7 +119,21 @@ export const status = {
     inactive: "error",
 };
 
+export function getProducts(filters: ProductFilter) {
+    return axios
+        .get(route("product.index"), {
+            params: {
+                page: filters.page,
+                perPage: filters.perPage,
+                search: filters.search,
+            },
+        });
+}
+
 export default {
     columns,
     filters,
+    getProducts,
 };
+
+

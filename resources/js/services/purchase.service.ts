@@ -2,7 +2,7 @@ import { ColumnType } from "@/types/datatable/column";
 import { globalFilter } from "@/services/helper.service";
 import { Purchase, PurchaseDetail } from "@/types/models/purchase";
 import Badge from "@/Components/Badges/Badge.vue";
-import { currency } from "@/number_format";
+import { currencyFormat } from "@/number_format";
 import Button from "@/Components/Button.vue";
 import Select from "@/Components/Forms/Select.vue";
 
@@ -21,11 +21,11 @@ export const productColumns: ColumnType<PurchaseDetail>[] = [
     },
     {
         label: "Unit price",
-        field: (item) => currency(item.price),
+        field: (item) => currencyFormat(item.price),
     },
     {
         label: "Sub total",
-        field: (item) => currency(item.sub_total),
+        field: (item) => currencyFormat(item.sub_total),
     },
 ];
 
@@ -72,7 +72,7 @@ export const columns: ColumnType<Purchase>[] = [
     },
     {
         label: "Total",
-        field: (item) => currency(item.total),
+        field: (item) => currencyFormat(item.total),
         sortable: "total",
     },
     {

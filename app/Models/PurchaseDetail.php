@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PurchaseDetail\HasRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PurchaseDetail extends Model
 {
     use HasFactory;
+    use HasRelationships;
 
     protected $fillable = [
         'product_name',
