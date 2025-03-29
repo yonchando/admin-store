@@ -5,43 +5,40 @@
 @use "button";
 @use "datatable";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "tailwindcss";
+@config "../../tailwind.config.js";
 
-@layer base {
-    html, body {
-        @apply text-sm leading-3 font-normal text-slate-800 dark:text-slate-100;
-    }
-    
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+html, body {
+    @apply text-base leading-3 font-normal text-slate-800 dark:text-slate-100;
+}
 
-    /* width */
-    ::-webkit-scrollbar {
-        scrollbar-width: thin;
-        width: 6px;
-    }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
+/* width */
+::-webkit-scrollbar {
+    scrollbar-width: thin;
+    width: 6px;
+}
 
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #ababab;
-        border-radius: 10px;
-        border: 1px solid transparent;
-        background-clip: padding-box;
-    }
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
 
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ababab;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 

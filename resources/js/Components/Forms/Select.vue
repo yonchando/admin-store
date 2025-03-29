@@ -193,7 +193,7 @@ function searching() {
                     <span v-if="selected === undefined || selected.length === 0" class="placeholder">
                         Select option
                     </span>
-                    <span v-else class="flex items-center gap-2">
+                    <span v-else class="flex items-center gap-2 text-gray-700">
                         <template v-if="props.multiple">
                             <template v-for="label in selected">
                                 <Badge severity="info">{{ label }}</Badge>

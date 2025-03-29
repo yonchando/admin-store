@@ -1,4 +1,4 @@
-import { Paginate, PaginateLink } from "@/types/paginate";
+import { Paginate } from "@/types/paginate";
 import _ from "lodash";
 import { defineStore } from "pinia";
 
@@ -10,7 +10,7 @@ export function callable(key: object | string | ((t: string) => string), values:
     }
 }
 
-export function dataGet(item: any, key: string | ((t: any) => string)) {
+export function dataGet(item: any, key: string | ((t: any) => any), index: number | undefined = undefined) {
     if (typeof key === "string") {
         return _.get(item, key);
     } else {

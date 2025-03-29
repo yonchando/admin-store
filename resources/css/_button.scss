@@ -1,5 +1,3 @@
-@layer components {
-    .btn {
-        @apply inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25;
-    }
+@utility btn {
+    @apply inline-flex items-center rounded border font-semibold tracking-widest transition duration-150 ease-in-out disabled:opacity-25;
 }

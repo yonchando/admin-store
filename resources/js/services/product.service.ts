@@ -5,12 +5,16 @@ import { globalFilter } from "@/services/helper.service";
 import { currency } from "@/number_format";
 import Select from "@/Components/Forms/Select.vue";
 import axios from "axios";
+import { h } from "vue";
 
 export const columns: ColumnType<Product>[] = [
     {
         label: "Name",
         field: "product_name",
         sortable: "product_name",
+        props: {
+            class: "w-xs"
+        }
     },
     {
         label: "Category",
@@ -31,13 +35,18 @@ export const columns: ColumnType<Product>[] = [
                 },
             },
         },
+        props: {
+            class: "w-xs"
+        }
     },
     {
         label: "Price",
-        field: (p) => currency(p.price, true),
+        field: (p) => {
+            return currency(p.price);
+        },
         sortable: "price",
         props: {
-            class: "w-32",
+            class: "w-3xs",
         },
     },
     {
@@ -45,7 +54,7 @@ export const columns: ColumnType<Product>[] = [
         field: "stock_qty",
         sortable: "stock_qty",
         props: {
-            class: "w-40",
+            class: "w-3xs",
         },
         component: {
             el: Badge,
@@ -58,7 +67,7 @@ export const columns: ColumnType<Product>[] = [
         label: "Status",
         field: (p) => __(p.status),
         props: {
-            class: "w-28",
+            class: "w-3xs",
         },
         filters: {
             field: "status",
@@ -85,15 +94,16 @@ export const columns: ColumnType<Product>[] = [
         field: "created_at",
         sortable: "created_at",
         props: {
-            class: "w-48",
+            class: "w-3xs",
         },
+        hideFromIndex: true,
     },
     {
         label: "Updated date",
         field: "updated_at",
         sortable: "updated_at",
         props: {
-            class: "w-48",
+            class: "w-3xs",
         },
         hideFromIndex: true,
     },
@@ -115,9 +125,3 @@ export default {
     columns,
     filters,
 };
-
-export class ProductService {
-    static getData(filters: ProductFilter) {
-        return;
-    }
-}

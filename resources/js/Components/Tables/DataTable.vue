@@ -140,7 +140,7 @@ function clearFilter(callback: any, field: string) {
 </script>
 
 <template>
-    <div class="flex items-center py-2">
+    <div class="flex items-center py-4">
         <div v-if="showSearch" class="flex">
             <div>
                 <TextInput
@@ -152,7 +152,7 @@ function clearFilter(callback: any, field: string) {
             </div>
         </div>
 
-        <div class="ml-auto w-full max-w-xxs" v-if="meta">
+        <div class="max-w-xxs ml-auto w-full" v-if="meta">
             <Select
                 :show-search="false"
                 label-inline
@@ -164,7 +164,7 @@ function clearFilter(callback: any, field: string) {
             </Select>
         </div>
     </div>
-    <div class="relative">
+    <div class="relative overflow-auto">
         <div v-if="loading" class="absolute inset-0 bg-slate-100/50 dark:bg-gray-700/50">
             <div role="status" class="flex h-full max-h-screen w-full items-center justify-center">
                 <svg
@@ -183,7 +183,7 @@ function clearFilter(callback: any, field: string) {
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <table class="min-w-full table-fixed border-collapse rounded-md xl:w-full">
+        <table class="w-full min-w-7xl table-fixed border-collapse rounded-md">
             <!-- Headers -->
             <thead>
                 <tr v-if="!$slots.thead">
